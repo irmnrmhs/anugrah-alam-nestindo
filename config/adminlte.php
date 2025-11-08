@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Anugrah Alam Nestindo',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,8 +63,8 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b> Anugrah Alam Nestindo </b>',
+    'logo_img' => 'img/Logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'img/Logo.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -190,13 +190,14 @@ return [
     |
     */
 
-    'classes_body' => '',
+    'classes_body' => 'layout-fixed layout-navbar-fixed',
     'classes_brand' => '',
-    'classes_brand_text' => '',
+    'classes_brand_text' => 'brand-text',
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    // active menu
+    'classes_sidebar' => 'sidebar-dark-secondary elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -316,81 +317,122 @@ return [
             'text' => 'search',
         ],
         [
-            'text' => 'blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
+        'text' => 'Dashboard',
+        'url'  => 'dashboard',
+        'icon' => 'fas fa-tachometer-alt',
         ],
+
+        // Menu Master
         [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
+            'text' => 'Master',
+            'icon' => 'fas fa-folder',
+            'submenu' => [
+                [   
+                    'text' => 'Role',
+                    'url'  => 'roles',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-user-shield',
+                ],
+                [
+                    'text' => 'User',
+                    'url'  => 'users',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Perusahaan',
+                    'url'  => 'companies',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Departemen',
+                    'url'  => 'departments',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Karyawan',
+                    'url'  => 'employees',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Kategori Supplier',
+                    'url'  => 'categories',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Supplier',
+                    'url'  => 'suppliers',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Customer',
+                    'url'  => 'customers',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Rumah Burung',
+                    'url'  => 'wbhouses',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Mobil',
+                    'url'  => 'cars',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Jenis Uji',
+                    'url'  => 'testTypes',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-users',
+                ],
+            ],
         ],
-        ['header' => 'account_settings'],
+
+        // Menu Bahan Baku
+        [
+            'text' => 'Bahan Baku',
+            'icon' => 'fas fa-folder',
+            'submenu' => [
+                [   
+                    'text' => 'SKP',
+                    'url'  => 'dcertificates',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [   
+                    'text' => 'Kedatangan',
+                    'url'  => 'arrivals',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+            ],
+        ],
+
+        // Menu Setting
         [
             'text' => 'profile',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'multilevel',
-            'icon' => 'fas fa-fw fa-share',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url' => '#',
+                    'text' => 'profile',
+                    'url' => 'admin/settings',
+                    'icon' => 'fas fa-fw fa-user',
                 ],
                 [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    'text' => 'change_password',
+                    'url' => 'admin/settings',
+                    'icon' => 'fas fa-fw fa-lock',
                 ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
+            ]
         ],
     ],
 

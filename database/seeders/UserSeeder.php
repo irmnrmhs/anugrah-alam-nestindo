@@ -69,6 +69,7 @@ class UserSeeder extends Seeder
             'roles_id' => 7,
             // 'employees_id' => 7
         ]);
+        
         User::create([
             'username' => 'admin_ac',
             'email' => 'ac@mail.com',
@@ -76,6 +77,7 @@ class UserSeeder extends Seeder
             'roles_id' => 8,
             // 'employees_id' => 8
         ]);
+        
         User::create([
             'username' => 'admin_ga',
             'email' => 'ga@mail.com',
@@ -83,5 +85,13 @@ class UserSeeder extends Seeder
             'roles_id' => 9,
             // 'employees_id' => 9
         ]);
+
+        // User::create([
+        //     'username' => 'regular_user',
+        //     'email' => 'user@mail.com',
+        //     'password' => Hash::make('user058'),
+        //     'roles_id' => 10,
+        //     'employees_id' => 10
+        // ]);
     }
 }
