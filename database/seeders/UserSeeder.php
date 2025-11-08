@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@mail.com',
             'password' => Hash::make('admin058'),
             'roles_id' => 1,
-            // 'employees_id' => 1
+            'employees_id' => 1
         ]);
 
         User::create([
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
             'email' => 'bb@mail.com',
             'password' => Hash::make('bb058'),
             'roles_id' => 2,
-            // 'employees_id' => 2
+            'employees_id' => 2
         ]);
 
         User::create([
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'email' => 'pr@mail.com',
             'password' => Hash::make('pr058'),
             'roles_id' => 3,
-            // 'employees_id' => 3
+            'employees_id' => 3
         ]);
 
         User::create([
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             'email' => 'qc@mail.com',
             'password' => Hash::make('qc058'),
             'roles_id' => 4,
-            // 'employees_id' => 4
+            'employees_id' => 4
         ]);
 
         User::create([
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
             'email' => 'fs@mail.com',
             'password' => Hash::make('qc058'),
             'roles_id' => 5,
-            // 'employees_id' => 5
+            'employees_id' => 5
         ]);
 
         User::create([
@@ -59,7 +59,7 @@ class UserSeeder extends Seeder
             'email' => 'ex@mail.com',
             'password' => Hash::make('ex058'),
             'roles_id' => 6,
-            // 'employees_id' => 6
+            'employees_id' => 6
         ]);
 
         User::create([
@@ -67,15 +67,15 @@ class UserSeeder extends Seeder
             'email' => 'hr@mail.com',
             'password' => Hash::make('hr058'),
             'roles_id' => 7,
-            // 'employees_id' => 7
+            'employees_id' => 7
         ]);
-        
+
         User::create([
             'username' => 'admin_ac',
             'email' => 'ac@mail.com',
             'password' => Hash::make('ac058'),
             'roles_id' => 8,
-            // 'employees_id' => 8
+            'employees_id' => 8
         ]);
         
         User::create([
@@ -83,7 +83,7 @@ class UserSeeder extends Seeder
             'email' => 'ga@mail.com',
             'password' => Hash::make('ga058'),
             'roles_id' => 9,
-            // 'employees_id' => 9
+            'employees_id' => 9
         ]);
 
         // User::create([
