@@ -190,7 +190,7 @@ return [
     |
     */
 
-    'classes_body' => '',
+    'classes_body' => 'layout-fixed layout-navbar-fixed',
     'classes_brand' => '',
     'classes_brand_text' => 'brand-text',
     'classes_content_wrapper' => '',
