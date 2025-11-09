@@ -1,0 +1,8 @@
+/* Toolbar DataTables */
+div.dt-buttons {
+    margin-bottom: 0.5rem;
+}
+/* Konten tidak tertutup sidebar */
+.content-wrapper {
+    overflow-x: hidden;
+}
