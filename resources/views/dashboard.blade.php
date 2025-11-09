@@ -7,5 +7,5 @@
 @stop
 
 @section('content')
-    <p>Selamat datang, {{ auth()->user()->username }}!</p>
+    <p>Selamat datang, {{ auth()->user()->employee->nama ?? auth()->user()->username }}!</p>
 @stop

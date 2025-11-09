@@ -1,197 +1,141 @@
-@extends('adminlte::page')
+@extends('layouts.form')
 
-@section('title', 'Kelola User')
+@php
+    $title = 'Kelola User';
+    $singular = 'User';
+@endphp
 
-@section('content_header')
-    <h1>Kelola User</h1>
+@section('table-headers')
+    <th>No</th>
+    <th>Role</th>
+    <th>Karyawan</th>
+    <th>Username</th>
+    <th>Email</th>
 @stop
 
-@section('content')
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title">Daftar User</h3>
-            <button class="btn btn-primary" id="btnAdd">Tambah User</button>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered table-striped" id="userTable">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Role</th>
-                        <th>Karyawan</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($users as $index => $user)
-                        <tr id="row-{{ $user->id }}">
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $user->role->name }}</td>
-                            <td>{{ $user->employee->nama }}</td>
-                            <td>{{ $user->username }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>
-                                <button class="btn btn-sm btn-warning btnEdit" data-id="{{ $user->id }}">Edit</button>
-                                <button class="btn btn-sm btn-danger btnDelete" data-id="{{ $user->id }}">Hapus</button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+@section('table-body')
+    @foreach($users as $index => $user)
+        <tr data-id="{{ $user->id }}">
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $user->role->name }}</td>
+            <td>{{ $user->employee->nama }}</td>
+            <td>{{ $user->username }}</td>
+            <td>{{ $user->email }}</td>
+            <td>
+                <button class="btn btn-sm btn-warning btnEdit">Edit</button>
+                <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
+            </td>
+        </tr>
+    @endforeach
+@stop
+
+@section('form-fields')
+    <div class="mb-3">
+        <label>Role</label>
+        <select id="roles_id" class="form-control" required>
+            <option value="">-- Pilih Role --</option>
+            @foreach($roles as $role)
+                <option value="{{ $role->id }}">{{ $role->name }}</option>
+            @endforeach
+        </select>
     </div>
 
-    {{-- Modal Form --}}
-    <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="userForm">
-                    @csrf
-                    <input type="hidden" id="users_id">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Tambah User</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label>Role</label>
-                            <select id="roles_id" class="form-control" required>
-                                <option value="">-- Pilih Role --</option>
-                                @foreach($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label>Karyawan</label>
-                            <select id="employees_id" class="form-control" required>
-                                <option value="">-- Pilih Karyawan --</option>
-                                @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label>Username</label>
-                            <input type="text" id="username" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label>Email</label>
-                            <input type="email" id="email" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label>Password</label>
-                            <input type="password" id="password" class="form-control" placeholder="Isi jika ingin ubah password" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary" id="btnSave">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+    <div class="mb-3">
+        <label>Karyawan</label>
+        <select id="employees_id" class="form-control" required>
+            <option value="">-- Pilih Karyawan --</option>
+            @foreach($employees as $employee)
+                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Username</label>
+        <input type="text" id="username" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" id="email" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Isi jika ingin ubah password">
     </div>
 @stop
 
-@section('js')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@section('form-submit-script')
+    const id = $('#item_id').val();
+    const url = id ? `/users/${id}` : '/users';
+    const method = id ? 'PUT' : 'POST';
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const userModal = new bootstrap.Modal(document.getElementById('userModal'));
-    const form = document.getElementById('userForm');
-    const modalTitle = document.getElementById('modalTitle');
-    const userIdInput = document.getElementById('users_id');
-    const obj = 'User';
+    const data = {
+        _token: '{{ csrf_token() }}',
+        roles_id: $('#roles_id').val(),
+        employees_id: $('#employees_id').val(),
+        username: $('#username').val(),
+        email: $('#email').val(),
+        password: $('#password').val()
+    };
 
-    document.getElementById('btnAdd').addEventListener('click', () => {
-        modalTitle.textContent = 'Tambah User';
-        form.reset();
-        userIdInput.value = '';
-        userModal.show();
+    fetch(url, {
+        method: method,
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(res => {
+        if (res.status === 'success') {
+            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
+        } else {
+            Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
+        }
     });
+@stop
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const id = userIdInput.value;
-        const url = id ? `/users/${id}` : '/users';
-        const method = id ? 'PUT' : 'POST';
-
-        const data = {
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
-            roles_id: document.getElementById('roles_id').value,
-            employees_id: document.getElementById('employees_id').value,
-            _token: '{{ csrf_token() }}'
-        };
-
-        fetch(url, {
-            method: method,
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (res.status === 'success') {
-                Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-            } else {
-                Swal.fire('Gagal', 'Terjadi kesalahan!', 'error');
-            }
-        })
-        .catch(() => Swal.fire('Error', 'Gagal menyimpan data', 'error'));
-    });
-
-    document.querySelectorAll('.btnEdit').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.dataset.id;
-            fetch(`/users/${id}`)
-                .then(res => res.json())
-                .then(user => {
-                    modalTitle.textContent = 'Edit User';
-                    userIdInput.value = user.id;
-                    document.getElementById('username').value = user.username;
-                    document.getElementById('email').value = user.email;
-                    document.getElementById('password').value = '';
-                    document.getElementById('roles_id').value = user.roles_id;
-                    document.getElementById('employees_id').value = user.employees_id;
-                    userModal.show();
-                });
-        });
-    });
-
-    document.querySelectorAll('.btnDelete').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.dataset.id;
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: 'Data akan dihapus permanen',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Batal'
-            }).then(result => {
-                if (result.isConfirmed) {
-                    fetch(`/users/${id}`, {
-                        method: 'DELETE',
-                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
-                    })
-                    .then(res => res.json())
-                    .then(res => {
-                        if (res.status === 'success') {
-                            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-                        } else {
-                            Swal.fire('Gagal', 'Tidak dapat menghapus ${obj}', 'error');
-                        }
-                    });
-                }
+@section('custom-js')
+    $(document).on('click', '.btnEdit', function() {
+        const id = $(this).closest('tr').data('id');
+        fetch(`/users/${id}`)
+            .then(r => r.json())
+            .then(user => {
+                $('#item_id').val(user.id);
+                $('#roles_id').val(user.roles_id);
+                $('#employees_id').val(user.employees_id);
+                $('#username').val(user.username);
+                $('#email').val(user.email);
+                $('#password').val('');
+                $('#modalTitle').text('Edit User');
+                new bootstrap.Modal('#crudModal').show();
             });
+    });
+
+    $(document).on('click', '.btnDelete', function() {
+        const id = $(this).closest('tr').data('id');
+        Swal.fire({
+            title: 'Yakin hapus?',
+            text: 'Data tidak bisa dikembalikan!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal'
+        }).then(result => {
+            if (result.isConfirmed) {
+                fetch(`/users/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        Swal.fire('Terhapus!', res.message, 'success').then(() => location.reload());
+                    } else {
+                        Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
+                    }
+                });
+            }
         });
     });
-});
-</script>
 @stop
