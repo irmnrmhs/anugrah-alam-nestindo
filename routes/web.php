@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CarController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\CompanyController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,16 +43,11 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
+    // Company
     Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
     Route::post('/company', [CompanyController::class, 'storeOrUpdate'])->name('company.storeOrUpdate');
-
-    // Company
-    // Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
-    // Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
-    // Route::get('/companies/{id}', [CompanyController::class, 'show'])->name('companies.show');
-    // Route::put('/companies/{id}', [CompanyController::class, 'update'])->name('companies.update');
-    // Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('companies.destroy');
-
+    
+    // Department
     Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
     Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
     Route::get('/departments/{id}', [DepartmentController::class, 'show'])->name('departments.show');
@@ -64,6 +60,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
     Route::put('/employees/{id}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    
+    // Mobil
+    Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
+    Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
+    Route::get('/cars/{id}', [CarController::class, 'show'])->name('cars.show');
+    Route::put('/cars/{id}', [CarController::class, 'update'])->name('cars.update');
+    Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
 });
 
 require __DIR__.'/auth.php';
