@@ -22,8 +22,9 @@ class DatabaseSeeder extends Seeder
             EmployeeSeeder::class,
             UserSeeder::class,
 
-            WBHouseSeeder::class,
+            AreaSeeder::class,
             CarSeeder::class,
+            WBHouseSeeder::class,
         ]);
         
         // User::factory(10)->create();

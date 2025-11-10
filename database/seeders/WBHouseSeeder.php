@@ -17,7 +17,7 @@ class WBHouseSeeder extends Seeder
             'kode'      => '2092',
             'nama'      => 'Cibarengkok 1',
             'alamat'    => '...',
-            'area'      => 'Jawa Barat',
+            'areas_id'      => 1,
             'kapasitas' => 209.00,
         ]);
 
@@ -25,7 +25,7 @@ class WBHouseSeeder extends Seeder
             'kode'      => '2106',
             'nama'      => 'Beruta A',
             'alamat'    => '...',
-            'area'      => 'Kalimantan',
+            'areas_id'      => 2,
             'kapasitas' => 700.00,
         ]);
     }

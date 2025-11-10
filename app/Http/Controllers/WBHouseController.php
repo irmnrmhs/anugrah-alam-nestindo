@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\WBHouse;
+use App\Models\Area;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
@@ -12,7 +13,8 @@ class WBHouseController extends Controller
     public function index(): View
     {
         $wbhouses = WBHouse::oldest()->get();
-        return view('masters.wbhouse', compact('wbhouses'));
+        $areas = Area::all();
+        return view('masters.wbhouse', compact('wbhouses', 'areas'));
     }
 
     public function store(Request $request): JsonResponse
@@ -21,7 +23,7 @@ class WBHouseController extends Controller
             'kode'      => 'required|string|max:25|unique:w_b_houses,kode',
             'nama'      => 'required',
             'alamat'    => 'nullable',
-            'area'       => 'required',
+            'areas_id'  => 'required|exists:areas,id',
             'kapasitas' => 'nullable|numeric|min:0|max:99999.99',
         ]);
 
@@ -36,7 +38,7 @@ class WBHouseController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $wbhouse = WBHouse::findOrFail($id);
+        $wbhouse = WBHouse::with('area')->findOrFail($id);
         return response()->json($wbhouse);
     }
 
@@ -46,7 +48,7 @@ class WBHouseController extends Controller
             'kode'      => 'required|string|max:25|unique:w_b_houses,kode,' . $id,
             'nama'      => 'required',
             'alamat'    => 'nullable',
-            'area'       => 'required',
+            'areas_id'  => 'required|exists:areas,id',
             'kapasitas' => 'nullable|numeric|min:0|max:99999.99',
 
         ]);

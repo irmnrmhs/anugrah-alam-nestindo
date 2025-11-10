@@ -10,9 +10,14 @@ class WBHouse extends Model
         'kode',
         'nama',
         'alamat',
-        'area',
+        'areas_id',
         'kapasitas',
     ];
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class, 'areas_id');
+    }
 
     // public function dcertificates()
     // {

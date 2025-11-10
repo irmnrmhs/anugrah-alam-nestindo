@@ -2,14 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\WBHouseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -62,6 +63,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/employees/{id}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     
+    // Area
+    Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');
+    Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
+    Route::get('/areas/{id}', [AreaController::class, 'show'])->name('areas.show');
+    Route::put('/areas/{id}', [AreaController::class, 'update'])->name('areas.update');
+    Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
+
     // Rumah Burung
     Route::get('/wbhouses', [WbhouseController::class, 'index'])->name('wbhouses.index');
     Route::post('/wbhouses', [WbhouseController::class, 'store'])->name('wbhouses.store');
@@ -75,6 +83,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/cars/{id}', [CarController::class, 'show'])->name('cars.show');
     Route::put('/cars/{id}', [CarController::class, 'update'])->name('cars.update');
     Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
+
+    // Area
+    Route::get('/cars', [AreaController::class, 'index'])->name('cars.index');
+    Route::post('/cars', [AreaController::class, 'store'])->name('cars.store');
+    Route::get('/cars/{id}', [AreaController::class, 'show'])->name('cars.show');
+    Route::put('/cars/{id}', [AreaController::class, 'update'])->name('cars.update');
+    Route::delete('/cars/{id}', [AreaController::class, 'destroy'])->name('cars.destroy');
 });
 
 require __DIR__.'/auth.php';

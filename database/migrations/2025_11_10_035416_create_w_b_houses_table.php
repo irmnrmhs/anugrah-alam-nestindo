@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('kode')->unique();
             $table->string('nama');
             $table->string('alamat')->nullable();
-            $table->string('area');
+            $table->foreignId('areas_id')->constrained('areas');
             $table->decimal('kapasitas', 7, 2)->nullable();
             $table->timestamps();
         });

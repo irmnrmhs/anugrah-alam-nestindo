@@ -1,28 +1,22 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Rumah Burung';
-    $singular = 'Rumah Burung';
+    $title = 'Kelola Area';
+    $singular = 'Area';
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Nomor Registrasi</th>
-    <th>Nama Rumah Burung</th>
-    <th>Alamat</th>
     <th>Area</th>
-    <th>Kapasitas</th>
+    <th>Keterangan</th>
 @stop
 
 @section('table-body')
-    @foreach($wbhouses as $index => $wbhouse)
-        <tr data-id="{{ $wbhouse->id }}">
+    @foreach($areas as $index => $area)
+        <tr data-id="{{ $area->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $wbhouse->kode }}</td>
-            <td>{{ $wbhouse->nama }}</td>
-            <td>{{ $wbhouse->alamat }}</td>
-            <td>{{ $wbhouse->area->area }}</td>
-            <td>{{ $wbhouse->kapasitas }}</td>
+            <td>{{ $area->area }}</td>
+            <td>{{ $area->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -33,44 +27,25 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Nomor Registrasi</label>
-        <input type="text" id="kode" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Nama Rumah Burung</label>
-        <input type="text" id="nama" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Alamat</label>
-        <input type="text" id="alamat" class="form-control">
-    </div>
-    <div class="mb-3">
         <label>Area</label>
-        <select id="areas_id" class="form-control" required>
-            <option value="">-- Pilih Area --</option>
-            @foreach($areas as $area)
-                <option value="{{ $area->id }}">{{ $area->area }}</option>
-            @endforeach
-        </select>
+        <input type="text" id="area" class="form-control" required>
     </div>
+
     <div class="mb-3">
-        <label>Kapasitas</label>
-        <input type="number" id="kapasitas" step="0.01" min="0" max="99999.99" class="form-control">
+        <label>Keterangan</label>
+        <input type="text" id="keterangan" class="form-control">
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/wbhouses/${id}` : '/wbhouses';
+    const url = id ? `/areas/${id}` : '/areas';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        kode: $('#kode').val(),
-        nama: $('#nama').val(),
-        alamat: $('#alamat').val(),
-        areas_id: $('#areas_id').val(),
-        kapasitas: $('#kapasitas').val()
+        area: $('#area').val(),
+        keterangan: $('#keterangan').val()
     };
 
     fetch(url, {
@@ -91,16 +66,13 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/wbhouses/${id}`)
+        fetch(`/areas/${id}`)
             .then(r => r.json())
-            .then(wbhouse => {
-                $('#item_id').val(wbhouse.id);
-                $('#kode').val(wbhouse.kode);
-                $('#nama').val(wbhouse.nama);
-                $('#alamat').val(wbhouse.alamat);
-                $('#areas_id').val(wbhouse.areas_id);
-                $('#kapasitas').val(wbhouse.kapasitas);
-                $('#modalTitle').text('Edit Rumah Burung');
+            .then(area => {
+                $('#item_id').val(area.id);
+                $('#area').val(area.area);
+                $('#keterangan').val(keterangan.area);
+                $('#modalTitle').text('Edit Area');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -116,7 +88,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/wbhouses/${id}`, {
+                fetch(`/areas/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

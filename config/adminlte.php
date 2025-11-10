@@ -376,6 +376,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Area',
+                    'url'  => 'areas',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Rumah Burung',
                     'url'  => 'wbhouses',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
