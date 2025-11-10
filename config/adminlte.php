@@ -341,7 +341,7 @@ return [
                 ],
                 [
                     'text' => 'Perusahaan',
-                    'url'  => 'companies',
+                    'url'  => 'company',
                     'can'  => 'Super Admin',
                     'icon' => 'fas fa-users',
                 ],

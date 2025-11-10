@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\CompanyController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,8 +42,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-    // Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
-    // Route::post('/company', [CompanyController::class, 'storeOrUpdate'])->name('company.storeOrUpdate');
+    Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
+    Route::post('/company', [CompanyController::class, 'storeOrUpdate'])->name('company.storeOrUpdate');
 
     // Company
     // Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
