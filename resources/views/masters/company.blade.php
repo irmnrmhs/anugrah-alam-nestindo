@@ -40,12 +40,20 @@
                        value="{{ $company->fax ?? '' }}">
             </div>
 
-            <div class="mb-3">
+            {{-- <div class="mb-3">
                 <label for="negara">Negara</label>
-                <input type="text" id="negara" name="negara" class="form-control" 
-                       value="{{ $company->negara ?? '' }}">
-            </div>
+                <input type="text" id="negara" name="negara" class="form-control" value="{{ $company->negara ?? '' }}">
+            </div> --}}
 
+            <div class="mb-3">
+                <label>Negara</label>
+                <select id="negara" class="form-control" required>
+                    <option value="">{{$company->negara ?? ''}}</option>
+                        @foreach($countries as $country)
+                            <option value="{{ $country ?? '' }}">{{ $country ?? '' }}</option>
+                        @endforeach
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
     </div>

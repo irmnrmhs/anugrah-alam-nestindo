@@ -10,7 +10,10 @@ class CompanyController extends Controller
     public function index()
     {
         $company = Company::first();
-        return view('masters.company', compact('company'));
+        $countries = [
+            'Indonesia', 'China', 'Malaysia', 'Singapura', 'Thailand', 'Jepang', 'Taiwan'
+        ];
+        return view('masters.company', compact('company', 'countries'));
     }
 
     public function storeOrUpdate(Request $request)

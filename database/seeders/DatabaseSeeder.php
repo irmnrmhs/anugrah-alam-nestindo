@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             EmployeeSeeder::class,
             UserSeeder::class,
+
+            WBHouseSeeder::class,
             CarSeeder::class,
         ]);
         

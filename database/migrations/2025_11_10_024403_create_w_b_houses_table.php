@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('w_b_houses', function (Blueprint $table) {
             $table->id();
+            $table->string('kode')->unique();
+            $table->string('nama');
+            $table->string('alamat')->nullable();
+            $table->string('area');
+            $table->decimal('kapasitas', 7, 2)->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('w_b_houses');
+        Schema::dropIfExists('wbhouses');
     }
 };

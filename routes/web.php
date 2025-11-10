@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\WBHouseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -61,6 +62,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/employees/{id}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     
+    // Rumah Burung
+    Route::get('/wbhouses', [WbhouseController::class, 'index'])->name('wbhouses.index');
+    Route::post('/wbhouses', [WbhouseController::class, 'store'])->name('wbhouses.store');
+    Route::get('/wbhouses/{id}', [WbhouseController::class, 'show'])->name('wbhouses.show');
+    Route::put('/wbhouses/{id}', [WbhouseController::class, 'update'])->name('wbhouses.update');
+    Route::delete('/wbhouses/{id}', [WbhouseController::class, 'destroy'])->name('wbhouses.destroy');
+
     // Mobil
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
     Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
