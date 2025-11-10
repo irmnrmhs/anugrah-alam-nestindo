@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WBHouseController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
@@ -90,6 +92,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/cars/{id}', [AreaController::class, 'show'])->name('cars.show');
     Route::put('/cars/{id}', [AreaController::class, 'update'])->name('cars.update');
     Route::delete('/cars/{id}', [AreaController::class, 'destroy'])->name('cars.destroy');
+
+    // Customer
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
+    Route::put('/customers/{id}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 });
 
 require __DIR__.'/auth.php';
