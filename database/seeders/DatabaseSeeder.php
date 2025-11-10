@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             AreaSeeder::class,
             CarSeeder::class,
             WBHouseSeeder::class,
+
+            CategorySeeder::class,
         ]);
         
         // User::factory(10)->create();
