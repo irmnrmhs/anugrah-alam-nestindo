@@ -12,10 +12,10 @@ class Category extends Model
         'keterangan',
     ];
 
-    // public function suppliers()
-    // {
-    //     return $this->hasMany(Supplier::class, 'categories_id');
-    // }
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class, 'categories_id');
+    }
 
     // public function testTypes()
     // {

@@ -12,6 +12,7 @@ use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 
@@ -101,6 +102,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
     
+    // Supplier
+    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+    Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
+    Route::get('/suppliers/{id}', [SupplierController::class, 'show'])->name('suppliers.show');
+    Route::put('/suppliers/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
+    Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
+
     // Customer
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
     Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');

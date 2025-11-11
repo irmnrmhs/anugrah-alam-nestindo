@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             WBHouseSeeder::class,
 
             CategorySeeder::class,
+            SupplierSeeder::class,
+            CustomerSeeder::class,
         ]);
         
         // User::factory(10)->create();
