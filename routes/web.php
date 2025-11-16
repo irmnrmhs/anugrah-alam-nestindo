@@ -89,11 +89,11 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
 
     // Area
-    Route::get('/cars', [AreaController::class, 'index'])->name('cars.index');
-    Route::post('/cars', [AreaController::class, 'store'])->name('cars.store');
-    Route::get('/cars/{id}', [AreaController::class, 'show'])->name('cars.show');
-    Route::put('/cars/{id}', [AreaController::class, 'update'])->name('cars.update');
-    Route::delete('/cars/{id}', [AreaController::class, 'destroy'])->name('cars.destroy');
+    Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');
+    Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
+    Route::get('/areas/{id}', [AreaController::class, 'show'])->name('areas.show');
+    Route::put('/areas/{id}', [AreaController::class, 'update'])->name('areas.update');
+    Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
 
     // Kategori
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');

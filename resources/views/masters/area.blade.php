@@ -71,7 +71,7 @@
             .then(area => {
                 $('#item_id').val(area.id);
                 $('#area').val(area.area);
-                $('#keterangan').val(keterangan.area);
+                $('#keterangan').val(area.keterangan);
                 $('#modalTitle').text('Edit Area');
                 new bootstrap.Modal('#crudModal').show();
             });
