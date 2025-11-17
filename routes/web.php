@@ -6,17 +6,18 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\FeatherController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TestTypeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\TestTypeController;
-use App\Http\Controllers\FeatherController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -89,6 +90,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/feathers/{id}', [FeatherController::class, 'show'])->name('feathers.show');
     Route::put('/feathers/{id}', [FeatherController::class, 'update'])->name('feathers.update');
     Route::delete('/feathers/{id}', [FeatherController::class, 'destroy'])->name('feathers.destroy');
+
+    // Jenis Warna
+    Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
+    Route::get('/colors/{id}', [ColorController::class, 'show'])->name('colors.show');
+    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
 
     // Mobil
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');

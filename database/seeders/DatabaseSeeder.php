@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             CustomerSeeder::class,
             FeatherSeeder::class,
+            ColorSeeder::class,
 
 
             TestTypeSeeder::class,
