@@ -23,7 +23,7 @@ class GradeController extends Controller
         $feathers = Feather::all();
         $colors = Color::all();
 
-        return view('masters.grade', compact('grades', 'categories', 'shapes', 'feathers', 'colors'));
+        return view('raw-material.grade', compact('grades', 'categories', 'shapes', 'feathers', 'colors'));
     }
 
     public function store(Request $request): JsonResponse
