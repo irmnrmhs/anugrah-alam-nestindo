@@ -9,4 +9,9 @@ class Feather extends Model
     protected $fillable = [
         'kode', 'jenis_bulu'
     ];
+
+    public function Grades()
+    {
+        return $this->hasMany(Grade::class, 'feathers_id');
+    }
 }

@@ -21,4 +21,9 @@ class Category extends Model
     {
         return $this->hasMany(TestType::class, 'categories_id');
     }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class, 'categories_id');
+    }
 }

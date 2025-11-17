@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Grade;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
@@ -7,9 +8,10 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\GradeController;
+use App\Http\Controllers\ShapeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FeatherController;
-use App\Http\Controllers\ShapeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
@@ -105,6 +107,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/shapes/{id}', [ShapeController::class, 'show'])->name('shapes.show');
     Route::put('/shapes/{id}', [ShapeController::class, 'update'])->name('shapes.update');
     Route::delete('/shapes/{id}', [ShapeController::class, 'destroy'])->name('shapes.destroy');
+
+    // Jenis Grade
+    Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');
+    Route::post('/grades', [GradeController::class, 'store'])->name('grades.store');
+    Route::get('/grades/{id}', [GradeController::class, 'show'])->name('grades.show');
+    Route::put('/grades/{id}', [GradeController::class, 'update'])->name('grades.update');
+    Route::delete('/grades/{id}', [GradeController::class, 'destroy'])->name('grades.destroy');
 
     // Mobil
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');

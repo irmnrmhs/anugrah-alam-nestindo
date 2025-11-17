@@ -9,4 +9,9 @@ class Color extends Model
     protected $fillable = [
         'kode', 'jenis_warna',
     ];
+
+    public function Grades()
+    {
+        return $this->hasMany(Grade::class, 'colors_id');
+    }
 }

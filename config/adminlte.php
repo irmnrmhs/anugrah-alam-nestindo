@@ -426,6 +426,12 @@ return [
             'text' => 'Bahan Baku',
             'icon' => 'fas fa-folder',
             'submenu' => [
+                [
+                    'text' => 'Grade',
+                    'url'  => 'grades',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
                 [   
                     'text' => 'SKP',
                     'url'  => 'dcertificates',

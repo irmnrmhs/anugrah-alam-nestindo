@@ -6,12 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grade extends Model
 {
-    // protected $fillable = [
-    //     'categories_id',
-    //     'grade',
-    //     'bentuk',
-    //     'bulu',
-    //     'warna',
-    //     'status'
-    // ];
+    protected $fillable = [
+        'categories_id',
+        'grade',
+        'shapes_id',
+        'feathers_id',
+        'colors_id',
+        'status'
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'categories_id');
+    }
+
+    public function shape()
+    {
+        return $this->belongsTo(Shape::class, 'shapes_id');
+    }
+
+    public function feather()
+    {
+        return $this->belongsTo(Feather::class, 'feathers_id');
+    }
+
+    public function color()
+    {
+        return $this->belongsTo(Color::class, 'colors_id');
+    }
 }
