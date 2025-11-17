@@ -1,20 +1,22 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Role';
-    $singular = 'Role';
+    $title = 'Kelola Jenis Bulu';
+    $singular = 'Jenis Bulu';
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Nama Role</th>
+    <th>Kode Bulu</th>
+    <th>Jenis Bulu</th>
 @stop
 
 @section('table-body')
-    @foreach($roles as $index => $role)
-        <tr data-id="{{ $role->id }}">
+    @foreach($feathers as $index => $feather)
+        <tr data-id="{{ $feather->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $role->name }}</td>
+            <td>{{ $feather->kode }}</td>
+            <td>{{ $feather->jenis_bulu }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -25,19 +27,24 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Nama Role</label>
-        <input type="text" id="name" class="form-control" required>
+        <label>Kode Bulu</label>
+        <input type="text" id="kode" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Jenis Bulu</label>
+        <input type="text" id="jenis_bulu" class="form-control" required>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/roles/${id}` : '/roles';
+    const url = id ? `/feathers/${id}` : '/feathers';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        name: $('#name').val()
+        kode: $('#kode').val(),
+        jenis_bulu: $('#jenis_bulu').val()
     };
 
     fetch(url, {
@@ -58,17 +65,17 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/roles/${id}`)
+        fetch(`/feathers/${id}`)
             .then(r => r.json())
-            .then(role => {
-                $('#item_id').val(role.id);
-                $('#name').val(role.name);
-                $('#modalTitle').text('Edit Role');
+            .then(feather => {
+                $('#item_id').val(feather.id);
+                $('#kode').val(feather.kode);
+                $('#jenis_bulu').val(feather.jenis_bulu);
+                $('#modalTitle').text('Edit Jenis Bulu');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
 
-    // === Delete Role ===
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
@@ -80,7 +87,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/roles/${id}`, {
+                fetch(`/feathers/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

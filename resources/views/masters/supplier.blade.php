@@ -1,20 +1,28 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Role';
-    $singular = 'Role';
+    $title = 'Kelola Supplier';
+    $singular = 'Supplier';
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Nama Role</th>
+    <th>Kode</th>
+    <th>Nama</th>
+    <th>Alamat</th>
+    <th>No. Telp</th>
+    <th>Kategori</th>
 @stop
 
 @section('table-body')
-    @foreach($roles as $index => $role)
-        <tr data-id="{{ $role->id }}">
+    @foreach($suppliers as $index => $supplier)
+        <tr data-id="{{ $supplier->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $role->name }}</td>
+            <td>{{ $supplier->kode }}</td>
+            <td>{{ $supplier->nama }}</td>
+            <td>{{ $supplier->alamat }}</td>
+            <td>{{ $supplier->no_telp }}</td>
+            <td>{{ $supplier->category->kategori }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -25,19 +33,44 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Nama Role</label>
-        <input type="text" id="name" class="form-control" required>
+        <label>Kode</label>
+        <input type="text" id="kode" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Nama</label>
+        <input type="text" id="nama" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Alamat</label>
+        <input type="text" id="alamat" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>No. Telp</label>
+        <input type="text" id="no_telp" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Kategori</label>
+        <select id="categories_id" class="form-control" required>
+            <option value="">-- Pilih Kategori --</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->kategori }}</option>
+            @endforeach
+        </select>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/roles/${id}` : '/roles';
+    const url = id ? `/suppliers/${id}` : '/suppliers';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        name: $('#name').val()
+        kode: $('#kode').val(),
+        nama: $('#nama').val(),
+        alamat: $('#alamat').val(),
+        no_telp: $('#no_telp').val(),
+        categories_id: $('#categories_id').val()
     };
 
     fetch(url, {
@@ -58,17 +91,20 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/roles/${id}`)
+        fetch(`/suppliers/${id}`)
             .then(r => r.json())
-            .then(role => {
-                $('#item_id').val(role.id);
-                $('#name').val(role.name);
-                $('#modalTitle').text('Edit Role');
+            .then(supplier => {
+                $('#item_id').val(supplier.id);
+                $('#kode').val(supplier.kode);
+                $('#nama').val(supplier.nama);
+                $('#alamat').val(supplier.alamat);
+                $('#no_telp').val(supplier.no_telp);
+                $('#categories_id').val(supplier.categories_id);
+                $('#modalTitle').text('Edit Supplier');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
 
-    // === Delete Role ===
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
@@ -80,7 +116,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/roles/${id}`, {
+                fetch(`/suppliers/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

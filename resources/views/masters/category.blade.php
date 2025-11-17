@@ -1,20 +1,24 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Role';
-    $singular = 'Role';
+    $title = 'Kelola Kategori';
+    $singular = 'Kategori';
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Nama Role</th>
+    <th>Kode</th>
+    <th>Kategori</th>
+    <th>Keterangan</th>
 @stop
 
 @section('table-body')
-    @foreach($roles as $index => $role)
-        <tr data-id="{{ $role->id }}">
+    @foreach($categories as $index => $category)
+        <tr data-id="{{ $category->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $role->name }}</td>
+            <td>{{ $category->kode }}</td>
+            <td>{{ $category->kategori }}</td>
+            <td>{{ $category->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -25,19 +29,29 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Nama Role</label>
-        <input type="text" id="name" class="form-control" required>
+        <label>Kode</label>
+        <input type="text" id="kode" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Kategori</label>
+        <input type="text" id="kategori" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Keterangan</label>
+        <input type="text" id="keterangan" class="form-control">
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/roles/${id}` : '/roles';
+    const url = id ? `/categories/${id}` : '/categories';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        name: $('#name').val()
+        kode: $('#kode').val(),
+        kategori: $('#kategori').val(),
+        keterangan: $('#keterangan').val()
     };
 
     fetch(url, {
@@ -58,17 +72,18 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/roles/${id}`)
+        fetch(`/categories/${id}`)
             .then(r => r.json())
-            .then(role => {
-                $('#item_id').val(role.id);
-                $('#name').val(role.name);
-                $('#modalTitle').text('Edit Role');
+            .then(category => {
+                $('#item_id').val(category.id);
+                $('#kode').val(category.kode);
+                $('#kategori').val(category.kategori);
+                $('#keterangan').val(category.keterangan);
+                $('#modalTitle').text('Edit Kategori');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
 
-    // === Delete Role ===
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
@@ -80,7 +95,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/roles/${id}`, {
+                fetch(`/categories/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

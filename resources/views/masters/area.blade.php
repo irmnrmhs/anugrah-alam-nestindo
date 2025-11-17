@@ -1,20 +1,22 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Role';
-    $singular = 'Role';
+    $title = 'Kelola Area';
+    $singular = 'Area';
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Nama Role</th>
+    <th>Area</th>
+    <th>Keterangan</th>
 @stop
 
 @section('table-body')
-    @foreach($roles as $index => $role)
-        <tr data-id="{{ $role->id }}">
+    @foreach($areas as $index => $area)
+        <tr data-id="{{ $area->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $role->name }}</td>
+            <td>{{ $area->area }}</td>
+            <td>{{ $area->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -25,24 +27,30 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Nama Role</label>
-        <input type="text" id="name" class="form-control" required>
+        <label>Area</label>
+        <input type="text" id="area" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Keterangan</label>
+        <input type="text" id="keterangan" class="form-control">
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/roles/${id}` : '/roles';
+    const url = id ? `/areas/${id}` : '/areas';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        name: $('#name').val()
+        area: $('#area').val(),
+        keterangan: $('#keterangan').val()
     };
 
     fetch(url, {
         method: method,
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
     .then(r => r.json())
@@ -58,17 +66,17 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/roles/${id}`)
+        fetch(`/areas/${id}`)
             .then(r => r.json())
-            .then(role => {
-                $('#item_id').val(role.id);
-                $('#name').val(role.name);
-                $('#modalTitle').text('Edit Role');
+            .then(area => {
+                $('#item_id').val(area.id);
+                $('#area').val(area.area);
+                $('#keterangan').val(area.keterangan);
+                $('#modalTitle').text('Edit Area');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
 
-    // === Delete Role ===
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
@@ -80,7 +88,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/roles/${id}`, {
+                fetch(`/areas/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

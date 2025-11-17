@@ -1,20 +1,28 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Role';
-    $singular = 'Role';
+    $title = 'Kelola Rumah Burung';
+    $singular = 'Rumah Burung';
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Nama Role</th>
+    <th>Nomor Registrasi</th>
+    <th>Nama Rumah Burung</th>
+    <th>Alamat</th>
+    <th>Area</th>
+    <th>Kapasitas</th>
 @stop
 
 @section('table-body')
-    @foreach($roles as $index => $role)
-        <tr data-id="{{ $role->id }}">
+    @foreach($wbhouses as $index => $wbhouse)
+        <tr data-id="{{ $wbhouse->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $role->name }}</td>
+            <td>{{ $wbhouse->kode }}</td>
+            <td>{{ $wbhouse->nama }}</td>
+            <td>{{ $wbhouse->alamat }}</td>
+            <td>{{ $wbhouse->area->area }}</td>
+            <td>{{ $wbhouse->kapasitas }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -25,24 +33,49 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Nama Role</label>
-        <input type="text" id="name" class="form-control" required>
+        <label>Nomor Registrasi</label>
+        <input type="text" id="kode" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Nama Rumah Burung</label>
+        <input type="text" id="nama" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Alamat</label>
+        <input type="text" id="alamat" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Area</label>
+        <select id="areas_id" class="form-control" required>
+            <option value="">-- Pilih Area --</option>
+            @foreach($areas as $area)
+                <option value="{{ $area->id }}">{{ $area->area }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Kapasitas</label>
+        <input type="number" id="kapasitas" step="0.01" min="0" max="99999.99" class="form-control">
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/roles/${id}` : '/roles';
+    const url = id ? `/wbhouses/${id}` : '/wbhouses';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        name: $('#name').val()
+        kode: $('#kode').val(),
+        nama: $('#nama').val(),
+        alamat: $('#alamat').val(),
+        areas_id: $('#areas_id').val(),
+        kapasitas: $('#kapasitas').val()
     };
 
     fetch(url, {
         method: method,
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
     .then(r => r.json())
@@ -58,17 +91,20 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/roles/${id}`)
+        fetch(`/wbhouses/${id}`)
             .then(r => r.json())
-            .then(role => {
-                $('#item_id').val(role.id);
-                $('#name').val(role.name);
-                $('#modalTitle').text('Edit Role');
+            .then(wbhouse => {
+                $('#item_id').val(wbhouse.id);
+                $('#kode').val(wbhouse.kode);
+                $('#nama').val(wbhouse.nama);
+                $('#alamat').val(wbhouse.alamat);
+                $('#areas_id').val(wbhouse.areas_id);
+                $('#kapasitas').val(wbhouse.kapasitas);
+                $('#modalTitle').text('Edit Rumah Burung');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
 
-    // === Delete Role ===
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
@@ -80,7 +116,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/roles/${id}`, {
+                fetch(`/wbhouses/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

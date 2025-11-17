@@ -113,7 +113,8 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            // 'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'img/Logo.png',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -341,7 +342,7 @@ return [
                 ],
                 [
                     'text' => 'Perusahaan',
-                    'url'  => 'companies',
+                    'url'  => 'company',
                     'can'  => 'Super Admin',
                     'icon' => 'fas fa-users',
                 ],
@@ -376,8 +377,32 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Area',
+                    'url'  => 'areas',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Rumah Burung',
                     'url'  => 'wbhouses',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Jenis Bulu',
+                    'url'  => 'feathers',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Jenis Warna',
+                    'url'  => 'colors',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Jenis Bentuk',
+                    'url'  => 'shapes',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
@@ -390,7 +415,7 @@ return [
                 [
                     'text' => 'Jenis Uji',
                     'url'  => 'testTypes',
-                    'can'  => 'Super Admin',
+                    'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
                     'icon' => 'fas fa-users',
                 ],
             ],
@@ -401,6 +426,12 @@ return [
             'text' => 'Bahan Baku',
             'icon' => 'fas fa-folder',
             'submenu' => [
+                [
+                    'text' => 'Grade',
+                    'url'  => 'grades',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
                 [   
                     'text' => 'SKP',
                     'url'  => 'dcertificates',

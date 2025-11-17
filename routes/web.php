@@ -1,10 +1,24 @@
 <?php
 
+use App\Models\Grade;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ColorController;
+use App\Http\Controllers\GradeController;
+use App\Http\Controllers\ShapeController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\FeatherController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WBHouseController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TestTypeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 
@@ -41,16 +55,11 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-    // Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
-    // Route::post('/company', [CompanyController::class, 'storeOrUpdate'])->name('company.storeOrUpdate');
-
     // Company
-    // Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
-    // Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
-    // Route::get('/companies/{id}', [CompanyController::class, 'show'])->name('companies.show');
-    // Route::put('/companies/{id}', [CompanyController::class, 'update'])->name('companies.update');
-    // Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->name('companies.destroy');
-
+    Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
+    Route::post('/company', [CompanyController::class, 'storeOrUpdate'])->name('company.storeOrUpdate');
+    
+    // Department
     Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
     Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
     Route::get('/departments/{id}', [DepartmentController::class, 'show'])->name('departments.show');
@@ -63,6 +72,90 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
     Route::put('/employees/{id}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    
+    // Area
+    Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');
+    Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
+    Route::get('/areas/{id}', [AreaController::class, 'show'])->name('areas.show');
+    Route::put('/areas/{id}', [AreaController::class, 'update'])->name('areas.update');
+    Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
+
+    // Rumah Burung
+    Route::get('/wbhouses', [WbhouseController::class, 'index'])->name('wbhouses.index');
+    Route::post('/wbhouses', [WbhouseController::class, 'store'])->name('wbhouses.store');
+    Route::get('/wbhouses/{id}', [WbhouseController::class, 'show'])->name('wbhouses.show');
+    Route::put('/wbhouses/{id}', [WbhouseController::class, 'update'])->name('wbhouses.update');
+    Route::delete('/wbhouses/{id}', [WbhouseController::class, 'destroy'])->name('wbhouses.destroy');
+
+    // Jenis Bulu
+    Route::get('/feathers', [FeatherController::class, 'index'])->name('feathers.index');
+    Route::post('/feathers', [FeatherController::class, 'store'])->name('feathers.store');
+    Route::get('/feathers/{id}', [FeatherController::class, 'show'])->name('feathers.show');
+    Route::put('/feathers/{id}', [FeatherController::class, 'update'])->name('feathers.update');
+    Route::delete('/feathers/{id}', [FeatherController::class, 'destroy'])->name('feathers.destroy');
+
+    // Jenis Warna
+    Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
+    Route::get('/colors/{id}', [ColorController::class, 'show'])->name('colors.show');
+    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
+
+    // Jenis Bentuk
+    Route::get('/shapes', [ShapeController::class, 'index'])->name('shapes.index');
+    Route::post('/shapes', [ShapeController::class, 'store'])->name('shapes.store');
+    Route::get('/shapes/{id}', [ShapeController::class, 'show'])->name('shapes.show');
+    Route::put('/shapes/{id}', [ShapeController::class, 'update'])->name('shapes.update');
+    Route::delete('/shapes/{id}', [ShapeController::class, 'destroy'])->name('shapes.destroy');
+
+    // Jenis Grade
+    Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');
+    Route::post('/grades', [GradeController::class, 'store'])->name('grades.store');
+    Route::get('/grades/{id}', [GradeController::class, 'show'])->name('grades.show');
+    Route::put('/grades/{id}', [GradeController::class, 'update'])->name('grades.update');
+    Route::delete('/grades/{id}', [GradeController::class, 'destroy'])->name('grades.destroy');
+
+    // Mobil
+    Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
+    Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
+    Route::get('/cars/{id}', [CarController::class, 'show'])->name('cars.show');
+    Route::put('/cars/{id}', [CarController::class, 'update'])->name('cars.update');
+    Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
+
+    // Area
+    Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');
+    Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
+    Route::get('/areas/{id}', [AreaController::class, 'show'])->name('areas.show');
+    Route::put('/areas/{id}', [AreaController::class, 'update'])->name('areas.update');
+    Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
+
+    // Kategori
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
+    Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+    
+    // Supplier
+    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+    Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
+    Route::get('/suppliers/{id}', [SupplierController::class, 'show'])->name('suppliers.show');
+    Route::put('/suppliers/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
+    Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
+
+    // Customer
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
+    Route::put('/customers/{id}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+
+    // Jenis Uji
+    Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
+    Route::post('/testTypes', [TestTypeController::class, 'store'])->name('testTypes.store');
+    Route::get('/testTypes/{id}', [TestTypeController::class, 'show'])->name('testTypes.show');
+    Route::put('/testTypes/{id}', [TestTypeController::class, 'update'])->name('testTypes.update');
+    Route::delete('/testTypes/{id}', [TestTypeController::class, 'destroy'])->name('testTypes.destroy');
 });
 
 require __DIR__.'/auth.php';
