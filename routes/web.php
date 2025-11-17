@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FeatherController;
+use App\Http\Controllers\ShapeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
@@ -97,6 +98,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/colors/{id}', [ColorController::class, 'show'])->name('colors.show');
     Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
     Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
+
+    // Jenis Bentuk
+    Route::get('/shapes', [ShapeController::class, 'index'])->name('shapes.index');
+    Route::post('/shapes', [ShapeController::class, 'store'])->name('shapes.store');
+    Route::get('/shapes/{id}', [ShapeController::class, 'show'])->name('shapes.show');
+    Route::put('/shapes/{id}', [ShapeController::class, 'update'])->name('shapes.update');
+    Route::delete('/shapes/{id}', [ShapeController::class, 'destroy'])->name('shapes.destroy');
 
     // Mobil
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');

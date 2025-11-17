@@ -401,6 +401,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Jenis Bentuk',
+                    'url'  => 'shapes',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Mobil',
                     'url'  => 'cars',
                     'can'  => 'Super Admin',
