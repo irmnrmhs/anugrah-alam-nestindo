@@ -16,6 +16,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TestTypeController;
+use App\Http\Controllers\FeatherController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -82,6 +83,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/wbhouses/{id}', [WbhouseController::class, 'update'])->name('wbhouses.update');
     Route::delete('/wbhouses/{id}', [WbhouseController::class, 'destroy'])->name('wbhouses.destroy');
 
+    // Jenis Bulu
+    Route::get('/feathers', [FeatherController::class, 'index'])->name('feathers.index');
+    Route::post('/feathers', [FeatherController::class, 'store'])->name('feathers.store');
+    Route::get('/feathers/{id}', [FeatherController::class, 'show'])->name('feathers.show');
+    Route::put('/feathers/{id}', [FeatherController::class, 'update'])->name('feathers.update');
+    Route::delete('/feathers/{id}', [FeatherController::class, 'destroy'])->name('feathers.destroy');
+
     // Mobil
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
     Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
@@ -117,7 +125,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/customers/{id}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
-    // Customer
+    // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
     Route::post('/testTypes', [TestTypeController::class, 'store'])->name('testTypes.store');
     Route::get('/testTypes/{id}', [TestTypeController::class, 'show'])->name('testTypes.show');

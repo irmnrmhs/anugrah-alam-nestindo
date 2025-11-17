@@ -389,6 +389,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Jenis Bulu',
+                    'url'  => 'feathers',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Mobil',
                     'url'  => 'cars',
                     'can'  => 'Super Admin',
