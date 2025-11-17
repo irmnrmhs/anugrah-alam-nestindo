@@ -30,7 +30,7 @@ class Dcertificate extends Model
 
     public function wbhouse()
     {
-        return $this->belongsTo(Wbhouse::class, 'wbhouses_id');
+        return $this->belongsTo(WBHouse::class, 'wbhouses_id');
     }
 
     // public function arrival()
