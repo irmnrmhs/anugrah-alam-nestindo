@@ -397,7 +397,7 @@ return [
                 [
                     'text' => 'Jenis Uji',
                     'url'  => 'testTypes',
-                    'can'  => 'Super Admin',
+                    'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
                     'icon' => 'fas fa-users',
                 ],
             ],

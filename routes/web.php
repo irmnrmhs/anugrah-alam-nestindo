@@ -15,6 +15,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\TestTypeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -115,6 +116,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
     Route::put('/customers/{id}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+
+    // Customer
+    Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
+    Route::post('/testTypes', [TestTypeController::class, 'store'])->name('testTypes.store');
+    Route::get('/testTypes/{id}', [TestTypeController::class, 'show'])->name('testTypes.show');
+    Route::put('/testTypes/{id}', [TestTypeController::class, 'update'])->name('testTypes.update');
+    Route::delete('/testTypes/{id}', [TestTypeController::class, 'destroy'])->name('testTypes.destroy');
 });
 
 require __DIR__.'/auth.php';

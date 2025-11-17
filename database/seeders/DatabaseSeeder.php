@@ -29,6 +29,9 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             SupplierSeeder::class,
             CustomerSeeder::class,
+
+
+            TestTypeSeeder::class,
         ]);
         
         // User::factory(10)->create();

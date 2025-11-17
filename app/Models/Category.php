@@ -17,8 +17,8 @@ class Category extends Model
         return $this->hasMany(Supplier::class, 'categories_id');
     }
 
-    // public function testTypes()
-    // {
-    //     return $this->hasMany(TestType::class, 'categories_id');
-    // }
+    public function testTypes()
+    {
+        return $this->hasMany(TestType::class, 'categories_id');
+    }
 }
