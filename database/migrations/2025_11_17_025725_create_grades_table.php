@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('categories_id')->constrained('categories')->onDelete('cascade');
-            $table->string('grade');
+            $table->string('grade')->unique();
             $table->foreignId('shapes_id')->constrained('shapes')->onDelete('cascade');
             $table->foreignId('feathers_id')->constrained('feathers')->onDelete('cascade');
             $table->foreignId('colors_id')->constrained('colors')->onDelete('cascade');

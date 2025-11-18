@@ -50,10 +50,6 @@
         </select>
     </div>
     <div class="mb-3">
-        <label>Grade</label>
-        <input type="text" id="grade" class="form-control" required>
-    </div>
-    <div class="mb-3">
         <label>Jenis Bentuk</label>
         <select id="shapes_id" class="form-control" required>
             <option value="">-- Pilih Jenis Bentuk --</option>
@@ -117,7 +113,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan grade belum digunakan.', 'error'));
 @stop
 
 @section('custom-js')
