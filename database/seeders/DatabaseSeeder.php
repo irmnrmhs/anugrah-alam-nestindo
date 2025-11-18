@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Arrival;
+use App\Models\Dcertificate;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -33,9 +35,11 @@ class DatabaseSeeder extends Seeder
             ColorSeeder::class,
             ShapeSeeder::class,
             GradeSeeder::class,
-
-
             TestTypeSeeder::class,
+            DcertificateSeeder::class,
+            ArrivalSeeder::class,
+
+
         ]);
         
         // User::factory(10)->create();

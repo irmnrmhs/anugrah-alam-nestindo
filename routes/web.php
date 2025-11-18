@@ -22,6 +22,8 @@ use App\Http\Controllers\TestTypeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\ArrivalController;
+use App\Models\Arrival;
 
 Route::get('/', function () {
     return view('welcome');
@@ -157,6 +159,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/dcertificates/{id}', [DcertificateController::class, 'show'])->name('dcertificates.show');
     Route::put('/dcertificates/{id}', [DcertificateController::class, 'update'])->name('dcertificates.update');
     Route::delete('/dcertificates/{id}', [DcertificateController::class, 'destroy'])->name('dcertificates.destroy');
+
+    // Arrival
+    Route::get('/arrivals', [ArrivalController::class, 'index'])->name('arrivals.index');
+    Route::post('/arrivals', [ArrivalController::class, 'store'])->name('arrivals.store');
+    Route::get('/arrivals/{id}', [ArrivalController::class, 'show'])->name('arrivals.show');
+    Route::put('/arrivals/{id}', [ArrivalController::class, 'update'])->name('arrivals.update');
+    Route::delete('/arrivals/{id}', [ArrivalController::class, 'destroy'])->name('arrivals.destroy');
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
