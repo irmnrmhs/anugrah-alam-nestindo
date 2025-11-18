@@ -38,7 +38,7 @@
 @stop
 
 @section('form-fields')
-    <input type="hidden" id="companies_id" value="{{ 1 }}" class="form-control" required>
+    <input type="hidden" id="companies_id" name="companies_id" value="1">
     <div class="mb-3">
         <label>Supplier</label>
         <select id="suppliers_id" class="form-control" required>
@@ -50,7 +50,7 @@
     </div>
     <div class="mb-3">
         <label>Rumah Burung</label>
-        <select id="suppliers_id" class="form-control" required>
+        <select id="wbhouses_id" class="form-control" required>
             <option value="">-- Pilih Rumah Burung --</option>
             @foreach($wbhouses as $wbhouse)
                 <option value="{{ $wbhouse->id }}">{{ $wbhouse->nama }}</option>
@@ -115,7 +115,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan Nomor SKP belum digunakan.', 'error'));
 @stop
 
 @section('custom-js')
