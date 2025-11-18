@@ -7,14 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Arrival extends Model
 {
     protected $fillable = [
+        'kode',
         'dcertificates_id',
         'cars_id',
-        'drivers_id', 
+        'employees_id', 
         // 'receivers_id', 
+        'tgl_kedatangan',
         'kondisi',
         'keterangan',
     ];
-// no skp, mobil, supir, penerima, kondisi, keterang
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employees_id');

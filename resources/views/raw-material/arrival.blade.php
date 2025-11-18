@@ -7,10 +7,12 @@
 
 @section('table-headers')
     <th>No</th>
+    <th>Kode Bahan Baku</th>
     <th>No. SKP</th>
     <th>Mobil</th>
     <th>Supir</th>
     {{-- <th>Penerima</th> --}}
+    <th>Tanggal Kedatangan</th>
     <th>Kondisi</th>
     <th>Keterangan</th>
 @stop
@@ -19,9 +21,12 @@
     @foreach($arrivals as $index => $arrival)
         <tr data-id="{{ $arrival->id }}">
             <td>{{ $index + 1 }}</td>
+            <td>{{ $arrival->kode }}</td>
             <td>{{ $arrival->dcertificate->no_skp }}</td>
-            <td>{{ $arrival->car->merk " - " $arrival->car->plat }}</td>
+            <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
             <td>{{ $arrival->employee->nama }}</td>
+            {{-- <td>{{ $arrival->employee->nama }}</td> --}}
+            <td>{{ $arrival->tgl_kedatangan }}</td>
             <td>{{ $arrival->kondisi }}</td>
             <td>{{ $arrival->keterangan }}</td>
             <td>
@@ -47,18 +52,22 @@
         <select id="cars_id" class="form-control" required>
             <option value="">-- Pilih Mobil --</option>
             @foreach($cars as $car)
-                <option value="{{ $car->id }}">{{ $car->merk " - " $car->plat }}</option>
+                <option value="{{ $car->id }}">{{ $car->merk . ' - ' . $car->plat }}</option>
             @endforeach
         </select>
     </div>
     <div class="mb-3">
         <label>Supir</label>
-        <select id="drivers_id" class="form-control" required>
+        <select id="employees_id" class="form-control" required>
             <option value="">-- Pilih Supir --</option>
             @foreach($employees as $employee)
                 <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
             @endforeach
         </select>
+    </div>
+    <div class="mb-3">
+        <label>Tanggal Kedatangan</label>
+        <input type="text" id="tgl_kedatangan" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Kondisi</label>
@@ -77,9 +86,11 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
+        kode: $('#kode').val(),
         dcertificates_id: $('#dcertificates_id').val(),
         cars_id: $('#cars_id').val(),
-        drivers_id: $('#drivers_id').val(),
+        employees_id: $('#employees_id').val(),
+        tgl_kedatangan: $('#tgl_kedatangan').val(),
         kondisi: $('#kondisi').val(),
         keterangan: $('#keterangan').val()
     };
@@ -107,9 +118,11 @@
             .then(r => r.json())
             .then(arrival => {
                 $('#item_id').val(arrival.id);
+                $('#kode').val(arrival.kode);
                 $('#dcertificates_id').val(arrival.dcertificates_id);
                 $('#cars_id').val(arrival.cars_id);
-                $('#drivers_id').val(arrival.drivers_id);
+                $('#employees_id').val(arrival.employees_id);
+                $('#tgl_kedatangan').val(arrival.tgl_kedatangan);
                 $('#kondisi').val(arrival.kondisi);
                 $('#keterangan').val(arrival.keterangan);
                 $('#modalTitle').text('Edit Kedatangan');

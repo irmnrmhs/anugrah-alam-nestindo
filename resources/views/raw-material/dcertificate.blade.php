@@ -1,8 +1,8 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data SKP';
-    $singular = 'SKP';
+    $title = 'Kelola Data Keterangan Pengiriman';
+    $singular = 'Keterangan Pengiriman';
 @endphp
 
 @section('table-headers')

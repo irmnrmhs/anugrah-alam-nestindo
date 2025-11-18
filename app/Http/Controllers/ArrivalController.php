@@ -12,6 +12,7 @@ use Illuminate\View\View;
 
 class ArrivalController extends Controller
 {
+    public string $obj = 'Kedatangan';
     public function index(): View
     {
         $arrivals = Arrival::with('employee', 'car', 'dcertificate')->oldest()->get();
@@ -19,19 +20,25 @@ class ArrivalController extends Controller
         $cars = Car::all();
         $dcertificates = Dcertificate::all();
 
-        return view('masters.arrival', compact('arrivals', 'employees', 'cars', 'dcertificates'));
+        return view('raw-material.arrival', compact('arrivals', 'employees', 'cars', 'dcertificates'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
+            'kode'              => 'required|unique:arrivals,kode',
+            'dcertificates_id'  => 'required|unique:dcertificates,id',
+            'cars_id'           => 'required|exists:cars,id',
+            'employees_id'      => 'required|exists:employees,id',
+            'tgl_kedatangan'    => 'required|date',
             'kondisi'           => 'required',
-            'keterangan'        => 'nullable',
-            'drivers_id'      => 'required',
+            'keterangan'        => 'required',
             // 'receivers_id'      => 'required',
-            'cars_id'           => 'required',
-            'dcertificates_id'  => 'required',
         ]);
+
+        $dcertificate = Dcertificate::find($request->wbhouse->kode);
+
+        $validated['kode'] = $dcertificate . '-' . 'tgl_kedatangan';
 
         $arrival = Arrival::create($validated);
 
@@ -52,16 +59,21 @@ class ArrivalController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
+            'kode'              => 'required|unique:arrivals,kode,' . $id,
+            'dcertificates_id'  => 'required|unique:dcertificates,id,' . $id,
+            'cars_id'           => 'required|exists:cars,id',
+            'employees_id'      => 'required|exists:employees,id',
+            'tgl_pemeriksaan'   => 'required|date',
             'kondisi'           => 'required',
-            'keterangan'        => 'nullable',
-            'drivers_id'      => 'required',
+            'keterangan'        => 'required',
             // 'receivers_id'      => 'required',
-            'cars_id'           => 'required',
-            'dcertificates_id'  => 'required',
         ]);
 
-        $arrival = Arrival::findOrFail($id);
+        $dcertificate = Dcertificate::find($request->wbhouse->kode);
 
+        $validated['kode'] = $dcertificate . '-' . 'tgl_kedatangan';
+
+        $arrival = Arrival::findOrFail($id);
         $arrival->update($validated);
 
         return response()->json([
