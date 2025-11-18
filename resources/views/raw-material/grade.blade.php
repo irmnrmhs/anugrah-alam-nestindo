@@ -49,40 +49,38 @@
             @endforeach
         </select>
     </div>
-    <!-- <div class="mb-3">
+    {{-- <div class="mb-3">
         <label>Grade</label>
         <input type="text" id="grade" class="form-control" required>
-    </div> -->
-    <input type="hidden" id="grade" name="grade">
+    </div> --}}
+    <div class="mb-3">
+        <label>Kode Grade (Auto)</label>
+        <input type="text" id="grade_preview" class="form-control" readonly>
+    </div>
     <div class="mb-3">
         <label>Jenis Bentuk</label>
-        <select id="shapes_id" name="shapes_id" class="form-control">
-            <option value="">-- pilih --</option>
-            @foreach ($shapes as $shape)
-                <option value="{{ $shape->id }}" data-code="{{ $shape->kode }}">
-                    {{ $shape->jenis_bentuk }}
-                </option>
+        <select id="shapes_id" class="form-control" required>
+            <option value="">-- Pilih Jenis Bentuk --</option>
+            @foreach($shapes as $shape)
+                <option value="{{ $shape->id }}">{{ $shape->jenis_bentuk }}</option>
             @endforeach
         </select>
     </div>
     <div class="mb-3">
         <label>Jenis Bulu</label>
-        <select id="feathers_id" name="feathers_id" class="form-control" required>
+        <select id="feathers_id" class="form-control" required>
             <option value="">-- Pilih Jenis Bulu --</option>
-            @foreach ($feathers as $feather)
-                <option value="{{ $feather->id }}" data-code="{{ $feather->kode }}">
-                    {{ $feather->jenis_bulu }}
-                </option>
+            @foreach($feathers as $feather)
+                <option value="{{ $feather->id }}">{{ $feather->jenis_bulu }}</option>
             @endforeach
         </select>
+    </div>
     <div class="mb-3">
         <label>Jenis Warna</label>
-        <select id="colors_id" name="colors_id" class="form-control" required>
+        <select id="colors_id" class="form-control" required>
             <option value="">-- Pilih Jenis Warna --</option>
-            @foreach ($colors as $color)
-                <option value="{{ $color->id }}" data-code="{{ $color->kode }}">
-                    {{ $color->jenis_warna }}
-                </option>
+            @foreach($colors as $color)
+                <option value="{{ $color->id }}">{{ $color->jenis_warna }}</option>
             @endforeach
         </select>
     </div>
@@ -96,19 +94,6 @@
 @stop
 
 @section('form-submit-script')
-
-$('#shapes_id, #feathers_id, #colors_id').on('change', function () {
-
-    let shapeCode   = $('#shapes_id option:selected').data('code');
-    let featherCode = $('#feathers_id option:selected').data('code');
-    let colorCode   = $('#colors_id option:selected').data('code');
-
-    if (shapeCode && featherCode && colorCode) {
-        let grade = `${shapeCode}-${featherCode}-${colorCode}`;
-            $('#grade').val(grade); // grade otomatis tersimpan tanpa tampil
-    }
-});
-
     const id = $('#item_id').val();
     const url = id ? `/grades/${id}` : '/grades';
     const method = id ? 'PUT' : 'POST';
@@ -116,7 +101,7 @@ $('#shapes_id, #feathers_id, #colors_id').on('change', function () {
     const data = {
         _token: '{{ csrf_token() }}',
         categories_id: $('#categories_id').val(),
-        grade: $('#grade').val(),
+        {{-- grade: $('#grade').val(), --}}
         shapes_id: $('#shapes_id').val(),
         feathers_id: $('#feathers_id').val(),
         colors_id: $('#colors_id').val(),
