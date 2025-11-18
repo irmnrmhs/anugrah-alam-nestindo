@@ -30,7 +30,7 @@ class GradeController extends Controller
     {
         $validated = $request->validate([
             'categories_id' => 'required|exists:categories,id',
-            // 'grade' => 'required|string|max:100|unique:grades,grade',
+            'grade' => 'nullable|string|max:100|unique:grades,grade',
             'shapes_id' => 'required|exists:shapes,id',
             'feathers_id' => 'required|exists:feathers,id',
             'colors_id' => 'required|exists:colors,id',
@@ -71,7 +71,7 @@ class GradeController extends Controller
     {
         $validated = $request->validate([
             'categories_id' => 'required|exists:categories,id',
-            // 'grade' => 'required|string|max:100|unique:grades,grade,' . $id,
+            'grade' => 'nullable|string|max:100|unique:grades,grade,' . $id,
             'shapes_id' => 'required|exists:shapes,id',
             'feathers_id' => 'required|exists:feathers,id',
             'colors_id' => 'required|exists:colors,id',
