@@ -51,9 +51,9 @@
     <div class="mb-3">
         <label>Rumah Burung</label>
         <select id="suppliers_id" class="form-control" required>
-            <option value="">-- Pilih Supplier --</option>
-            @foreach($suppliers as $supplier)
-                <option value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
+            <option value="">-- Pilih Rumah Burung --</option>
+            @foreach($wbhouses as $wbhouse)
+                <option value="{{ $wbhouse->id }}">{{ $wbhouse->nama }}</option>
             @endforeach
         </select>
     </div>
