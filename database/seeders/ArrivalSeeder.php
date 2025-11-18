@@ -18,7 +18,7 @@ class ArrivalSeeder extends Seeder
             'dcertificates_id'  => 1,
             'cars_id'           => 2,
             'employees_id'      => 3,
-            'tgl_kedatangan'   => 12/12/2025,
+            'tgl_kedatangan'   => '2025-12-12',
             'kondisi'           => 'Bebas dari ... (checkbox)',
             'keterangan'        => 'Dinyatakan aman ...',
         ]);
