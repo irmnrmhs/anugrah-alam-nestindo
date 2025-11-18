@@ -54,10 +54,6 @@
         <input type="text" id="grade" class="form-control" required>
     </div> --}}
     <div class="mb-3">
-        <label>Kode Grade (Auto)</label>
-        <input type="text" id="grade_preview" class="form-control" readonly>
-    </div>
-    <div class="mb-3">
         <label>Jenis Bentuk</label>
         <select id="shapes_id" class="form-control" required>
             <option value="">-- Pilih Jenis Bentuk --</option>

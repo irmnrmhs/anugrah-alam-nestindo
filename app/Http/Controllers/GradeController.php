@@ -37,26 +37,26 @@ class GradeController extends Controller
             'status' => 'required|boolean',
         ]);
 
-        // Ambil kode relasi
+        $category = Category::find($request->categories_id);
         $shape = Shape::find($request->shapes_id);
         $feather = Feather::find($request->feathers_id);
         $color = Color::find($request->colors_id);
 
-        // Generate grade otomatis (tanpa kategori)
         $generatedGrade = strtoupper(
             $shape->kode . '-' .
             $feather->kode . '-' .
             $color->kode
         );
 
-        // Tambahkan ke validated
         $validated['grade'] = $generatedGrade;
 
         $grade = Grade::create($validated);
 
+        $message = "Grade baru berhasil ditambahkan dengan kode {$generatedGrade}, kategori {$category->kategori}, jenis bentuk {$shape->jenis_bentuk}, jenis bulu {$feather->jenis_bulu}, dan jenis warna {$color->jenis_warna}.";
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Grade berhasil ditambahkan',
+            'message' => $message,
             'data' => $grade,
         ]);
     }
@@ -82,7 +82,6 @@ class GradeController extends Controller
         $feather = Feather::find($request->feathers_id);
         $color = Color::find($request->colors_id);
 
-        // Generate grade baru
         $validated['grade'] = strtoupper(
             $shape->kode . '-' .
             $feather->kode . '-' .
