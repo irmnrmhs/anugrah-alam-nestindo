@@ -459,6 +459,26 @@ return [
             ],
         ],
 
+        // Menu Kontrol Kualitas
+        [
+            'text' => 'Kontrol Kualitas',
+            'icon' => 'fas fa-folder',
+            'submenu' => [
+                [
+                    'text' => 'Sampel Bahan Baku',
+                    'url'  => 'rm-samples',
+                    'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Hasil Uji Bahan Baku',
+                    'url'  => 'rm-results',
+                    'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
+                    'icon' => 'fas fa-users',
+                ],
+            ],
+        ],
+
         // Menu Setting
         [
             'text' => 'profile',
