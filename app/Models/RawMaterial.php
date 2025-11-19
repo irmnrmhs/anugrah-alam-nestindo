@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class RawMaterial extends Model
 {
     protected $fillable = [
-        // 'kode',
+        'kode',
         // 'arrivals_id',
         'biji',
         'berat',

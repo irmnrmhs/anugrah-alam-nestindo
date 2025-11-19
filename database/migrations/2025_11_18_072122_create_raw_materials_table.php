@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('raw_materials', function (Blueprint $table) {
             $table->id();
-            // $table->string('kode')->unique();
+            $table->string('kode')->unique();
             // $table->foreignId('arrivals_id')->constrained('arrivals')->unique();
             // $table->foreignId('rw_tests_id')->constrained('rw_tests')->default();
             $table->integer('biji')->default(0);
