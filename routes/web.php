@@ -25,6 +25,7 @@ use App\Http\Controllers\TestTypeController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 
 Route::get('/', function () {
@@ -175,6 +176,9 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/containers/{id}', [ContainerController::class, 'show'])->name('containers.show');
     Route::put('/containers/{id}', [ContainerController::class, 'update'])->name('containers.update');
     Route::delete('/containers/{id}', [ContainerController::class, 'destroy'])->name('containers.destroy');
+
+    // Raw Material
+    Route::get('/rawMaterials', [RawMaterialController::class, 'index'])->name('rawMaterials.index');
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
