@@ -21,7 +21,9 @@ class AreaController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
+            'kode' => 'required|unique:areas,kode',
             'area' => 'required|unique:areas,area',
+            'kh' => 'required|boolean',
             'keterangan' => 'nullable'
         ]);
 
@@ -42,7 +44,9 @@ class AreaController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
+            'kode' => 'required|unique:areas,kode,' . $id,
             'area' => 'required|unique:areas,area,' . $id,
+            'kh' => 'required|boolean',
             'keterangan' => 'nullable'
         ]);
 

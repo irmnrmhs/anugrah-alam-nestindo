@@ -7,7 +7,9 @@
 
 @section('table-headers')
     <th>No</th>
+    <th>Kode</th>
     <th>Area</th>
+    <th>KH</th>
     <th>Keterangan</th>
 @stop
 
@@ -15,7 +17,15 @@
     @foreach($areas as $index => $area)
         <tr data-id="{{ $area->id }}">
             <td>{{ $index + 1 }}</td>
+            <td>{{ $area->kode }}</td>
             <td>{{ $area->area }}</td>
+            <td>
+                @if($area->kh)
+                    <span class="badge bg-success">Ya</span>
+                @else
+                    <span class="badge bg-danger">Tidak</span>
+                @endif
+            </td>
             <td>{{ $area->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -27,10 +37,20 @@
 
 @section('form-fields')
     <div class="mb-3">
+        <label>Kode</label>
+        <input type="text" id="kode" class="form-control" required>
+    </div>
+    <div class="mb-3">
         <label>Area</label>
         <input type="text" id="area" class="form-control" required>
     </div>
-
+    <div class="mb-3">
+        <label>KH</label>
+        <select id="kh" class="form-control" required>
+            <option value="1">Ya</option>
+            <option value="0">Tidak</option>
+        </select>
+    </div>
     <div class="mb-3">
         <label>Keterangan</label>
         <input type="text" id="keterangan" class="form-control">
@@ -44,7 +64,9 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
+        kode: $('#kode').val(),
         area: $('#area').val(),
+        kh: $('#kh').val(),
         keterangan: $('#keterangan').val()
     };
 
@@ -70,7 +92,9 @@
             .then(r => r.json())
             .then(area => {
                 $('#item_id').val(area.id);
+                $('#kode').val(area.kode);
                 $('#area').val(area.area);
+                $('#kh').val(area.kh);
                 $('#keterangan').val(area.keterangan);
                 $('#modalTitle').text('Edit Area');
                 new bootstrap.Modal('#crudModal').show();
