@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\RawMaterialController;
 use Illuminate\Database\Eloquent\Model;
 
 class Arrival extends Model
@@ -31,4 +32,14 @@ class Arrival extends Model
     {
         return $this->belongsTo(Dcertificate::class, 'dcertificates_id');
     }
+
+    public function containers()
+    {
+        return $this->hasMany(Container::class, 'arrivals_id');
+    }
+
+    // public function rawMaterial()
+    // {
+    //     return $this->belongsTo(RawMaterial::class, 'arrivals_id');
+    // }
 }

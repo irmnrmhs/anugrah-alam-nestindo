@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('containers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('arrivals_id')->constrained('arrivals');
+            $table->foreignId('employees_id')->constrained('employees');
+            $table->integer('biji');
+            $table->decimal('berat', 7, 2);
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

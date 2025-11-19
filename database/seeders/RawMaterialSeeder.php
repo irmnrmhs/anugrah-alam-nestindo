@@ -12,6 +12,6 @@ class RawMaterialSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        
     }
 }
