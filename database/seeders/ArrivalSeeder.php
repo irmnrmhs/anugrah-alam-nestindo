@@ -19,8 +19,8 @@ class ArrivalSeeder extends Seeder
             'cars_id'           => 2,
             'employees_id'      => 3,
             'tgl_kedatangan'   => '2025-12-12',
-            'kondisi'           => 'Bebas dari ... (checkbox)',
-            'keterangan'        => 'Dinyatakan aman ...',
+            'kondisi'           => 'Bebas dari ...',
+            'keterangan'        => 'Tidak ada kontaminasi pest. kemasan dalam keadaan utuh.',
         ]);
     }
 }

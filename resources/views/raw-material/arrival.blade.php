@@ -72,8 +72,10 @@
     <div class="mb-3">
     <label>Kondisi</label>
     <div>
-        <label><input type="checkbox" class="kondisi-item" value="debu"> Debu</label><br>
-        <label><input type="checkbox" class="kondisi-item" value="pecahan kaca"> Pecahan Kaca</label>
+        <label><input type="checkbox" class="kondisi-item" value="sampah"> Bebas dari sampah </label><br>
+        <label><input type="checkbox" class="kondisi-item" value="ceceran oli"> Bebas dari ceceran oli </label><br>
+        <label><input type="checkbox" class="kondisi-item" value="benda tajam"> Bebas dari benda tajam </label><br>
+        <label><input type="checkbox" class="kondisi-item" value="kondisi seal dalam keadaan utuh"> Seal utuh </label>
     </div>
 </div>
     <div class="mb-3">
@@ -89,7 +91,7 @@
             list.push($(this).val());
         });
 
-        return list.length > 0 ? 'bebas dari ' + list.join(', ') : '';
+        return list.length > 0 ? 'Bebas dari ' + list.join(', ') : '';
     }
 
     const id = $('#item_id').val();
@@ -120,7 +122,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan grade belum digunakan.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan SKP belum digunakan.', 'error'));
 @stop
 
 @section('custom-js')

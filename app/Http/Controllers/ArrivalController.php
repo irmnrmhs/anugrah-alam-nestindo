@@ -36,18 +36,14 @@ class ArrivalController extends Controller
             // 'receivers_id'      => 'required',
         ]);
 
-        // 1. Ambil objek Dcertificate (termasuk relasi wbhouse)
         $dcertificate = Dcertificate::with('wbhouse')->find($validated['dcertificates_id']);
 
-        // 2. Ambil KODE dari WBHouse yang berelasi
         $kode_wbhouse = $dcertificate->wbhouse->kode; 
         $tgl_kedatangan = $validated['tgl_kedatangan'];
 
         $format_tgl = date('dmy', strtotime($tgl_kedatangan));
-        // 3. Buat nilai 'kode' baru (KODE_WBHOUSE-TGL_KEDATANGAN)
         $validated['kode'] = $kode_wbhouse . '-' . $format_tgl;
 
-        // 4. Pastikan kode yang dibuat unik di tabel arrivals
         if (Arrival::where('kode', $validated['kode'])->exists()) {
             return response()->json([
                 'status' => 'error',
@@ -84,21 +80,17 @@ class ArrivalController extends Controller
             // 'receivers_id'      => 'required',
         ]);
 
-        // 1. Ambil objek Dcertificate (termasuk relasi wbhouse)
         $dcertificate = Dcertificate::with('wbhouse')->find($validated['dcertificates_id']);
 
-        // 2. Ambil KODE dari WBHouse yang berelasi
         $kode_wbhouse = $dcertificate->wbhouse->kode; 
         $tgl_kedatangan = $validated['tgl_kedatangan'];
 
         $format_tgl = date('dmy', strtotime($tgl_kedatangan));
 
-        // 3. Buat nilai 'kode' baru (KODE_WBHOUSE-TGL_KEDATANGAN)
         $validated['kode'] = $kode_wbhouse . '-' . $format_tgl;
 
         $arrival = Arrival::findOrFail($id);
         
-        // 4. Pastikan kode yang diperbarui unik, mengabaikan baris saat ini
         if (Arrival::where('kode', $validated['kode'])->where('id', '!=', $id)->exists()) {
             return response()->json([
                 'status' => 'error',
