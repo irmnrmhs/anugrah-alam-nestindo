@@ -1,3 +1,10 @@
+@php
+    $title = 'Kelola Bahan Baku';
+    $singular = 'Bahan Baku';
+    $hideAddButton = true;
+    $hideActions = true;
+@endphp
+
 @extends('layouts.form')
 
 @php
@@ -19,10 +26,6 @@
             <td>{{ $raw_material->kode }}</td>
             <td>{{ $raw_material->biji }}</td>
             <td>{{ $raw_material->berat }}</td>
-            <td>
-                <button class="btn btn-sm btn-warning btnEdit">Edit</button>
-                <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-            </td>
         </tr>
     @endforeach
 @stop

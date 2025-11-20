@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-// sy ingin agar ketika pada containers ditambahkan data maka 
+    
     /**
      * Reverse the migrations.
      */

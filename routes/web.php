@@ -1,9 +1,5 @@
 <?php
 
-// use App\Models\Grade;
-// use App\Models\Arrival;
-// use App\Models\Customer;
-// use App\Models\Container;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
