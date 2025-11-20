@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model
 {
     protected $fillable = [
-        'categories_id',
+        // 'categories_id',
         'grade',
         'shapes_id',
         'feathers_id',
@@ -15,10 +15,10 @@ class Grade extends Model
         'status'
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'categories_id');
-    }
+    // public function category()
+    // {
+    //     return $this->belongsTo(Category::class, 'categories_id');
+    // }
 
     public function shape()
     {

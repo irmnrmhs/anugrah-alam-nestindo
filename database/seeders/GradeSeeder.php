@@ -14,7 +14,7 @@ class GradeSeeder extends Seeder
     public function run(): void
     {
         Grade::create([
-            'categories_id' => 1,
+            // 'categories_id' => 1,
             'grade' => 'MK-BRP-P',
             'shapes_id' => 1,
             'feathers_id' => 1,
