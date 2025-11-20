@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-// use App\Models\Category;
 use App\Models\Shape;
 use App\Models\Feather;
 use App\Models\Color;
@@ -15,10 +13,10 @@ use Illuminate\View\View;
 class GradeController extends Controller
 {
     public string $obj = 'Grade';
+
     public function index(): View
     {
         $grades = Grade::with('shape', 'feather', 'color')->oldest()->get();
-        // $categories = Category::all();
         $shapes = Shape::all();
         $feathers = Feather::all();
         $colors = Color::all();
@@ -29,30 +27,15 @@ class GradeController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            // 'categories_id' => 'required|exists:categories,id',
-            'grade' => 'nullable|string|max:100|unique:grades,grade',
             'shapes_id' => 'required|exists:shapes,id',
             'feathers_id' => 'required|exists:feathers,id',
             'colors_id' => 'required|exists:colors,id',
             'status' => 'required|boolean',
         ]);
 
-        // $category = Category::find($request->categories_id);
-        $shape = Shape::find($request->shapes_id);
-        $feather = Feather::find($request->feathers_id);
-        $color = Color::find($request->colors_id);
-
-        $generatedGrade = strtoupper(
-            $shape->kode . '-' .
-            $feather->kode . '-' .
-            $color->kode
-        );
-
-        $validated['grade'] = $generatedGrade;
-
         $grade = Grade::create($validated);
 
-        $message = "Grade baru berhasil ditambahkan dengan kode {$generatedGrade}, kategori {$category->kategori}, jenis bentuk {$shape->jenis_bentuk}, jenis bulu {$feather->jenis_bulu}, dan jenis warna {$color->jenis_warna}.";
+        $message = "Grade baru berhasil ditambahkan dengan kode {$grade->grade}.";
 
         return response()->json([
             'status' => 'success',
@@ -70,30 +53,18 @@ class GradeController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            // 'categories_id' => 'required|exists:categories,id',
-            'grade' => 'nullable|string|max:100|unique:grades,grade,' . $id,
             'shapes_id' => 'required|exists:shapes,id',
             'feathers_id' => 'required|exists:feathers,id',
             'colors_id' => 'required|exists:colors,id',
             'status' => 'required|boolean',
         ]);
 
-        $shape = Shape::find($request->shapes_id);
-        $feather = Feather::find($request->feathers_id);
-        $color = Color::find($request->colors_id);
-
-        $validated['grade'] = strtoupper(
-            $shape->kode . '-' .
-            $feather->kode . '-' .
-            $color->kode
-        );
-
         $grade = Grade::findOrFail($id);
         $grade->update($validated);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Grade berhasil diperbarui',
+            'message' => 'Grade berhasil diperbarui.',
             'data' => $grade,
         ]);
     }
@@ -105,7 +76,7 @@ class GradeController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => $this->obj . ' berhasil dihapus',
+            'message' => "{$this->obj} berhasil dihapus",
         ]);
     }
 }

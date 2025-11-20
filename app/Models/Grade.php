@@ -8,7 +8,6 @@ class Grade extends Model
 {
     protected $fillable = [
         // 'categories_id',
-        'grade',
         'shapes_id',
         'feathers_id',
         'colors_id',
@@ -33,5 +32,14 @@ class Grade extends Model
     public function color()
     {
         return $this->belongsTo(Color::class, 'colors_id');
+    }
+
+    public function getGradeAttribute()
+    {
+        return strtoupper(
+            $this->shape?->kode . '-' .
+            $this->feather?->kode . '-' .
+            $this->color?->kode
+        );
     }
 }

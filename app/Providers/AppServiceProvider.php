@@ -5,6 +5,14 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
+use App\Models\Shape;
+use App\Models\Feather;
+use App\Models\Color;
+
+use App\Observers\ShapeObserver;
+use App\Observers\FeatherObserver;
+use App\Observers\ColorObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -45,5 +53,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('view-dashboard', function ($user) {
             return $user->role->name !== 'User';
         });
+
+        Shape::observe(ShapeObserver::class);
+        Feather::observe(FeatherObserver::class);
+        Color::observe(ColorObserver::class);
     }
 }

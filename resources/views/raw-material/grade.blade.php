@@ -82,8 +82,6 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
-        <!-- categories_id: $('#categories_id').val(), -->
-        grade: $('#grade').val(),
         shapes_id: $('#shapes_id').val(),
         feathers_id: $('#feathers_id').val(),
         colors_id: $('#colors_id').val(),
@@ -113,8 +111,6 @@
             .then(r => r.json())
             .then(grade => {
                 $('#item_id').val(grade.id);
-                <!-- $('#categories_id').val(grade.categories_id); -->
-                $('#grade').val(grade.grade);
                 $('#shapes_id').val(grade.shapes_id);
                 $('#feathers_id').val(grade.feathers_id);
                 $('#colors_id').val(grade.colors_id);
