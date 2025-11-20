@@ -13,7 +13,7 @@ class RawMaterial extends Model
         'berat',
         // 'kadar_air'
     ];
-
+    
     // public function containers()
     // {
     //     return $this->hasMany(Container::class, 'raw_materials_id');
