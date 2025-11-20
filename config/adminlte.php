@@ -432,6 +432,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Bahan Baku',
+                    'url'  => 'rawMaterials',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
                 [   
                     'text' => 'SKP',
                     'url'  => 'dcertificates',
@@ -441,6 +447,12 @@ return [
                 [   
                     'text' => 'Kedatangan',
                     'url'  => 'arrivals',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [   
+                    'text' => 'Kontainer',
+                    'url'  => 'containers',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],

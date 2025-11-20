@@ -33,8 +33,8 @@ class Dcertificate extends Model
         return $this->belongsTo(WBHouse::class, 'wbhouses_id');
     }
 
-    // public function arrival()
-    // {
-    //     return $this->hasOne(Arrival::class, 'dcertificates_id');
-    // }
+    public function arrival()
+    {
+        return $this->hasOne(Arrival::class, 'dcertificates_id');
+    }
 }

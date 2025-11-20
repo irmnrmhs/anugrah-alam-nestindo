@@ -67,12 +67,17 @@
     </div>
     <div class="mb-3">
         <label>Tanggal Kedatangan</label>
-        <input type="text" id="tgl_kedatangan" class="form-control" required>
+        <input type="date" id="tgl_kedatangan" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Kondisi</label>
-        <input type="text" id="kondisi" class="form-control" required>
+    <label>Kondisi</label>
+    <div>
+        <label><input type="checkbox" class="kondisi-item" value="sampah"> Bebas dari sampah </label><br>
+        <label><input type="checkbox" class="kondisi-item" value="ceceran oli"> Bebas dari ceceran oli </label><br>
+        <label><input type="checkbox" class="kondisi-item" value="benda tajam"> Bebas dari benda tajam </label><br>
+        <label><input type="checkbox" class="kondisi-item" value="kondisi seal dalam keadaan utuh"> Seal utuh </label>
     </div>
+</div>
     <div class="mb-3">
         <label>Keterangan</label>
         <input type="text" id="keterangan" class="form-control" required>
@@ -80,18 +85,27 @@
 @stop
 
 @section('form-submit-script')
+    function getKondisiValue() {
+        let list = [];
+        $('.kondisi-item:checked').each(function() {
+            list.push($(this).val());
+        });
+
+        return list.length > 0 ? 'Bebas dari ' + list.join(', ') : '';
+    }
+
     const id = $('#item_id').val();
     const url = id ? `/arrivals/${id}` : '/arrivals';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        kode: $('#kode').val(),
+        <!-- kode: $('#kode').val(), -->
         dcertificates_id: $('#dcertificates_id').val(),
         cars_id: $('#cars_id').val(),
         employees_id: $('#employees_id').val(),
         tgl_kedatangan: $('#tgl_kedatangan').val(),
-        kondisi: $('#kondisi').val(),
+        kondisi: getKondisiValue(),
         keterangan: $('#keterangan').val()
     };
 
@@ -108,7 +122,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan grade belum digunakan.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan SKP belum digunakan.', 'error'));
 @stop
 
 @section('custom-js')
@@ -118,13 +132,21 @@
             .then(r => r.json())
             .then(arrival => {
                 $('#item_id').val(arrival.id);
-                $('#kode').val(arrival.kode);
+                <!-- $('#kode').val(arrival.kode); -->
                 $('#dcertificates_id').val(arrival.dcertificates_id);
                 $('#cars_id').val(arrival.cars_id);
                 $('#employees_id').val(arrival.employees_id);
                 $('#tgl_kedatangan').val(arrival.tgl_kedatangan);
-                $('#kondisi').val(arrival.kondisi);
                 $('#keterangan').val(arrival.keterangan);
+                
+                $('.kondisi-item').prop('checked', false);
+                if (arrival.kondisi) {
+                    const kondisiList = arrival.kondisi.replace('bebas dari ', '').split(', ');
+                    kondisiList.forEach(function(k) {
+                        $('.kondisi-item[value="'+k+'"]').prop('checked', true);
+                    });
+                }
+
                 $('#modalTitle').text('Edit Kedatangan');
                 new bootstrap.Modal('#crudModal').show();
             });
