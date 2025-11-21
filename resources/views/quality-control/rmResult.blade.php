@@ -17,7 +17,7 @@
     @foreach($results as $index => $result)
         <tr data-id="{{ $result->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $result->rawMaterial->arrival->dcertificate->wbhouse->kode . '/' . $result->rawMaterial->arrival->dcertificate->wbhouse->nama }}</td>
+            <td>{{ $result->rawMaterial->kode }}</td>
             <td>{{ $result->kadar_air }}</td>
             <td>{{ $result->kadar_nitrit }}</td>
             <td>{{ $result->kadar_aluminium }}</td>
@@ -35,7 +35,7 @@
         <select id="rms_id" class="form-control" required>
             <option value="">-- Pilih Rumah Burung --</option>
             @foreach($rms as $rm)
-                <option value="{{ $rm->id }}">{{ $rm->kode . '/' .  $rm->nama}}</option>
+                <option value="{{ $rm->id }}">{{ $rm->kode}}</option>
             @endforeach
         </select>
     </div>
