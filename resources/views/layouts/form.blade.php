@@ -5,7 +5,9 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>{{ $title ?? 'Kelola Data' }}</h1>
-        <button class="btn btn-primary" id="btnAdd">Tambah {{ $singular ?? 'Data' }}</button>
+        @if (empty($hideAddButton))
+            <button class="btn btn-primary" id="btnAdd">Tambah {{ $singular ?? 'Data' }}</button>
+        @endif
     </div>
 @stop
 
@@ -17,7 +19,9 @@
                 <thead>
                     <tr>
                         @yield('table-headers')
-                        <th>Aksi</th>
+                        @if (empty($hideActions))
+                            <th>Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>

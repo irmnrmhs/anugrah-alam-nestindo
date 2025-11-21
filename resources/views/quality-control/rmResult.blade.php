@@ -51,10 +51,6 @@
         <label>Kadar Aluminium</label>
         <input type="number" id="kadar_aluminium" step="0.01" min="0" max="999.9" class="form-control">
     </div>
-    <div class="mb-3">
-        <label>Keterangan</label>
-        <input type="number" id="keterangan" class="form-control">
-    </div>
 @stop
 
 @section('form-submit-script')

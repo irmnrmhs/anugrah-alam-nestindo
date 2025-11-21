@@ -8,12 +8,12 @@ class RawMaterial extends Model
 {
     protected $fillable = [
         'kode',
-        // 'arrivals_id',
+        'arrivals_id',
         'biji',
         'berat',
         // 'kadar_air'
     ];
-
+    
     // public function containers()
     // {
     //     return $this->hasMany(Container::class, 'raw_materials_id');
@@ -22,5 +22,10 @@ class RawMaterial extends Model
     public function arrival()
     {
         return $this->belongsTo(Arrival::class, 'arrivals_id');
+    }
+
+    public function rmResults()
+    {
+        return $this->hasMany(RmResult::class, 'rms_id');
     }
 }
