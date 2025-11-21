@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\Shape;
 use App\Models\Feather;
 use App\Models\Color;
+use App\Models\WBHouse;
 
+use App\Observers\WBHouseObserver;
 use App\Observers\ShapeObserver;
 use App\Observers\FeatherObserver;
 use App\Observers\ColorObserver;
@@ -57,5 +59,6 @@ class AppServiceProvider extends ServiceProvider
         Shape::observe(ShapeObserver::class);
         Feather::observe(FeatherObserver::class);
         Color::observe(ColorObserver::class);
+        WBHouse::observe(WBHouseObserver::class);
     }
 }

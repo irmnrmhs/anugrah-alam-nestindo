@@ -32,7 +32,7 @@ class ArrivalController extends Controller
             'employees_id'      => 'required|exists:employees,id',
             'tgl_kedatangan'    => 'required|date',
             'kondisi'           => 'required',
-            'keterangan'        => 'required',
+            'keterangan'        => 'nullable',
             // 'receivers_id'      => 'required',
         ]);
 
@@ -76,7 +76,7 @@ class ArrivalController extends Controller
             'employees_id'      => 'required|exists:employees,id',
             'tgl_kedatangan'   => 'required|date',
             'kondisi'           => 'required',
-            'keterangan'        => 'required',
+            'keterangan'        => 'nullable',
             // 'receivers_id'      => 'required',
         ]);
 

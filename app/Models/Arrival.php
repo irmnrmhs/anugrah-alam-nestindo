@@ -38,8 +38,8 @@ class Arrival extends Model
         return $this->hasMany(Container::class, 'arrivals_id');
     }
 
-    // public function rawMaterial()
-    // {
-    //     return $this->belongsTo(RawMaterial::class, 'arrivals_id');
-    // }
+    public function rawMaterial()
+    {
+        return $this->hasOne(RawMaterial::class, 'arrivals_id');
+    }
 }
