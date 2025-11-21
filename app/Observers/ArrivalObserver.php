@@ -15,6 +15,7 @@ class ArrivalObserver
         // otomatis membuat RawMaterial baru berdasarkan kode arrival
         RawMaterial::create([
             'kode' => $arrival->kode,
+            'arrivals_id' => $arrival->id,
             'biji' => 0,
             'berat' => 0,
         ]);
@@ -25,16 +26,10 @@ class ArrivalObserver
      */
     public function updated(Arrival $arrival): void
     {
-        // cek apakah arrival.kod e berubah
         if ($arrival->wasChanged('kode')) {
-
-            $oldCode = $arrival->getOriginal('kode'); // kode sebelum update
-            $newCode = $arrival->kode;               // kode arrival terbaru
-
-            // update raw material yang menggunakan kode arrival lama
-            RawMaterial::where('kode', $oldCode)
+            RawMaterial::where('arrivals_id', $arrival->id)
                 ->update([
-                    'kode' => $newCode
+                    'kode' => $arrival->kode
                 ]);
         }
     }

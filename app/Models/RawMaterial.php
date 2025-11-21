@@ -8,7 +8,7 @@ class RawMaterial extends Model
 {
     protected $fillable = [
         'kode',
-        // 'arrivals_id',
+        'arrivals_id',
         'biji',
         'berat',
         // 'kadar_air'
