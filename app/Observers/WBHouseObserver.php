@@ -3,80 +3,35 @@
 namespace App\Observers;
 
 use App\Models\WBHouse;
-use Illuminate\Support\Facades\DB;
+use App\Models\Dcertificate;
+use App\Models\Arrival;
 use Carbon\Carbon;
 
 class WBHouseObserver
 {
-    /**
-     * Handle the WBHouse "created" event.
-     */
-    public function created(WBHouse $wBHouse): void
+    public function updated(WBHouse $wbhouse)
     {
-        //
-    }
-
-    /**
-     * Handle the WBHouse "updated" event.
-     */
-    public function updated(WBHouse $wBHouse): void
-    {
-        //
-    }
-
-    public function updating(WBHouse $wbhouse)
-    {
-        // Jalankan hanya jika field 'kode' berubah
+        // Jalankan hanya jika 'kode' berubah
         if ($wbhouse->isDirty('kode')) {
 
             $newKode = $wbhouse->kode;
 
-            // Ambil semua dcertificates milik wbhouse ini
-            $dcertIds = DB::table('dcertificates')
-                ->where('wbhouses_id', $wbhouse->id)
-                ->pluck('id');
+            // ambil seluruh dcertificate terkait dg wbhouse ini
+            $dcerts = Dcertificate::where('wbhouses_id', $wbhouse->id)->get();
 
-            if ($dcertIds->isEmpty()) {
-                return; // tidak ada arrival yang terkait
-            }
+            foreach ($dcerts as $dcert) {
 
-            // Ambil semua arrival yang memakai SKP tersebut
-            $arrivals = DB::table('arrivals')
-                ->whereIn('dcertificates_id', $dcertIds)
-                ->get();
+                // ambil semua arrival berdasarkan dcertificate
+                foreach ($dcert->arrivals as $arrival) {
 
-            foreach ($arrivals as $arrival) {
-                $tgl = Carbon::parse($arrival->tgl_kedatangan)->format('dmy');
-                $kodeBaru = $newKode . '-' . $tgl;
+                    // regenerasi kode arrival
+                    $arrival->kode = $newKode . '-' .
+                        Carbon::parse($arrival->tgl_kedatangan)->format('dmy');
 
-                DB::table('arrivals')
-                    ->where('id', $arrival->id)
-                    ->update(['kode' => $kodeBaru]);
+                    // simpan pakai Eloquent → memicu ArrivalObserver@updated
+                    $arrival->save();
+                }
             }
         }
-    }
-
-    /**
-     * Handle the WBHouse "deleted" event.
-     */
-    public function deleted(WBHouse $wBHouse): void
-    {
-        //
-    }
-
-    /**
-     * Handle the WBHouse "restored" event.
-     */
-    public function restored(WBHouse $wBHouse): void
-    {
-        //
-    }
-
-    /**
-     * Handle the WBHouse "force deleted" event.
-     */
-    public function forceDeleted(WBHouse $wBHouse): void
-    {
-        //
     }
 }
