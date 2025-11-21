@@ -13,14 +13,14 @@ class ArrivalSeeder extends Seeder
      */
     public function run(): void
     {
-        Arrival::create([
-            'kode'              => '2157-121225',
-            'dcertificates_id'  => 1,
-            'cars_id'           => 2,
-            'employees_id'      => 3,
-            'tgl_kedatangan'   => '2025-12-12',
-            'kondisi'           => 'Bebas dari ...',
-            'keterangan'        => 'Tidak ada kontaminasi pest. kemasan dalam keadaan utuh.',
-        ]);
+        // Arrival::create([
+        //     'kode'              => '2157-121225',
+        //     'dcertificates_id'  => 1,
+        //     'cars_id'           => 2,
+        //     'employees_id'      => 3,
+        //     'tgl_kedatangan'   => 12/12/2025,
+        //     'kondisi'           => 'Bebas dari ... (checkbox)',
+        //     'keterangan'        => 'Dinyatakan aman ...',
+        // ]);
     }
 }

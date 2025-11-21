@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RmResult;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\RmResultController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
 use App\Http\Controllers\ContainerController;
@@ -182,6 +184,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/testTypes/{id}', [TestTypeController::class, 'show'])->name('testTypes.show');
     Route::put('/testTypes/{id}', [TestTypeController::class, 'update'])->name('testTypes.update');
     Route::delete('/testTypes/{id}', [TestTypeController::class, 'destroy'])->name('testTypes.destroy');
+
+    // Hasil Uji
+    Route::get('/rm-results', [RmResultController::class, 'index'])->name('rm-results.index');
+    Route::post('/rm-results', [RmResultController::class, 'store'])->name('rm-results.store');
+    Route::get('/rm-results/{id}', [RmResultController::class, 'show'])->name('rm-results.show');
+    Route::put('/rm-results/{id}', [RmResultController::class, 'update'])->name('rm-results.update');
+    Route::delete('/rm-results/{id}', [RmResultController::class, 'destroy'])->name('rm-results.destroy');
 });
 
 require __DIR__.'/auth.php';
