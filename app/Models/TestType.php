@@ -18,4 +18,9 @@ class TestType extends Model
     {
         return $this->belongsTo(Category::class, 'categories_id');
     }
+
+    // public function rmResults()
+    // {
+    //     return $this->hasMany(RmResult::class, 'types_id');
+    // }
 }
