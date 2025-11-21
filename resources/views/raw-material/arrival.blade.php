@@ -80,7 +80,7 @@
 </div>
     <div class="mb-3">
         <label>Keterangan</label>
-        <input type="text" id="keterangan" class="form-control" required>
+        <input type="text" id="keterangan" class="form-control">
     </div>
 @stop
 
@@ -111,10 +111,10 @@
 
     fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         body: JSON.stringify(data)
     })
-    .then(res => res.json())
+    .then(r => r.json())
     .then(res => {
         if (res.status === 'success') {
             Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
@@ -141,9 +141,10 @@
                 
                 $('.kondisi-item').prop('checked', false);
                 if (arrival.kondisi) {
-                    const kondisiList = arrival.kondisi.replace('bebas dari ', '').split(', ');
+                    const kondisiList = arrival.kondisi.toLowerCase().replace('bebas dari ', '').split(', ');
                     kondisiList.forEach(function(k) {
-                        $('.kondisi-item[value="'+k+'"]').prop('checked', true);
+                        $('.kondisi-item[value="'+k.trim().toLowerCase()+'"]').prop('checked', true);
+
                     });
                 }
 
