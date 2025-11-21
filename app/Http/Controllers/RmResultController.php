@@ -14,19 +14,15 @@ class RmResultController extends Controller
     public string $obj = 'Bahan Baku';
     public function index(): View
     {
-        $results = RmResult::with('type', 'rawMaterial', 'rawMaterial.arrival.dcertificate.wbhouse')->oldest()->get();
-        $results = RmResult::with('rawMaterial.arrival.dcertificate.wbhouse')->get();
-
-        $types = TestType::all();
+        $results = RmResult::with('rawMaterial')->oldest()->get();
         $rms = RawMaterial::all();
 
-        return view('quality-control.rmResult', compact('results', 'types', 'rms'));
+        return view('quality-control.rmResult', compact('results', 'rms'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            // 'types_id' => 'required|exists:test_types,id',
             'rms_id' => 'required|exists:raw_materials,id',
             'kadar_air' => 'nullable|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',
@@ -44,7 +40,7 @@ class RmResultController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $result = RmResult::findOrFail($id);
+        $result = RmResult::with('rawMaterial')->findOrFail($id);
         return response()->json($result);
     }
 
@@ -52,7 +48,6 @@ class RmResultController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            // 'types_id' => 'required|exists:test_types,id',
             'rms_id' => 'required|exists:raw_materials,id',
             'kadar_air' => 'nullable|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',
