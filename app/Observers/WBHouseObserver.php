@@ -55,7 +55,7 @@ class WBHouseObserver
             }
         }
     }
-    
+
     /**
      * Handle the WBHouse "deleted" event.
      */
