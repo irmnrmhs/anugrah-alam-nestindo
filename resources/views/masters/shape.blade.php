@@ -46,7 +46,7 @@
         kode: $('#kode').val(),
         jenis_bentuk: $('#jenis_bentuk').val()
     };
-
+    
     fetch(url, {
         method: method,
         headers: {'Content-Type': 'application/json'},

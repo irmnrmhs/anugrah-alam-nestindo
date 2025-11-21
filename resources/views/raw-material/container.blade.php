@@ -1,32 +1,28 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Area';
-    $singular = 'Area';
+    $title = 'Kelola Kontainer';
+    $singular = 'Kontainer';
 @endphp
 
 @section('table-headers')
     <th>No</th>
     <th>Kode</th>
-    <th>Area</th>
-    <th>KH</th>
+    <th>Biji</th>
+    <th>Berat</th>
     <th>Keterangan</th>
+    <th>Petugas</th>
 @stop
 
 @section('table-body')
-    @foreach($areas as $index => $area)
-        <tr data-id="{{ $area->id }}">
+    @foreach($containers as $index => $container)
+        <tr data-id="{{ $container->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $area->kode }}</td>
-            <td>{{ $area->area }}</td>
-            <td>
-                @if($area->kh)
-                    <span class="badge bg-success">Ya</span>
-                @else
-                    <span class="badge bg-danger">Tidak</span>
-                @endif
-            </td>
-            <td>{{ $area->keterangan }}</td>
+            <td>{{ $container->arrival->kode }}</td>
+            <td>{{ $container->biji }}</td>
+            <td>{{ $container->berat }}</td>
+            <td>{{ $container->keterangan }}</td>
+            <td>{{ $container->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -37,19 +33,30 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Kode</label>
-        <input type="text" id="kode" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Area</label>
-        <input type="text" id="area" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>KH</label>
-        <select id="kh" class="form-control" required>
-            <option value="1">Ya</option>
-            <option value="0">Tidak</option>
+        <label>Kode Bahan Baku</label>
+        <select id="arrivals_id" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach($arrivals as $arrival)
+                <option value="{{ $arrival->id }}">{{ $arrival->kode }}</option>
+            @endforeach
         </select>
+    </div>
+    <div class="mb-3">
+        <label>Petugas</label>
+        <select id="employees_id" class="form-control" required>
+            <option value="">-- Pilih Petugas --</option>
+            @foreach($employees as $employee)
+                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Biji</label>
+        <input type="number" id="biji" step="1" min="0" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Berat</label>
+        <input type="number" id="berat" step="0.01" min="0" max="99999.99" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
@@ -59,14 +66,15 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/areas/${id}` : '/areas';
+    const url = id ? `/containers/${id}` : '/containers';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        kode: $('#kode').val(),
-        area: $('#area').val(),
-        kh: $('#kh').val(),
+        arrivals_id: $('#arrivals_id').val(),
+        employees_id: $('#employees_id').val(),
+        biji: $('#biji').val(),
+        berat: $('#berat').val(),
         keterangan: $('#keterangan').val()
     };
 
@@ -75,28 +83,30 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
-    .then(r => r.json())
+    .then(res => res.json())
     .then(res => {
         if (res.status === 'success') {
             Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
         } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
+            Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
-    });
+    })
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan NIP tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/areas/${id}`)
+        fetch(`/containers/${id}`)
             .then(r => r.json())
-            .then(area => {
-                $('#item_id').val(area.id);
-                $('#kode').val(area.kode);
-                $('#area').val(area.area);
-                $('#kh').val(area.kh);
-                $('#keterangan').val(area.keterangan);
-                $('#modalTitle').text('Edit Area');
+            .then(container => {
+                $('#item_id').val(container.id);
+                $('#arrivals_id').val(container.arrivals_id);
+                $('#employees_id').val(container.employees_id);
+                $('#biji').val(container.biji);
+                $('#berat').val(container.berat);
+                $('#keterangan').val(container.keterangan);
+                $('#modalTitle').text('Edit Kontainer');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -112,7 +122,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/areas/${id}`, {
+                fetch(`/containers/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

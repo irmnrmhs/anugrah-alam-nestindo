@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('raw_materials', function (Blueprint $table) {
             $table->id();
-            $table->string('kode');
-            $table->foreignId('dcertificates_id')->constrained('dcertificates');
-            $table->foreignId('arrivals_id')->constrained('arrivals');
-            $table->string('biji');
-            $table->string('berat');
-            $table->string('kadar_air');
+            $table->string('kode')->unique();
+            // $table->foreignId('arrivals_id')->constrained('arrivals')->unique();
+            // $table->foreignId('rw_tests_id')->constrained('rw_tests')->default();
+            $table->integer('biji')->default(0);
+            $table->decimal('berat', 7, 2)->default(0);
+            // $table->decimal('kadar_air', 5, 2); id_uji_bb
             $table->timestamps();
         });
     }
-
+// sy ingin agar ketika pada containers ditambahkan data maka 
     /**
      * Reverse the migrations.
      */

@@ -1,7 +1,9 @@
 <?php
 
-use App\Models\Grade;
-use App\Models\Customer;
+// use App\Models\Grade;
+// use App\Models\Arrival;
+// use App\Models\Customer;
+// use App\Models\Container;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\ShapeController;
+use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FeatherController;
 use App\Http\Controllers\ProfileController;
@@ -19,11 +22,11 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
+use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
-use App\Http\Controllers\ArrivalController;
-use App\Models\Arrival;
 
 Route::get('/', function () {
     return view('welcome');
@@ -166,6 +169,16 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/arrivals/{id}', [ArrivalController::class, 'show'])->name('arrivals.show');
     Route::put('/arrivals/{id}', [ArrivalController::class, 'update'])->name('arrivals.update');
     Route::delete('/arrivals/{id}', [ArrivalController::class, 'destroy'])->name('arrivals.destroy');
+
+    // Container
+    Route::get('/containers', [ContainerController::class, 'index'])->name('containers.index');
+    Route::post('/containers', [ContainerController::class, 'store'])->name('containers.store');
+    Route::get('/containers/{id}', [ContainerController::class, 'show'])->name('containers.show');
+    Route::put('/containers/{id}', [ContainerController::class, 'update'])->name('containers.update');
+    Route::delete('/containers/{id}', [ContainerController::class, 'destroy'])->name('containers.destroy');
+
+    // Raw Material
+    Route::get('/rawMaterials', [RawMaterialController::class, 'index'])->name('rawMaterials.index');
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');

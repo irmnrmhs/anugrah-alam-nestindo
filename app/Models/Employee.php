@@ -26,9 +26,14 @@ class Employee extends Model
     {
         return $this->hasMany(User::class, 'employees_id');
     }
-
+    
     public function arrival()
     {
         return $this->hasOne(Arrival::class, 'employees_id');
+    }
+
+    public function containers()
+    {
+        return $this->hasMany(Container::class, 'employees_id');
     }
 }

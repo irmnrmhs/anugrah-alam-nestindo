@@ -26,20 +26,31 @@ class ArrivalController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'kode'              => 'required|unique:arrivals,kode',
-            'dcertificates_id'  => 'required|unique:dcertificates,id',
+            // 'kode'              => 'required|unique:arrivals,kode',
+            'dcertificates_id'  => 'required|exists:dcertificates,id|unique:arrivals,dcertificates_id',
             'cars_id'           => 'required|exists:cars,id',
             'employees_id'      => 'required|exists:employees,id',
             'tgl_kedatangan'    => 'required|date',
             'kondisi'           => 'required',
-            'keterangan'        => 'required',
+            'keterangan'        => 'nullable',
             // 'receivers_id'      => 'required',
         ]);
 
-        $dcertificate = Dcertificate::find($request->wbhouse->kode);
+        $dcertificate = Dcertificate::with('wbhouse')->find($validated['dcertificates_id']);
 
-        $validated['kode'] = $dcertificate . '-' . 'tgl_kedatangan';
+        $kode_wbhouse = $dcertificate->wbhouse->kode; 
+        $tgl_kedatangan = $validated['tgl_kedatangan'];
 
+        $format_tgl = date('dmy', strtotime($tgl_kedatangan));
+        $validated['kode'] = $kode_wbhouse . '-' . $format_tgl;
+
+        if (Arrival::where('kode', $validated['kode'])->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal: Kode Kedatangan otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa SKP atau tanggal kedatangan.',
+            ], 409);
+        }
+        
         $arrival = Arrival::create($validated);
 
         return response()->json([
@@ -59,21 +70,34 @@ class ArrivalController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'kode'              => 'required|unique:arrivals,kode,' . $id,
-            'dcertificates_id'  => 'required|unique:dcertificates,id,' . $id,
+            // 'kode'              => 'required|unique:arrivals,kode,' . $id,
+            'dcertificates_id'  => 'required|exists:dcertificates,id|unique:arrivals,dcertificates_id,' . $id,
             'cars_id'           => 'required|exists:cars,id',
             'employees_id'      => 'required|exists:employees,id',
-            'tgl_pemeriksaan'   => 'required|date',
+            'tgl_kedatangan'   => 'required|date',
             'kondisi'           => 'required',
-            'keterangan'        => 'required',
+            'keterangan'        => 'nullable',
             // 'receivers_id'      => 'required',
         ]);
 
-        $dcertificate = Dcertificate::find($request->wbhouse->kode);
+        $dcertificate = Dcertificate::with('wbhouse')->find($validated['dcertificates_id']);
 
-        $validated['kode'] = $dcertificate . '-' . 'tgl_kedatangan';
+        $kode_wbhouse = $dcertificate->wbhouse->kode; 
+        $tgl_kedatangan = $validated['tgl_kedatangan'];
+
+        $format_tgl = date('dmy', strtotime($tgl_kedatangan));
+
+        $validated['kode'] = $kode_wbhouse . '-' . $format_tgl;
 
         $arrival = Arrival::findOrFail($id);
+        
+        if (Arrival::where('kode', $validated['kode'])->where('id', '!=', $id)->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal: Kode Kedatangan otomatis yang diperbarui (' . $validated['kode'] . ') sudah ada.',
+            ], 409);
+        }
+
         $arrival->update($validated);
 
         return response()->json([

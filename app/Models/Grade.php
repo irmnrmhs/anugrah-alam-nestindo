@@ -7,18 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model
 {
     protected $fillable = [
-        'categories_id',
-        'grade',
+        // 'categories_id',
         'shapes_id',
         'feathers_id',
         'colors_id',
         'status'
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'categories_id');
-    }
+    // public function category()
+    // {
+    //     return $this->belongsTo(Category::class, 'categories_id');
+    // }
 
     public function shape()
     {
@@ -33,5 +32,14 @@ class Grade extends Model
     public function color()
     {
         return $this->belongsTo(Color::class, 'colors_id');
+    }
+
+    public function getGradeAttribute()
+    {
+        return strtoupper(
+            $this->shape?->kode . '-' .
+            $this->feather?->kode . '-' .
+            $this->color?->kode
+        );
     }
 }
