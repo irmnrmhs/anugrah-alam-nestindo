@@ -456,6 +456,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
+                [   
+                    'text' => 'Stok Bahan Baku',
+                    'url'  => 'rmstocks',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 

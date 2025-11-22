@@ -36,4 +36,9 @@ class Employee extends Model
     {
         return $this->hasMany(Container::class, 'employees_id');
     }
+
+    public function stocks()
+    {
+        return $this->hasMany(RmStock::class, 'rms_id');
+    }
 }
