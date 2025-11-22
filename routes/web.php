@@ -186,6 +186,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/rmstocks/{id}', [RmStockController::class, 'show'])->name('rmstocks.show');
     Route::put('/rmstocks/{id}', [RmStockController::class, 'update'])->name('rmstocks.update');
     Route::delete('/rmstocks/{id}', [RmStockController::class, 'destroy'])->name('rmstocks.destroy');
+    $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');

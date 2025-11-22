@@ -29,17 +29,26 @@ class RmStockController extends Controller
             'tgl_keluar' => 'required|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
-            'biji_sisa' => 'required|integer|min:0',
-            'berat_sisa' => 'required|numeric|min:0|max:99999.99',
             'keterangan' => 'nullable'
         ]);
 
-        $stock = RmStock::create($validated);
+        $raw = RawMaterial::find($validated['rms_id']);
+
+        if (
+            $validated['biji_keluar'] > $raw->biji_sisa ||
+            $validated['berat_keluar'] > $raw->berat_sisa
+        ) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
+        RmStock::create($validated);
 
         return response()->json([
             'status' => 'success',
-            'message' => $this->obj . ' berhasil ditambahkan',
-            'data' => $stock,
+            'message' => 'Stok keluar berhasil ditambahkan'
         ]);
     }
 
@@ -58,19 +67,31 @@ class RmStockController extends Controller
             'tgl_keluar' => 'required|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
-            'biji_sisa' => 'required|integer|min:0',
-            'berat_sisa' => 'required|numeric|min:0|max:99999.99',
             'keterangan' => 'nullable'
         ]);
 
         $stock = RmStock::findOrFail($id);
+        $raw = RawMaterial::find($validated['rms_id']);
+
+        // hitung sisa aktual
+        $biji_sisa = $raw->biji_sisa + $stock->biji_keluar;
+        $berat_sisa = $raw->berat_sisa + $stock->berat_keluar;
+
+        if (
+            $validated['biji_keluar'] > $biji_sisa ||
+            $validated['berat_keluar'] > $berat_sisa
+        ) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
 
         $stock->update($validated);
 
         return response()->json([
             'status' => 'success',
-            'message' => $this->obj . ' berhasil diperbarui',
-            'data' => $stock,
+            'message' => 'Stok berhasil diperbarui'
         ]);
     }
 
