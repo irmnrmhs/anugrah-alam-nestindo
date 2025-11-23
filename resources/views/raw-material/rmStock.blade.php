@@ -52,18 +52,20 @@
             @endforeach
         </select>
     </div>
-    <div class="row mb-3">
-        <div class="col">
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <label>Tanggal Stok Keluar Terakhir</label>
+            <input type="text" id="last_out_date" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-4">
             <label>Biji Sisa</label>
-            <input type="text" id="info_biji_sisa" class="form-control" disabled>
+            <input type="text" id="biji_sisa" class="form-control" readonly>
         </div>
-        <div class="col">
+
+        <div class="col-md-4">
             <label>Berat Sisa</label>
-            <input type="text" id="info_berat_sisa" class="form-control" disabled>
-        </div>
-        <div class="col">
-            <label>Tanggal Keluar Terakhir</label>
-            <input type="text" id="info_last_date" class="form-control" disabled>
+            <input type="text" id="berat_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">
