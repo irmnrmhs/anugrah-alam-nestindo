@@ -23,9 +23,38 @@ class RawMaterial extends Model
     {
         return $this->belongsTo(Arrival::class, 'arrivals_id');
     }
-
+    
     public function rmResults()
     {
         return $this->hasMany(RmResult::class, 'rms_id');
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(RmStock::class, 'rms_id');
+    }
+
+    // total biji keluar
+    public function getTotalBijiKeluarAttribute()
+    {
+        return $this->stocks()->sum('biji_keluar');
+    }
+
+    // total berat keluar
+    public function getTotalBeratKeluarAttribute()
+    {
+        return $this->stocks()->sum('berat_keluar');
+    }
+
+    // biji sisa
+    public function getBijiSisaAttribute()
+    {
+        return $this->biji - $this->total_biji_keluar;
+    }
+
+    // berat sisa
+    public function getBeratSisaAttribute()
+    {
+        return $this->berat - $this->total_berat_keluar;
     }
 }

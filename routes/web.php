@@ -25,6 +25,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\RmStockController;
+use App\Models\RmStock;
 
 Route::get('/', function () {
     return view('welcome');
@@ -177,6 +179,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
 
     // Raw Material
     Route::get('/rawMaterials', [RawMaterialController::class, 'index'])->name('rawMaterials.index');
+
+    // Container
+    Route::get('/rmstocks', [RmStockController::class, 'index'])->name('rmstocks.index');
+    Route::post('/rmstocks', [RmStockController::class, 'store'])->name('rmstocks.store');
+    Route::get('/rmstocks/{id}', [RmStockController::class, 'show'])->name('rmstocks.show');
+    Route::put('/rmstocks/{id}', [RmStockController::class, 'update'])->name('rmstocks.update');
+    Route::delete('/rmstocks/{id}', [RmStockController::class, 'destroy'])->name('rmstocks.destroy');
+    $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
