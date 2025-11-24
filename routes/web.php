@@ -179,6 +179,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
 
     // Raw Material
     Route::get('/rawMaterials', [RawMaterialController::class, 'index'])->name('rawMaterials.index');
+    Route::get('/raw-material-info/{id}', [RawMaterialController::class, 'info']);
+
 
     // Container
     Route::get('/rmstocks', [RmStockController::class, 'index'])->name('rmstocks.index');

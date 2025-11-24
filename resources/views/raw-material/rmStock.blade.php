@@ -43,15 +43,6 @@
             @endforeach
         </select>
     </div>
-    <div class="mb-3">
-        <label>Petugas</label>
-        <select id="employees_id" class="form-control" required>
-            <option value="">-- Pilih Petugas --</option>
-            @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
-            @endforeach
-        </select>
-    </div>
     <div class="row mb-3">
         <div class="col">
             <label>Biji Sisa</label>
@@ -65,6 +56,15 @@
             <label>Tanggal Keluar Terakhir</label>
             <input type="text" id="info_last_date" class="form-control" disabled>
         </div>
+    </div>
+    <div class="mb-3">
+        <label>Petugas</label>
+        <select id="employees_id" class="form-control" required>
+            <option value="">-- Pilih Petugas --</option>
+            @foreach($employees as $employee)
+                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="mb-3">
         <label>Tanggal Keluar</label>
@@ -116,6 +116,24 @@
 @stop
 
 @section('custom-js')
+    $('#rms_id').on('change', function () {
+        const id = $(this).val();
+        if (!id) return;
+
+        fetch(`/raw-material-info/${id}`)
+            .then(r => r.json())
+            .then(info => {
+                $('#info_biji_sisa').val(info.biji_sisa);
+                $('#info_berat_sisa').val(info.berat_sisa);
+                $('#info_last_date').val(info.last_date ?? '-');
+            })
+            .catch(() => {
+                $('#info_biji_sisa').val('-');
+                $('#info_berat_sisa').val('-');
+                $('#info_last_date').val('-');
+            });
+    });
+
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
         fetch(`/rmstocks/${id}`)
