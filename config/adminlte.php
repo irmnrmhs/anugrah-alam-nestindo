@@ -462,6 +462,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
+                [   
+                    'text' => 'Product Identifier',
+                    'url'  => 'identifiers',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 

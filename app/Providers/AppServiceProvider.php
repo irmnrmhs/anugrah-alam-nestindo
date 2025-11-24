@@ -10,12 +10,14 @@ use App\Models\Feather;
 use App\Models\Color;
 use App\Models\WBHouse;
 use App\Models\Arrival;
+use App\Models\Supplier;
 
 use App\Observers\ShapeObserver;
 use App\Observers\FeatherObserver;
 use App\Observers\ColorObserver;
 use App\Observers\WBHouseObserver;
 use App\Observers\ArrivalObserver;
+use App\Observers\SupplierObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -63,5 +65,6 @@ class AppServiceProvider extends ServiceProvider
         Color::observe(ColorObserver::class);
         WBHouse::observe(WBHouseObserver::class);
         Arrival::observe(ArrivalObserver::class);
+        Supplier::observe(SupplierObserver::class);
     }
 }
