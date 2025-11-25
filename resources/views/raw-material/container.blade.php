@@ -31,9 +31,7 @@
     @endforeach
 @stop
 
-{{-- ===========================
-    MODAL 1 : INPUT KODE + JUMLAH
-=========================== --}}
+{{-- Modal 1 Input Kode Jumlah --}}
 @section('form-fields')
     <div class="mb-3">
         <label>Kode Bahan Baku</label>
@@ -61,10 +59,9 @@
         return;
     }
 
-    // Tutup modal pertama
     bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
 
-    // ====== Generate modal kedua ======
+    {{-- Modal 2 Input Detail Kontainer --}}
     let html = '';
     for (let i = 1; i <= jumlah; i++) {
         html += `
@@ -197,3 +194,5 @@
     </div>
 </div>
 @endsection
+
+{{-- before --}}
