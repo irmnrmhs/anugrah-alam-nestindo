@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('ikh');
             $table->string('nama');
-            $table->string('alamat');
-            $table->string('telp');
-            $table->string('fax');
-            $table->string('negara');
+            $table->string('alamat')->nullable();
+            $table->string('telp')->nullable();
+            $table->string('fax')->nullable();
+            $table->string('negara')->nullable();
             $table->timestamps();
         });
     }

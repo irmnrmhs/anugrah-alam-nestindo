@@ -40,15 +40,10 @@
                        value="{{ $company->fax ?? '' }}">
             </div>
 
-            {{-- <div class="mb-3">
-                <label for="negara">Negara</label>
-                <input type="text" id="negara" name="negara" class="form-control" value="{{ $company->negara ?? '' }}">
-            </div> --}}
-
             <div class="mb-3">
                 <label>Negara</label>
-                <select id="negara" class="form-control" required>
-                    <option value="">{{$company->negara ?? '-- Pilih Negara --'}}</option>
+                <select id="negara" class="form-control">
+                    <option value="{{ $company->negara ?? '' }}">{{$company->negara ?? '-- Pilih Negara --'}}</option>
                         @foreach($countries as $country)
                             <option value="{{ $country ?? '' }}">{{ $country ?? '' }}</option>
                         @endforeach
@@ -84,12 +79,12 @@ document.getElementById('companyForm').addEventListener('submit', function(e) {
     .then(res => res.json())
     .then(res => {
         if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success');
+            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
         } else {
             Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan.', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data ke server.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data.', 'error'));
 });
 </script>
 @stop

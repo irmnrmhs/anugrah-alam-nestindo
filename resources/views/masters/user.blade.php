@@ -10,7 +10,7 @@
     <th>Role</th>
     <th>Karyawan</th>
     <th>Username</th>
-    <th>Email</th>
+    {{-- <th>Email</th> --}}
 @stop
 
 @section('table-body')
@@ -20,7 +20,7 @@
             <td>{{ $user->role->name }}</td>
             <td>{{ $user->employee->nama }}</td>
             <td>{{ $user->username }}</td>
-            <td>{{ $user->email }}</td>
+            {{-- <td>{{ $user->email }}</td> --}}
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -55,10 +55,10 @@
         <input type="text" id="username" class="form-control" required>
     </div>
 
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <label>Email</label>
-        <input type="email" id="email" class="form-control" required>
-    </div>
+        <input type="email" id="email" class="form-control">
+    </div> --}}
 
     <div class="mb-3">
         <label>Password</label>
@@ -76,7 +76,7 @@
         roles_id: $('#roles_id').val(),
         employees_id: $('#employees_id').val(),
         username: $('#username').val(),
-        email: $('#email').val(),
+        {{-- email: $('#email').val(), --}}
         password: $('#password').val()
     };
 
@@ -92,7 +92,8 @@
         } else {
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
-    });
+    })
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan username tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')
@@ -105,7 +106,7 @@
                 $('#roles_id').val(user.roles_id);
                 $('#employees_id').val(user.employees_id);
                 $('#username').val(user.username);
-                $('#email').val(user.email);
+                {{-- $('#email').val(user.email); --}}
                 $('#password').val('');
                 $('#modalTitle').text('Edit User');
                 new bootstrap.Modal('#crudModal').show();
