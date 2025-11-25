@@ -12,8 +12,6 @@ class RmStock extends Model
         'tgl_keluar',
         'biji_keluar',
         'berat_keluar',
-        'biji_sisa',
-        'berat_sisa',
         'keterangan'
     ];
 

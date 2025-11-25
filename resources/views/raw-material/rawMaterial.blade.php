@@ -17,6 +17,8 @@
     <th>Kode</th>
     <th>Biji</th>
     <th>Berat</th>
+    <th>Biji Sisa</th>
+    <th>Berat Sisa</th>
 @stop
 
 @section('table-body')
@@ -26,6 +28,8 @@
             <td>{{ $raw_material->kode }}</td>
             <td>{{ $raw_material->biji }}</td>
             <td>{{ $raw_material->berat }}</td>
+            <td>{{ $raw_material->biji_sisa }}</td>
+            <td>{{ $raw_material->berat_sisa }}</td>
         </tr>
     @endforeach
 @stop

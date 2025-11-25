@@ -18,8 +18,6 @@ return new class extends Migration
             $table->date('tgl_keluar');
             $table->integer('biji_keluar');
             $table->decimal('berat_keluar', 7, 2);
-            $table->integer('biji_sisa');
-            $table->decimal('berat_sisa', 7, 2);
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

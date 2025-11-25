@@ -432,12 +432,6 @@ return [
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
-                [
-                    'text' => 'Bahan Baku',
-                    'url'  => 'rawMaterials',
-                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
-                    'icon' => 'fas fa-users',
-                ],
                 [   
                     'text' => 'SKP',
                     'url'  => 'dcertificates',
@@ -456,9 +450,21 @@ return [
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Bahan Baku',
+                    'url'  => 'rawMaterials',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
                 [   
                     'text' => 'Stok Bahan Baku',
                     'url'  => 'rmstocks',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [   
+                    'text' => 'Product Identifier',
+                    'url'  => 'identifiers',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
@@ -470,12 +476,12 @@ return [
             'text' => 'Kontrol Kualitas',
             'icon' => 'fas fa-folder',
             'submenu' => [
-                [
-                    'text' => 'Sampel Bahan Baku',
-                    'url'  => 'rm-samples',
-                    'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
-                    'icon' => 'fas fa-users',
-                ],
+                // [
+                //     'text' => 'Sampel Bahan Baku',
+                //     'url'  => 'rm-samples',
+                //     'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
+                //     'icon' => 'fas fa-users',
+                // ],
                 [
                     'text' => 'Hasil Uji Bahan Baku',
                     'url'  => 'rm-results',
@@ -568,6 +574,7 @@ return [
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
                 ],
+                
                 [
                     'type' => 'css',
                     'asset' => false,

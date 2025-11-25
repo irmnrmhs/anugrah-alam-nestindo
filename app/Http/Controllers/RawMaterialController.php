@@ -74,4 +74,17 @@ class RawMaterialController extends Controller
             'message' => $this->obj . ' berhasil dihapus',
         ]);
     }
+
+    public function info($id)
+    {
+        $raw = RawMaterial::with(['stocks' => function($q){
+            $q->latest('tgl_keluar');
+        }])->findOrFail($id);
+
+        return response()->json([
+            'biji_sisa'  => $raw->biji_sisa,
+            'berat_sisa' => $raw->berat_sisa,
+            'last_date'  => optional($raw->stocks->first())->tgl_keluar,
+        ]);
+    }
 }

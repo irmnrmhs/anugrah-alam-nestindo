@@ -12,8 +12,6 @@
     <th>Tanggal Keluar</th>
     <th>Biji Keluar</th>
     <th>Berat Keluar</th>
-    <th>Biji Sisa</th>
-    <th>Berat Sisa</th>
     <th>Keterangan</th>
 @stop
 
@@ -26,8 +24,6 @@
             <td>{{ $stock->tgl_keluar }}</td>
             <td>{{ $stock->biji_keluar }}</td>
             <td>{{ $stock->berat_keluar }}</td>
-            <td>{{ $stock->biji_sisa }}</td>
-            <td>{{ $stock->berat_sisa }}</td>
             <td>{{ $stock->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -56,6 +52,31 @@
             @endforeach
         </select>
     </div>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <label>Tanggal Stok Keluar Terakhir</label>
+            <input type="text" id="last_out_date" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-4">
+            <label>Biji Sisa</label>
+            <input type="text" id="biji_sisa" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-4">
+            <label>Berat Sisa</label>
+            <input type="text" id="berat_sisa" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Petugas</label>
+        <select id="employees_id" class="form-control" required>
+            <option value="">-- Pilih Petugas --</option>
+            @foreach($employees as $employee)
+                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+            @endforeach
+        </select>
+    </div>
     <div class="mb-3">
         <label>Tanggal Keluar</label>
         <input type="date" id="tgl_keluar" class="form-control" required>
@@ -67,14 +88,6 @@
     <div class="mb-3">
         <label>Berat Keluar</label>
         <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Biji Sisa</label>
-        <input type="number" id="biji_sisa" step="1" min="0" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Berat Sisa</label>
-        <input type="number" id="berat_sisa" step="0.001" min="0" max="99999.99" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
@@ -94,8 +107,6 @@
         tgl_keluar: $('#tgl_keluar').val(),
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
-        biji_sisa: $('#biji_sisa').val(),
-        berat_sisa: $('#berat_sisa').val(),
         keterangan: $('#keterangan').val()
     };
 
@@ -116,6 +127,24 @@
 @stop
 
 @section('custom-js')
+    $('#rms_id').on('change', function () {
+        const id = $(this).val();
+        if (!id) return;
+
+        fetch(`/raw-material-info/${id}`)
+            .then(r => r.json())
+            .then(info => {
+                $('#info_biji_sisa').val(info.biji_sisa);
+                $('#info_berat_sisa').val(info.berat_sisa);
+                $('#info_last_date').val(info.last_date ?? '-');
+            })
+            .catch(() => {
+                $('#info_biji_sisa').val('-');
+                $('#info_berat_sisa').val('-');
+                $('#info_last_date').val('-');
+            });
+    });
+
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
         fetch(`/rmstocks/${id}`)
@@ -127,8 +156,6 @@
                 $('#tgl_keluar').val(stock.tgl_keluar);
                 $('#biji_keluar').val(stock.biji_keluar);
                 $('#berat_keluar').val(stock.berat_keluar);
-                $('#biji_sisa').val(stock.biji_sisa);
-                $('#berat_sisa').val(stock.berat_sisa);
                 $('#keterangan').val(stock.keterangan);
                 $('#modalTitle').text('Edit Stok Bahan Baku');
                 new bootstrap.Modal('#crudModal').show();
