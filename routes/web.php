@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\RmStock;
 use App\Models\RmResult;
+use App\Models\ProductIdentifier;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FeatherController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RmStockController;
 use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
@@ -25,8 +28,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
-use App\Http\Controllers\RmStockController;
-use App\Models\RmStock;
+use App\Http\Controllers\ProductIdentifierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -179,14 +181,22 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
 
     // Raw Material
     Route::get('/rawMaterials', [RawMaterialController::class, 'index'])->name('rawMaterials.index');
+    Route::get('/raw-material-info/{id}', [RawMaterialController::class, 'info']);
 
-    // Container
+    // Stok
     Route::get('/rmstocks', [RmStockController::class, 'index'])->name('rmstocks.index');
     Route::post('/rmstocks', [RmStockController::class, 'store'])->name('rmstocks.store');
     Route::get('/rmstocks/{id}', [RmStockController::class, 'show'])->name('rmstocks.show');
     Route::put('/rmstocks/{id}', [RmStockController::class, 'update'])->name('rmstocks.update');
     Route::delete('/rmstocks/{id}', [RmStockController::class, 'destroy'])->name('rmstocks.destroy');
     $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
+
+    // Pengidentifikasi Produk
+    Route::get('/identifiers', [ProductIdentifierController::class, 'index'])->name('identifiers.index');
+    Route::post('/identifiers', [ProductIdentifierController::class, 'store'])->name('identifiers.store');
+    Route::get('/identifiers/{id}', [ProductIdentifierController::class, 'show'])->name('identifiers.show');
+    Route::put('/identifiers/{id}', [ProductIdentifierController::class, 'update'])->name('identifiers.update');
+    Route::delete('/identifiers/{id}', [ProductIdentifierController::class, 'destroy'])->name('identifiers.destroy');
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');

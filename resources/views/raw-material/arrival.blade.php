@@ -8,11 +8,12 @@
 @section('table-headers')
     <th>No</th>
     <th>Kode Bahan Baku</th>
+    <th>Tanggal Kedatangan</th>
     <th>No. SKP</th>
     <th>Mobil</th>
     <th>Supir</th>
+    {{-- <th>Kadar Air</th> --}}
     {{-- <th>Penerima</th> --}}
-    <th>Tanggal Kedatangan</th>
     <th>Kondisi</th>
     <th>Keterangan</th>
 @stop
@@ -22,11 +23,11 @@
         <tr data-id="{{ $arrival->id }}">
             <td>{{ $index + 1 }}</td>
             <td>{{ $arrival->kode }}</td>
+            <td>{{ $arrival->tgl_kedatangan }}</td>
             <td>{{ $arrival->dcertificate->no_skp }}</td>
             <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
             <td>{{ $arrival->employee->nama }}</td>
             {{-- <td>{{ $arrival->employee->nama }}</td> --}}
-            <td>{{ $arrival->tgl_kedatangan }}</td>
             <td>{{ $arrival->kondisi }}</td>
             <td>{{ $arrival->keterangan }}</td>
             <td>
@@ -48,6 +49,10 @@
         </select>
     </div>
     <div class="mb-3">
+        <label>Tanggal Kedatangan</label>
+        <input type="date" id="tgl_kedatangan" class="form-control" required>
+    </div>
+    <div class="mb-3">
         <label>Mobil</label>
         <select id="cars_id" class="form-control" required>
             <option value="">-- Pilih Mobil --</option>
@@ -64,10 +69,6 @@
                 <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
             @endforeach
         </select>
-    </div>
-    <div class="mb-3">
-        <label>Tanggal Kedatangan</label>
-        <input type="date" id="tgl_kedatangan" class="form-control" required>
     </div>
     <div class="mb-3">
     <label>Kondisi</label>

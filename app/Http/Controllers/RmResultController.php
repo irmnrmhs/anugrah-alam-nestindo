@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class RmResultController extends Controller
 {
-    public string $obj = 'Bahan Baku';
+    public string $obj = 'Hasil Uji';
     public function index(): View
     {
         $results = RmResult::with('rawMaterial')->oldest()->get();

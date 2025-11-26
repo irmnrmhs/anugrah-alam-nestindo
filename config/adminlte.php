@@ -462,6 +462,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
+                [   
+                    'text' => 'Product Identifier',
+                    'url'  => 'identifiers',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 
@@ -568,6 +574,7 @@ return [
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
                 ],
+                
                 [
                     'type' => 'css',
                     'asset' => false,

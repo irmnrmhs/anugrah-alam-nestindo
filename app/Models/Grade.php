@@ -34,6 +34,11 @@ class Grade extends Model
         return $this->belongsTo(Color::class, 'colors_id');
     }
 
+    public function identifiers()
+    {
+        return $this->hasMany(ProductIdentifier::class, 'grades_Id');
+    }
+
     public function getGradeAttribute()
     {
         return strtoupper(
