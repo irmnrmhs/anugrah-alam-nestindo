@@ -377,6 +377,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Mobil',
+                    'url'  => 'cars',
+                    'can'  => 'Super Admin',
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Area',
                     'url'  => 'areas',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
@@ -404,12 +410,6 @@ return [
                     'text' => 'Jenis Bentuk',
                     'url'  => 'shapes',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
-                    'icon' => 'fas fa-users',
-                ],
-                [
-                    'text' => 'Mobil',
-                    'url'  => 'cars',
-                    'can'  => 'Super Admin',
                     'icon' => 'fas fa-users',
                 ],
                 [

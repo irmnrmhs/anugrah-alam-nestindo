@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('w_b_houses', function (Blueprint $table) {
             $table->id();
             $table->string('kode')->unique();
-            $table->string('nama');
+            $table->string('nama')->unique();
             $table->string('alamat')->nullable();
             $table->foreignId('areas_id')->constrained('areas');
             $table->decimal('kapasitas', 7, 2)->nullable();
