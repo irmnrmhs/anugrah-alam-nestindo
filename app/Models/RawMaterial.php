@@ -34,6 +34,11 @@ class RawMaterial extends Model
         return $this->hasMany(RmStock::class, 'rms_id');
     }
 
+    public function identifiers()
+    {
+        return $this->hasMany(ProductIdentifier::class, 'rms_id');
+    }
+
     // total biji keluar
     public function getTotalBijiKeluarAttribute()
     {

@@ -31,6 +31,7 @@
     @endforeach
 @stop
 
+{{-- Modal 1 Input Kode Jumlah --}}
 @section('form-fields')
     <div class="mb-3">
         <label>Kode Bahan Baku</label>
@@ -41,87 +42,114 @@
             @endforeach
         </select>
     </div>
+
     <div class="mb-3">
-        <label>Petugas</label>
-        <select id="employees_id" class="form-control" required>
-            <option value="">-- Pilih Petugas --</option>
-            @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="mb-3">
-        <label>Biji</label>
-        <input type="number" id="biji" step="1" min="0" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Berat</label>
-        <input type="number" id="berat" step="0.01" min="0" max="99999.99" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Keterangan</label>
-        <input type="text" id="keterangan" class="form-control">
+        <label>Jumlah Kontainer</label>
+        <input type="number" min="1" id="jumlah_kontainer" class="form-control" required>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/containers/${id}` : '/containers';
-    const method = id ? 'PUT' : 'POST';
+    const arrivals_id = $('#arrivals_id').val();
+    const jumlah = parseInt($('#jumlah_kontainer').val());
 
-    const data = {
-        _token: '{{ csrf_token() }}',
-        arrivals_id: $('#arrivals_id').val(),
-        employees_id: $('#employees_id').val(),
-        biji: $('#biji').val(),
-        berat: $('#berat').val(),
-        keterangan: $('#keterangan').val()
-    };
+    if (!arrivals_id || jumlah < 1) {
+        Swal.fire('Error', 'Lengkapi Kode & Jumlah Kontainer!', 'error');
+        return;
+    }
 
-    fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(res => {
-        if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-        } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
+    bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
+
+    {{-- Modal 2 Input Detail Kontainer --}}
+    let html = '';
+    for (let i = 1; i <= jumlah; i++) {
+        html += `
+            <div class="border rounded p-3 mb-3">
+                <h6>Kontainer ${i}</h6>
+
+                <label>Biji</label>
+                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0">
+
+                <label>Berat</label>
+                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01">
+
+                <label>Keterangan</label>
+                <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}">
+
+                <label>Petugas</label>
+                <select class="form-control kont-petugas" data-index="${i}">
+                    <option value="">-- Pilih Petugas --</option>
+                    @foreach($employees as $employee)
+                        <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
+        `;
+    }
+
+    $('#secondModalBody').html(html);
+    $('#secondModal').modal('show');
+
+    // Submit modal kedua
+    $('#btnSubmitAll').off().on('click', function () {
+        let list = [];
+
+        for (let i = 1; i <= jumlah; i++) {
+            list.push({
+                arrivals_id,
+                biji: $(`.kont-biji[data-index="${i}"]`).val(),
+                berat: $(`.kont-berat[data-index="${i}"]`).val(),
+                keterangan: $(`.kont-keterangan[data-index="${i}"]`).val(),
+                employees_id: $(`.kont-petugas[data-index="${i}"]`).val(),
+            });
         }
-    })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan NIP tidak duplikat', 'error'));
+
+        fetch('/containers/bulk', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ items: list })
+        })
+        .then(r => r.json())
+        .then(res => {
+            if (res.status === 'success') {
+                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
+            } else {
+                Swal.fire('Error', res.message, 'error');
+            }
+        });
+    });
 @stop
 
 @section('custom-js')
+    // Edit
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
+
         fetch(`/containers/${id}`)
             .then(r => r.json())
             .then(container => {
                 $('#item_id').val(container.id);
                 $('#arrivals_id').val(container.arrivals_id);
-                $('#employees_id').val(container.employees_id);
-                $('#biji').val(container.biji);
-                $('#berat').val(container.berat);
-                $('#keterangan').val(container.keterangan);
+                $('#jumlah_kontainer').val(1); // edit hanya 1
                 $('#modalTitle').text('Edit Kontainer');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
 
+    // Delete
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
-            title: 'Yakin hapus?',
+            title: 'Hapus?',
             text: 'Data tidak bisa dikembalikan!',
             icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
-            cancelButtonText: 'Batal'
-        }).then(result => {
-            if (result.isConfirmed) {
+            showCancelButton: true
+        }).then(res => {
+            if (res.isConfirmed) {
                 fetch(`/containers/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
@@ -129,12 +157,42 @@
                 .then(r => r.json())
                 .then(res => {
                     if (res.status === 'success') {
-                        Swal.fire('Terhapus!', res.message, 'success').then(() => location.reload());
+                        Swal.fire('Terhapus', res.message, 'success').then(() => location.reload());
                     } else {
-                        Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
+                        Swal.fire('Error', res.message, 'error');
                     }
                 });
             }
         });
     });
 @stop
+
+
+{{-- =======================
+  MODAL KEDUA
+======================= --}}
+@section('content')
+@parent
+
+<div class="modal fade" id="secondModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Input Detail Kontainer</h5>
+            </div>
+
+            <div class="modal-body overflow-auto" id="secondModalBody" style="max-height: 70vh;">
+                {{-- auto generated --}}
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button class="btn btn-primary" id="btnSubmitAll">Simpan Semua</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endsection
+
+{{-- before --}}
