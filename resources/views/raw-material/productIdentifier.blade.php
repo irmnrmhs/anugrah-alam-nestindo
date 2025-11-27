@@ -7,7 +7,7 @@
 
 @section('table-headers')
     <th>No</th>
-    <th>Supplier</th>
+    {{-- <th>Supplier</th> --}}
     <th>Kode Bahan Baku</th>
     <th>Grade</th>
     <th>Kode Produk</th>
@@ -20,7 +20,7 @@
     @foreach($identifiers as $index => $identifier)
         <tr data-id="{{ $identifier->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $identifier->supplier->nama }}</td>
+            {{-- <td>{{ $identifier->supplier->nama }}</td> --}}
             <td>{{ $identifier->rawMaterial->kode }}</td>
             <td>{{ $identifier->grade->grade }}</td>
             <td>{{ $identifier->kode }}</td>
@@ -36,15 +36,6 @@
 @stop
 
 @section('form-fields')
-    <div class="mb-3">
-        <label>Supplier</label>
-        <select id="suppliers_id" class="form-control" required>
-            <option value="">-- Pilih Supplier --</option>
-            @foreach($suppliers as $supplier)
-                <option value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
-            @endforeach
-        </select>
-    </div>
     <div class="mb-3">
         <label>Kode Bahan Baku</label>
         <select id="rms_id" class="form-control" required>
@@ -84,10 +75,8 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
-        suppliers_id: $('#suppliers_id').val(),
         rms_id: $('#rms_id').val(),
         grades_id: $('#grades_id').val(),
-        {{-- kode: $('#kode').val(), --}}
         tanggal: $('#tanggal').val(),
         biji: $('#biji').val(),
         berat: $('#berat').val()
@@ -106,7 +95,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan NIP tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan kode tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')
@@ -116,10 +105,8 @@
             .then(r => r.json())
             .then(identifier => {
                 $('#item_id').val(identifier.id);
-                $('#suppliers_id').val(identifier.suppliers_id);
                 $('#rms_id').val(identifier.rms_id);
                 $('#grades_id').val(identifier.grades_id);
-                {{-- $('#kode').val(identifier.kode); --}}
                 $('#tanggal').val(identifier.tanggal);
                 $('#biji').val(identifier.biji);
                 $('#berat').val(identifier.berat);

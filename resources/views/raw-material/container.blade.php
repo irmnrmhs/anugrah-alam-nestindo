@@ -69,10 +69,10 @@
                 <h6>Kontainer ${i}</h6>
 
                 <label>Biji</label>
-                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0">
+                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0" required>
 
                 <label>Berat</label>
-                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01">
+                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01" required>
 
                 <label>Keterangan</label>
                 <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}">
@@ -96,13 +96,14 @@
         let list = [];
 
         for (let i = 1; i <= jumlah; i++) {
-            list.push({
-                arrivals_id,
-                biji: $(`.kont-biji[data-index="${i}"]`).val(),
-                berat: $(`.kont-berat[data-index="${i}"]`).val(),
-                keterangan: $(`.kont-keterangan[data-index="${i}"]`).val(),
-                employees_id: $(`.kont-petugas[data-index="${i}"]`).val(),
-            });
+            let biji = $(`.kont-biji[data-index="${i}"]`).val();
+            let berat = $(`.kont-berat[data-index="${i}"]`).val();
+            let petugas = $(`.kont-petugas[data-index="${i}"]`).val();
+
+            if (!biji || !berat || !petugas) {
+                Swal.fire('Error', `Data kontainer ${i} belum lengkap!`, 'error');
+                return;
+            }
         }
 
         fetch('/containers/bulk', {

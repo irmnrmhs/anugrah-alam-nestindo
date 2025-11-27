@@ -43,15 +43,6 @@
             @endforeach
         </select>
     </div>
-    <div class="mb-3">
-        <label>Petugas</label>
-        <select id="employees_id" class="form-control" required>
-            <option value="">-- Pilih Petugas --</option>
-            @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
-            @endforeach
-        </select>
-    </div>
     <div class="row mt-3">
         <div class="col-md-4">
             <label>Tanggal Stok Keluar Terakhir</label>

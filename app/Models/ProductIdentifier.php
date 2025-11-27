@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class ProductIdentifier extends Model
 {
     protected $fillable = [
-        'suppliers_id',
         'rms_id',
         'grades_id',
         'kode',
@@ -15,11 +14,6 @@ class ProductIdentifier extends Model
         'biji',
         'berat'
     ];
-
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class, 'suppliers_id');
-    }
 
     public function rawMaterial()
     {
