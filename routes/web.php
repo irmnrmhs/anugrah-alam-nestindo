@@ -164,6 +164,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/dcertificates/{id}', [DcertificateController::class, 'show'])->name('dcertificates.show');
     Route::put('/dcertificates/{id}', [DcertificateController::class, 'update'])->name('dcertificates.update');
     Route::delete('/dcertificates/{id}', [DcertificateController::class, 'destroy'])->name('dcertificates.destroy');
+    Route::get('/dcertificates/{id}/export', [DcertificateController::class, 'export'])->name('dcertificates.export');
 
     // Arrival
     Route::get('/arrivals', [ArrivalController::class, 'index'])->name('arrivals.index');
@@ -211,6 +212,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/rm-results/{id}', [RmResultController::class, 'show'])->name('rm-results.show');
     Route::put('/rm-results/{id}', [RmResultController::class, 'update'])->name('rm-results.update');
     Route::delete('/rm-results/{id}', [RmResultController::class, 'destroy'])->name('rm-results.destroy');
+
+
 });
 
 require __DIR__.'/auth.php';
