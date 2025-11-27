@@ -21,7 +21,7 @@ class WBHouseController extends Controller
     {
         $validated = $request->validate([
             'kode'      => 'required|string|max:25|unique:w_b_houses,kode',
-            'nama'      => 'required',
+            'nama'      => 'required|unique:w_b_houses,nama',
             'alamat'    => 'nullable',
             'areas_id'  => 'required|exists:areas,id',
             'kapasitas' => 'nullable|numeric|min:0|max:99999.99',
@@ -46,7 +46,7 @@ class WBHouseController extends Controller
     {
         $validated = $request->validate([
             'kode'      => 'required|string|max:25|unique:w_b_houses,kode,' . $id,
-            'nama'      => 'required',
+            'nama'      => 'required|unique:w_b_houses,kode,' . $id,
             'alamat'    => 'nullable',
             'areas_id'  => 'required|exists:areas,id',
             'kapasitas' => 'nullable|numeric|min:0|max:99999.99',

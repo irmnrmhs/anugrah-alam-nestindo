@@ -11,7 +11,6 @@ class RoleController extends Controller
 {
     public string $obj = 'Role';
 
-    // Display a listing of the resource.
     public function index(): View
     {
         $roles = Role::oldest()->get();
@@ -19,11 +18,10 @@ class RoleController extends Controller
         return view('masters.role', compact('roles'));
     }
 
-    // Simpan data role baru (AJAX)
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:roles,name',
+            'name' => 'required|unique:roles,name',
         ]);
 
         $role = Role::create($validated);
@@ -36,7 +34,6 @@ class RoleController extends Controller
     }
 
     
-    // Ambil data satu role (untuk edit modal)
     public function show(int $id): JsonResponse
     {
         $role = Role::findOrFail($id);
@@ -44,12 +41,10 @@ class RoleController extends Controller
         return response()->json($role);
     }
 
-    
-    // Update data role (AJAX)
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:roles,name,' . $id,
+            'name' => 'required|unique:roles,name,' . $id,
         ]);
 
         $role = Role::findOrFail($id);
@@ -62,7 +57,6 @@ class RoleController extends Controller
         ]);
     }
 
-    // Hapus role (AJAX)
     public function destroy(int $id): JsonResponse
     {
         $role = Role::findOrFail($id);

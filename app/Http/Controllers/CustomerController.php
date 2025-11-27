@@ -23,7 +23,7 @@ class CustomerController extends Controller
     {
         $validated = $request->validate([
             'kode'      => 'required|string|max:25|unique:customers,kode',
-            'nama'      => 'required',
+            'nama'      => 'required|string|max:25|unique:customers,kode',
             'alamat'    => 'nullable',
             'no_telp'   => 'nullable',
             'fax'       => 'nullable',
@@ -49,7 +49,7 @@ class CustomerController extends Controller
     {
         $validated = $request->validate([
             'kode'      => 'required|string|max:25|unique:customers,kode,' . $id,
-            'nama'      => 'required',
+            'nama'      => 'required|string|max:25|unique:customers,kode,' . $id,
             'alamat'    => 'nullable',
             'no_telp'   => 'nullable',
             'fax'       => 'nullable',
