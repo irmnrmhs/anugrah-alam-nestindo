@@ -22,7 +22,7 @@ class SupplierController extends Controller
     {
         $validated = $request->validate([
             'kode' => 'required|string|max:25|unique:suppliers,kode',
-            'nama' => 'required|string|max:255',
+            'nama' => 'required|string|max:255|unique:suppliers,kode',
             'alamat' => 'nullable',
             'no_telp' => 'nullable',
             'categories_id' => 'required|exists:categories,id',
@@ -48,7 +48,7 @@ class SupplierController extends Controller
     {
         $validated = $request->validate([
             'kode' => 'required|string|max:25|unique:suppliers,kode,' .$id,
-            'nama' => 'required|string|max:255',
+            'nama' => 'required|string|max:255|unique:suppliers,kode,' .$id,
             'alamat' => 'nullable',
             'no_telp' => 'nullable',
             'categories_id' => 'required|exists:categories,id',

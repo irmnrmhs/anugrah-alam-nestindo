@@ -66,7 +66,8 @@
         } else {
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
-    });
+    })
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan kode dan kategori tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')

@@ -37,7 +37,7 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
-        name: $('#name').val()
+        name: $('#name').val(),
     };
 
     fetch(url, {
@@ -50,9 +50,10 @@
         if (res.status === 'success') {
             Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
         } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
+            Swal.fire('Gagal', res.message || 'Terjadi kesalahan. Role tidak boleh sama.', 'error');
         }
-    });
+    })
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan Role tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')
@@ -68,7 +69,6 @@
             });
     });
 
-    // === Delete Role ===
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({

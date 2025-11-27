@@ -86,7 +86,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan NIP tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data.', 'error'));
 @stop
 
 @section('custom-js')

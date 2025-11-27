@@ -85,7 +85,8 @@
         } else {
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
-    });
+    })
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan no registrasi dan nama tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')

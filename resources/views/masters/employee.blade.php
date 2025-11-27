@@ -78,7 +78,6 @@
 @stop
 
 @section('custom-js')
-    // === Edit ===
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
         fetch(`/employees/${id}`)
@@ -93,7 +92,6 @@
             });
     });
 
-    // === Delete ===
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
