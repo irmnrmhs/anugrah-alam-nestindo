@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('feathers_id')->constrained('feathers')->onDelete('cascade');
             $table->foreignId('colors_id')->constrained('colors')->onDelete('cascade');
             $table->boolean('status');
+            $table->unique(['shapes_id', 'feathers_id', 'colors_id'], 'grade_unique_combo');
             $table->timestamps();
         });
     }

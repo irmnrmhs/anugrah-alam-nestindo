@@ -101,7 +101,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan grade belum digunakan.', 'error'));
+    .catch(() => Swal.fire('Error', 'Kode grade sudah ada / tidak valid!', 'error'));
 @stop
 
 @section('custom-js')

@@ -9,6 +9,7 @@ use App\Models\Grade;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Illuminate\Validation\Rule;
 
 class GradeController extends Controller
 {
@@ -27,9 +28,17 @@ class GradeController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'shapes_id' => 'required|exists:shapes,id',
-            'feathers_id' => 'required|exists:feathers,id',
-            'colors_id' => 'required|exists:colors,id',
+            'shapes_id' => ['required', 'exists:shapes,id'],
+            'feathers_id' => ['required', 'exists:feathers,id'],
+            'colors_id' => [
+                'required',
+                'exists:colors,id',
+                Rule::unique('grades')->where(fn ($q) =>
+                    $q->where('shapes_id', $request->shapes_id)
+                    ->where('feathers_id', $request->feathers_id)
+                    ->where('colors_id', $request->colors_id)
+                ),
+            ],
             'status' => 'required|boolean',
         ]);
 
@@ -53,9 +62,17 @@ class GradeController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'shapes_id' => 'required|exists:shapes,id',
-            'feathers_id' => 'required|exists:feathers,id',
-            'colors_id' => 'required|exists:colors,id',
+            'shapes_id' => ['required', 'exists:shapes,id'],
+            'feathers_id' => ['required', 'exists:feathers,id'],
+            'colors_id' => [
+                'required',
+                'exists:colors,id',
+                Rule::unique('grades')->ignore($id)->where(fn ($q) =>
+                    $q->where('shapes_id', $request->shapes_id)
+                    ->where('feathers_id', $request->feathers_id)
+                    ->where('colors_id', $request->colors_id)
+                ),
+            ],
             'status' => 'required|boolean',
         ]);
 
