@@ -10,6 +10,7 @@ use App\Models\Dcertificate;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DcertificateController extends Controller
 {
@@ -87,5 +88,15 @@ class DcertificateController extends Controller
             'status' => 'success',
             'message' => $this->obj . ' berhasil dihapus',
         ]);
+    }
+
+    public function export($id)
+    {
+        $dcertificate = Dcertificate::with(['company', 'supplier', 'wbhouse'])->findOrFail($id);
+
+        $pdf = Pdf::loadView('exports.skp', compact('dcertificate'))
+                ->setPaper('A4', 'portrait');
+
+        return $pdf->download('SKP-' . $dcertificate->no_skp . '.pdf');
     }
 }
