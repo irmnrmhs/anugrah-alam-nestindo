@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Data Karyawan';
     $singular = 'Karyawan';
+    $deleteMultipleUrl = '/employees/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>NIP</th>
     <th>Nama</th>
@@ -15,6 +17,7 @@
 @section('table-body')
     @foreach($employees as $index => $employee)
         <tr data-id="{{ $employee->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $employee->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $employee->nip }}</td>
             <td>{{ $employee->nama }}</td>

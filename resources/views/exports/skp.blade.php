@@ -1,74 +1,201 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+
     <style>
-        body { font-family: sans-serif; font-size: 12px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        td { padding: 4px; vertical-align: top; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .table-bordered td { border: 1px solid #000; }
-        .title { font-size: 18px; font-weight: bold; margin-bottom: 0; }
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 12px;
+            margin: 20px 30px;
+        }
+
+        .company {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .company-desc {
+            text-align: center;
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+
+        .box-right {
+            position: absolute;
+            right: 30px;
+            top: 25px;
+            border: 1px solid #000;
+            padding: 5px 10px;
+            font-size: 11px;
+        }
+
+        .title {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 11px;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        table.info {
+            width: 100%;
+        }
+        table.info td {
+            padding: 6px 0;
+            vertical-align: top;
+        }
+        .label {
+            width: 220px;
+            font-weight: bold;
+        }
+        .en {
+            font-size: 10px;
+            font-style: italic;
+            color: #444;
+        }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table.data-table th, table.data-table td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .footer-sign {
+            margin-top: 40px;
+            width: 100%;
+            text-align: right;
+        }
+
+        .signature {
+            margin-top: 50px;
+        }
     </style>
+
 </head>
+
 <body>
 
-    <div class="header">
-        <p class="title">PT. ANUGRAH ALAM NESTINDO</p>
-        <P>Kp Bolenglang RT 002 RW 013, Sukasari Cilaku, Kab. Cianjur, Jawa Barat</P>
-        <p></p>
-
-        <h2 style="text-decoration-line: underline">Surat Keterangan Pengiriman</h2>
-        <h4 style="font-style: italic">Delivery Certificate</h4>
+    <!-- Box kanan -->
+    <div class="box-right">
+        No. AAN/FRM/RW/01/04 <br>
+        Rev-01
     </div>
 
-    <table>
+    <!-- Header -->
+    <p class="company">PT. ANUGRAH ALAM NESTINDO</p>
+    <p class="company-desc">
+        Kp Bolenglang RT. 002 RW 013, Sukasari Cilaku, Kab. Cianjur, Jawa Barat
+    </p>
+
+    <p class="title">SURAT KETERANGAN PENGIRIMAN</p>
+    <p class="subtitle">Delivery Certificate</p>
+
+    <!-- Informasi -->
+    <table class="info">
         <tr>
-            <td width="30%">
-                Nama/ No Registrasi Rumah Walet<br>
-                Name/ Bird's House Registration Number
-            </td>
-            <td>: {{ $dcertificate->wbhouse->nama . "/" . $dcertificate->wbhouse->kode }}</td>
+            <td class="label">Nama/ No Registrasi Rumah Walet <br><span class="en">Name / Bird's House Registration Number</span></td>
+            <td>: {{ $dcertificate->wbhouse->nama_walet ?? '-' }}</td>
         </tr>
+
         <tr>
-            <td>Alamat Rumah Walet</td>
-            <td>: {{ $dcertificate->wbhouse->alamat }}</td>
+            <td class="label">Alamat Rumah Walet <br><span class="en">Bird’s House Address</span></td>
+            <td>: {{ $dcertificate->wbhouse->alamat_walet ?? '-' }}</td>
         </tr>
+
         <tr>
-            <td>Tujuan IKH</td>
-            <td>: {{ $dcertificate->company->nama }}</td>
+            <td class="label">Tujuan IKH <br><span class="en">IKH Destination Number</span></td>
+            <td>: {{ $dcertificate->company->nama_perusahaan ?? '-' }}</td>
         </tr>
+
         <tr>
-            <td>Nomor Registrasi IКН</td>
-            <td>: {{ $dcertificate->company->ikh }}</td>
+            <td class="label">Nomor Registrasi IKH <br><span class="en">IKH Registration Number</span></td>
+            <td>: {{ $dcertificate->company->no_ikh ?? '-' }}</td>
         </tr>
+
         <tr>
-            <td>Alamat IKH</td>
-            <td>: {{ $dcertificate->company->alamat }}</td>
+            <td class="label">Alamat IKH <br><span class="en">IKH Address</span></td>
+            <td>: {{ $dcertificate->company->alamat ?? '-' }}</td>
         </tr>
+
         <tr>
-            <td>Tanggal, Bulan, Tahun</td>
-            <td>: {{ $dcertificate->tgl_skp }}</td>
+            <td class="label">Tanggal, Bulan, Tahun <br><span class="en">Date, Month, Year</span></td>
+            <td>: {{ $dcertificate->tanggal ?? '-' }}</td>
         </tr>
+
         <tr>
-            <td>Nomor SKP / KH-14</td>
+            <td class="label">Nomor SKP / KH-14 <br><span class="en">Delivery Certificate / KH-14</span></td>
             <td>: {{ $dcertificate->no_skp }}</td>
         </tr>
     </table>
 
-    <br><br><br>
+    <!-- Data Tabel -->
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th rowspan="2">No</th>
+                <th rowspan="2">Tanggal Panen <br><span class="en">Date of Harvesting</span></th>
+                <th rowspan="2">Berat Panen (kg) <br><span class="en">Weight of Harvesting (kg)</span></th>
+                <th colspan="2">Pengiriman ke IKH <br><span class="en">Delivery to IKH</span></th>
+            </tr>
+            <tr>
+                <th>Tanggal Kirim <br><span class="en">Date of Delivery</span></th>
+                <th>Berat Kirim (kg) <br><span class="en">Weight of Delivery (kg)</span></th>
+            </tr>
+        </thead>
 
-    <table>
-        <tr>
-            <td width="60%"></td>
-            <td>
-                Pemilik/ Penanggungjawab Rumah Walet,<br>
-                Owner/ Person in Charge of Bird's House<br><br><br><br><br>
-                   (.................)<br>
-                ________________________
-            </td>
-        </tr>
+        <tbody>
+            @foreach($dcertificate->arrivals as $i => $row)
+                <tr>
+                    <td>{{ $i + 1 }}</td>
+                    <td>{{ $row->tgl_panen }}</td>
+                    <td>{{ number_format($row->berat_panen, 2) }}</td>
+                    <td>{{ $row->tgl_kirim }}</td>
+                    <td>{{ number_format($row->berat_kirim, 2) }}</td>
+                </tr>
+            @endforeach
+
+            <!-- Baris kosong agar mirip pdf asli -->
+            @for ($n = $dcertificate->arrivals->count(); $n < 10; $n++)
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            @endfor
+
+            <tr>
+                <td colspan="2" style="text-align: right; font-weight: bold;">TOTAL</td>
+                <td>{{ number_format($dcertificate->arrivals->sum('berat_panen'), 2) }}</td>
+                <td style="text-align: right; font-weight: bold;">TOTAL</td>
+                <td>{{ number_format($dcertificate->arrivals->sum('berat_kirim'), 2) }}</td>
+            </tr>
+        </tbody>
     </table>
+
+    <!-- Tanda tangan -->
+    <div class="footer-sign">
+        Pemilik/ Penanggungjawab Rumah Walet <br>
+        <span class="en">Owner / Person in Charge of Bird’s House</span>
+
+        <div class="signature"></div>
+
+        ({{ $dcertificate->wbhouse->penanggungjawab ?? '................................' }})
+    </div>
 
 </body>
 </html>

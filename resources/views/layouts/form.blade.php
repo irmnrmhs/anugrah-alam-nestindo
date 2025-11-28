@@ -11,11 +11,19 @@
     </div>
 @stop
 
+@section('bulk-actions')
+    <button id="btnDeleteSelected" class="btn btn-danger mb-2" style="display:none;">
+        Hapus Terpilih
+    </button>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-body">
+            @yield('bulk-actions')
+            
             {{-- Tabel utama --}}
-            <table class="table table-bordered table-striped" id="dataTable">
+            <table class="table table-bordered table-striped" id="dataTable" data-delete-multiple="{{ $deleteMultipleUrl ?? '' }}">
                 <thead>
                     <tr>
                         @yield('table-headers')
@@ -69,11 +77,67 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+    // ==== Multi Delete Universal ====
+    function toggleBulkDeleteButton() {
+        const selected = $('.row-check:checked').length;
+        if (selected > 0) $('#btnDeleteSelected').show();
+        else $('#btnDeleteSelected').hide();
+    }
+
+    $(document).on('change', '.row-check', toggleBulkDeleteButton);
+
+    $(document).on('change', '#checkAll', function () {
+        $('.row-check').prop('checked', $(this).is(':checked'));
+        toggleBulkDeleteButton();
+    });
+
+    $(document).on('click', '#btnDeleteSelected', function () {
+        const ids = $('.row-check:checked').map((i, el) => el.value).get();
+
+        if (ids.length === 0) {
+            return Swal.fire('Oops', 'Tidak ada data yang dipilih', 'warning');
+        }
+
+        Swal.fire({
+            title: 'Hapus data terpilih?',
+            text: 'Data yang dihapus tidak bisa dikembalikan.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus'
+        }).then(result => {
+            if (result.isConfirmed) {
+
+                // URL delete multiple diambil dari attribute
+                const url = $('#dataTable').data('delete-multiple');
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ ids })
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        Swal.fire('Terhapus!', res.message, 'success')
+                            .then(() => location.reload());
+                    } else {
+                        Swal.fire('Gagal', res.message, 'error');
+                    }
+                });
+            }
+        });
+    });
+
+
+    // ==== Main ====
     $(function() {
-        // === Init Table ===
+        // Init datatable
         $('#dataTable').DataTable({ responsive: true });
 
-        // === Modal ===
+        // Modal
         const modal = new bootstrap.Modal('#crudModal');
 
         $('#btnAdd').click(() => {
@@ -83,13 +147,13 @@
             modal.show();
         });
 
-        // === Submit Form ===
+        // Submit Form
         $('#crudForm').submit(e => {
             e.preventDefault();
             @yield('form-submit-script')
         });
 
-        // === Custom Action per halaman (edit/delete) ===
+        // Custom Action from child
         @yield('custom-js')
     });
     </script>

@@ -80,6 +80,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
     Route::put('/employees/{id}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::post('/employees/delete-multiple', [EmployeeController::class, 'deleteMultiple']);
     
     // Area
     Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');
