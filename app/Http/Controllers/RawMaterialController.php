@@ -14,7 +14,7 @@ class RawMaterialController extends Controller
     public string $obj = 'Bahan Baku';
     public function index(): View
     {
-        $raw_materials = RawMaterial::with('arrival')->oldest()->get();
+        $raw_materials = RawMaterial::with('arrival')->latest()->get();
         $arrivals = Arrival::all();
 
         return view('raw-material.rawMaterial', compact('raw_materials', 'arrivals'));

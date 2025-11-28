@@ -17,7 +17,7 @@ class DcertificateController extends Controller
     public string $obj = 'Grade';
     public function index(): View
     {
-        $dcertificates = Dcertificate::with('company', 'supplier', 'wbhouse')->oldest()->get();
+        $dcertificates = Dcertificate::with('company', 'supplier', 'wbhouse')->latest()->get();
         $companies = Company::all();
         $suppliers = Supplier::all();
         $wbhouses = WBHouse::all();

@@ -13,7 +13,7 @@ class DepartmentController extends Controller
     public string $obj = 'Departemen';
     public function index(): View
     {
-        $departments = Department::oldest()->get();
+        $departments = Department::latest()->get();
         return view('masters.department', compact('departments'));
     }
 

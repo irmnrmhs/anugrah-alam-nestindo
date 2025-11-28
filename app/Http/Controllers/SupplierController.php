@@ -12,7 +12,7 @@ class SupplierController extends Controller
 {
     public function index(): View
     {
-        $suppliers = Supplier::with('category')->oldest()->get();
+        $suppliers = Supplier::with('category')->latest()->get();
         $categories = Category::all();
 
         return view('masters.supplier', compact('suppliers', 'categories'));

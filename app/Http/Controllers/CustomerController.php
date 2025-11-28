@@ -11,7 +11,7 @@ class CustomerController extends Controller
 {
     public function index(): View
     {
-        $customers = Customer::oldest()->get();
+        $customers = Customer::latest()->get();
         $countries = [
             'Indonesia', 'China', 'Malaysia', 'Singapura', 'Thailand', 'Jepang', 'Taiwan'
         ];

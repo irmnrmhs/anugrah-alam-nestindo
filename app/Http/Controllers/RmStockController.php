@@ -14,7 +14,7 @@ class RmStockController extends Controller
     public string $obj = 'Stok Bahan Baku';
     public function index(): View
     {
-        $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
+        $stocks = RmStock::with('rawMaterial', 'employee')->latest()->get();
         $rms = RawMaterial::all();
         $employees = Employee::all();
 

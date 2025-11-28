@@ -12,7 +12,7 @@ class CarController extends Controller
 {
     public function index(): View
     {
-        $cars = Car::oldest()->get();
+        $cars = Car::latest()->get();
         return view('masters.car', compact('cars'));
     }
 

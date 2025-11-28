@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {
     public function index(): View
     {
-        $categories = Category::oldest()->get();
+        $categories = Category::latest()->get();
 
         return view('masters.category', compact('categories'));
     }

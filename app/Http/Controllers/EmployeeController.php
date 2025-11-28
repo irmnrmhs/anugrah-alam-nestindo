@@ -13,7 +13,7 @@ class EmployeeController extends Controller
     public string $obj = 'Karyawan';
     public function index(): View
     {
-        $employees = Employee::with('department')->oldest()->get();
+        $employees = Employee::with('department')->latest()->get();
         $departments = Department::all();
 
         return view('masters.employee', compact('employees', 'departments'));

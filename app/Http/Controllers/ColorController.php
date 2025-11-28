@@ -13,7 +13,7 @@ class ColorController extends Controller
 
     public function index(): View
     {
-        $colors = Color::oldest()->get();
+        $colors = Color::latest()->get();
 
         return view('masters.color', compact('colors'));
     }

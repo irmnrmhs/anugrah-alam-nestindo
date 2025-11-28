@@ -13,7 +13,7 @@ class FeatherController extends Controller
 
     public function index(): View
     {
-        $feathers = Feather::oldest()->get();
+        $feathers = Feather::latest()->get();
 
         return view('masters.feather', compact('feathers'));
     }

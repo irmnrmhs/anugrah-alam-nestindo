@@ -15,7 +15,7 @@ class ContainerController extends Controller
     public string $obj = 'Kontainer';
     public function index(): View
     {
-        $containers = Container::with('arrival', 'employee')->oldest()->get();
+        $containers = Container::with('arrival', 'employee')->latest()->get();
         $arrivals = Arrival::all();
         $employees = Employee::all();
 

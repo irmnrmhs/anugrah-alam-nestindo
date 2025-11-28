@@ -13,7 +13,7 @@ class TestTypeController extends Controller
     public string $obj = 'Jenis Uji';
     public function index(): View
     {
-        $testTypes = TestType::with('category')->oldest()->get();
+        $testTypes = TestType::with('category')->latest()->get();
         $categories = Category::all();
 
         return view('masters.testType', compact('testTypes', 'categories'));
