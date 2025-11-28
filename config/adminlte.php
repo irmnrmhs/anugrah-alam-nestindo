@@ -395,6 +395,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Jenis Bentuk',
+                    'url'  => 'shapes',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Jenis Bulu',
                     'url'  => 'feathers',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
@@ -403,12 +409,6 @@ return [
                 [
                     'text' => 'Jenis Warna',
                     'url'  => 'colors',
-                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
-                    'icon' => 'fas fa-users',
-                ],
-                [
-                    'text' => 'Jenis Bentuk',
-                    'url'  => 'shapes',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
