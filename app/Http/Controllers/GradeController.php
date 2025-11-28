@@ -17,7 +17,7 @@ class GradeController extends Controller
 
     public function index(): View
     {
-        $grades = Grade::with('shape', 'feather', 'color')->oldest()->get();
+        $grades = Grade::with('shape', 'feather', 'color')->latest()->get();
         $shapes = Shape::all();
         $feathers = Feather::all();
         $colors = Color::all();

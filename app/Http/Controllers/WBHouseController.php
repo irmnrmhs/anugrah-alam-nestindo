@@ -12,7 +12,7 @@ class WBHouseController extends Controller
 {
     public function index(): View
     {
-        $wbhouses = WBHouse::oldest()->get();
+        $wbhouses = WBHouse::latest()->get();
         $areas = Area::all();
         return view('masters.wbhouse', compact('wbhouses', 'areas'));
     }

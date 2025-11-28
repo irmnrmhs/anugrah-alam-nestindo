@@ -15,7 +15,7 @@ class ArrivalController extends Controller
     public string $obj = 'Kedatangan';
     public function index(): View
     {
-        $arrivals = Arrival::with('employee', 'car', 'dcertificate')->oldest()->get();
+        $arrivals = Arrival::with('employee', 'car', 'dcertificate')->latest()->get();
         $employees = Employee::all();
         $cars = Car::all();
         $dcertificates = Dcertificate::all();

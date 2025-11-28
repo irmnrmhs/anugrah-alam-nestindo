@@ -13,7 +13,7 @@ class RoleController extends Controller
 
     public function index(): View
     {
-        $roles = Role::oldest()->get();
+        $roles = Role::latest()->get();
 
         return view('masters.role', compact('roles'));
     }

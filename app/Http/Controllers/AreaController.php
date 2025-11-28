@@ -14,7 +14,7 @@ class AreaController extends Controller
 
     public function index(): View
     {
-        $areas = Area::oldest()->get();
+        $areas = Area::latest()->get();
         return view('masters.area', compact('areas'));
     }
 

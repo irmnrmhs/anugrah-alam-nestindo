@@ -13,7 +13,7 @@ class ShapeController extends Controller
 
     public function index(): View
     {
-        $shapes = Shape::oldest()->get();
+        $shapes = Shape::latest()->get();
 
         return view('masters.shape', compact('shapes'));
     }

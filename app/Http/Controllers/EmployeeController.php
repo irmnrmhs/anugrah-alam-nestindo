@@ -13,7 +13,7 @@ class EmployeeController extends Controller
     public string $obj = 'Karyawan';
     public function index(): View
     {
-        $employees = Employee::with('department')->oldest()->get();
+        $employees = Employee::with('department')->latest()->get();
         $departments = Department::all();
 
         return view('masters.employee', compact('employees', 'departments'));
@@ -72,4 +72,17 @@ class EmployeeController extends Controller
             'message' => $this->obj . ' berhasil dihapus',
         ]);
     }
+
+    public function deleteMultiple(Request $request): JsonResponse
+    {
+        $ids = $request->ids;
+
+        Employee::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data terpilih berhasil dihapus'
+        ]);
+    }
+
 }

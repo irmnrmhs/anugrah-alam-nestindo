@@ -14,7 +14,7 @@ class RmResultController extends Controller
     public string $obj = 'Hasil Uji';
     public function index(): View
     {
-        $results = RmResult::with('rawMaterial')->oldest()->get();
+        $results = RmResult::with('rawMaterial')->latest()->get();
         $rms = RawMaterial::all();
 
         return view('quality-control.rmResult', compact('results', 'rms'));

@@ -16,7 +16,7 @@ class UserController extends Controller
     public string $obj = 'User';
     public function index(): View
     {
-        $users = User::with('role', 'employee')->oldest()->get();
+        $users = User::with('role', 'employee')->latest()->get();
         $roles = Role::all();
         $employees = Employee::all();
 
