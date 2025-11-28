@@ -23,6 +23,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RmResultController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
@@ -116,6 +117,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/shapes/{id}', [ShapeController::class, 'show'])->name('shapes.show');
     Route::put('/shapes/{id}', [ShapeController::class, 'update'])->name('shapes.update');
     Route::delete('/shapes/{id}', [ShapeController::class, 'destroy'])->name('shapes.destroy');
+
+    Route::get('/types', [TypeController::class, 'index'])->name('types.index');
 
     // Jenis Grade
     Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');
