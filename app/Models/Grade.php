@@ -47,4 +47,9 @@ class Grade extends Model
             $this->color?->kode
         );
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
 }

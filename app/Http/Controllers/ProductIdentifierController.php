@@ -17,7 +17,7 @@ class ProductIdentifierController extends Controller
     {
         $identifiers = ProductIdentifier::with('rawMaterial', 'grade')->latest()->get();
         $rms = RawMaterial::all();
-        $grades = Grade::all();
+        $grades = Grade::active()->get();
 
         return view('raw-material.productIdentifier', compact('identifiers', 'rms', 'grades'));
     }
