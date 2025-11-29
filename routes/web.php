@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BlendController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\ShapeController;
@@ -23,7 +25,6 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RmResultController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
-use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
@@ -118,7 +119,9 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/shapes/{id}', [ShapeController::class, 'update'])->name('shapes.update');
     Route::delete('/shapes/{id}', [ShapeController::class, 'destroy'])->name('shapes.destroy');
 
-    Route::get('/types', [TypeController::class, 'index'])->name('types.index');
+    // Blend UI
+    Route::get('/types', [BlendController::class, 'type'])->name('types.type');
+    Route::get('/areas-wbhouses', [BlendController::class, 'area_wbhouse'])->name('areas-wbhouses.area_wbhouse');
 
     // Jenis Grade
     Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');

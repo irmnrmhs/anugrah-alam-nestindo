@@ -335,7 +335,7 @@ return [
                     'icon' => 'fas fa-user-shield',
                 ],
                 [
-                    'text' => 'User',
+                    'text' => 'Pengguna',
                     'url'  => 'users',
                     'can'  => 'Super Admin',
                     'icon' => 'fas fa-users',
@@ -395,20 +395,8 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Jenis Bentuk',
-                    'url'  => 'shapes',
-                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
-                    'icon' => 'fas fa-users',
-                ],
-                [
-                    'text' => 'Jenis Bulu',
-                    'url'  => 'feathers',
-                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
-                    'icon' => 'fas fa-users',
-                ],
-                [
-                    'text' => 'Jenis Warna',
-                    'url'  => 'colors',
+                    'text' => 'Kategori Grade',
+                    'url'  => 'types',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],

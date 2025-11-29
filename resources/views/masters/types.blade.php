@@ -1,21 +1,17 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Tipe (Shape, Feather, Color)';
+    $title = 'Kelola Kategori Grade';
     $hideAddButton = true;
 @endphp
 
 @section('content')
 <div class="row">
-
-    {{-- ================================
-         TABLE SHAPES
-    ================================== --}}
     <div class="col-md-4">
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <strong>Shape</strong>
-                <button class="btn btn-sm btn-primary" id="btnAddShape">Tambah Shape</button>
+                <strong>Bentuk</strong>
+                <button class="btn btn-sm btn-primary" id="btnAddShape">Tambah Bentuk</button>
                 <button class="btn btn-outline-secondary btn-sm p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShape" aria-expanded="true" aria-controls="collapseShape">
                     <i class="fas fa-minus"></i>
                 </button>
@@ -50,15 +46,11 @@
         </div>
     </div>
 
-
-    {{-- ================================
-         TABLE FEATHERS
-    ================================== --}}
     <div class="col-md-4">
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <strong>Feather</strong>
-                <button class="btn btn-primary btn-sm" id="btnAddFeather">Tambah Feather</button>
+                <strong>Bulu</strong>
+                <button class="btn btn-primary btn-sm" id="btnAddFeather">Tambah Bulu</button>
             </div>
             <div class="card-body p-2">
                 <table class="table table-bordered table-striped" id="tableFeather">
@@ -88,15 +80,11 @@
         </div>
     </div>
 
-
-    {{-- ================================
-         TABLE COLORS
-    ================================== --}}
     <div class="col-md-4">
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <strong>Color</strong>
-                <button class="btn btn-primary btn-sm" id="btnAddColor">Tambah Color</button>
+                <strong>Warna</strong>
+                <button class="btn btn-primary btn-sm" id="btnAddColor">Tambah Warna</button>
             </div>
             <div class="card-body p-2">
                 <table class="table table-bordered table-striped" id="tableColor">
@@ -128,11 +116,6 @@
 
 </div>
 
-
-
-{{-- ============================================
-    ============   MODAL UNIVERSAL   ============
-=============================================== --}}
 <div class="modal fade" id="modalType" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -170,8 +153,6 @@
 
 @endsection
 
-
-
 @section('js')
 @parent
 <script>
@@ -190,13 +171,10 @@ function openModal(type, title) {
     modal.show();
 }
 
-/* ============= BUTTON ADD ============= */
 $('#btnAddShape').click(() => openModal('shape', 'Tambah Shape'));
 $('#btnAddFeather').click(() => openModal('feather', 'Tambah Feather'));
 $('#btnAddColor').click(() => openModal('color', 'Tambah Color'));
 
-
-/* ============= EDIT BUTTON ============= */
 $(document).on('click', '.btnEditShape', function() {
     const id = $(this).closest('tr').data('id');
     fetch(`/shapes/${id}`)
@@ -242,8 +220,6 @@ $(document).on('click', '.btnEditColor', function() {
         });
 });
 
-
-/* ============= DELETE BUTTON ============= */
 function deleteItem(url) {
     Swal.fire({
         title: 'Yakin hapus?',
@@ -276,7 +252,6 @@ $(document).on('click', '.btnDeleteColor', function() {
 });
 
 
-/* ============= SUBMIT FORM UNIVERSAL ============= */
 $('#formType').submit(e => {
     e.preventDefault();
 
