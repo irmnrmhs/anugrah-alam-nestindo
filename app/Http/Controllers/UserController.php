@@ -28,13 +28,12 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required|string|max:100|unique:users,username',
             'email' => 'nullable|email',
-            'password' => 'required',
+            'password' => 'required', // tetap wajib
             'roles_id' => 'required|exists:roles,id',
             'employees_id' => 'required|exists:employees,id',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-
         $user = User::create($validated);
 
         return response()->json([
@@ -55,13 +54,14 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required|string|max:100|unique:users,username,' . $id,
             'email' => 'nullable|email',
-            'password' => 'required',
+            'password' => 'nullable', // <=== TIDAK REQUIRED
             'roles_id' => 'required|exists:roles,id',
             'employees_id' => 'required|exists:employees,id',
         ]);
 
         $user = User::findOrFail($id);
 
+        // Jika password dikosongkan → jangan update password
         if (!empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {

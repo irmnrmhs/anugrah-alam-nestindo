@@ -93,7 +93,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan username tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan data diisi lengkap dan username tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')
