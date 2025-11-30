@@ -31,7 +31,9 @@
     @endforeach
 @stop
 
-{{-- Modal 1 Input Kode Jumlah --}}
+{{-- ===========================
+    MODAL 1 : INPUT KODE + JUMLAH
+=========================== --}}
 @section('form-fields')
     <div class="mb-3">
         <label>Kode Bahan Baku</label>
@@ -59,9 +61,10 @@
         return;
     }
 
+    // Tutup modal pertama
     bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
 
-    {{-- Modal 2 Input Detail Kontainer --}}
+    // ====== Generate modal kedua ======
     let html = '';
     for (let i = 1; i <= jumlah; i++) {
         html += `
@@ -69,10 +72,10 @@
                 <h6>Kontainer ${i}</h6>
 
                 <label>Biji</label>
-                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0" required>
+                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0">
 
                 <label>Berat</label>
-                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01" required>
+                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01">
 
                 <label>Keterangan</label>
                 <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}">
@@ -96,26 +99,14 @@
         let list = [];
 
         for (let i = 1; i <= jumlah; i++) {
-            let biji = $(`.kont-biji[data-index="${i}"]`).val();
-            let berat = $(`.kont-berat[data-index="${i}"]`).val();
-            let petugas = $(`.kont-petugas[data-index="${i}"]`).val();
-            let ket = $(`.kont-keterangan[data-index="${i}"]`).val();
-
-            if (!biji || !berat || !petugas) {
-                Swal.fire('Error', `Data kontainer ${i} belum lengkap!`, 'error');
-                return;
-            }
-
             list.push({
-                arrivals_id: arrivals_id,
-                employees_id: petugas,
-                biji: Number(biji),
-                berat: Number(berat),
-                keterangan: ket ?? ''
+                arrivals_id,
+                biji: $(`.kont-biji[data-index="${i}"]`).val(),
+                berat: $(`.kont-berat[data-index="${i}"]`).val(),
+                keterangan: $(`.kont-keterangan[data-index="${i}"]`).val(),
+                employees_id: $(`.kont-petugas[data-index="${i}"]`).val(),
             });
         }
-
-        console.log("LIST DIKIRIM:", list); // ⬅ DEBUG WAJIB
 
         fetch('/containers/bulk', {
             method: 'POST',
@@ -127,18 +118,11 @@
         })
         .then(r => r.json())
         .then(res => {
-            console.log("RESPON SERVER:", res); // ⬅ DEBUG WAJIB
-
             if (res.status === 'success') {
-                Swal.fire('Berhasil', res.message, 'success')
-                    .then(() => location.reload());
+                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
             } else {
                 Swal.fire('Error', res.message, 'error');
             }
-        })
-        .catch(err => {
-            console.error("ERROR FETCH:", err);
-            Swal.fire('Error', 'Gagal kirim data ke server!', 'error');
         });
     });
 @stop
@@ -213,5 +197,3 @@
     </div>
 </div>
 @endsection
-
-{{-- before --}}
