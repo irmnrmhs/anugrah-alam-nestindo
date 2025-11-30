@@ -140,43 +140,22 @@ class ContainerController extends Controller
         ]);
     }
 
-    public function bulk(Request $request): JsonResponse
+    public function bulk(Request $request)
     {
-        $validated = $request->validate([
-            'items' => 'required|array|min:1',
-            'items.*.arrivals_id'   => 'required|exists:arrivals,id',
-            'items.*.employees_id'  => 'required|exists:employees,id',
-            'items.*.biji'          => 'required|integer|min:0',
-            'items.*.berat'         => 'required|numeric|min:0|max:99999.99',
-            'items.*.keterangan'    => 'nullable|string',
-        ]);
-
-        $items = $validated['items'];
-
-        foreach ($items as $item) {
-
-            // Insert container
-            $container = Container::create($item);
-
-            // Ambil kode arrival
-            $arrival = Arrival::find($item['arrivals_id']);
-            $kode = $arrival->kode;
-
-            // Update raw material
-            $raw = RawMaterial::firstOrCreate(
-                ['kode' => $kode],
-                ['biji' => 0, 'berat' => 0]
-            );
-
-            $raw->biji += $item['biji'];
-            $raw->berat += $item['berat'];
-            $raw->save();
+        foreach ($request->items as $item) {
+            Container::create([
+                'arrivals_id' => $item['arrivals_id'],
+                'employees_id' => $item['employees_id'],
+                'biji'        => $item['biji'],
+                'berat'       => $item['berat'],
+                'keterangan'  => $item['keterangan'],
+            ]);
         }
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Semua kontainer berhasil ditambahkan.',
+            'message' => 'Data kontainer berhasil ditambahkan!'
         ]);
-}
+    }
 
 }

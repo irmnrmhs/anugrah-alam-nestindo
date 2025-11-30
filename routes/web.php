@@ -186,6 +186,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/containers/{id}', [ContainerController::class, 'show'])->name('containers.show');
     Route::put('/containers/{id}', [ContainerController::class, 'update'])->name('containers.update');
     Route::delete('/containers/{id}', [ContainerController::class, 'destroy'])->name('containers.destroy');
+    Route::post('/containers/bulk', [ContainerController::class, 'bulk'])->name('containers.bulk');
 
     // Raw Material
     Route::get('/rawMaterials', [RawMaterialController::class, 'index'])->name('rawMaterials.index');

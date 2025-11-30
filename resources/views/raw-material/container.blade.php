@@ -99,12 +99,23 @@
             let biji = $(`.kont-biji[data-index="${i}"]`).val();
             let berat = $(`.kont-berat[data-index="${i}"]`).val();
             let petugas = $(`.kont-petugas[data-index="${i}"]`).val();
+            let ket = $(`.kont-keterangan[data-index="${i}"]`).val();
 
             if (!biji || !berat || !petugas) {
                 Swal.fire('Error', `Data kontainer ${i} belum lengkap!`, 'error');
                 return;
             }
+
+            list.push({
+                arrivals_id: arrivals_id,
+                employees_id: petugas,
+                biji: Number(biji),
+                berat: Number(berat),
+                keterangan: ket ?? ''
+            });
         }
+
+        console.log("LIST DIKIRIM:", list); // ⬅ DEBUG WAJIB
 
         fetch('/containers/bulk', {
             method: 'POST',
@@ -116,11 +127,18 @@
         })
         .then(r => r.json())
         .then(res => {
+            console.log("RESPON SERVER:", res); // ⬅ DEBUG WAJIB
+
             if (res.status === 'success') {
-                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
+                Swal.fire('Berhasil', res.message, 'success')
+                    .then(() => location.reload());
             } else {
                 Swal.fire('Error', res.message, 'error');
             }
+        })
+        .catch(err => {
+            console.error("ERROR FETCH:", err);
+            Swal.fire('Error', 'Gagal kirim data ke server!', 'error');
         });
     });
 @stop
