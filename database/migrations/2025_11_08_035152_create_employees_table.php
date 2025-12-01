@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nip')->unique();
             $table->string('nama');
-            $table->foreignId('dept_id')->constrained('departments')->onDelete('cascade');
+            $table->foreignId('dept_id')->constrained('departments');
             $table->timestamps();
         });
     }
