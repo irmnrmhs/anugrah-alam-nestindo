@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Rumah Burung';
     $singular = 'Rumah Burung';
+    $deleteMultipleUrl = '/wbhouses/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Nomor Registrasi</th>
     <th>Nama Rumah Burung</th>
@@ -17,6 +19,7 @@
 @section('table-body')
     @foreach($wbhouses as $index => $wbhouse)
         <tr data-id="{{ $wbhouse->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $wbhouse->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $wbhouse->kode }}</td>
             <td>{{ $wbhouse->nama }}</td>

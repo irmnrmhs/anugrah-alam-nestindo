@@ -1,11 +1,13 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola User';
+    $title = 'Kelola Pengguna';
     $singular = 'User';
+    $deleteMultipleUrl = '/users/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Role</th>
     <th>Karyawan</th>
@@ -16,6 +18,7 @@
 @section('table-body')
     @foreach($users as $index => $user)
         <tr data-id="{{ $user->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $user->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $user->role->name }}</td>
             <td>{{ $user->employee->nama }}</td>

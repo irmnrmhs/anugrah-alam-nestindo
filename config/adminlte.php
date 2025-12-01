@@ -426,7 +426,7 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'SKP',
+                    'text' => 'Keterangan Pengiriman',
                     'url'  => 'dcertificates',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',

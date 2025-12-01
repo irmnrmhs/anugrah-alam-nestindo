@@ -99,4 +99,16 @@ class DcertificateController extends Controller
 
         return $pdf->download('SKP-' . $dcertificate->no_skp . '.pdf');
     }
+
+    public function deleteMultiple(Request $request): JsonResponse
+    {
+        $ids = $request->ids;
+
+        Dcertificate::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data terpilih berhasil dihapus'
+        ]);
+    }
 }

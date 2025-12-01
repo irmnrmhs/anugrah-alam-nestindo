@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Pengidentifikasi Produk';
     $singular = 'Pengidentifikasi Produk';
+    $deleteMultipleUrl = '/identifiers/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     {{-- <th>Supplier</th> --}}
     <th>Kode Bahan Baku</th>
@@ -19,6 +21,7 @@
 @section('table-body')
     @foreach($identifiers as $index => $identifier)
         <tr data-id="{{ $identifier->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $identifier->id }}"></td>
             <td>{{ $index + 1 }}</td>
             {{-- <td>{{ $identifier->supplier->nama }}</td> --}}
             <td>{{ $identifier->rawMaterial->kode }}</td>

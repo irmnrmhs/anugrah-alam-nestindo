@@ -177,6 +177,17 @@ class ContainerController extends Controller
             'status' => 'success',
             'message' => 'Semua kontainer berhasil ditambahkan.',
         ]);
-}
+    }
 
+    public function deleteMultiple(Request $request): JsonResponse
+    {
+        $ids = $request->ids;
+
+        Container::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data terpilih berhasil dihapus'
+        ]);
+    }
 }

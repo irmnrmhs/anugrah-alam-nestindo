@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Kontainer';
     $singular = 'Kontainer';
+    $deleteMultipleUrl = '/containers/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Kode</th>
     <th>Biji</th>
@@ -17,6 +19,7 @@
 @section('table-body')
     @foreach($containers as $index => $container)
         <tr data-id="{{ $container->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $container->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $container->arrival->kode }}</td>
             <td>{{ $container->biji }}</td>

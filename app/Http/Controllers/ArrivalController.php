@@ -117,4 +117,16 @@ class ArrivalController extends Controller
             'message' => 'Data kedatangan berhasil dihapus.',
         ]);
     }
+
+    public function deleteMultiple(Request $request): JsonResponse
+    {
+        $ids = $request->ids;
+
+        Arrival::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data terpilih berhasil dihapus'
+        ]);
+    }
 }
