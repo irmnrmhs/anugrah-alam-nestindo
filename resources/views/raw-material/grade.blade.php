@@ -7,7 +7,6 @@
 
 @section('table-headers')
     <th>No</th>
-    <!-- <th>Kategori</th> -->
     <th>Grade</th>
     <th>Jenis Bentuk</th>
     <th>Jenis Bulu</th>

@@ -2,6 +2,7 @@
 
 @php
     $title = 'Kelola Area & Rumah Burung';
+    $hideAddButton = true;
 @endphp
 
 @section('content')
