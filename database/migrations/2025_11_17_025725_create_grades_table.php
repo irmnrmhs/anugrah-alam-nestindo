@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('categories_id')->constrained('categories')->onDelete('cascade');
             // $table->string('grade')->unique();
-            $table->foreignId('shapes_id')->constrained('shapes')->onDelete('cascade');
-            $table->foreignId('feathers_id')->constrained('feathers')->onDelete('cascade');
-            $table->foreignId('colors_id')->constrained('colors')->onDelete('cascade');
+            $table->foreignId('shapes_id')->constrained('shapes');
+            $table->foreignId('feathers_id')->constrained('feathers');
+            $table->foreignId('colors_id')->constrained('colors');
             $table->boolean('status');
             $table->unique(['shapes_id', 'feathers_id', 'colors_id'], 'grade_unique_combo');
             $table->timestamps();

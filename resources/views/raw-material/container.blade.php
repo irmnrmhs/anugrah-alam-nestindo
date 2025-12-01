@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Kontainer';
     $singular = 'Kontainer';
+    $deleteMultipleUrl = '/containers/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Kode</th>
     <th>Biji</th>
@@ -17,6 +19,7 @@
 @section('table-body')
     @foreach($containers as $index => $container)
         <tr data-id="{{ $container->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $container->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $container->arrival->kode }}</td>
             <td>{{ $container->biji }}</td>
@@ -31,7 +34,9 @@
     @endforeach
 @stop
 
-{{-- Modal 1 Input Kode Jumlah --}}
+{{-- ===========================
+    MODAL 1 : INPUT KODE + JUMLAH
+=========================== --}}
 @section('form-fields')
     <div class="mb-3">
         <label>Kode Bahan Baku</label>
@@ -59,9 +64,10 @@
         return;
     }
 
+    // Tutup modal pertama
     bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
 
-    {{-- Modal 2 Input Detail Kontainer --}}
+    // ====== Generate modal kedua ======
     let html = '';
     for (let i = 1; i <= jumlah; i++) {
         html += `
@@ -69,10 +75,10 @@
                 <h6>Kontainer ${i}</h6>
 
                 <label>Biji</label>
-                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0" required>
+                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0">
 
                 <label>Berat</label>
-                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01" required>
+                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01">
 
                 <label>Keterangan</label>
                 <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}">
@@ -96,14 +102,13 @@
         let list = [];
 
         for (let i = 1; i <= jumlah; i++) {
-            let biji = $(`.kont-biji[data-index="${i}"]`).val();
-            let berat = $(`.kont-berat[data-index="${i}"]`).val();
-            let petugas = $(`.kont-petugas[data-index="${i}"]`).val();
-
-            if (!biji || !berat || !petugas) {
-                Swal.fire('Error', `Data kontainer ${i} belum lengkap!`, 'error');
-                return;
-            }
+            list.push({
+                arrivals_id,
+                biji: $(`.kont-biji[data-index="${i}"]`).val(),
+                berat: $(`.kont-berat[data-index="${i}"]`).val(),
+                keterangan: $(`.kont-keterangan[data-index="${i}"]`).val(),
+                employees_id: $(`.kont-petugas[data-index="${i}"]`).val(),
+            });
         }
 
         fetch('/containers/bulk', {
@@ -126,24 +131,91 @@
 @stop
 
 @section('custom-js')
-    // Edit
-    $(document).on('click', '.btnEdit', function() {
+    // ===============================
+    // BUTTON EDIT
+    // ===============================
+    $(document).on('click', '.btnEdit', function () {
         const id = $(this).closest('tr').data('id');
 
         fetch(`/containers/${id}`)
             .then(r => r.json())
             .then(container => {
+
+                // Simpan ID ke hidden input (kalau diperlukan)
                 $('#item_id').val(container.id);
-                $('#arrivals_id').val(container.arrivals_id);
-                $('#jumlah_kontainer').val(1); // edit hanya 1
-                $('#modalTitle').text('Edit Kontainer');
-                new bootstrap.Modal('#crudModal').show();
+
+                // ===============================
+                // Generate FORM untuk modal kedua
+                // ===============================
+                let html = `
+                    <label>Biji</label>
+                    <input type="number" class="form-control mb-2" id="edit_biji"
+                        value="${container.biji}" min="0">
+
+                    <label>Berat</label>
+                    <input type="number" class="form-control mb-2" id="edit_berat"
+                        value="${container.berat}" min="0" step="0.01">
+
+                    <label>Keterangan</label>
+                    <input type="text" class="form-control mb-2" id="edit_keterangan"
+                        value="${container.keterangan ?? ''}">
+
+                    <label>Petugas</label>
+                    <select class="form-control" id="edit_petugas">
+                        <option value="">-- Pilih Petugas --</option>
+                        @foreach($employees as $employee)
+                            <option value="{{ $employee->id }}"
+                                ${container.employees_id == "{{ $employee->id }}" ? 'selected' : ''}>
+                                {{ $employee->nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                `;
+
+                $('#secondModalBody').html(html);
+                $('#secondModal').modal('show');
+
+                // ==================================
+                // PROSES UPDATE SAAT KLIK SIMPAN
+                // ==================================
+                $('#btnSubmitAll').off().on('click', function () {
+
+                    let payload = {
+                        arrivals_id: container.arrivals_id, // arrival tidak bisa diubah lewat modal ini
+                        biji: parseInt($('#edit_biji').val()),
+                        berat: parseFloat($('#edit_berat').val()),
+                        keterangan: $('#edit_keterangan').val() || null,
+                        employees_id: parseInt($('#edit_petugas').val())
+                    };
+
+                    fetch(`/containers/${container.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.status === 'success') {
+                            Swal.fire('Berhasil', res.message, 'success')
+                                .then(() => location.reload());
+                        } else {
+                            Swal.fire('Error', res.message, 'error');
+                        }
+                    });
+                });
             });
     });
 
-    // Delete
-    $(document).on('click', '.btnDelete', function() {
+
+    // ===============================
+    // BUTTON DELETE (tetap seperti semula)
+    // ===============================
+    $(document).on('click', '.btnDelete', function () {
         const id = $(this).closest('tr').data('id');
+
         Swal.fire({
             title: 'Hapus?',
             text: 'Data tidak bisa dikembalikan!',
@@ -158,14 +230,17 @@
                 .then(r => r.json())
                 .then(res => {
                     if (res.status === 'success') {
-                        Swal.fire('Terhapus', res.message, 'success').then(() => location.reload());
+                        Swal.fire('Terhapus', res.message, 'success')
+                            .then(() => location.reload());
                     } else {
                         Swal.fire('Error', res.message, 'error');
                     }
-                });
+                })
+                .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
     });
+
 @stop
 
 
@@ -195,5 +270,3 @@
     </div>
 </div>
 @endsection
-
-{{-- before --}}

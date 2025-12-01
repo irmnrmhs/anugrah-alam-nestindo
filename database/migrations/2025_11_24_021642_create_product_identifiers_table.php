@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('product_identifiers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rms_id')->constrained('raw_materials')->onDelete('cascade');
-            $table->foreignId('grades_id')->constrained('grades')->onDelete('cascade');
+            $table->foreignId('rms_id')->constrained('raw_materials');
+            $table->foreignId('grades_id')->constrained('grades');
             $table->string('kode')->unique();
             $table->date('tanggal');
             $table->integer('biji');

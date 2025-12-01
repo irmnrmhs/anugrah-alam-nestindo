@@ -7,7 +7,6 @@
 
 @section('table-headers')
     <th>No</th>
-    <!-- <th>Kategori</th> -->
     <th>Grade</th>
     <th>Jenis Bentuk</th>
     <th>Jenis Bulu</th>
@@ -142,7 +141,8 @@
                     } else {
                         Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
                     }
-                });
+                })
+                .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
     });

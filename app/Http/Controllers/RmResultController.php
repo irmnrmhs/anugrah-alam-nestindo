@@ -75,4 +75,16 @@ class RmResultController extends Controller
             'message' => $this->obj . ' berhasil dihapus',
         ]);
     }
+
+    public function deleteMultiple(Request $request): JsonResponse
+    {
+        $ids = $request->ids;
+
+        RmResult::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data terpilih berhasil dihapus'
+        ]);
+    }
 }

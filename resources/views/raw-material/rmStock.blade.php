@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Stok Bahan Baku';
     $singular = 'Stok Bahan Baku';
+    $deleteMultipleUrl = '/rmstocks/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Kode Bahan Baku</th>
     <th>Petugas</th>
@@ -18,6 +20,7 @@
 @section('table-body')
     @foreach($stocks as $index => $stock)
         <tr data-id="{{ $stock->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $stock->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $stock->rawMaterial->kode }}</td>
             <td>{{ $stock->employee->nama }}</td>
@@ -175,7 +178,9 @@
                     } else {
                         Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
                     }
-                });
+                })
+                
+                .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
     });

@@ -17,7 +17,7 @@ class ProductIdentifierController extends Controller
     {
         $identifiers = ProductIdentifier::with('rawMaterial', 'grade')->latest()->get();
         $rms = RawMaterial::all();
-        $grades = Grade::all();
+        $grades = Grade::active()->get();
 
         return view('raw-material.productIdentifier', compact('identifiers', 'rms', 'grades'));
     }
@@ -97,6 +97,18 @@ class ProductIdentifierController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil dihapus',
+        ]);
+    }
+
+    public function deleteMultiple(Request $request): JsonResponse
+    {
+        $ids = $request->ids;
+
+        ProductIdentifier::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data terpilih berhasil dihapus'
         ]);
     }
 }

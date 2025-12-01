@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Data Kedatangan';
     $singular = 'Kedatangan';
+    $deleteMultipleUrl = '/arrivals/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Kode Bahan Baku</th>
     <th>Tanggal Kedatangan</th>
@@ -21,6 +23,7 @@
 @section('table-body')
     @foreach($arrivals as $index => $arrival)
         <tr data-id="{{ $arrival->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $arrival->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $arrival->kode }}</td>
             <td>{{ $arrival->tgl_kedatangan }}</td>
@@ -176,7 +179,8 @@
                     } else {
                         Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
                     }
-                });
+                })
+                .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
     });

@@ -15,7 +15,7 @@ class ContainerController extends Controller
     public string $obj = 'Kontainer';
     public function index(): View
     {
-        $containers = Container::with('arrival', 'employee')->latest()->get();
+        $containers = Container::with('arrival', 'employee')->oldest()->get();
         $arrivals = Arrival::all();
         $employees = Employee::all();
 
@@ -177,6 +177,17 @@ class ContainerController extends Controller
             'status' => 'success',
             'message' => 'Semua kontainer berhasil ditambahkan.',
         ]);
-}
+    }
 
+    public function deleteMultiple(Request $request): JsonResponse
+    {
+        $ids = $request->ids;
+
+        Container::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data terpilih berhasil dihapus'
+        ]);
+    }
 }

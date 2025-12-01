@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Data Keterangan Pengiriman';
     $singular = 'Keterangan Pengiriman';
+    $deleteMultipleUrl = '/dcertificates/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Supplier</th>
     <th>Rumah Burung</th>
@@ -20,6 +22,7 @@
 @section('table-body')
     @foreach($dcertificates as $index => $dcertificate)
         <tr data-id="{{ $dcertificate->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $dcertificate->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $dcertificate->supplier->nama }}</td>
             <td>{{ $dcertificate->wbhouse->nama }}</td>
@@ -162,7 +165,8 @@
                     } else {
                         Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
                     }
-                });
+                })
+                .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
     });

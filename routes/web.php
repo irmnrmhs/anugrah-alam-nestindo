@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BlendController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\ShapeController;
@@ -23,7 +25,6 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RmResultController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
-use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
@@ -63,6 +64,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::post('/users/delete-multiple', [UserController::class, 'deleteMultiple']);
 
     // Company
     Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
@@ -96,6 +98,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/wbhouses/{id}', [WbhouseController::class, 'show'])->name('wbhouses.show');
     Route::put('/wbhouses/{id}', [WbhouseController::class, 'update'])->name('wbhouses.update');
     Route::delete('/wbhouses/{id}', [WbhouseController::class, 'destroy'])->name('wbhouses.destroy');
+    Route::post('/wbhouses/delete-multiple', [WbhouseController::class, 'deleteMultiple']);
 
     // Jenis Bulu
     Route::get('/feathers', [FeatherController::class, 'index'])->name('feathers.index');
@@ -118,7 +121,9 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/shapes/{id}', [ShapeController::class, 'update'])->name('shapes.update');
     Route::delete('/shapes/{id}', [ShapeController::class, 'destroy'])->name('shapes.destroy');
 
-    Route::get('/types', [TypeController::class, 'index'])->name('types.index');
+    // Blend UI
+    Route::get('/types', [BlendController::class, 'type'])->name('types.type');
+    Route::get('/areas-wbhouses', [BlendController::class, 'area_wbhouse'])->name('areas-wbhouses.area_wbhouse');
 
     // Jenis Grade
     Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');
@@ -169,6 +174,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/dcertificates/{id}', [DcertificateController::class, 'update'])->name('dcertificates.update');
     Route::delete('/dcertificates/{id}', [DcertificateController::class, 'destroy'])->name('dcertificates.destroy');
     Route::get('/dcertificates/{id}/export', [DcertificateController::class, 'export'])->name('dcertificates.export');
+    Route::post('/dcertificates/delete-multiple', [DcertificateController::class, 'deleteMultiple']);
 
     // Arrival
     Route::get('/arrivals', [ArrivalController::class, 'index'])->name('arrivals.index');
@@ -176,6 +182,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/arrivals/{id}', [ArrivalController::class, 'show'])->name('arrivals.show');
     Route::put('/arrivals/{id}', [ArrivalController::class, 'update'])->name('arrivals.update');
     Route::delete('/arrivals/{id}', [ArrivalController::class, 'destroy'])->name('arrivals.destroy');
+    Route::post('/arrivals/delete-multiple', [ArrivalController::class, 'deleteMultiple']);
 
     // Container
     Route::get('/containers', [ContainerController::class, 'index'])->name('containers.index');
@@ -183,6 +190,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/containers/{id}', [ContainerController::class, 'show'])->name('containers.show');
     Route::put('/containers/{id}', [ContainerController::class, 'update'])->name('containers.update');
     Route::delete('/containers/{id}', [ContainerController::class, 'destroy'])->name('containers.destroy');
+    Route::post('/containers/delete-multiple', [ContainerController::class, 'deleteMultiple']);
+    Route::post('/containers/bulk', [ContainerController::class, 'bulk'])->name('containers.bulk');
 
     // Raw Material
     Route::get('/rawMaterials', [RawMaterialController::class, 'index'])->name('rawMaterials.index');
@@ -194,6 +203,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/rmstocks/{id}', [RmStockController::class, 'show'])->name('rmstocks.show');
     Route::put('/rmstocks/{id}', [RmStockController::class, 'update'])->name('rmstocks.update');
     Route::delete('/rmstocks/{id}', [RmStockController::class, 'destroy'])->name('rmstocks.destroy');
+    Route::post('/rmstocks/delete-multiple', [RmStockController::class, 'deleteMultiple']);
     $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
 
     // Pengidentifikasi Produk
@@ -202,6 +212,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/identifiers/{id}', [ProductIdentifierController::class, 'show'])->name('identifiers.show');
     Route::put('/identifiers/{id}', [ProductIdentifierController::class, 'update'])->name('identifiers.update');
     Route::delete('/identifiers/{id}', [ProductIdentifierController::class, 'destroy'])->name('identifiers.destroy');
+    Route::post('/identifiers/delete-multiple', [ProductIdentifierController::class, 'deleteMultiple']);
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
@@ -216,7 +227,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/rm-results/{id}', [RmResultController::class, 'show'])->name('rm-results.show');
     Route::put('/rm-results/{id}', [RmResultController::class, 'update'])->name('rm-results.update');
     Route::delete('/rm-results/{id}', [RmResultController::class, 'destroy'])->name('rm-results.destroy');
-
+    Route::post('/rm-results/delete-multiple', [RmResultController::class, 'deleteMultiple']);
 
 });
 

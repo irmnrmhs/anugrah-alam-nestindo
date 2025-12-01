@@ -11,7 +11,9 @@ use App\Models\Color;
 use App\Models\WBHouse;
 use App\Models\Arrival;
 use App\Models\Supplier;
+use App\Models\Dcertificate;
 
+use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
 use App\Observers\FeatherObserver;
 use App\Observers\ColorObserver;
@@ -66,5 +68,6 @@ class AppServiceProvider extends ServiceProvider
         WBHouse::observe(WBHouseObserver::class);
         Arrival::observe(ArrivalObserver::class);
         Supplier::observe(SupplierObserver::class);
+        Dcertificate::observe(DCertificateObserver::class);
     }
 }

@@ -84,5 +84,4 @@ class EmployeeController extends Controller
             'message' => 'Data terpilih berhasil dihapus'
         ]);
     }
-
 }

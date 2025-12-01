@@ -3,9 +3,11 @@
 @php
     $title = 'Kelola Pengidentifikasi Produk';
     $singular = 'Pengidentifikasi Produk';
+    $deleteMultipleUrl = '/identifiers/delete-multiple';
 @endphp
 
 @section('table-headers')
+    <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     {{-- <th>Supplier</th> --}}
     <th>Kode Bahan Baku</th>
@@ -19,6 +21,7 @@
 @section('table-body')
     @foreach($identifiers as $index => $identifier)
         <tr data-id="{{ $identifier->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $identifier->id }}"></td>
             <td>{{ $index + 1 }}</td>
             {{-- <td>{{ $identifier->supplier->nama }}</td> --}}
             <td>{{ $identifier->rawMaterial->kode }}</td>
@@ -137,7 +140,8 @@
                     } else {
                         Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
                     }
-                });
+                })
+                .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
     });
