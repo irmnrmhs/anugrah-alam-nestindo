@@ -235,7 +235,8 @@
                     } else {
                         Swal.fire('Error', res.message, 'error');
                     }
-                });
+                })
+                .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
     });
