@@ -128,24 +128,91 @@
 @stop
 
 @section('custom-js')
-    // Edit
-    $(document).on('click', '.btnEdit', function() {
+    // ===============================
+    // BUTTON EDIT
+    // ===============================
+    $(document).on('click', '.btnEdit', function () {
         const id = $(this).closest('tr').data('id');
 
         fetch(`/containers/${id}`)
             .then(r => r.json())
             .then(container => {
+
+                // Simpan ID ke hidden input (kalau diperlukan)
                 $('#item_id').val(container.id);
-                $('#arrivals_id').val(container.arrivals_id);
-                $('#jumlah_kontainer').val(1); // edit hanya 1
-                $('#modalTitle').text('Edit Kontainer');
-                new bootstrap.Modal('#crudModal').show();
+
+                // ===============================
+                // Generate FORM untuk modal kedua
+                // ===============================
+                let html = `
+                    <label>Biji</label>
+                    <input type="number" class="form-control mb-2" id="edit_biji"
+                        value="${container.biji}" min="0">
+
+                    <label>Berat</label>
+                    <input type="number" class="form-control mb-2" id="edit_berat"
+                        value="${container.berat}" min="0" step="0.01">
+
+                    <label>Keterangan</label>
+                    <input type="text" class="form-control mb-2" id="edit_keterangan"
+                        value="${container.keterangan ?? ''}">
+
+                    <label>Petugas</label>
+                    <select class="form-control" id="edit_petugas">
+                        <option value="">-- Pilih Petugas --</option>
+                        @foreach($employees as $employee)
+                            <option value="{{ $employee->id }}"
+                                ${container.employees_id == "{{ $employee->id }}" ? 'selected' : ''}>
+                                {{ $employee->nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                `;
+
+                $('#secondModalBody').html(html);
+                $('#secondModal').modal('show');
+
+                // ==================================
+                // PROSES UPDATE SAAT KLIK SIMPAN
+                // ==================================
+                $('#btnSubmitAll').off().on('click', function () {
+
+                    let payload = {
+                        arrivals_id: container.arrivals_id, // arrival tidak bisa diubah lewat modal ini
+                        biji: parseInt($('#edit_biji').val()),
+                        berat: parseFloat($('#edit_berat').val()),
+                        keterangan: $('#edit_keterangan').val() || null,
+                        employees_id: parseInt($('#edit_petugas').val())
+                    };
+
+                    fetch(`/containers/${container.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.status === 'success') {
+                            Swal.fire('Berhasil', res.message, 'success')
+                                .then(() => location.reload());
+                        } else {
+                            Swal.fire('Error', res.message, 'error');
+                        }
+                    });
+                });
             });
     });
 
-    // Delete
-    $(document).on('click', '.btnDelete', function() {
+
+    // ===============================
+    // BUTTON DELETE (tetap seperti semula)
+    // ===============================
+    $(document).on('click', '.btnDelete', function () {
         const id = $(this).closest('tr').data('id');
+
         Swal.fire({
             title: 'Hapus?',
             text: 'Data tidak bisa dikembalikan!',
@@ -160,7 +227,8 @@
                 .then(r => r.json())
                 .then(res => {
                     if (res.status === 'success') {
-                        Swal.fire('Terhapus', res.message, 'success').then(() => location.reload());
+                        Swal.fire('Terhapus', res.message, 'success')
+                            .then(() => location.reload());
                     } else {
                         Swal.fire('Error', res.message, 'error');
                     }
@@ -168,6 +236,7 @@
             }
         });
     });
+
 @stop
 
 
