@@ -28,19 +28,17 @@ class GradeController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'shapes_id' => ['required', 'exists:shapes,id'],
-            'feathers_id' => ['required', 'exists:feathers,id'],
-            'colors_id' => [
-                'required',
-                'exists:colors,id',
-                Rule::unique('grades')->where(fn ($q) =>
-                    $q->where('shapes_id', $request->shapes_id)
-                    ->where('feathers_id', $request->feathers_id)
-                    ->where('colors_id', $request->colors_id)
-                ),
-            ],
+            // 'grade' => 'required|unique:grades,grade',
+            'shapes_id' => 'required|exists:shapes,id',
+            'feathers_id' => 'required|exists:feathers,id',
+            'colors_id' => 'required|exists:colors,id',
             'status' => 'required|boolean',
         ]);
+
+        $shapes = Shape::find($validated['shapes_id']);
+        $feather = Feather::find($validated['feathers_id']);
+        $color = Color::find($validated['colors_id']);
+        $validated['grade'] = strtoupper($shapes->kode . "-" . $feather->kode . "-" . $color->kode);
 
         $grade = Grade::create($validated);
 
@@ -62,20 +60,18 @@ class GradeController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'shapes_id' => ['required', 'exists:shapes,id'],
-            'feathers_id' => ['required', 'exists:feathers,id'],
-            'colors_id' => [
-                'required',
-                'exists:colors,id',
-                Rule::unique('grades')->ignore($id)->where(fn ($q) =>
-                    $q->where('shapes_id', $request->shapes_id)
-                    ->where('feathers_id', $request->feathers_id)
-                    ->where('colors_id', $request->colors_id)
-                ),
-            ],
+            // 'grade' => 'required|unique:grades,grade,' . $id,
+            'shapes_id' => 'required|exists:shapes,id',
+            'feathers_id' => 'required|exists:feathers,id',
+            'colors_id' => 'required|exists:colors,id',
             'status' => 'required|boolean',
         ]);
 
+        $shapes = Shape::find($validated['shapes_id']);
+        $feather = Feather::find($validated['feathers_id']);
+        $color = Color::find($validated['colors_id']);
+        $validated['grade'] = strtoupper($shapes->kode . "-" . $feather->kode . "-" . $color->kode);
+        
         $grade = Grade::findOrFail($id);
         $grade->update($validated);
 
