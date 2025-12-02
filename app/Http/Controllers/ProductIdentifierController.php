@@ -34,7 +34,7 @@ class ProductIdentifierController extends Controller
 
         // $supplier = Supplier::find($validated['suppliers_id']);
         
-        $raw = RawMaterial::find($validated['rms_id']);
+        $raw = RawMaterial::with('stocks', 'identifiers')->find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
 
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
@@ -43,13 +43,13 @@ class ProductIdentifierController extends Controller
         // $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier->kode;
         $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
 
-        if (
-            $validated['biji'] > ($raw->biji - $raw->biji_sisa) ||
-            $validated['berat'] > ($raw->berat - $raw->berat_sisa)
+       if (
+            $validated['biji'] > $raw->sisa_untuk_identifikasi_biji ||
+            $validated['berat'] > $raw->sisa_untuk_identifikasi_berat
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa',
+                'message' => 'Melebihi stok keluar yang tersedia',
             ], 422);
         }
 
@@ -79,7 +79,7 @@ class ProductIdentifierController extends Controller
         ]);
 
         // $supplier = Supplier::find($validated['suppliers_id']);
-        $raw = RawMaterial::find($validated['rms_id']);
+        $raw = RawMaterial::with('stocks', 'identifiers')->find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
 
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
@@ -90,17 +90,13 @@ class ProductIdentifierController extends Controller
 
         $identifier = ProductIdentifier::findOrFail($id);
 
-        // hitung sisa aktual
-        $biji_sisa = $raw->biji_sisa + $grade->biji;
-        $berat_sisa = $raw->berat_sisa + $grade->berat;
+        $bijiSisa = $raw->sisa_untuk_identifikasi_biji + $identifier->biji;
+        $beratSisa = $raw->sisa_untuk_identifikasi_berat + $identifier->berat;
 
-        if (
-            $validated['biji'] > $biji_sisa ||
-            $validated['berat'] > $berat_sisa
-        ) {
+        if ($validated['biji'] > $bijiSisa || $validated['berat'] > $beratSisa) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa',
+                'message' => 'Melebihi stok keluar yang tersedia',
             ], 422);
         }
 
