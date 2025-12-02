@@ -34,21 +34,30 @@ class ProductIdentifierController extends Controller
 
         // $supplier = Supplier::find($validated['suppliers_id']);
         
-        $rm = RawMaterial::find($validated['rms_id']);
+        $raw = RawMaterial::find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
 
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
-        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
+        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $raw->kode);
 
         // $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier->kode;
         $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
 
-        $identifier = ProductIdentifier::create($validated);
+        if (
+            $validated['biji'] > ($raw->biji - $raw->biji_sisa) ||
+            $validated['berat'] > ($raw->berat - $raw->berat_sisa)
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
+        ProductIdentifier::create($validated);
 
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan',
-            'data' => $identifier,
         ]);
     }
 
@@ -70,16 +79,31 @@ class ProductIdentifierController extends Controller
         ]);
 
         // $supplier = Supplier::find($validated['suppliers_id']);
-        $rm = RawMaterial::find($validated['rms_id']);
+        $raw = RawMaterial::find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
 
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
-        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
+        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $raw->kode);
 
         $validated['kode'] = $cleanGrade . '-' . $cleanKode;
         // $validated['kode'] = $cleanGrade . '-' . $cleanKode . $supplier->kode;
 
         $identifier = ProductIdentifier::findOrFail($id);
+
+        // hitung sisa aktual
+        $biji_sisa = $raw->biji_sisa + $grade->biji;
+        $berat_sisa = $raw->berat_sisa + $grade->berat;
+
+        if (
+            $validated['biji'] > $biji_sisa ||
+            $validated['berat'] > $berat_sisa
+        ) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
         $identifier->update($validated);
 
         return response()->json([
