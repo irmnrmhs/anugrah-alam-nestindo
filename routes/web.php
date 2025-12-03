@@ -99,6 +99,9 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/wbhouses/{id}', [WbhouseController::class, 'update'])->name('wbhouses.update');
     Route::delete('/wbhouses/{id}', [WbhouseController::class, 'destroy'])->name('wbhouses.destroy');
     Route::post('/wbhouses/delete-multiple', [WbhouseController::class, 'deleteMultiple']);
+    Route::get('/wbhouses/{id}', function($id){
+        return App\Models\WBHouse::with('area')->findOrFail($id);
+    });
 
     // Jenis Bulu
     Route::get('/feathers', [FeatherController::class, 'index'])->name('feathers.index');

@@ -61,10 +61,10 @@
             @endforeach
         </select>
     </div>
-    <!-- <div class="mb-3">
+    <div class="mb-3">
         <label>Nomor SKP</label>
         <input type="text" id="no_skp" class="form-control" required>
-    </div> -->
+    </div>
     <div class="mb-3">
         <label>Tanggal SKP</label>
         <input type="date" id="tgl_skp" class="form-control" required>
@@ -98,7 +98,7 @@
         companies_id: $('#companies_id').val(),
         suppliers_id: $('#suppliers_id').val(),
         wbhouses_id: $('#wbhouses_id').val(),
-        <!-- no_skp: $('#no_skp').val(), -->
+        no_skp: $('#no_skp').val(),
         tgl_skp: $('#tgl_skp').val(),
         tgl_panen: $('#tgl_panen').val(),
         berat_panen: $('#berat_panen').val(),
@@ -123,6 +123,25 @@
 @stop
 
 @section('custom-js')
+    $('#wbhouses_id').on('change', function () {
+        const id = $(this).val();
+
+        if (!id) return;
+
+        fetch(`/wbhouses/${id}`)
+            .then(r => r.json())
+            .then(wb => {
+                const kh = wb.area?.kh;
+                if (kh == 1) {
+                    $('#no_skp').prop('disabled', false);
+                    $('#no_skp').val('');
+                } else {
+                    $('#no_skp').prop('disabled', true);
+                    $('#no_skp').val('AUTO');
+                }
+            });
+    });
+
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
         fetch(`/dcertificates/${id}`)
