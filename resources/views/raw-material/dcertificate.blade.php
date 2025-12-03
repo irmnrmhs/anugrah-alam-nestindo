@@ -61,10 +61,10 @@
             @endforeach
         </select>
     </div>
-    <div class="mb-3">
+    <!-- <div class="mb-3">
         <label>Nomor SKP</label>
         <input type="text" id="no_skp" class="form-control" required>
-    </div>
+    </div> -->
     <div class="mb-3">
         <label>Tanggal SKP</label>
         <input type="date" id="tgl_skp" class="form-control" required>
@@ -98,7 +98,7 @@
         companies_id: $('#companies_id').val(),
         suppliers_id: $('#suppliers_id').val(),
         wbhouses_id: $('#wbhouses_id').val(),
-        no_skp: $('#no_skp').val(),
+        <!-- no_skp: $('#no_skp').val(), -->
         tgl_skp: $('#tgl_skp').val(),
         tgl_panen: $('#tgl_panen').val(),
         berat_panen: $('#berat_panen').val(),
@@ -132,7 +132,7 @@
                 $('#companies_id').val(dcertificate.companies_id)
                 $('#suppliers_id').val(dcertificate.suppliers_id)
                 $('#wbhouses_id').val(dcertificate.wbhouses_id)
-                $('#no_skp').val(dcertificate.no_skp)
+                <!-- $('#no_skp').val(dcertificate.no_skp) -->
                 $('#tgl_skp').val(dcertificate.tgl_skp)
                 $('#tgl_panen').val(dcertificate.tgl_panen)
                 $('#berat_panen').val(dcertificate.berat_panen)

@@ -14,7 +14,7 @@ class DcertificateSeeder extends Seeder
     public function run(): void
     {
         Dcertificate::create([
-            'no_skp'        => 'SKP01',
+            // 'no_skp'        => 'SKP01',
             'tgl_skp'       => '2025-11-07',
             'tgl_panen'     => '2025-11-06',
             'berat_panen'   => 50.00,
