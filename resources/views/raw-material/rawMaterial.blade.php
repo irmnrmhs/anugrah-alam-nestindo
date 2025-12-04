@@ -1,5 +1,5 @@
 @php
-    $title = 'Kelola Bahan Baku';
+    $title = 'Bahan Baku';
     $singular = 'Bahan Baku';
     $hideAddButton = true;
     $hideActions = true;
@@ -8,7 +8,7 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Bahan Baku';
+    $title = 'Bahan Baku';
     $singular = 'Bahan Baku';
 @endphp
 

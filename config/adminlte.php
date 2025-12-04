@@ -478,6 +478,19 @@ return [
             ],
         ],
 
+        [
+            'text' => 'Produksi',
+            'icon' => 'fas fa-folder',
+            'submenu' => [
+                [
+                    'text' => 'Riwayat',
+                    'url'  => 'histories',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+            ],
+        ],
+
         // Menu Setting
         [
             'text' => 'profile',
