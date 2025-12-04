@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\Company;
-use App\Models\Supplier;
 use App\Models\WBHouse;
+use App\Models\Supplier;
+use Illuminate\View\View;
 use App\Models\Dcertificate;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\Rule;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 
 class DcertificateController extends Controller
 {
@@ -31,13 +33,54 @@ class DcertificateController extends Controller
             'companies_id' => 'required|exists:companies,id',
             'suppliers_id' => 'required|exists:suppliers,id',
             'wbhouses_id' => 'required|exists:w_b_houses,id',
-            'no_skp' => 'required|string|max:100|unique:dcertificates,no_skp',
-            'tgl_skp' => 'required|date',
+            'no_skp' => $request->kh == 1 ? 'required' : 'nullable',
+            'tgl_skp' => [
+                'required',
+                'date',
+                Rule::unique('dcertificates')->where(function ($query) use ($request) {
+                    return $query->where('suppliers_id', $request->suppliers_id)
+                                ->where('wbhouses_id', $request->wbhouses_id);
+                }),
+            ],
             'tgl_panen' => 'required|date',
             'berat_panen' => 'required|numeric|min:0|max:99999.99',
             'tgl_kirim' => 'required|date',
             'berat_kirim' => 'required|numeric|min:0|max:99999.99',
         ]);
+
+        $wb = WBHouse::with('area')->find($validated['wbhouses_id']);
+
+        if ($wb->area->kh == 1) {
+            if (empty($validated['no_skp'])) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nomor SKP wajib diisi oleh nomor KH'
+                ], 422);
+            }
+        }
+
+        if ($wb->area->kh == 0) {
+
+            $area = $wb->area->kode;
+
+            $bln = Carbon::parse($validated['tgl_skp'])->month;
+            $roman = [
+                1=>'I', 2=>'II', 3=>'III', 4=>'IV', 5=>'V', 6=>'VI',
+                7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'
+            ][$bln];
+
+            $last = Dcertificate::whereHas('wbhouse', function($q) {
+                $q->whereHas('area', function($a) {
+                    $a->where('kh', 0);
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->first();
+
+            $nextNumber = $last ? intval(substr($last->no_skp, -3)) + 1 : 1;
+
+            $validated['no_skp'] = 'AAN/SKP/' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' . $area . '/' . $roman;
+        }
 
         $dcertificate = Dcertificate::create($validated);
 
@@ -60,8 +103,15 @@ class DcertificateController extends Controller
             'companies_id' => 'required|exists:companies,id',
             'suppliers_id' => 'required|exists:suppliers,id',
             'wbhouses_id' => 'required|exists:w_b_houses,id',
-            'no_skp' => 'required|string|max:100|unique:dcertificates,no_skp,' . $id,
-            'tgl_skp' => 'required|date',
+            'no_skp' => 'nullable|string|max:100',
+            'tgl_skp' => [
+                'required',
+                'date',
+                Rule::unique('dcertificates')->where(function ($query) use ($request) {
+                    return $query->where('suppliers_id', $request->suppliers_id)
+                                ->where('wbhouses_id', $request->wbhouses_id);
+                }),
+            ],
             'tgl_panen' => 'required|date',
             'berat_panen' => 'required|numeric|min:0|max:99999.99',
             'tgl_kirim' => 'required|date',
@@ -70,7 +120,35 @@ class DcertificateController extends Controller
 
         $dcertificate = Dcertificate::findOrFail($id);
 
-        $dcertificate->update($validated);
+        $wb = WBHouse::with('area')->find($validated['wbhouses_id']);
+
+        if ($wb->area->kh == 1) {
+            if (empty($validated['no_skp'])) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nomor SKP wajib diisi oleh nomor KH'
+                ], 422);
+            }
+        }
+
+        if ($wb->area->kh == 0) {
+
+            $area = $wb->area->kode;
+
+            $bln = Carbon::parse($validated['tgl_skp'])->month;
+            $roman = [
+                1=>'I', 2=>'II', 3=>'III', 4=>'IV', 5=>'V', 6=>'VI',
+                7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'
+            ][$bln];
+
+            $last = Dcertificate::whereHas('wbhouse.area', function($q) {
+                $q->where('kh', 0);
+            })->orderBy('id', 'desc')->first();
+
+            $nextNumber = $last ? intval(substr($last->no_skp, -3)) + 1 : 1;
+
+            $validated['no_skp'] = 'AAN/SKP/' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' . $area . '/' . $roman;
+        }
 
         return response()->json([
             'status' => 'success',

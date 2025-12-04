@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('berat_panen', 7, 2);
             $table->date('tgl_kirim');
             $table->decimal('berat_kirim', 7, 2);
+            $table->unique(['suppliers_id', 'wbhouses_id', 'tgl_kirim'], 'unique_supplier_wb_tgl');
             $table->timestamps();
         });
     }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model
 {
     protected $fillable = [
+        'grade',
         'shapes_id',
         'feathers_id',
         'colors_id',
@@ -34,14 +35,14 @@ class Grade extends Model
     }
 
     // Accessor
-    public function getGradeAttribute()
-    {
-        return strtoupper(
-            $this->shape?->kode . '-' .
-            $this->feather?->kode . '-' .
-            $this->color?->kode
-        );
-    }
+    // public function getGradeAttribute()
+    // {
+    //     return strtoupper(
+    //         $this->shape?->kode . '-' .
+    //         $this->feather?->kode . '-' .
+    //         $this->color?->kode
+    //     );
+    // }
 
     public function scopeActive($query)
     {

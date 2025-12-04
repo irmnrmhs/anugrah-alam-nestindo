@@ -123,6 +123,25 @@
 @stop
 
 @section('custom-js')
+    $('#wbhouses_id').on('change', function () {
+        const id = $(this).val();
+
+        if (!id) return;
+
+        fetch(`/wbhouses/${id}`)
+            .then(r => r.json())
+            .then(wb => {
+                const kh = wb.area?.kh;
+                if (kh == 1) {
+                    $('#no_skp').prop('disabled', false);
+                    $('#no_skp').val('');
+                } else {
+                    $('#no_skp').prop('disabled', true);
+                    $('#no_skp').val('AUTO');
+                }
+            });
+    });
+
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
         fetch(`/dcertificates/${id}`)
@@ -132,7 +151,7 @@
                 $('#companies_id').val(dcertificate.companies_id)
                 $('#suppliers_id').val(dcertificate.suppliers_id)
                 $('#wbhouses_id').val(dcertificate.wbhouses_id)
-                $('#no_skp').val(dcertificate.no_skp)
+                <!-- $('#no_skp').val(dcertificate.no_skp) -->
                 $('#tgl_skp').val(dcertificate.tgl_skp)
                 $('#tgl_panen').val(dcertificate.tgl_panen)
                 $('#berat_panen').val(dcertificate.berat_panen)

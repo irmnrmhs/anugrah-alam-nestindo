@@ -66,7 +66,6 @@ class ArrivalController extends Controller
         return response()->json($arrival);
     }
 
-
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
