@@ -31,6 +31,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
+use App\Http\Controllers\HistoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -233,6 +234,9 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/rm-results/delete-multiple', [RmResultController::class, 'deleteMultiple']);
     Route::post('/rm-results/bulk', [RmResultController::class, 'bulk'])->name('rm-results.bulk');
 
+    // History
+    Route::get('/histories', [HistoryController::class, 'index'])->name('histories.index');
+    Route::get('/histories-info/{id}', [HistoryController::class, 'info']);
 });
 
 require __DIR__.'/auth.php';

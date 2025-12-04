@@ -25,6 +25,11 @@ class ProductIdentifier extends Model
         return $this->belongsTo(Grade::class, 'grades_id');
     }
 
+    public function histories()
+    {
+        return $this->hasMany('identifiers_id');
+    }
+
     public function getTotalBijiAttribute()
     {
         return $this->sum('biji');
