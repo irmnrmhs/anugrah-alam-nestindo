@@ -181,7 +181,7 @@
             showCancelButton: true
         }).then(res => {
             if (res.isConfirmed) {
-                fetch(`/results/${id}`, {
+                fetch(`/rm-results/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })
