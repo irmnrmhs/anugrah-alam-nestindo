@@ -31,16 +31,15 @@ class ProductIdentifierController extends Controller
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99'
         ]);
-
-        // $supplier = Supplier::find($validated['suppliers_id']);
         
-        $raw = RawMaterial::with('stocks', 'identifiers')->find($validated['rms_id']);
+        $raw = RawMaterial::with('stocks', 'identifiers', 'arrival')->find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
 
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
         $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $raw->kode);
+        // $supplier = $raw->arrival->dcertificate->supplier->kode;
 
-        // $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier->kode;
+        // $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier;
         $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
 
        if (
