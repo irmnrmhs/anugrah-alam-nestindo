@@ -18,4 +18,9 @@ class History extends Model
     {
         return $this->belongsTo('identifiers_id');
     }
+
+    public function edges()
+    {
+        return $this->hasMany('histories_id');
+    }
 }

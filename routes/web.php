@@ -30,6 +30,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\EdgeController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\HistoryController;
 
@@ -237,6 +238,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     // History
     Route::get('/histories', [HistoryController::class, 'index'])->name('histories.index');
     Route::get('/histories-info/{id}', [HistoryController::class, 'info']);
+    
+    // Sesek kaki
+    Route::get('/edges', [EdgeController::class, 'index'])->name('edges.index');
+    Route::post('/edges', [EdgeController::class, 'store'])->name('edges.store');
+    Route::get('/edges/{id}', [EdgeController::class, 'show'])->name('edges.show');
+    Route::put('/edges/{id}', [EdgeController::class, 'update'])->name('edges.update');
+    Route::delete('/edges/{id}', [EdgeController::class, 'destroy'])->name('edges.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -41,4 +41,9 @@ class Employee extends Model
     {
         return $this->hasMany(RmStock::class, 'rms_id');
     }
+
+    public function edges()
+    {
+        return $this->hasMany(Edge::class, 'employees_id');
+    }
 }

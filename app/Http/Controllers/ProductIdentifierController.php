@@ -32,7 +32,8 @@ class ProductIdentifierController extends Controller
             'berat' => 'required|numeric|min:0|max:99999.99'
         ]);
         
-        $raw = RawMaterial::with('stocks', 'identifiers', 'arrival')->find($validated['rms_id']);
+        // $raw = RawMaterial::with('stocks', 'identifiers', 'arrival')->find($validated['rms_id']);
+        $raw = RawMaterial::find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
 
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
