@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\RawMaterial;
 use App\Models\RmResult;
-use App\Models\TestType;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -73,6 +72,28 @@ class RmResultController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil dihapus',
+        ]);
+    }
+
+    public function bulk(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'items' => 'required|array|min:1',
+            'items.*.rms_id'   => 'required|exists:raw_materials,id',
+            'items.*.kadar_air' => 'nullable|numeric|min:0|max:999.99',
+            'items.*.kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',
+            'items.*.kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
+        ]);
+
+        $items = $validated['items'];
+
+        foreach ($items as $item) {
+            RmResult::create($item);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Semua hasil uji berhasil ditambahkan.',
         ]);
     }
 

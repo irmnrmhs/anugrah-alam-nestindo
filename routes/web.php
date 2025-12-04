@@ -231,6 +231,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/rm-results/{id}', [RmResultController::class, 'update'])->name('rm-results.update');
     Route::delete('/rm-results/{id}', [RmResultController::class, 'destroy'])->name('rm-results.destroy');
     Route::post('/rm-results/delete-multiple', [RmResultController::class, 'deleteMultiple']);
+    Route::post('/rm-results/bulk', [RmResultController::class, 'bulk'])->name('rm-results.bulk');
 
 });
 

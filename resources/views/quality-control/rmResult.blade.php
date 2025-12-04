@@ -34,98 +34,193 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Rumah Burung/No. Registrasi</label>
+        <label>Kode Bahan Baku</label>
         <select id="rms_id" class="form-control" required>
-            <option value="">-- Pilih Rumah Burung --</option>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
             @foreach($rms as $rm)
-                <option value="{{ $rm->id }}">{{ $rm->kode}}</option>
+                <option value="{{ $rm->id }}">{{ $rm->kode }}</option>
             @endforeach
         </select>
     </div>
+
     <div class="mb-3">
-        <label>Kadar Air</label>
-        <input type="number" id="kadar_air" step="0.01" min="0" max="999.99" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Kadar Nitrit</label>
-        <input type="number" id="kadar_nitrit" step="0.01" min="0" max="999.9" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Kadar Aluminium</label>
-        <input type="number" id="kadar_aluminium" step="0.01" min="0" max="999.9" class="form-control">
+        <label>Jumlah Sampel</label>
+        <input type="number" min="1" id="jumlah_sampel" class="form-control" required>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/rm-results/${id}` : '/rm-results';
-    const method = id ? 'PUT' : 'POST';
+    const rms_id = $('#rms_id').val();
+    const jumlah = parseInt($('#jumlah_sampel').val());
 
-    const data = {
-        _token: '{{ csrf_token() }}',
-        rms_id: $('#rms_id').val(),
-        kadar_air: $('#kadar_air').val(),
-        kadar_nitrit: $('#kadar_nitrit').val(),
-        kadar_aluminium: $('#kadar_aluminium').val()
-    };
+    if (!rms_id || jumlah < 1) {
+        Swal.fire('Error', 'Lengkapi Kode & Jumlah Sampel.', 'error');
+        return;
+    }
 
-    fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(res => {
-        if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-        } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
+    bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
+
+    let html = '';
+    for (let i = 1; i <= jumlah; i++) {
+        html += `
+            <div class="border rounded p-3 mb-3">
+                <h6>Sampel ${i}</h6>
+
+                <label>Kadar Air</label>
+                <input type="number" class="form-control mb-2 kadar-air" data-index="${i}" step="0.01" min="0" max="999.99">
+
+                <label>Kadar Nitrit</label>
+                <input type="number" class="form-control mb-2 kadar-nitrit" data-index="${i}" step="0.01" min="0" max="999.99">
+
+                <label>Kadar Aluminium</label>
+                <input type="number" class="form-control mb-2 kadar-aluminium" data-index="${i}" step="0.01" min="0" max="999.99">
+            </div>
+        `;
+    }
+
+    $('#secondModalBody').html(html);
+    $('#secondModal').modal('show');
+
+    $('#btnSubmitAll').off().on('click', function () {
+        let list = [];
+
+        for (let i = 1; i <= jumlah; i++) {
+            list.push({
+                rms_id,
+                kadar_air: $(`.kadar-air[data-index="${i}"]`).val(),
+                kadar_nitrit: $(`.kadar-nitrit[data-index="${i}"]`).val(),
+                kadar_aluminium: $(`.kadar-aluminium[data-index="${i}"]`).val()
+            });
         }
-    })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan NIP tidak duplikat', 'error'));
+
+        fetch('/rm-results/bulk', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ items: list })
+        })
+        .then(r => r.json())
+        .then(res => {
+            if (res.status === 'success') {
+                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
+            } else {
+                Swal.fire('Error', res.message, 'error');
+            }
+        });
+    });
 @stop
 
 @section('custom-js')
-    $(document).on('click', '.btnEdit', function() {
+    $(document).on('click', '.btnEdit', function () {
         const id = $(this).closest('tr').data('id');
+
         fetch(`/rm-results/${id}`)
             .then(r => r.json())
             .then(result => {
+
                 $('#item_id').val(result.id);
-                $('#rms_id').val(result.rms_id);
-                $('#kadar_air').val(result.kadar_air);
-                $('#kadar_nitrit').val(result.kadar_nitrit);
-                $('#kadar_aluminium').val(result.kadar_aluminium);
-                $('#modalTitle').text('Edit Hasil Uji');
-                new bootstrap.Modal('#crudModal').show();
+
+                let html = `
+                    <label>Kadar Air</label>
+                    <input type="number" class="form-control mb-2" id="edit_air"
+                        value="${result.kadar_air}" step="0.01" min="0" max="999.99">
+
+                    <label>Kadar Nitrit</label>
+                    <input type="number" class="form-control mb-2" id="edit_nitrit"
+                        value="${result.kadar_nitrit}" step="0.01" min="0" max="999.99">
+
+                    <label>Kadar Aluminium</label>
+                    <input type="number" class="form-control mb-2" id="edit_aluminium"
+                        value="${result.kadar_aluminium}" step="0.01" min="0" max="999.99">
+
+                `;
+
+                $('#secondModalBody').html(html);
+                $('#secondModal').modal('show');
+
+                $('#btnSubmitAll').off().on('click', function () {
+
+                    let payload = {
+                        rms_id: result.rms_id,
+                        kadar_air: parseFloat($('#edit_air').val()),
+                        kadar_nitrit: parseFloat($('#edit_nitrit').val()),
+                        kadar_aluminium: parseFloat($('#edit_aluminium').val())
+                    };
+
+                    fetch(`/rm-results/${result.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.status === 'success') {
+                            Swal.fire('Berhasil', res.message, 'success')
+                                .then(() => location.reload());
+                        } else {
+                            Swal.fire('Error', res.message, 'error');
+                        }
+                    });
+                });
             });
     });
 
-    $(document).on('click', '.btnDelete', function() {
+    $(document).on('click', '.btnDelete', function () {
         const id = $(this).closest('tr').data('id');
+
         Swal.fire({
-            title: 'Yakin hapus?',
+            title: 'Hapus?',
             text: 'Data tidak bisa dikembalikan!',
             icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
-            cancelButtonText: 'Batal'
-        }).then(result => {
-            if (result.isConfirmed) {
-                fetch(`/rm-results/${id}`, {
+            showCancelButton: true
+        }).then(res => {
+            if (res.isConfirmed) {
+                fetch(`/results/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })
                 .then(r => r.json())
                 .then(res => {
                     if (res.status === 'success') {
-                        Swal.fire('Terhapus!', res.message, 'success').then(() => location.reload());
+                        Swal.fire('Terhapus', res.message, 'success')
+                            .then(() => location.reload());
                     } else {
-                        Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
+                        Swal.fire('Error', res.message, 'error');
                     }
                 })
                 .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
     });
+
 @stop
+
+@section('content')
+@parent
+
+<div class="modal fade" id="secondModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Input Detail Sampel</h5>
+            </div>
+
+            <div class="modal-body overflow-auto" id="secondModalBody" style="max-height: 70vh;">
+                {{-- auto generated --}}
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button class="btn btn-primary" id="btnSubmitAll">Simpan Semua</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endsection
