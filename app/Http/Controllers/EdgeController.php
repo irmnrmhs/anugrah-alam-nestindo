@@ -29,7 +29,6 @@ class EdgeController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'employees_id' => 'required|exists:employees,id',
             'tgl_selesai' => 'required|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99'
@@ -58,7 +57,6 @@ class EdgeController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'employees_id' => 'required|exists:employees,id',
             'tgl_selesai' => 'required|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99'

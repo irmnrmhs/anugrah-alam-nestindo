@@ -9,7 +9,7 @@ class Edge extends Model
     protected $fillable = [
         'histories_id',
         'employees_id',
-        'tgl-mulai',
+        'tgl_mulai',
         'biji_masuk',
         'berat_masuk',
         'tgl_selesai',

@@ -16,11 +16,11 @@ class History extends Model
 
     public function identifier()
     {
-        return $this->belongsTo('identifiers_id');
+        return $this->belongsTo(ProductIdentifier::class, 'identifiers_id');
     }
 
     public function edges()
     {
-        return $this->hasMany('histories_id');
+        return $this->hasMany(Edge::class, 'histories_id');
     }
 }

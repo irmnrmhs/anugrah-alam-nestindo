@@ -488,6 +488,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Sesek Kaki',
+                    'url'  => 'edges',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 

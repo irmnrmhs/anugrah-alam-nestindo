@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('tgl_selesai');
             $table->integer('biji_keluar');
             $table->decimal('berat_keluar', 7, 2);
-            $table->string('status');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
