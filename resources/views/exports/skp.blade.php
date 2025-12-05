@@ -159,14 +159,7 @@
         </thead>
 
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>{{ $dcertificate->tgl_panen }}</td>
-                <td>{{ $dcertificate->berat_panen }}</td>
-                <td>{{ $dcertificate->tgl_kirim }}</td>
-                <td>{{ $dcertificate->berat_kirim }}</td>
-            </tr>
-            {{-- @foreach($dcertificate->arrival as $i => $row)
+            @foreach($dcertificate->details as $i => $row)
                 <tr>
                     <td>{{ $i + 1 }}</td>
                     <td>{{ $row->tgl_panen }}</td>
@@ -174,7 +167,7 @@
                     <td>{{ $row->tgl_kirim }}</td>
                     <td>{{ number_format($row->berat_kirim, 2) }}</td>
                 </tr>
-            @endforeach --}}
+            @endforeach
 
             @for ($n = 0; $n < 5; $n++)
                 <tr>
@@ -188,9 +181,9 @@
 
             <tr>
                 <td colspan="2" style="text-align: right; font-weight: bold;">TOTAL</td>
-                <td>{{ number_format($dcertificate->sum('berat_panen'), 2) }}</td>
+                <td>{{ number_format($dcertificate->details->sum('berat_panen'), 2) }}</td>
                 <td style="text-align: right; font-weight: bold;">TOTAL</td>
-                <td>{{ number_format($dcertificate->sum('berat_kirim'), 2) }}</td>
+                <td>{{ number_format($dcertificate->details->sum('berat_kirim'), 2) }}</td>
             </tr>
         </tbody>
     </table>

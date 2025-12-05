@@ -41,11 +41,7 @@ class DcertificateController extends Controller
                     return $query->where('suppliers_id', $request->suppliers_id)
                                 ->where('wbhouses_id', $request->wbhouses_id);
                 }),
-            ],
-            'tgl_panen' => 'required|date',
-            'berat_panen' => 'required|numeric|min:0|max:99999.99',
-            'tgl_kirim' => 'required|date',
-            'berat_kirim' => 'required|numeric|min:0|max:99999.99',
+            ]
         ]);
 
         $wb = WBHouse::with('area')->find($validated['wbhouses_id']);
@@ -117,11 +113,7 @@ class DcertificateController extends Controller
                     return $query->where('suppliers_id', $request->suppliers_id)
                                 ->where('wbhouses_id', $request->wbhouses_id);
                 }),
-            ],
-            'tgl_panen' => 'required|date',
-            'berat_panen' => 'required|numeric|min:0|max:99999.99',
-            'tgl_kirim' => 'required|date',
-            'berat_kirim' => 'required|numeric|min:0|max:99999.99',
+            ]
         ]);
 
         $dcertificate = Dcertificate::findOrFail($id);
@@ -181,7 +173,10 @@ class DcertificateController extends Controller
         $pdf = Pdf::loadView('exports.skp', compact('dcertificate'))
                 ->setPaper('A4', 'portrait');
 
-        return $pdf->download('SKP-' . $dcertificate->no_skp . '.pdf');
+        // return $pdf->download('SKP-' . $dcertificate->no_skp . '.pdf');
+        $filename = 'SKP-' . str_replace(['/', '\\'], '-', $dcertificate->no_skp) . '.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

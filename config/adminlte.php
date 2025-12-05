@@ -420,8 +420,14 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Keterangan Pengiriman',
+                    'text' => 'Pengiriman',
                     'url'  => 'dcertificates',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Detail Pengiriman',
+                    'url'  => 'details',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
