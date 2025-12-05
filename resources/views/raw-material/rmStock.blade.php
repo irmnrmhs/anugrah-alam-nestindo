@@ -128,14 +128,14 @@
         fetch(`/raw-material-info/${id}`)
             .then(r => r.json())
             .then(info => {
-                $('#info_biji_sisa').val(info.biji_sisa);
-                $('#info_berat_sisa').val(info.berat_sisa);
-                $('#info_last_date').val(info.last_date ?? '-');
+                $('#biji_sisa').val(info.biji_sisa);
+                $('#berat_sisa').val(info.berat_sisa);
+                $('#last_out_date').val(info.last_date ?? '-');
             })
             .catch(() => {
-                $('#info_biji_sisa').val('-');
-                $('#info_berat_sisa').val('-');
-                $('#info_last_date').val('-');
+                $('#biji_sisa').val('-');
+                $('#berat_sisa').val('-');
+                $('#last_out_date').val('-');
             });
     });
 

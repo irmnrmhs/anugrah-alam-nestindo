@@ -58,6 +58,17 @@ class RmStockController extends Controller
         return response()->json($stock);
     }
 
+    public function materialInfo($id)
+    {
+        $raw = RawMaterial::findOrFail($id);
+        $lastOut = RmStock::where('rms_id', $id)->latest()->first();
+
+        return response()->json([
+            'biji_sisa' => $raw->biji_sisa,
+            'berat_sisa' => $raw->berat_sisa,
+            'last_date' => $lastOut?->tgl_keluar,
+        ]);
+    }
 
     public function update(Request $request, int $id): JsonResponse
     {
