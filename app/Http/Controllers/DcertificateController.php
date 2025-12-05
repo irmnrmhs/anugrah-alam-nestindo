@@ -64,20 +64,25 @@ class DcertificateController extends Controller
             $area = $wb->area->kode;
 
             $bln = Carbon::parse($validated['tgl_skp'])->month;
-            $roman = [
+            $romanArr = [
                 1=>'I', 2=>'II', 3=>'III', 4=>'IV', 5=>'V', 6=>'VI',
                 7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'
-            ][$bln];
+            ];
+            $roman = $romanArr[$bln];
 
-            $last = Dcertificate::whereHas('wbhouse', function($q) {
-                $q->whereHas('area', function($a) {
-                    $a->where('kh', 0);
-                });
-            })
-            ->orderBy('id', 'desc')
-            ->first();
+            $pattern = "AAN/SKP/%/{$area}/{$roman}";
 
-            $nextNumber = $last ? intval(substr($last->no_skp, -3)) + 1 : 1;
+            $last = Dcertificate::where('no_skp', 'like', $pattern)
+                    ->orderBy('id', 'desc')
+                    ->first();
+
+            if ($last && !empty($last->no_skp)) {
+                $parts = explode('/', $last->no_skp);
+                $lastNum = isset($parts[2]) ? intval($parts[2]) : 0;
+                $nextNumber = $lastNum + 1;
+            } else {
+                $nextNumber = 1;
+            }
 
             $validated['no_skp'] = 'AAN/SKP/' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' . $area . '/' . $roman;
         }
