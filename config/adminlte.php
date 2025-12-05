@@ -420,8 +420,14 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Keterangan Pengiriman',
+                    'text' => 'Pengiriman',
                     'url'  => 'dcertificates',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Detail Pengiriman',
+                    'url'  => 'details',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
@@ -485,6 +491,12 @@ return [
                 [
                     'text' => 'Riwayat',
                     'url'  => 'histories',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Sesek Kaki',
+                    'url'  => 'edges',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ],

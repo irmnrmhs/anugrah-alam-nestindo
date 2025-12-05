@@ -1,8 +1,8 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Keterangan Pengiriman';
-    $singular = 'Keterangan Pengiriman';
+    $title = 'Kelola Data Pengiriman';
+    $singular = 'Pengiriman';
     $deleteMultipleUrl = '/dcertificates/delete-multiple';
 @endphp
 
@@ -13,10 +13,7 @@
     <th>Rumah Burung</th>
     <th>Nomor SKP</th>
     <th>Tanggal SKP</th>
-    <th>Tanggal Panen</th>
-    <th>Berat Panen</th>
-    <th>Tanggal Kirim</th>
-    <th>Berat Kirim</th>
+    <th>Detail Pengiriman</th>
 @stop
 
 @section('table-body')
@@ -28,14 +25,11 @@
             <td>{{ $dcertificate->wbhouse->nama }}</td>
             <td>{{ $dcertificate->no_skp }}</td>
             <td>{{ $dcertificate->tgl_skp }}</td>
-            <td>{{ $dcertificate->tgl_panen }}</td>
-            <td>{{ $dcertificate->berat_panen }}</td>
-            <td>{{ $dcertificate->tgl_kirim }}</td>
-            <td>{{ $dcertificate->berat_kirim }}</td>
+            <td></td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('dcertificates.export', $dcertificate->id) }}" class="btn btn-sm btn-primary" target="_blank">PDF</a>
+                <a href="{{ route('dcertificates.export', $dcertificate->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak SKP</a>
             </td>
         </tr>
     @endforeach
@@ -69,22 +63,6 @@
         <label>Tanggal SKP</label>
         <input type="date" id="tgl_skp" class="form-control" required>
     </div>
-    <div class="mb-3">
-        <label>Tanggal Panen</label>
-        <input type="date" id="tgl_panen" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Berat Panen</label>
-        <input type="number" id="berat_panen" step="0.01" min="0" max="99999.99" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Tanggal Kirim</label>
-        <input type="date" id="tgl_kirim" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Berat Kirim</label>
-        <input type="number" id="berat_kirim" step="0.01" min="0" max="99999.99" class="form-control">
-    </div>
     
 @stop
 
@@ -99,11 +77,7 @@
         suppliers_id: $('#suppliers_id').val(),
         wbhouses_id: $('#wbhouses_id').val(),
         no_skp: $('#no_skp').val(),
-        tgl_skp: $('#tgl_skp').val(),
-        tgl_panen: $('#tgl_panen').val(),
-        berat_panen: $('#berat_panen').val(),
-        tgl_kirim: $('#tgl_kirim').val(),
-        berat_kirim: $('#berat_kirim').val()
+        tgl_skp: $('#tgl_skp').val()
     };
 
     fetch(url, {
@@ -148,15 +122,10 @@
             .then(r => r.json())
             .then(dcertificate => {
                 $('#item_id').val(dcertificate.id);
-                $('#companies_id').val(dcertificate.companies_id)
-                $('#suppliers_id').val(dcertificate.suppliers_id)
-                $('#wbhouses_id').val(dcertificate.wbhouses_id)
-                <!-- $('#no_skp').val(dcertificate.no_skp) -->
-                $('#tgl_skp').val(dcertificate.tgl_skp)
-                $('#tgl_panen').val(dcertificate.tgl_panen)
-                $('#berat_panen').val(dcertificate.berat_panen)
-                $('#tgl_kirim').val(dcertificate.tgl_kirim)
-                $('#berat_kirim').val(dcertificate.berat_kirim)
+                $('#companies_id').val(dcertificate.companies_id);
+                $('#suppliers_id').val(dcertificate.suppliers_id);
+                $('#wbhouses_id').val(dcertificate.wbhouses_id);
+                $('#tgl_skp').val(dcertificate.tgl_skp);
                 $('#modalTitle').text('Edit SKP');
                 new bootstrap.Modal('#crudModal').show();
             });

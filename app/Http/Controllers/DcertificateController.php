@@ -41,11 +41,7 @@ class DcertificateController extends Controller
                     return $query->where('suppliers_id', $request->suppliers_id)
                                 ->where('wbhouses_id', $request->wbhouses_id);
                 }),
-            ],
-            'tgl_panen' => 'required|date',
-            'berat_panen' => 'required|numeric|min:0|max:99999.99',
-            'tgl_kirim' => 'required|date',
-            'berat_kirim' => 'required|numeric|min:0|max:99999.99',
+            ]
         ]);
 
         $wb = WBHouse::with('area')->find($validated['wbhouses_id']);
@@ -64,22 +60,28 @@ class DcertificateController extends Controller
             $area = $wb->area->kode;
 
             $bln = Carbon::parse($validated['tgl_skp'])->month;
-            $roman = [
+            $romanArr = [
                 1=>'I', 2=>'II', 3=>'III', 4=>'IV', 5=>'V', 6=>'VI',
                 7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'
-            ][$bln];
+            ];
+            $roman = $romanArr[$bln];
+            $thn = date('y', strtotime($validated['tgl_skp']));
 
-            $last = Dcertificate::whereHas('wbhouse', function($q) {
-                $q->whereHas('area', function($a) {
-                    $a->where('kh', 0);
-                });
-            })
-            ->orderBy('id', 'desc')
-            ->first();
+            $pattern = "AAN/SKP/%/{$area}/{$roman}";
 
-            $nextNumber = $last ? intval(substr($last->no_skp, -3)) + 1 : 1;
+            $last = Dcertificate::where('no_skp', 'like', $pattern)
+                    ->orderBy('id', 'desc')
+                    ->first();
 
-            $validated['no_skp'] = 'AAN/SKP/' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' . $area . '/' . $roman;
+            if ($last && !empty($last->no_skp)) {
+                $parts = explode('/', $last->no_skp);
+                $lastNum = isset($parts[2]) ? intval($parts[2]) : 0;
+                $nextNumber = $lastNum + 1;
+            } else {
+                $nextNumber = 1;
+            }
+
+            $validated['no_skp'] = 'AAN/SKP/' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' . $area . '/' . $roman . '/'. $thn;
         }
 
         $dcertificate = Dcertificate::create($validated);
@@ -111,11 +113,7 @@ class DcertificateController extends Controller
                     return $query->where('suppliers_id', $request->suppliers_id)
                                 ->where('wbhouses_id', $request->wbhouses_id);
                 }),
-            ],
-            'tgl_panen' => 'required|date',
-            'berat_panen' => 'required|numeric|min:0|max:99999.99',
-            'tgl_kirim' => 'required|date',
-            'berat_kirim' => 'required|numeric|min:0|max:99999.99',
+            ]
         ]);
 
         $dcertificate = Dcertificate::findOrFail($id);
@@ -175,7 +173,10 @@ class DcertificateController extends Controller
         $pdf = Pdf::loadView('exports.skp', compact('dcertificate'))
                 ->setPaper('A4', 'portrait');
 
-        return $pdf->download('SKP-' . $dcertificate->no_skp . '.pdf');
+        // return $pdf->download('SKP-' . $dcertificate->no_skp . '.pdf');
+        $filename = 'SKP-' . str_replace(['/', '\\'], '-', $dcertificate->no_skp) . '.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

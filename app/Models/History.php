@@ -16,6 +16,31 @@ class History extends Model
 
     public function identifier()
     {
-        return $this->belongsTo('identifiers_id');
+        return $this->belongsTo(ProductIdentifier::class, 'identifiers_id');
+    }
+
+    public function edges()
+    {
+        return $this->hasMany(Edge::class, 'histories_id');
+    }
+
+    public function getTotalBijiSesekAttribute()
+    {
+        return $this->edges()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratSesekAttribute()
+    {
+        return $this->edges()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiSesekAttribute()
+    {
+        return $this->biji - $this->total_biji_sesek;
+    }
+
+    public function getSisaBeratSesekAttribute()
+    {
+        return $this->berat - $this->total_berat_sesek;
     }
 }

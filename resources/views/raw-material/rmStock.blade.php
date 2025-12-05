@@ -54,12 +54,12 @@
 
         <div class="col-md-4">
             <label>Biji Sisa</label>
-            <input type="text" id="biji_sisa" class="form-control" readonly>
+            <input type="number" id="biji_sisa" class="form-control" readonly>
         </div>
 
         <div class="col-md-4">
             <label>Berat Sisa</label>
-            <input type="text" id="berat_sisa" class="form-control" readonly>
+            <input type="number" id="berat_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">

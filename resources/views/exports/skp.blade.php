@@ -48,14 +48,17 @@
         table.info {
             width: 100%;
         }
+
         table.info td {
             padding: 6px 0;
             vertical-align: top;
         }
+
         .label {
             width: 220px;
             font-weight: bold;
         }
+
         .en {
             font-size: 10px;
             font-style: italic;
@@ -67,6 +70,7 @@
             border-collapse: collapse;
             margin-top: 15px;
         }
+
         table.data-table th, table.data-table td {
             border: 1px solid black;
             padding: 5px;
@@ -88,16 +92,14 @@
 
 <body>
 
-    <!-- Box kanan -->
     <div class="box-right">
         No. AAN/FRM/RW/01/04 <br>
         Rev-01
     </div>
 
-    <!-- Header -->
-    <p class="company">PT. ANUGRAH ALAM NESTINDO</p>
+    <p class="company">{{ $dcertificate->company->nama }}</p>
     <p class="company-desc">
-        Kp Bolenglang RT. 002 RW 013, Sukasari Cilaku, Kab. Cianjur, Jawa Barat
+        {{ $dcertificate->company->alamat }}
     </p>
 
     <p class="title">SURAT KETERANGAN PENGIRIMAN</p>
@@ -107,32 +109,32 @@
     <table class="info">
         <tr>
             <td class="label">Nama/ No Registrasi Rumah Walet <br><span class="en">Name / Bird's House Registration Number</span></td>
-            <td>: {{ $dcertificate->wbhouse->nama_walet ?? '-' }}</td>
+            <td>: {{ $dcertificate->wbhouse->nama . '/' . $dcertificate->wbhouse->kode }}</td>
         </tr>
 
         <tr>
             <td class="label">Alamat Rumah Walet <br><span class="en">Bird’s House Address</span></td>
-            <td>: {{ $dcertificate->wbhouse->alamat_walet ?? '-' }}</td>
+            <td>: {{ $dcertificate->wbhouse->alamat }}</td>
         </tr>
 
         <tr>
             <td class="label">Tujuan IKH <br><span class="en">IKH Destination Number</span></td>
-            <td>: {{ $dcertificate->company->nama_perusahaan ?? '-' }}</td>
+            <td>: {{ $dcertificate->company->nama }}</td>
         </tr>
 
         <tr>
             <td class="label">Nomor Registrasi IKH <br><span class="en">IKH Registration Number</span></td>
-            <td>: {{ $dcertificate->company->no_ikh ?? '-' }}</td>
+            <td>: {{ $dcertificate->company->ikh }}</td>
         </tr>
 
         <tr>
             <td class="label">Alamat IKH <br><span class="en">IKH Address</span></td>
-            <td>: {{ $dcertificate->company->alamat ?? '-' }}</td>
+            <td>: {{ $dcertificate->company->alamat }}</td>
         </tr>
 
         <tr>
             <td class="label">Tanggal, Bulan, Tahun <br><span class="en">Date, Month, Year</span></td>
-            <td>: {{ $dcertificate->tanggal ?? '-' }}</td>
+            <td>: {{ $dcertificate->tgl_skp }}</td>
         </tr>
 
         <tr>
@@ -157,7 +159,7 @@
         </thead>
 
         <tbody>
-            @foreach($dcertificate->arrivals as $i => $row)
+            @foreach($dcertificate->details as $i => $row)
                 <tr>
                     <td>{{ $i + 1 }}</td>
                     <td>{{ $row->tgl_panen }}</td>
@@ -167,8 +169,7 @@
                 </tr>
             @endforeach
 
-            <!-- Baris kosong agar mirip pdf asli -->
-            @for ($n = $dcertificate->arrivals->count(); $n < 10; $n++)
+            @for ($n = 0; $n < 5; $n++)
                 <tr>
                     <td>&nbsp;</td>
                     <td></td>
@@ -180,21 +181,20 @@
 
             <tr>
                 <td colspan="2" style="text-align: right; font-weight: bold;">TOTAL</td>
-                <td>{{ number_format($dcertificate->arrivals->sum('berat_panen'), 2) }}</td>
+                <td>{{ number_format($dcertificate->details->sum('berat_panen'), 2) }}</td>
                 <td style="text-align: right; font-weight: bold;">TOTAL</td>
-                <td>{{ number_format($dcertificate->arrivals->sum('berat_kirim'), 2) }}</td>
+                <td>{{ number_format($dcertificate->details->sum('berat_kirim'), 2) }}</td>
             </tr>
         </tbody>
     </table>
 
-    <!-- Tanda tangan -->
     <div class="footer-sign">
         Pemilik/ Penanggungjawab Rumah Walet <br>
         <span class="en">Owner / Person in Charge of Bird’s House</span>
 
         <div class="signature"></div>
 
-        ({{ $dcertificate->wbhouse->penanggungjawab ?? '................................' }})
+        ({{ '................................' }})
     </div>
 
 </body>

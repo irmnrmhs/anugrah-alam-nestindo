@@ -27,16 +27,16 @@ class ProductIdentifier extends Model
 
     public function histories()
     {
-        return $this->hasMany('identifiers_id');
+        return $this->hasMany(History::class, 'identifiers_id');
     }
 
-    public function getTotalBijiAttribute()
-    {
-        return $this->sum('biji');
-    }
+    // public function getTotalBijiAttribute()
+    // {
+    //     return $this->sum('biji');
+    // }
 
-    public function getTotalBeratAttribute()
-    {
-        return $this->sum('berat');
-    }
+    // public function getTotalBeratAttribute()
+    // {
+    //     return $this->sum('berat');
+    // }
 }

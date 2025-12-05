@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\RmStock;
-use App\Models\RmResult;
-use App\Models\ProductIdentifier;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
@@ -30,8 +27,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\EdgeController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\DetailSkpController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -180,6 +179,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/dcertificates/{id}/export', [DcertificateController::class, 'export'])->name('dcertificates.export');
     Route::post('/dcertificates/delete-multiple', [DcertificateController::class, 'deleteMultiple']);
 
+    // Detail SKP
+    Route::get('/details', [DetailSkpController::class, 'index'])->name('details.index');
+    Route::post('/details', [DetailSkpController::class, 'store'])->name('details.store');
+    Route::get('/details/{id}', [DetailSkpController::class, 'show'])->name('details.show');
+    Route::put('/details/{id}', [DetailSkpController::class, 'update'])->name('details.update');
+    Route::delete('/details/{id}', [DetailSkpController::class, 'destroy'])->name('details.destroy');
+    Route::post('/details/delete-multiple', [DetailSkpController::class, 'deleteMultiple']);
+
     // Arrival
     Route::get('/arrivals', [ArrivalController::class, 'index'])->name('arrivals.index');
     Route::post('/arrivals', [ArrivalController::class, 'store'])->name('arrivals.store');
@@ -208,7 +215,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/rmstocks/{id}', [RmStockController::class, 'update'])->name('rmstocks.update');
     Route::delete('/rmstocks/{id}', [RmStockController::class, 'destroy'])->name('rmstocks.destroy');
     Route::post('/rmstocks/delete-multiple', [RmStockController::class, 'deleteMultiple']);
-    $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
+    // $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
 
     // Pengidentifikasi Produk
     Route::get('/identifiers', [ProductIdentifierController::class, 'index'])->name('identifiers.index');
@@ -237,6 +244,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     // History
     Route::get('/histories', [HistoryController::class, 'index'])->name('histories.index');
     Route::get('/histories-info/{id}', [HistoryController::class, 'info']);
+    
+    // Sesek kaki
+    Route::get('/edges', [EdgeController::class, 'index'])->name('edges.index');
+    Route::post('/edges', [EdgeController::class, 'store'])->name('edges.store');
+    Route::get('/edges/{id}', [EdgeController::class, 'show'])->name('edges.show');
+    Route::put('/edges/{id}', [EdgeController::class, 'update'])->name('edges.update');
+    Route::delete('/edges/{id}', [EdgeController::class, 'destroy'])->name('edges.destroy');
 });
 
 require __DIR__.'/auth.php';

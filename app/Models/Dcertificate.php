@@ -11,11 +11,7 @@ class Dcertificate extends Model
         'suppliers_id',
         'wbhouses_id',
         'no_skp',
-        'tgl_skp',
-        'tgl_panen',
-        'berat_panen',
-        'tgl_kirim',
-        'berat_kirim',
+        'tgl_skp'
     ];
 
     public function company()
@@ -36,5 +32,10 @@ class Dcertificate extends Model
     public function arrival()
     {
         return $this->hasOne(Arrival::class, 'dcertificates_id');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(DetailSkp::class, 'dcertificates_id');
     }
 }
