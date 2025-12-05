@@ -215,6 +215,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/rmstocks/{id}', [RmStockController::class, 'update'])->name('rmstocks.update');
     Route::delete('/rmstocks/{id}', [RmStockController::class, 'destroy'])->name('rmstocks.destroy');
     Route::post('/rmstocks/delete-multiple', [RmStockController::class, 'deleteMultiple']);
+    Route::get('/raw-material-info/{id}', [RmStockController::class, 'materialInfo']);
     // $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
 
     // Pengidentifikasi Produk
