@@ -1,6 +1,6 @@
 @php
-    $title = 'Riwayat';
-    $singular = 'Riwayat';
+    $title = 'Tracker';
+    $singular = 'Tracker';
     $hideAddButton = true;
     $hideActions = true;
 @endphp
@@ -8,8 +8,8 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Riwayat';
-    $singular = 'Riwayat';
+    $title = 'Tracker';
+    $singular = 'Tracker';
 @endphp
 
 @section('table-headers')
@@ -19,8 +19,8 @@
     <th>Tujuan</th>
     <th>Total Biji</th>
     <th>Total Berat</th>
-    {{-- <th>Sisa Biji</th>
-    <th>Sisa Berat</th> --}}
+    <th>Sisa Biji</th>
+    <th>Sisa Berat</th>
 @stop
 
 @section('table-body')
@@ -32,6 +32,8 @@
             <td>{{ $history->tujuan }}</td>
             <td>{{ $history->biji }}</td>
             <td>{{ $history->berat }}</td>
+            <td>{{ $history->sisa_biji_sesek }}</td>
+            <td>{{ $history->sisa_berat_sesek }}</td>
         </tr>
     @endforeach
 @stop

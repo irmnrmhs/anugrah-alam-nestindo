@@ -35,7 +35,7 @@
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('dcertificates.export', $dcertificate->id) }}" class="btn btn-sm btn-primary" target="_blank">PDF</a>
+                <a href="{{ route('dcertificates.export', $dcertificate->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak SKP</a>
             </td>
         </tr>
     @endforeach
