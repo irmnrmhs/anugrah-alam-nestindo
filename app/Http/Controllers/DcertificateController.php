@@ -69,6 +69,7 @@ class DcertificateController extends Controller
                 7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'
             ];
             $roman = $romanArr[$bln];
+            $thn = date('y', strtotime($validated['tgl_skp']));
 
             $pattern = "AAN/SKP/%/{$area}/{$roman}";
 
@@ -84,7 +85,7 @@ class DcertificateController extends Controller
                 $nextNumber = 1;
             }
 
-            $validated['no_skp'] = 'AAN/SKP/' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' . $area . '/' . $roman;
+            $validated['no_skp'] = 'AAN/SKP/' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' . $area . '/' . $roman . '/'. $thn;
         }
 
         $dcertificate = Dcertificate::create($validated);
