@@ -55,7 +55,13 @@
 
     <div class="mb-3">
         <label>Username</label>
-        <input type="text" id="username" class="form-control" required>
+        <input type="text"
+           id="username"
+           class="form-control"
+           required
+           pattern="^[a-zA-Z0-9._]{3,30}$"
+           oninvalid="this.setCustomValidity('Tidak boleh mengandung spasi dan hanya boleh huruf, angka, titik, dan underscore')"
+           oninput="this.setCustomValidity('')">
     </div>
 
     {{-- <div class="mb-3">

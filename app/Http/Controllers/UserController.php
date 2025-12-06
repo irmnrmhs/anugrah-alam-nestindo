@@ -26,7 +26,14 @@ class UserController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'username' => 'required|string|max:100|unique:users,username',
+            'username' => [
+                'required',
+                'string',
+                'min:3',
+                'max:30',
+                'unique:users,username',
+                'regex:/^[a-zA-Z0-9._]+$/'
+            ],
             'email' => 'nullable|email',
             'password' => 'required', // tetap wajib
             'roles_id' => 'required|exists:roles,id',
@@ -52,9 +59,16 @@ class UserController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'username' => 'required|string|max:100|unique:users,username,' . $id,
+            'username' => [
+            'required',
+            'string',
+            'min:3',
+            'max:30',
+            'unique:users,username,' . $id,
+            'regex:/^[a-zA-Z0-9._]+$/'
+        ],
             'email' => 'nullable|email',
-            'password' => 'nullable', // <=== TIDAK REQUIRED
+            'password' => 'nullable',
             'roles_id' => 'required|exists:roles,id',
             'employees_id' => 'required|exists:employees,id',
         ]);
