@@ -8,16 +8,25 @@
 @section('content')
 <div class="row">
 
+    {{-- ========================= AREA ========================= --}}
     <div class="col-12">
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <strong>Area</strong>
-                <button class="btn btn-sm btn-primary" id="btnAddArea">Tambah Area</button>
-                <button class="btn btn-outline-secondary btn-sm p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseArea" aria-expanded="true">
+
+                <button class="btn btn-sm btn-primary" id="btnAddArea">
+                    Tambah Area
+                </button>
+
+                {{-- Tombol collapse dengan icon yang akan berubah --}}
+                <button class="btn btn-outline-secondary btn-sm p-1 toggle-icon"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseArea"
+                    aria-expanded="true">
                     <i class="fas fa-minus"></i>
                 </button>
             </div>
         </div>
+
         <div class="collapse show" id="collapseArea">
             <div class="card-body p-2">
                 <table class="table table-bordered table-striped" id="tableArea">
@@ -57,16 +66,27 @@
         </div>
     </div>
 
+
+
+    {{-- ========================= WBHOUSE ========================= --}}
     <div class="col-12">
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <strong>Rumah Burung</strong>
-                <button class="btn btn-sm btn-primary" id="btnAddWBHouse">Tambah Rumah Burung</button>
-                <button class="btn btn-outline-secondary btn-sm p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWBHouse" aria-expanded="true">
+
+                <button class="btn btn-sm btn-primary" id="btnAddWBHouse">
+                    Tambah Rumah Burung
+                </button>
+
+                {{-- Tombol collapse dengan icon --}}
+                <button class="btn btn-outline-secondary btn-sm p-1 toggle-icon"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseWBHouse"
+                    aria-expanded="true">
                     <i class="fas fa-minus"></i>
                 </button>
             </div>
         </div>
+
         <div class="collapse show" id="collapseWBHouse">
             <div class="card-body p-2">
                 <table class="table table-bordered table-striped" id="tableWBHouse">
@@ -104,7 +124,9 @@
 
 </div>
 
-{{-- Modal tunggal --}}
+
+
+{{-- MODAL CRUD --}}
 <div class="modal fade" id="crudModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -118,9 +140,7 @@
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body" id="modalBody">
-                    {{-- Fields diisi JS --}}
-                </div>
+                <div class="modal-body" id="modalBody"></div>
 
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -132,6 +152,8 @@
     </div>
 </div>
 @endsection
+
+
 
 @section('js')
 @parent
@@ -145,6 +167,7 @@ function openModal(type, title, data = null) {
     $('#modalTitle').text(title);
 
     let html = '';
+
     if (type === 'area') {
         html = `
         <div class="mb-3">
@@ -157,7 +180,7 @@ function openModal(type, title, data = null) {
         </div>
         <div class="mb-3">
             <label>KH</label>
-            <select id="kh" class="form-control" required>
+            <select id="kh" class="form-control">
                 <option value="1" ${data?.kh ? 'selected' : ''}>Ya</option>
                 <option value="0" ${!data?.kh ? 'selected' : ''}>Tidak</option>
             </select>
@@ -166,7 +189,9 @@ function openModal(type, title, data = null) {
             <label>Keterangan</label>
             <input type="text" id="keterangan" class="form-control" value="${data?.keterangan ?? ''}">
         </div>`;
-    } else if (type === 'wbhouse') {
+    }
+
+    if (type === 'wbhouse') {
         html = `
         <div class="mb-3">
             <label>Nomor Registrasi</label>
@@ -191,7 +216,7 @@ function openModal(type, title, data = null) {
         </div>
         <div class="mb-3">
             <label>Kapasitas</label>
-            <input type="number" id="kapasitas" step="0.01" min="0" max="99999.99" class="form-control" value="${data?.kapasitas ?? ''}">
+            <input type="number" step="0.01" id="kapasitas" class="form-control" value="${data?.kapasitas ?? ''}">
         </div>`;
     }
 
@@ -199,71 +224,83 @@ function openModal(type, title, data = null) {
     modal.show();
 }
 
-// Tombol tambah
-$('#btnAddArea').click(() => openModal('area', 'Tambah Area'));
-$('#btnAddWBHouse').click(() => openModal('wbhouse', 'Tambah Rumah Burung'));
 
-// Tombol edit
-$(document).on('click', '.btnEditArea', function() {
+
+// ====================== EDIT ======================
+$(document).on('click', '.btnEditArea', function () {
     const id = $(this).closest('tr').data('id');
     fetch(`/areas/${id}`)
-        .then(res => res.json())
-        .then(d => openModal('area', 'Edit Area', d));
-});
-$(document).on('click', '.btnEditWBHouse', function() {
-    const id = $(this).closest('tr').data('id');
-    fetch(`/wbhouses/${id}`)
-        .then(res => res.json())
-        .then(d => openModal('wbhouse', 'Edit Rumah Burung', d));
+        .then(r => r.json())
+        .then(data => openModal('area', 'Edit Area', data));
 });
 
-// Tombol delete
+$(document).on('click', '.btnEditWBHouse', function () {
+    const id = $(this).closest('tr').data('id');
+    fetch(`/wbhouses/${id}`)
+        .then(r => r.json())
+        .then(data => openModal('wbhouse', 'Edit Rumah Burung', data));
+});
+
+
+
+// ====================== DELETE ======================
 function deleteItem(url) {
     Swal.fire({
-        title: 'Yakin hapus?',
+        title: 'Hapus data ini?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus'
-    }).then(r => {
-        if (!r.isConfirmed) return;
-        fetch(url, { method: 'DELETE', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } })
-            .then(res => res.json())
-            .then(out => Swal.fire('Sukses', out.message, 'success').then(() => location.reload()));
+    }).then(res => {
+        if (!res.isConfirmed) return;
+        fetch(url, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+        })
+        .then(r => r.json())
+        .then(out => Swal.fire('Sukses', out.message, 'success')
+            .then(() => location.reload()));
     });
 }
 
-$(document).on('click', '.btnDeleteArea', function() {
+$(document).on('click', '.btnDeleteArea', function () {
     deleteItem(`/areas/${$(this).closest('tr').data('id')}`);
 });
-$(document).on('click', '.btnDeleteWBHouse', function() {
+
+$(document).on('click', '.btnDeleteWBHouse', function () {
     deleteItem(`/wbhouses/${$(this).closest('tr').data('id')}`);
 });
 
-// Submit form
+
+
+// ====================== SUBMIT FORM ======================
 $('#formCRUD').submit(e => {
     e.preventDefault();
+
     const type = $('#type_category').val();
-    const id = $('#item_id').val();
-    let url = '';
-    if (type === 'area') url = id ? `/areas/${id}` : '/areas';
-    if (type === 'wbhouse') url = id ? `/wbhouses/${id}` : '/wbhouses';
+    const id   = $('#item_id').val();
+
+    let url = type === 'area'
+        ? (id ? `/areas/${id}` : '/areas')
+        : (id ? `/wbhouses/${id}` : '/wbhouses');
+
     const method = id ? 'PUT' : 'POST';
 
     let payload = {};
+
     if (type === 'area') {
         payload = {
             kode: $('#kode').val(),
             area: $('#area').val(),
             kh: $('#kh').val(),
-            keterangan: $('#keterangan').val()
+            keterangan: $('#keterangan').val(),
         };
-    } else if (type === 'wbhouse') {
+    } else {
         payload = {
             kode: $('#kode').val(),
             nama: $('#nama').val(),
             alamat: $('#alamat').val(),
             areas_id: $('#areas_id').val(),
-            kapasitas: $('#kapasitas').val()
+            kapasitas: $('#kapasitas').val(),
         };
     }
 
@@ -272,8 +309,37 @@ $('#formCRUD').submit(e => {
         headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         body: JSON.stringify(payload)
     })
-    .then(res => res.json())
-    .then(out => Swal.fire('Sukses', out.message, 'success').then(() => location.reload()));
+    .then(r => r.json())
+    .then(out => Swal.fire('Sukses', out.message, 'success')
+        .then(() => location.reload()));
+});
+
+
+
+// ====================== TOGGLE ICON COLLAPSE ======================
+$('.collapse').each(function () {
+    const collapseId = '#' + $(this).attr('id');
+
+    // Jika collapse dibuka → ikon minus
+    $(collapseId).on('shown.bs.collapse', function () {
+        $(`[data-bs-target="${collapseId}"] i`)
+            .removeClass('fa-plus')
+            .addClass('fa-minus');
+    });
+
+    // Jika collapse ditutup → ikon plus
+    $(collapseId).on('hidden.bs.collapse', function () {
+        $(`[data-bs-target="${collapseId}"] i`)
+            .removeClass('fa-minus')
+            .addClass('fa-plus');
+    });
+
+    // Set icon awal sesuai kondisi awal
+    if (!$(collapseId).hasClass('show')) {
+        $(`[data-bs-target="${collapseId}"] i`)
+            .removeClass('fa-minus')
+            .addClass('fa-plus');
+    }
 });
 </script>
 @endsection
