@@ -28,5 +28,13 @@ class WBHouseSeeder extends Seeder
             'areas_id'      => 2,
             'kapasitas' => 700.00,
         ]);
+
+        WBHouse::create([
+            'kode'      => '2157',
+            'nama'      => 'Sungai Danau A',
+            'alamat'    => '...',
+            'areas_id'      => 5,
+            'kapasitas' => 2500.00,
+        ]);
     }
 }
