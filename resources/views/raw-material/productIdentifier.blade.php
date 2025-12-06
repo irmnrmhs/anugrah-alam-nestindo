@@ -9,7 +9,6 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    {{-- <th>Supplier</th> --}}
     <th>Kode Bahan Baku</th>
     <th>Grade</th>
     <th>Kode Produk</th>
@@ -23,7 +22,6 @@
         <tr data-id="{{ $identifier->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $identifier->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            {{-- <td>{{ $identifier->supplier->nama }}</td> --}}
             <td>{{ $identifier->rawMaterial->kode }}</td>
             <td>{{ $identifier->grade->grade }}</td>
             <td>{{ $identifier->kode }}</td>
@@ -98,7 +96,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan kode tidak duplikat.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan NIP tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')
