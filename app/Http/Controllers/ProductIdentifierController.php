@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dcertificate;
 use App\Models\Grade;
 use App\Models\ProductIdentifier;
 use App\Models\RawMaterial;
-use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -17,7 +17,7 @@ class ProductIdentifierController extends Controller
     {
         $identifiers = ProductIdentifier::with('rawMaterial', 'grade')->latest()->get();
         $rms = RawMaterial::all();
-        $grades = Grade::active()->get();
+        $grades = Grade::all();
 
         return view('raw-material.productIdentifier', compact('identifiers', 'rms', 'grades'));
     }
@@ -31,39 +31,28 @@ class ProductIdentifierController extends Controller
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99'
         ]);
-        
-        // $raw = RawMaterial::with('stocks', 'identifiers', 'arrival')->find($validated['rms_id']);
-        $raw = RawMaterial::find($validated['rms_id']);
+
+        $rm = RawMaterial::with('arrival')->find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
+        $supplier = $rm->arrival->dcertificate->supplier->kode;
 
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
-        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $raw->kode);
-        // $supplier = $raw->arrival->dcertificate->supplier->kode;
+        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
+        $kode =  $cleanGrade . '-' . $cleanKode . $supplier;
+        $validated['kode'] = $kode;
 
-        // $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier;
-        $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
-
-       if (
-            $validated['biji'] > $raw->sisa_untuk_identifikasi_biji ||
-            $validated['berat'] > $raw->sisa_untuk_identifikasi_berat
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Melebihi stok keluar yang tersedia',
-            ], 422);
-        }
-
-        ProductIdentifier::create($validated);
+        $identifier = ProductIdentifier::create($validated);
 
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan',
+            'data' => $identifier,
         ]);
     }
 
     public function show(int $id): JsonResponse
     {
-        $identifier = ProductIdentifier::with('rawMaterial', 'grade')->findOrFail($id);
+        $identifier = ProductIdentifier::findOrFail($id);
         return response()->json($identifier);
     }
 
@@ -78,27 +67,16 @@ class ProductIdentifierController extends Controller
             'berat' => 'required|numeric|min:0|max:99999.99'
         ]);
 
-        // $supplier = Supplier::find($validated['suppliers_id']);
-        $raw = RawMaterial::with('stocks', 'identifiers')->find($validated['rms_id']);
+        $rm = RawMaterial::with('arrival')->find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
+        $supplier = $rm->arrival->dcertificate->supplier->kode;
 
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
-        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $raw->kode);
-
-        $validated['kode'] = $cleanGrade . '-' . $cleanKode;
-        // $validated['kode'] = $cleanGrade . '-' . $cleanKode . $supplier->kode;
+        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
+        $kode =  $cleanGrade . '-' . $cleanKode . $supplier;
+        $validated['kode'] = $kode;
 
         $identifier = ProductIdentifier::findOrFail($id);
-
-        $bijiSisa = $raw->sisa_untuk_identifikasi_biji + $identifier->biji;
-        $beratSisa = $raw->sisa_untuk_identifikasi_berat + $identifier->berat;
-
-        if ($validated['biji'] > $bijiSisa || $validated['berat'] > $beratSisa) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Melebihi stok keluar yang tersedia',
-            ], 422);
-        }
 
         $identifier->update($validated);
 

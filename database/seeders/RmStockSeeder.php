@@ -12,6 +12,6 @@ class RmStockSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        
     }
 }

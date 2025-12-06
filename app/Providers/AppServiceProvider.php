@@ -12,6 +12,7 @@ use App\Models\WBHouse;
 use App\Models\Arrival;
 use App\Models\Supplier;
 use App\Models\Dcertificate;
+use App\Models\Grade;
 
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
@@ -20,6 +21,7 @@ use App\Observers\ColorObserver;
 use App\Observers\WBHouseObserver;
 use App\Observers\ArrivalObserver;
 use App\Observers\SupplierObserver;
+use App\Observers\GradeObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -69,5 +71,6 @@ class AppServiceProvider extends ServiceProvider
         Arrival::observe(ArrivalObserver::class);
         Supplier::observe(SupplierObserver::class);
         Dcertificate::observe(DCertificateObserver::class);
+        Grade::observe(GradeObserver::class);
     }
 }

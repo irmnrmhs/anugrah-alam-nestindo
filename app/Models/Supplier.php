@@ -19,13 +19,13 @@ class Supplier extends Model
         return $this->belongsTo(Category::class, 'categories_id');
     }
 
-    public function identifiers()
+    public function dcertificates()
     {
-        return $this->hasMany(ProductIdentifier::class, 'suppliers_id');
+        return $this->hasMany(Dcertificate::class, 'suppliers_id');
     }
-
-    // public function dcertificates()
+    
+    // public function identifiers()
     // {
-    //     return $this->hasMany(Dcertificate::class, 'suppliers_id');
+    //     return $this->hasMany(ProductIdentifier::class, 'suppliers_id');
     // }
 }
