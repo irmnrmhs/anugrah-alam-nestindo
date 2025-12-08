@@ -74,14 +74,20 @@
         </select>
     </div>
     <div class="mb-3">
-    <label>Kondisi</label>
-    <div>
-        <label><input type="checkbox" class="kondisi-item" value="sampah"> Bebas dari sampah </label><br>
-        <label><input type="checkbox" class="kondisi-item" value="ceceran oli"> Bebas dari ceceran oli </label><br>
-        <label><input type="checkbox" class="kondisi-item" value="benda tajam"> Bebas dari benda tajam </label><br>
-        <label><input type="checkbox" class="kondisi-item" value="kondisi seal dalam keadaan utuh"> Seal utuh </label>
+        <label>Kondisi</label>
+        <div>
+            <label>
+                <input type="checkbox" id="kondisi_all"> Semua Kondisi Terpenuhi
+            </label>
+            <hr>
+        </div>
+        <div>
+            <label><input type="checkbox" class="kondisi-item" value="sampah"> Bebas dari sampah </label><br>
+            <label><input type="checkbox" class="kondisi-item" value="ceceran oli"> Bebas dari ceceran oli </label><br>
+            <label><input type="checkbox" class="kondisi-item" value="benda tajam"> Bebas dari benda tajam </label><br>
+            <label><input type="checkbox" class="kondisi-item" value="kondisi seal dalam keadaan utuh"> Seal utuh </label>
+        </div>
     </div>
-</div>
     <div class="mb-3">
         <label>Keterangan</label>
         <input type="text" id="keterangan" class="form-control">
@@ -130,6 +136,19 @@
 @stop
 
 @section('custom-js')
+    // Jika checklist "Semua Kondisi"
+    $(document).on('change', '#kondisi_all', function() {
+        const checked = $(this).is(':checked');
+        $('.kondisi-item').prop('checked', checked);
+    });
+
+    // Jika ada perubahan di checkbox individu,
+    // master menjadi on bila SEMUA individu tercentang
+    $(document).on('change', '.kondisi-item', function() {
+        const allChecked = $('.kondisi-item:checked').length === $('.kondisi-item').length;
+        $('#kondisi_all').prop('checked', allChecked);
+    });
+
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
         fetch(`/arrivals/${id}`)

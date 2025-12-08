@@ -13,7 +13,7 @@ use App\Models\Arrival;
 use App\Models\Supplier;
 use App\Models\Dcertificate;
 use App\Models\Grade;
-
+use App\Models\ProductIdentifier;
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
 use App\Observers\FeatherObserver;
@@ -22,6 +22,7 @@ use App\Observers\WBHouseObserver;
 use App\Observers\ArrivalObserver;
 use App\Observers\SupplierObserver;
 use App\Observers\GradeObserver;
+use App\Observers\IdentifierObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -72,5 +73,20 @@ class AppServiceProvider extends ServiceProvider
         Supplier::observe(SupplierObserver::class);
         Dcertificate::observe(DCertificateObserver::class);
         Grade::observe(GradeObserver::class);
+        ProductIdentifier::observe(IdentifierObserver::class);
     }
+
+    // 1. Grading BB (PR01GB)
+    // 2. Sesek Kaki (PR02SK)
+    // 3. Pencucian (PR03PC)
+    // 4. Inspeksi dan Koreksi (PR04IK)
+    // 5. Pencabutan Bulu (PR05PB)
+    // 6. Perendaman (PR06PR)
+    // 7. Cabut Bilas (PR07CB)
+    // 8. Masuk Cetak (PR08MC)
+    // 9. Keluar Cetak (PR09KC)
+    // 10. Pengeringan (PR10PK)
+    // 11. Grading PJ (PR11GP)
+    // 12. Stok PJ (PR12SP)
+    // 13. Steaming (PR13ST)
 }

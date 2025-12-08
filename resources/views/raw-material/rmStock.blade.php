@@ -48,17 +48,17 @@
     </div>
     <div class="row mt-3">
         <div class="col-md-4">
-            <label>Tanggal Stok Keluar Terakhir</label>
+            <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
             <input type="text" id="last_out_date" class="form-control" readonly>
         </div>
 
         <div class="col-md-4">
-            <label>Biji Sisa</label>
+            <label style="font-size: 10pt">Biji Sisa</label>
             <input type="number" id="biji_sisa" class="form-control" readonly>
         </div>
 
         <div class="col-md-4">
-            <label>Berat Sisa</label>
+            <label style="font-size: 10pt">Berat Sisa</label>
             <input type="number" id="berat_sisa" class="form-control" readonly>
         </div>
     </div>

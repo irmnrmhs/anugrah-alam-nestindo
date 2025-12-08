@@ -252,6 +252,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/edges/{id}', [EdgeController::class, 'show'])->name('edges.show');
     Route::put('/edges/{id}', [EdgeController::class, 'update'])->name('edges.update');
     Route::delete('/edges/{id}', [EdgeController::class, 'destroy'])->name('edges.destroy');
+    Route::post('/edges/delete-multiple', [EdgeController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

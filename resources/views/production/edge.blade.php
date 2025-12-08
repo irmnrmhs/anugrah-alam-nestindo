@@ -33,7 +33,15 @@
             <td>{{ $edge->tgl_selesai }}</td>
             <td>{{ $edge->biji_keluar }}</td>
             <td>{{ $edge->berat_keluar }}</td>
-            <td>{{ $edge->status }}</td>
+            <td>
+                @if($edge->status == 0)
+                    <span class="badge bg-warning">Menunggu Persetujuan</span>
+                @elseif ($edge->status == 1)
+                    <span class="badge bg-success">Disetujui</span>
+                @else
+                    <span class="badge bg-danger">Ditolak</span>
+                @endif
+            </td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
