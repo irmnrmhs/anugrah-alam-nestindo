@@ -14,6 +14,7 @@ use App\Models\Supplier;
 use App\Models\Dcertificate;
 use App\Models\Grade;
 use App\Models\ProductIdentifier;
+use App\Models\Edge;
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
 use App\Observers\FeatherObserver;
@@ -23,6 +24,7 @@ use App\Observers\ArrivalObserver;
 use App\Observers\SupplierObserver;
 use App\Observers\GradeObserver;
 use App\Observers\IdentifierObserver;
+use App\Observers\EdgeObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -74,6 +76,7 @@ class AppServiceProvider extends ServiceProvider
         Dcertificate::observe(DCertificateObserver::class);
         Grade::observe(GradeObserver::class);
         ProductIdentifier::observe(IdentifierObserver::class);
+        Edge::observe(EdgeObserver::class);
     }
 
     // 1. Grading BB (PR01GB)

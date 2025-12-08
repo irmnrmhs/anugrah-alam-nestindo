@@ -24,6 +24,11 @@ class History extends Model
         return $this->hasMany(Edge::class, 'histories_id');
     }
 
+    public function washes()
+    {
+        return $this->hasMany(Wash::class, 'histories_id');
+    }
+
     public function getTotalBijiSesekAttribute()
     {
         return $this->edges()->sum('biji_masuk');

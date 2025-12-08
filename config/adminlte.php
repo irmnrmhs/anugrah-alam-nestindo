@@ -500,6 +500,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Pencucian',
+                    'url'  => 'washes',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 

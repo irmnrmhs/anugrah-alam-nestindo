@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\EdgeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WashController;
 use App\Http\Controllers\BlendController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\GradeController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\ShapeController;
 use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FeatherController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RmStockController;
 use App\Http\Controllers\WBHouseController;
@@ -24,13 +27,11 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DetailSkpController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
-use App\Http\Controllers\EdgeController;
 use App\Http\Controllers\ProductIdentifierController;
-use App\Http\Controllers\HistoryController;
-use App\Http\Controllers\DetailSkpController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -253,6 +254,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/edges/{id}', [EdgeController::class, 'update'])->name('edges.update');
     Route::delete('/edges/{id}', [EdgeController::class, 'destroy'])->name('edges.destroy');
     Route::post('/edges/delete-multiple', [EdgeController::class, 'deleteMultiple']);
+    
+    // Pencucian
+    Route::get('/washes', [WashController::class, 'index'])->name('washes.index');
+    Route::post('/washes', [WashController::class, 'store'])->name('washes.store');
+    Route::get('/washes/{id}', [WashController::class, 'show'])->name('washes.show');
+    Route::put('/washes/{id}', [WashController::class, 'update'])->name('washes.update');
+    Route::delete('/washes/{id}', [WashController::class, 'destroy'])->name('washes.destroy');
+    Route::post('/washes/delete-multiple', [WashController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';
