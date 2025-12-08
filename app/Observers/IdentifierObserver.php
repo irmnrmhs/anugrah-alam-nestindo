@@ -14,10 +14,11 @@ class IdentifierObserver
     {
         History::create([
             'identifiers_id' => $productIdentifier->id,
-            'asal' => NULL,
-            'tujuan' => 'Sesek',
+            'asal' => 'PR01GB',
+            'tujuan' => 'PR02SK',
             'biji' => $productIdentifier->biji,
-            'berat' => $productIdentifier->berat
+            'berat' => $productIdentifier->berat,
+            'status' => 0
         ]);
     }
 

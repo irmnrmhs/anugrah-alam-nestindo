@@ -77,7 +77,7 @@
         <label>Kondisi</label>
         <div>
             <label>
-                <input type="checkbox" id="kondisi_all"> Semua Kondisi
+                <input type="checkbox" id="kondisi_all"> Semua Kondisi Terpenuhi
             </label>
             <hr>
         </div>
