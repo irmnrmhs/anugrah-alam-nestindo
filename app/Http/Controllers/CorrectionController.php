@@ -80,7 +80,7 @@ class CorrectionController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         $biji_sisa = $tracker->sisa_biji_koreksi + $correction->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_koreksi + $correction->berat_keluar;
+        $berat_sisa = $tracker->sisa_berat_koreksi + $correction->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||
