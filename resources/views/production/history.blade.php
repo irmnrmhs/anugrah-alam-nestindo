@@ -90,8 +90,60 @@
             </td>
             <td>{{ $history->biji }}</td>
             <td>{{ $history->berat }}</td>
-            <td>{{ $history->sisa_biji_sesek }}</td>
-            <td>{{ $history->sisa_berat_sesek }}</td>
+            <td>
+                @if ($history->tujuan === 'PR02SK')
+                    {{ $history->sisa_biji_sesek }}
+                @elseif ($history->tujuan === 'PR03PC')
+                    {{ $history->sisa_biji_cuci }}
+                @elseif ($history->tujuan === 'PR04IK')
+                    <span>Inspeksi dan Koreksi</span>
+                @elseif ($history->tujuan === 'PR05PB')
+                    <span>Pencabutan Bulu</span>
+                @elseif ($history->tujuan === 'PR06PR')
+                    <span>Perendaman</span>
+                @elseif ($history->tujuan === 'PR07CB')
+                    <span>Cabut Bilas</span>
+                @elseif ($history->tujuan === 'PR08MC')
+                    <span>Masuk Cetak</span>
+                @elseif ($history->tujuan === 'PR09KC')
+                    <span>Keluar Cetak</span>
+                @elseif ($history->tujuan === 'PR10PK')
+                    <span>Pengeringan</span>
+                @elseif ($history->tujuan === 'PR11GP')
+                    <span>Grading Produk Jadi</span>
+                @elseif ($history->tujuan === 'PR12PK')
+                    <span>Stok Produk Jadi</span>
+                @elseif ($history->tujuan === 'PR13GP')
+                    <span>Steaming</span>
+                @endif
+            </td>
+            <td>
+                @if ($history->tujuan === 'PR02SK')
+                    {{ $history->sisa_berat_sesek }}
+                @elseif ($history->tujuan === 'PR03PC')
+                    {{ $history->sisa_berat_cuci }}
+                @elseif ($history->tujuan === 'PR04IK')
+                    <span>Inspeksi dan Koreksi</span>
+                @elseif ($history->tujuan === 'PR05PB')
+                    <span>Pencabutan Bulu</span>
+                @elseif ($history->tujuan === 'PR06PR')
+                    <span>Perendaman</span>
+                @elseif ($history->tujuan === 'PR07CB')
+                    <span>Cabut Bilas</span>
+                @elseif ($history->tujuan === 'PR08MC')
+                    <span>Masuk Cetak</span>
+                @elseif ($history->tujuan === 'PR09KC')
+                    <span>Keluar Cetak</span>
+                @elseif ($history->tujuan === 'PR10PK')
+                    <span>Pengeringan</span>
+                @elseif ($history->tujuan === 'PR11GP')
+                    <span>Grading Produk Jadi</span>
+                @elseif ($history->tujuan === 'PR12PK')
+                    <span>Stok Produk Jadi</span>
+                @elseif ($history->tujuan === 'PR13GP')
+                    <span>Steaming</span>
+                @endif
+            </td>
         </tr>
     @endforeach
 @stop

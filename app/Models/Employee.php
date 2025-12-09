@@ -46,4 +46,9 @@ class Employee extends Model
     {
         return $this->hasMany(Edge::class, 'employees_id');
     }
+
+    public function washes()
+    {
+        return $this->hasMany(Wash::class, 'employees_id');
+    }
 }
