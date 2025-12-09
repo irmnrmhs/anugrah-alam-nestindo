@@ -15,7 +15,7 @@ class WashController extends Controller
     public function index(): View
     {
         $washes = Wash::with('history', 'employee')->latest()->get();
-        $histories = History::all();
+        $histories = History::where('tujuan', 'PR03PC')->get();
         $employees = Employee::all();
 
         return view('production.wash', compact('washes', 'histories', 'employees'));
@@ -33,6 +33,18 @@ class WashController extends Controller
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99'
         ]);
+
+        $tracker = History::find($validated['histories_id']);
+
+        if(
+            $validated['biji_masuk'] > $tracker->sisa_biji_cuci ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_cuci
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
 
         $wash = Wash::create($validated);
 
@@ -63,7 +75,21 @@ class WashController extends Controller
         ]);
 
         $wash = Wash::findOrFail($id);
-        
+        $tracker = History::find($validated['histories_id']);
+
+        $biji_sisa = $tracker->sisa_biji_cuci + $wash->biji_masuk;
+        $berat_sisa = $tracker->sisa_berat_cuci + $wash->berat_keluar;
+
+        if(
+            $validated['biji_masuk'] > $biji_sisa ||
+            $validated['berat_masuk'] > $berat_sisa
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
         $wash->update($validated);
 
         return response()->json([

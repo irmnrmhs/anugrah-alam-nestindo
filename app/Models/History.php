@@ -29,6 +29,7 @@ class History extends Model
         return $this->hasMany(Wash::class, 'histories_id');
     }
 
+    // 1. Sesek Kaki
     public function getTotalBijiSesekAttribute()
     {
         return $this->edges()->sum('biji_masuk');
@@ -47,5 +48,26 @@ class History extends Model
     public function getSisaBeratSesekAttribute()
     {
         return $this->berat - $this->total_berat_sesek;
+    }
+
+    // 2. Pencucian
+    public function getTotalBijiCuciAttribute()
+    {
+        return $this->washes()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratCuciAttribute()
+    {
+        return $this->washes()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiCuciAttribute()
+    {
+        return $this->biji - $this->total_biji_cuci;
+    }
+
+    public function getSisaBeratCuciAttribute()
+    {
+        return $this->berat - $this->total_berat_cuci;
     }
 }

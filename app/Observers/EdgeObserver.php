@@ -13,11 +13,11 @@ class EdgeObserver
     public function created(Edge $edge): void
     {
         History::create([
-            'identifiers_id' => $edge->id,
+            'identifiers_id' => $edge->histories_id,
             'asal' => 'PR02SK',
             'tujuan' => 'PR03PC',
-            'biji' => $edge->biji,
-            'berat' => $edge->berat,
+            'biji' => $edge->biji_keluar,
+            'berat' => $edge->berat_keluar,
             'status' => 0
         ]);
     }

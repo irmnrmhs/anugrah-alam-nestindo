@@ -15,7 +15,7 @@ class EdgeController extends Controller
     public function index(): View
     {
         $edges = Edge::with('history', 'employee')->latest()->get();
-        $histories = History::all();
+        $histories = History::where('tujuan', 'PR02SK')->get();
         $employees = Employee::all();
 
         return view('production.edge', compact('edges', 'histories', 'employees'));
@@ -33,6 +33,18 @@ class EdgeController extends Controller
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99'
         ]);
+
+        $tracker = History::find($validated['histories_id']);
+
+        if(
+            $validated['biji_masuk'] > $tracker->sisa_biji_sesek ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_sesek
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
 
         $edge = Edge::create($validated);
 
@@ -63,13 +75,26 @@ class EdgeController extends Controller
         ]);
 
         $edge = Edge::findOrFail($id);
-        
+        $tracker = History::find($validated['histories_id']);
+
+        $biji_sisa = $tracker->sisa_biji_sesek + $edge->biji_masuk;
+        $berat_sisa = $tracker->sisa_berat_sesek + $edge->berat_keluar;
+
+        if(
+            $validated['biji_masuk'] > $biji_sisa ||
+            $validated['berat_masuk'] > $berat_sisa
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
         $edge->update($validated);
 
         return response()->json([
             'status' => 'success',
-            'message' => $this->obj . ' berhasil diperbarui',
-            'data' => $edge,
+            'message' => $this->obj . ' berhasil diperbarui'
         ]);
     }
 
