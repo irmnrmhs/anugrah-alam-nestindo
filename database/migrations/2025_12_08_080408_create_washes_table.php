@@ -19,8 +19,8 @@ return new class extends Migration
             $table->integer('biji_masuk');
             $table->decimal('berat_masuk', 7, 2);
             $table->date('tgl_selesai');
-            $table->integer('biji_keluar');
-            $table->decimal('berat_keluar', 7, 2);
+            $table->integer('biji_keluar')->default(0);
+            $table->decimal('berat_keluar', 7, 2)->default(0);
             $table->integer('status')->default(0);
             $table->timestamps();
         });

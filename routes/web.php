@@ -32,6 +32,8 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
+use App\Http\Controllers\CorrectionController;
+use App\Models\Correction;
 
 Route::get('/', function () {
     return view('welcome');
@@ -262,6 +264,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/washes/{id}', [WashController::class, 'update'])->name('washes.update');
     Route::delete('/washes/{id}', [WashController::class, 'destroy'])->name('washes.destroy');
     Route::post('/washes/delete-multiple', [WashController::class, 'deleteMultiple']);
+    
+    // Inspeksi dan Koreksi
+    Route::get('/corrections', [CorrectionController::class, 'index'])->name('corrections.index');
+    Route::post('/corrections', [CorrectionController::class, 'store'])->name('corrections.store');
+    Route::get('/corrections/{id}', [CorrectionController::class, 'show'])->name('corrections.show');
+    Route::put('/corrections/{id}', [CorrectionController::class, 'update'])->name('corrections.update');
+    Route::delete('/corrections/{id}', [CorrectionController::class, 'destroy'])->name('corrections.destroy');
+    Route::post('/corrections/delete-multiple', [CorrectionController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

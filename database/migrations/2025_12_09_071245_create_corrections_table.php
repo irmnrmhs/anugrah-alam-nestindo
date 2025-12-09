@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('edges', function (Blueprint $table) {
+        Schema::create('corrections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('histories_id')->constrained('histories');
             $table->foreignId('employees_id')->constrained('employees');
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('tgl_selesai');
             $table->integer('biji_keluar')->default(0);
             $table->decimal('berat_keluar', 7, 2)->default(0);
+            $table->string('keterangan')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();
         });
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('edges');
+        Schema::dropIfExists('corrections');
     }
 };

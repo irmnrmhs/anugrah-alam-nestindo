@@ -506,6 +506,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Inspeksi dan Koreksi',
+                    'url'  => 'corrections',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 

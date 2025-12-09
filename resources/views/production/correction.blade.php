@@ -1,9 +1,9 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Pencucian';
-    $singular = 'Pencucian';
-    $deleteMultipleUrl = '/washes/delete-multiple';
+    $title = 'Kelola Data Inspeksi dan Koreksi';
+    $singular = 'Inspeksi dan Koreksi';
+    $deleteMultipleUrl = '/corrections/delete-multiple';
 @endphp
 
 @section('table-headers')
@@ -17,31 +17,33 @@
     <th>Tanggal Selesai</th>
     <th>Biji Keluar</th>
     <th>Berat Keluar</th>
+    <th>Keterangan</th>
     <th>Status</th>
 @stop
 
 @section('table-body')
-    @foreach($washes as $index => $wash)
-        <tr data-id="{{ $wash->id }}">
-            <td><input type="checkbox" class="row-check" value="{{ $wash->id }}"></td>
+    @foreach($corrections as $index => $correction)
+        <tr data-id="{{ $correction->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $correction->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $wash->history->identifier->kode }}</td>
-            <td>{{ $wash->employee->nama }}</td>
-            <td>{{ $wash->tgl_mulai }}</td>
-            <td>{{ $wash->biji_masuk }}</td>
-            <td>{{ $wash->berat_masuk }}</td>
-            <td>{{ $wash->tgl_selesai }}</td>
-            <td>{{ $wash->biji_keluar }}</td>
-            <td>{{ $wash->berat_keluar }}</td>
+            <td>{{ $correction->history->identifier->kode }}</td>
+            <td>{{ $correction->employee->nama }}</td>
+            <td>{{ $correction->tgl_mulai }}</td>
+            <td>{{ $correction->biji_masuk }}</td>
+            <td>{{ $correction->berat_masuk }}</td>
+            <td>{{ $correction->tgl_selesai }}</td>
+            <td>{{ $correction->biji_keluar }}</td>
+            <td>{{ $correction->berat_keluar }}</td>
             <td>
-                @if($wash->status == 0)
-                    <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($wash->status == 1)
-                    <span class="badge bg-success">Disetujui</span>
+                @if($correction->status == 0)
+                <span class="badge bg-warning">Menunggu Persetujuan</span>
+                @elseif ($correction->status == 1)
+                <span class="badge bg-success">Disetujui</span>
                 @else
-                    <span class="badge bg-danger">Ditolak</span>
+                <span class="badge bg-danger">Ditolak</span>
                 @endif
             </td>
+            <td>{{ $correction->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -93,6 +95,10 @@
         <label>Berat Setelah Proses</label>
         <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control" required>
     </div>
+    <div class="mb-3">
+        <label>Keterangan</label>
+        <input type="text" id="keterangan" class="form-control">
+    </div>
     {{-- <div class="mb-3">
         <label>Status</label>
         <select id="status" class="form-control" required>
@@ -106,7 +112,7 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/washes/${id}` : '/washes';
+    const url = id ? `/corrections/${id}` : '/corrections';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
@@ -119,6 +125,7 @@
         tgl_selesai: $('#tgl_selesai').val(),
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
+        keterangan: $('#keterangan').val(),
         {{-- status: $('#status').val() --}}
     };
 
@@ -141,20 +148,21 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/washes/${id}`)
+        fetch(`/corrections/${id}`)
             .then(r => r.json())
-            .then(wash => {
-                $('#item_id').val(wash.id);
-                $('#histories_id').val(wash.histories_id);
-                $('#employees_id').val(wash.employees_id);
-                $('#tgl_mulai').val(wash.tgl_mulai);
-                $('#biji_masuk').val(wash.biji_masuk);
-                $('#berat_masuk').val(wash.berat_masuk);
-                $('#tgl_selesai').val(wash.tgl_selesai);
-                $('#biji_keluar').val(wash.biji_keluar);
-                $('#berat_keluar').val(wash.berat_keluar);
-                {{-- $('#status').val(wash.status); --}}
-                $('#modalTitle').text('Edit Pencucian');
+            .then(correction => {
+                $('#item_id').val(correction.id);
+                $('#histories_id').val(correction.histories_id);
+                $('#employees_id').val(correction.employees_id);
+                $('#tgl_mulai').val(correction.tgl_mulai);
+                $('#biji_masuk').val(correction.biji_masuk);
+                $('#berat_masuk').val(correction.berat_masuk);
+                $('#tgl_selesai').val(correction.tgl_selesai);
+                $('#biji_keluar').val(correction.biji_keluar);
+                $('#berat_keluar').val(correction.berat_keluar);
+                $('#keterangan').val(correction.keterangan);
+                {{-- $('#status').val(correction.status); --}}
+                $('#modalTitle').text('Edit Inspeksi dan Koreksi');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -170,7 +178,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/washes/${id}`, {
+                fetch(`/corrections/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })
