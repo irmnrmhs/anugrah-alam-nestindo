@@ -63,26 +63,26 @@ class RawMaterial extends Model
         return $this->berat - $this->total_berat_keluar;
     }
 
-    public function getTotalDipakaiBijiAttribute()
-    {
-        return $this->productIdentifiers->sum('biji');
-    }
+    // public function getTotalDipakaiBijiAttribute()
+    // {
+    //     return $this->productIdentifiers->sum('biji');
+    // }
 
-    public function getTotalDipakaiBeratAttribute()
-    {
-        return $this->productIdentifiers->sum('berat');
-    }
+    // public function getTotalDipakaiBeratAttribute()
+    // {
+    //     return $this->productIdentifiers->sum('berat');
+    // }
 
-    /**
-     * Sisa stok yang boleh dipakai ProductIdentifier
-     */
-    public function getSisaUntukIdentifikasiBijiAttribute()
-    {
-        return $this->total_keluar_biji - $this->total_dipakai_biji;
-    }
+    // /**
+    //  * Sisa stok yang boleh dipakai ProductIdentifier
+    //  */
+    // public function getSisaUntukIdentifikasiBijiAttribute()
+    // {
+    //     return $this->total_keluar_biji - $this->total_dipakai_biji;
+    // }
 
-    public function getSisaUntukIdentifikasiBeratAttribute()
-    {
-        return $this->total_keluar_berat - $this->total_dipakai_berat;
-    }
+    // public function getSisaUntukIdentifikasiBeratAttribute()
+    // {
+    //     return $this->total_keluar_berat - $this->total_dipakai_berat;
+    // }
 }

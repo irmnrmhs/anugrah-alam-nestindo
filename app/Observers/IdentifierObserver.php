@@ -44,6 +44,14 @@ class IdentifierObserver
     }
 
     /**
+     * Handle the ProductIdentifier "deleting" event.
+     */
+    public function deleting(ProductIdentifier $productIdentifier): void
+    {
+        $productIdentifier->histories()->delete();
+    }
+
+    /**
      * Handle the ProductIdentifier "restored" event.
      */
     public function restored(ProductIdentifier $productIdentifier): void
@@ -56,6 +64,6 @@ class IdentifierObserver
      */
     public function forceDeleted(ProductIdentifier $productIdentifier): void
     {
-        //
+        History::where('identifiers_id', $productIdentifier->id)->delete();
     }
 }

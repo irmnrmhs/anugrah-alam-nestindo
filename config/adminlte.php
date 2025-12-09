@@ -489,7 +489,7 @@ return [
             'icon' => 'fas fa-folder',
             'submenu' => [
                 [
-                    'text' => 'Riwayat',
+                    'text' => 'Tracker',
                     'url'  => 'histories',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',

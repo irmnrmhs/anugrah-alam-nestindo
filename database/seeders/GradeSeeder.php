@@ -21,5 +21,14 @@ class GradeSeeder extends Seeder
             'colors_id' => 1,
             'status' => 1,
         ]);
+
+        Grade::create([
+            // 'categories_id' => 1,
+            'grade' => 'OVL-BRP-P',
+            'shapes_id' => 2,
+            'feathers_id' => 1,
+            'colors_id' => 1,
+            'status' => 1,
+        ]);
     }
 }
