@@ -51,4 +51,9 @@ class Employee extends Model
     {
         return $this->hasMany(Wash::class, 'employees_id');
     }
+
+    public function corrections()
+    {
+        return $this->hasMany(Correction::class, 'employees_id');
+    }
 }
