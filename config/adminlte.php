@@ -489,6 +489,12 @@ return [
             'icon' => 'fas fa-folder',
             'submenu' => [
                 [
+                    'text' => 'Grade Produk Jadi',
+                    'url'  => 'fp-grades',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Tracker',
                     'url'  => 'histories',
                     'can'  => ['Super Admin', 'Admin Produksi'],
