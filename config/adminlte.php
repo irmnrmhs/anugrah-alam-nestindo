@@ -346,7 +346,7 @@ return [
                     'text' => 'Perusahaan',
                     'url'  => 'company',
                     'can'  => ['Super Admin', 'Admin Human Resource'],
-                    'icon' => 'fas fa-users',
+                    'icon' => 'fas fa-building',
                 ],
                 [
                     'text' => 'Departemen',
@@ -531,19 +531,19 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Cabut Bilas',
+                    'text' => 'Masuk Cetak',
                     'url'  => 'entries',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Cabut Bilas',
-                    'url'  => 'exits',
+                    'text' => 'Keluar Cetak',
+                    'url'  => 'pulls',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Cabut Bilas',
+                    'text' => 'Pengeringan',
                     'url'  => 'dries',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',

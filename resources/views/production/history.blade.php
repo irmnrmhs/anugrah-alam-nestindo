@@ -98,17 +98,17 @@
                 @elseif ($history->tujuan === 'PR04IK')
                     {{ $history->sisa_biji_koreksi }}
                 @elseif ($history->tujuan === 'PR05PB')
-                    {{ $history->sisa_biji_cb }}
+                    {{ $history->sisa_biji_cabut }}
                 @elseif ($history->tujuan === 'PR06PR')
-                    <span>Perendaman</span>
+                    {{ $history->sisa_biji_rendam }}
                 @elseif ($history->tujuan === 'PR07CB')
-                    <span>Cabut Bilas</span>
+                    {{ $history->sisa_biji_bilas }}
                 @elseif ($history->tujuan === 'PR08MC')
-                    <span>Masuk Cetak</span>
+                    {{ $history->sisa_biji_masuk }}
                 @elseif ($history->tujuan === 'PR09KC')
-                    <span>Keluar Cetak</span>
+                    {{ $history->sisa_biji_keluar }}
                 @elseif ($history->tujuan === 'PR10PK')
-                    <span>Pengeringan</span>
+                    {{ $history->sisa_biji_kering }}
                 @elseif ($history->tujuan === 'PR11GP')
                     <span>Grading Produk Jadi</span>
                 @elseif ($history->tujuan === 'PR12PK')
@@ -125,17 +125,17 @@
                 @elseif ($history->tujuan === 'PR04IK')
                     {{ $history->sisa_berat_koreksi }}
                 @elseif ($history->tujuan === 'PR05PB')
-                    {{ $history->sisa_berat_cb }}
+                    {{ $history->sisa_berat_cabut }}
                 @elseif ($history->tujuan === 'PR06PR')
-                    <span>Perendaman</span>
+                    {{ $history->sisa_berat_rendam }}
                 @elseif ($history->tujuan === 'PR07CB')
-                    <span>Cabut Bilas</span>
+                    {{ $history->sisa_berat_bilas }}
                 @elseif ($history->tujuan === 'PR08MC')
-                    <span>Masuk Cetak</span>
+                    {{ $history->sisa_berat_masuk }}
                 @elseif ($history->tujuan === 'PR09KC')
-                    <span>Keluar Cetak</span>
+                    {{ $history->sisa_berat_keluar }}
                 @elseif ($history->tujuan === 'PR10PK')
-                    <span>Pengeringan</span>
+                    {{ $history->sisa_berat_kering }}
                 @elseif ($history->tujuan === 'PR11GP')
                     <span>Grading Produk Jadi</span>
                 @elseif ($history->tujuan === 'PR12PK')

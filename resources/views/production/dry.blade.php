@@ -148,7 +148,7 @@
         tgl_selesai: $('#tgl_selesai').val(),
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
-        waktu_keluar: $('#waktut_keluar').val(),
+        waktu_keluar: $('#waktu_keluar').val(),
         shift: $('#shift').val(),
         keterangan: $('#keterangan').val(),
         {{-- status: $('#status').val() --}}
