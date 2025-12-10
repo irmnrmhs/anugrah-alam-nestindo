@@ -16,6 +16,8 @@ use App\Models\Grade;
 use App\Models\ProductIdentifier;
 use App\Models\Edge;
 use App\Models\Wash;
+use App\Models\Correction;
+
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
 use App\Observers\FeatherObserver;
@@ -27,6 +29,7 @@ use App\Observers\GradeObserver;
 use App\Observers\IdentifierObserver;
 use App\Observers\EdgeObserver;
 use App\Observers\WashObserver;
+use App\Observers\CorrectionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -80,6 +83,7 @@ class AppServiceProvider extends ServiceProvider
         ProductIdentifier::observe(IdentifierObserver::class);
         Edge::observe(EdgeObserver::class);
         Wash::observe(WashObserver::class);
+        Correction::observe(CorrectionObserver::class);
     }
 
     // 1. Grading BB (PR01GB)

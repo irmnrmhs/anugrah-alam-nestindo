@@ -70,26 +70,6 @@
 @stop
 
 @section('form-submit-script')
-    {{-- $('#rms_id').on('change', function () {
-        const id = $(this).val();
-        if (!id) return;
-
-        fetch(`/raw-material-info/${id}`)
-            .then(r => r.json())
-            .then(info => {
-                $('#biji_sisa').val(info.biji_sisa);
-                $('#berat_sisa').val(info.berat_sisa);
-
-                // Anda bisa juga panggil endpoint untuk available identifier:
-                fetch(`/identifiers/available/${id}`)
-                    .then(r => r.json())
-                    .then(a => {
-                        $('#available_for_identifier_biji').text(a.biji);
-                        $('#available_for_identifier_berat').text(a.berat);
-                    })
-            })
-    }); --}}
-
     const id = $('#item_id').val();
     const url = id ? `/identifiers/${id}` : '/identifiers';
     const method = id ? 'PUT' : 'POST';

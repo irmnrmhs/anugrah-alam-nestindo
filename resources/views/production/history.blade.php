@@ -96,7 +96,7 @@
                 @elseif ($history->tujuan === 'PR03PC')
                     {{ $history->sisa_biji_cuci }}
                 @elseif ($history->tujuan === 'PR04IK')
-                    <span>Inspeksi dan Koreksi</span>
+                    {{ $history->sisa_biji_koreksi }}
                 @elseif ($history->tujuan === 'PR05PB')
                     <span>Pencabutan Bulu</span>
                 @elseif ($history->tujuan === 'PR06PR')
@@ -123,7 +123,7 @@
                 @elseif ($history->tujuan === 'PR03PC')
                     {{ $history->sisa_berat_cuci }}
                 @elseif ($history->tujuan === 'PR04IK')
-                    <span>Inspeksi dan Koreksi</span>
+                    {{ $history->sisa_berat_koreksi }}
                 @elseif ($history->tujuan === 'PR05PB')
                     <span>Pencabutan Bulu</span>
                 @elseif ($history->tujuan === 'PR06PR')

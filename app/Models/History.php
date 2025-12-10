@@ -79,7 +79,7 @@ class History extends Model
     // 3. Inspeksi dan Koreksi
     public function getTotalBijiKoreksiAttribute()
     {
-        return $this->correnctions()->sum('biji_masuk');
+        return $this->corrections()->sum('biji_masuk');
     }
 
     public function getTotalBeratKoreksiAttribute()

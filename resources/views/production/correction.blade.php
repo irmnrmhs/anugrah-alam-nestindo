@@ -34,6 +34,7 @@
             <td>{{ $correction->tgl_selesai }}</td>
             <td>{{ $correction->biji_keluar }}</td>
             <td>{{ $correction->berat_keluar }}</td>
+            <td>{{ $correction->keterangan }}</td>
             <td>
                 @if($correction->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -43,7 +44,6 @@
                 <span class="badge bg-danger">Ditolak</span>
                 @endif
             </td>
-            <td>{{ $correction->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
