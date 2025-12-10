@@ -95,19 +95,19 @@
     </div>
     <div class="mb-3">
         <label>Tanggal Selesai</label>
-        <input type="date" id="tgl_selesai" class="form-control" required>
+        <input type="date" id="tgl_selesai" class="form-control">
     </div>
     <div class="mb-3">
         <label>Biji Setelah Proses</label>
-        <input type="number" id="biji_keluar" step="1" min="0" class="form-control" required>
+        <input type="number" id="biji_keluar" step="1" min="0" class="form-control">
     </div>
     <div class="mb-3">
         <label>Berat Setelah Proses</label>
-        <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control" required>
+        <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
     </div>
     <div class="mb-3">
         <label>Waktu Keluar</label>
-        <input type="time" id="waktu_keluar" class="form-control" required>
+        <input type="time" id="waktu_keluar" class="form-control">
     </div>
     <div class="mb-3">
         <label>Shift</label>
