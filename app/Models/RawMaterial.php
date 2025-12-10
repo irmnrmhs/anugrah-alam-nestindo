@@ -63,6 +63,16 @@ class RawMaterial extends Model
         return $this->berat - $this->total_berat_keluar;
     }
 
+    // public function stok_biji_sisa()
+    // {
+    //     return $this->total_biji_masuk - $this->total_biji_keluar;
+    // }
+
+    // public function stok_berat_sisa()
+    // {
+    //     return $this->total_berat_masuk - $this->total_berat_keluar;
+    // }
+
     // public function getTotalDipakaiBijiAttribute()
     // {
     //     return $this->productIdentifiers->sum('biji');

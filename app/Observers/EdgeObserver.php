@@ -27,7 +27,17 @@ class EdgeObserver
      */
     public function updated(Edge $edge): void
     {
-        //
+        $history = History::where('identifiers_id', $edge->history->identifiers_id)
+            ->where('asal', 'PR02SK')
+            ->where('tujuan', 'PR03PC')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $edge->biji_keluar,
+                'berat' => $edge->berat_keluar,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class EdgeObserver
      */
     public function deleted(Edge $edge): void
     {
-        //
+        History::where('identifiers_id', $edge->history->identifiers_id)
+            ->where('asal', 'PR02SK')
+            ->where('tujuan', 'PR03PC')
+            ->delete();
     }
 
     /**
