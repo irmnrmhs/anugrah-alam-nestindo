@@ -34,6 +34,35 @@ class History extends Model
         return $this->hasMany(Correction::class, 'histories_id');
     }
 
+    public function picks()
+    {
+        return $this->hasMany(Pick::class, 'histories_id');
+    }
+
+    public function soaks()
+    {
+        return $this->hasMany(Soak::class, 'histories_id');
+    }
+
+    public function rinses()
+    {
+        return $this->hasMany(Rinse::class, 'histories_id');
+    }
+
+    public function entries()
+    {
+        return $this->hasMany(Entry::class, 'histories_id');
+    }
+    public function pulls()
+    {
+        return $this->hasMany(Pull::class, 'histories_id');
+    }
+
+    public function dries()
+    {
+        return $this->hasMany(Dry::class, 'histories_id');
+    }
+
     // 1. Sesek Kaki
     public function getTotalBijiSesekAttribute()
     {
@@ -79,7 +108,7 @@ class History extends Model
     // 3. Inspeksi dan Koreksi
     public function getTotalBijiKoreksiAttribute()
     {
-        return $this->correnctions()->sum('biji_masuk');
+        return $this->corrections()->sum('biji_masuk');
     }
 
     public function getTotalBeratKoreksiAttribute()
@@ -95,5 +124,131 @@ class History extends Model
     public function getSisaBeratKoreksiAttribute()
     {
         return $this->berat - $this->total_berat_koreksi;
+    }
+
+    // 4. Pencabutan Bulu
+    public function getTotalBijiCabutAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratCabutAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiCabutAttribute()
+    {
+        return $this->biji - $this->total_biji_cb;
+    }
+
+    public function getSisaBeratCabutAttribute()
+    {
+        return $this->berat - $this->total_berat_cb;
+    }
+
+    // 5. Perendaman
+    public function getTotalBijiRendamAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratRendamAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiRendamAttribute()
+    {
+        return $this->biji - $this->total_biji_rendam;
+    }
+
+    public function getSisaBeratRendamAttribute()
+    {
+        return $this->berat - $this->total_berat_rendam;
+    }
+
+    // 6. Cabut Bilas
+    public function getTotalBijiBilasAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratBilasAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiBilasAttribute()
+    {
+        return $this->biji - $this->total_biji_bilas;
+    }
+
+    public function getSisaBeratBilasAttribute()
+    {
+        return $this->berat - $this->total_berat_bilas;
+    }
+
+    // 7. Cetak Masuk
+    public function getTotalBijiMasukAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratMasukAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiMasukAttribute()
+    {
+        return $this->biji - $this->total_biji_masuk;
+    }
+
+    public function getSisaBeratMasukAttribute()
+    {
+        return $this->berat - $this->total_berat_masuk;
+    }
+
+    // 7. Cetak Keluar
+    public function getTotalBijiKeluarAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratKeluarAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiKeluarAttribute()
+    {
+        return $this->biji - $this->total_biji_keluar;
+    }
+
+    public function getSisaBeratKeluarAttribute()
+    {
+        return $this->berat - $this->total_berat_keluar;
+    }
+
+    // 8. Pengeringan
+    public function getTotalBijiKeringAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratKeringAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiKeringAttribute()
+    {
+        return $this->biji - $this->total_biji_kering;
+    }
+
+    public function getSisaBeratKeringAttribute()
+    {
+        return $this->berat - $this->total_berat_kering;
     }
 }

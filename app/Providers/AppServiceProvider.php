@@ -16,6 +16,14 @@ use App\Models\Grade;
 use App\Models\ProductIdentifier;
 use App\Models\Edge;
 use App\Models\Wash;
+use App\Models\Correction;
+use App\Models\Pick;
+use App\Models\Soak;
+use App\Models\Rinse;
+use App\Models\Entry;
+use App\Models\Pull;
+use App\Models\Dry;
+
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
 use App\Observers\FeatherObserver;
@@ -27,6 +35,13 @@ use App\Observers\GradeObserver;
 use App\Observers\IdentifierObserver;
 use App\Observers\EdgeObserver;
 use App\Observers\WashObserver;
+use App\Observers\CorrectionObserver;
+use App\Observers\PickObserver;
+use App\Observers\SoakObserver;
+use App\Observers\RinseObserver;
+use App\Observers\EntryObserver;
+use App\Observers\PullObserver;
+use App\Observers\DryObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -80,6 +95,13 @@ class AppServiceProvider extends ServiceProvider
         ProductIdentifier::observe(IdentifierObserver::class);
         Edge::observe(EdgeObserver::class);
         Wash::observe(WashObserver::class);
+        Correction::observe(CorrectionObserver::class);
+        Pick::observe(PickObserver::class);
+        Soak::observe(SoakObserver::class);
+        Rinse::observe(RinseObserver::class);
+        Entry::observe(EntryObserver::class);
+        Pull::observe(PullObserver::class);
+        Dry::observe(DryObserver::class);
     }
 
     // 1. Grading BB (PR01GB)

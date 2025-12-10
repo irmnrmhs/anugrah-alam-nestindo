@@ -56,4 +56,34 @@ class Employee extends Model
     {
         return $this->hasMany(Correction::class, 'employees_id');
     }
+
+    public function picks()
+    {
+        return $this->hasMany(Pick::class, 'employees_id');
+    }
+
+    public function soaks()
+    {
+        return $this->hasMany(Soak::class, 'employees_id');
+    }
+
+    public function rinses()
+    {
+        return $this->hasMany(Rinse::class, 'employees_id');
+    }
+
+    public function entries()
+    {
+        return $this->hasMany(Entry::class, 'employees_id');
+    }
+    
+    public function pulls()
+    {
+        return $this->hasMany(Pull::class, 'employees_id');
+    }
+
+    public function dries()
+    {
+        return $this->hasMany(Dry::class, 'employees_id');
+    }
 }

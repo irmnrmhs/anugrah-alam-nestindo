@@ -1,9 +1,9 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Sesek Kaki';
-    $singular = 'Sesek Kaki';
-    $deleteMultipleUrl = '/edges/delete-multiple';
+    $title = 'Kelola Data Pencabutan Bulu';
+    $singular = 'Pencabutan Bulu';
+    $deleteMultipleUrl = '/picks/delete-multiple';
 @endphp
 
 @section('table-headers')
@@ -17,29 +17,31 @@
     <th>Tanggal Selesai</th>
     <th>Biji Keluar</th>
     <th>Berat Keluar</th>
+    <th>Keterangan</th>
     <th>Status</th>
 @stop
 
 @section('table-body')
-    @foreach($edges as $index => $edge)
-        <tr data-id="{{ $edge->id }}">
-            <td><input type="checkbox" class="row-check" value="{{ $edge->id }}"></td>
+    @foreach($picks as $index => $pick)
+        <tr data-id="{{ $pick->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $pick->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $edge->history->identifier->kode }}</td>
-            <td>{{ $edge->employee->nama }}</td>
-            <td>{{ $edge->tgl_mulai }}</td>
-            <td>{{ $edge->biji_masuk }}</td>
-            <td>{{ $edge->berat_masuk }}</td>
-            <td>{{ $edge->tgl_selesai }}</td>
-            <td>{{ $edge->biji_keluar }}</td>
-            <td>{{ $edge->berat_keluar }}</td>
+            <td>{{ $pick->history->identifier->kode }}</td>
+            <td>{{ $pick->employee->nama }}</td>
+            <td>{{ $pick->tgl_mulai }}</td>
+            <td>{{ $pick->biji_masuk }}</td>
+            <td>{{ $pick->berat_masuk }}</td>
+            <td>{{ $pick->tgl_selesai }}</td>
+            <td>{{ $pick->biji_keluar }}</td>
+            <td>{{ $pick->berat_keluar }}</td>
+            <td>{{ $pick->keterangan }}</td>
             <td>
-                @if($edge->status == 0)
-                    <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($edge->status == 1)
-                    <span class="badge bg-success">Disetujui</span>
+                @if($pick->status == 0)
+                <span class="badge bg-warning">Menunggu Persetujuan</span>
+                @elseif ($pick->status == 1)
+                <span class="badge bg-success">Disetujui</span>
                 @else
-                    <span class="badge bg-danger">Ditolak</span>
+                <span class="badge bg-danger">Ditolak</span>
                 @endif
             </td>
             <td>
@@ -93,6 +95,10 @@
         <label>Berat Setelah Proses</label>
         <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
     </div>
+    <div class="mb-3">
+        <label>Keterangan</label>
+        <input type="text" id="keterangan" class="form-control">
+    </div>
     {{-- <div class="mb-3">
         <label>Status</label>
         <select id="status" class="form-control" required>
@@ -106,7 +112,7 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/edges/${id}` : '/edges';
+    const url = id ? `/picks/${id}` : '/picks';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
@@ -119,6 +125,7 @@
         tgl_selesai: $('#tgl_selesai').val(),
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
+        keterangan: $('#keterangan').val(),
         {{-- status: $('#status').val() --}}
     };
 
@@ -141,20 +148,21 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/edges/${id}`)
+        fetch(`/picks/${id}`)
             .then(r => r.json())
-            .then(edge => {
-                $('#item_id').val(edge.id);
-                $('#histories_id').val(edge.histories_id);
-                $('#employees_id').val(edge.employees_id);
-                $('#tgl_mulai').val(edge.tgl_mulai);
-                $('#biji_masuk').val(edge.biji_masuk);
-                $('#berat_masuk').val(edge.berat_masuk);
-                $('#tgl_selesai').val(edge.tgl_selesai);
-                $('#biji_keluar').val(edge.biji_keluar);
-                $('#berat_keluar').val(edge.berat_keluar);
-                {{-- $('#status').val(edge.status); --}}
-                $('#modalTitle').text('Edit Sesek Kaki');
+            .then(pick => {
+                $('#item_id').val(pick.id);
+                $('#histories_id').val(pick.histories_id);
+                $('#employees_id').val(pick.employees_id);
+                $('#tgl_mulai').val(pick.tgl_mulai);
+                $('#biji_masuk').val(pick.biji_masuk);
+                $('#berat_masuk').val(pick.berat_masuk);
+                $('#tgl_selesai').val(pick.tgl_selesai);
+                $('#biji_keluar').val(pick.biji_keluar);
+                $('#berat_keluar').val(pick.berat_keluar);
+                $('#keterangan').val(pick.keterangan);
+                {{-- $('#status').val(pick.status); --}}
+                $('#modalTitle').text('Edit Pencabutan Bulu');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -170,7 +178,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/edges/${id}`, {
+                fetch(`/picks/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

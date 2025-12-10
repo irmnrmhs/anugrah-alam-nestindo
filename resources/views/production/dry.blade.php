@@ -1,9 +1,9 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Sesek Kaki';
-    $singular = 'Sesek Kaki';
-    $deleteMultipleUrl = '/edges/delete-multiple';
+    $title = 'Kelola Data Pengeringan';
+    $singular = 'Pengeringan';
+    $deleteMultipleUrl = '/dries/delete-multiple';
 @endphp
 
 @section('table-headers')
@@ -14,32 +14,40 @@
     <th>Tanggal Mulai</th>
     <th>Jumlah Biji</th>
     <th>Berat</th>
+    <th>Waktu Masuk</th>
     <th>Tanggal Selesai</th>
     <th>Biji Keluar</th>
     <th>Berat Keluar</th>
+    <th>Waktu Keluar</th>
+    <th>Shift</th>
+    <th>Keterangan</th>
     <th>Status</th>
 @stop
 
 @section('table-body')
-    @foreach($edges as $index => $edge)
-        <tr data-id="{{ $edge->id }}">
-            <td><input type="checkbox" class="row-check" value="{{ $edge->id }}"></td>
+    @foreach($dries as $index => $dry)
+        <tr data-id="{{ $dry->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $dry->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $edge->history->identifier->kode }}</td>
-            <td>{{ $edge->employee->nama }}</td>
-            <td>{{ $edge->tgl_mulai }}</td>
-            <td>{{ $edge->biji_masuk }}</td>
-            <td>{{ $edge->berat_masuk }}</td>
-            <td>{{ $edge->tgl_selesai }}</td>
-            <td>{{ $edge->biji_keluar }}</td>
-            <td>{{ $edge->berat_keluar }}</td>
+            <td>{{ $dry->history->identifier->kode }}</td>
+            <td>{{ $dry->employee->nama }}</td>
+            <td>{{ $dry->tgl_mulai }}</td>
+            <td>{{ $dry->biji_masuk }}</td>
+            <td>{{ $dry->berat_masuk }}</td>
+            <td>{{ $dry->waktu_masuk }}</td>
+            <td>{{ $dry->tgl_selesai }}</td>
+            <td>{{ $dry->biji_keluar }}</td>
+            <td>{{ $dry->berat_keluar }}</td>
+            <td>{{ $dry->waktu_keluar }}</td>
+            <td>{{ $dry->shift }}</td>
+            <td>{{ $dry->keterangan }}</td>
             <td>
-                @if($edge->status == 0)
-                    <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($edge->status == 1)
-                    <span class="badge bg-success">Disetujui</span>
+                @if($dry->status == 0)
+                <span class="badge bg-warning">Menunggu Persetujuan</span>
+                @elseif ($dry->status == 1)
+                <span class="badge bg-success">Disetujui</span>
                 @else
-                    <span class="badge bg-danger">Ditolak</span>
+                <span class="badge bg-danger">Ditolak</span>
                 @endif
             </td>
             <td>
@@ -82,6 +90,10 @@
         <input type="number" id="berat_masuk" step="0.001" min="0" max="99999.99" class="form-control" required>
     </div>
     <div class="mb-3">
+        <label>Waktu Masuk</label>
+        <input type="time" id="waktu_masuk" class="form-control" required>
+    </div>
+    <div class="mb-3">
         <label>Tanggal Selesai</label>
         <input type="date" id="tgl_selesai" class="form-control">
     </div>
@@ -92,6 +104,22 @@
     <div class="mb-3">
         <label>Berat Setelah Proses</label>
         <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Waktu Keluar</label>
+        <input type="time" id="waktu_keluar" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Shift</label>
+        <select id="shift" class="form-control" required>
+            <option value="">-- Pilih Shift --</option>
+            <option value="{{ '1' }}">1</option>
+            <option value="{{ '2' }}">2</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Keterangan</label>
+        <input type="text" id="keterangan" class="form-control">
     </div>
     {{-- <div class="mb-3">
         <label>Status</label>
@@ -106,7 +134,7 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/edges/${id}` : '/edges';
+    const url = id ? `/dries/${id}` : '/dries';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
@@ -116,9 +144,13 @@
         tgl_mulai: $('#tgl_mulai').val(),
         biji_masuk: $('#biji_masuk').val(),
         berat_masuk: $('#berat_masuk').val(),
+        waktu_masuk: $('#waktu_masuk').val(),
         tgl_selesai: $('#tgl_selesai').val(),
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
+        waktu_keluar: $('#waktut_keluar').val(),
+        shift: $('#shift').val(),
+        keterangan: $('#keterangan').val(),
         {{-- status: $('#status').val() --}}
     };
 
@@ -141,20 +173,23 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/edges/${id}`)
+        fetch(`/dries/${id}`)
             .then(r => r.json())
-            .then(edge => {
-                $('#item_id').val(edge.id);
-                $('#histories_id').val(edge.histories_id);
-                $('#employees_id').val(edge.employees_id);
-                $('#tgl_mulai').val(edge.tgl_mulai);
-                $('#biji_masuk').val(edge.biji_masuk);
-                $('#berat_masuk').val(edge.berat_masuk);
-                $('#tgl_selesai').val(edge.tgl_selesai);
-                $('#biji_keluar').val(edge.biji_keluar);
-                $('#berat_keluar').val(edge.berat_keluar);
-                {{-- $('#status').val(edge.status); --}}
-                $('#modalTitle').text('Edit Sesek Kaki');
+            .then(dry => {
+                $('#item_id').val(dry.id);
+                $('#histories_id').val(dry.histories_id);
+                $('#employees_id').val(dry.employees_id);
+                $('#tgl_mulai').val(dry.tgl_mulai);
+                $('#biji_masuk').val(dry.biji_masuk);
+                $('#berat_masuk').val(dry.berat_masuk);
+                $('#waktu_masuk').val(dry.waktu_masuk);
+                $('#tgl_selesai').val(dry.tgl_selesai);
+                $('#biji_keluar').val(dry.biji_keluar);
+                $('#berat_keluar').val(dry.berat_keluar);
+                $('#waktu_keluar').val(dry.waktu_keluar);
+                $('#keterangan').val(dry.keterangan);
+                {{-- $('#status').val(dry.status); --}}
+                $('#modalTitle').text('Edit Masuk Cetak');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -170,7 +205,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/edges/${id}`, {
+                fetch(`/dries/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

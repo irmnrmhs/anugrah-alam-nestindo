@@ -1,9 +1,9 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Sesek Kaki';
-    $singular = 'Sesek Kaki';
-    $deleteMultipleUrl = '/edges/delete-multiple';
+    $title = 'Kelola Data Perendaman';
+    $singular = 'Perendaman';
+    $deleteMultipleUrl = '/soaks/delete-multiple';
 @endphp
 
 @section('table-headers')
@@ -17,29 +17,33 @@
     <th>Tanggal Selesai</th>
     <th>Biji Keluar</th>
     <th>Berat Keluar</th>
+    <th>Shift</th>
+    <th>Keterangan</th>
     <th>Status</th>
 @stop
 
 @section('table-body')
-    @foreach($edges as $index => $edge)
-        <tr data-id="{{ $edge->id }}">
-            <td><input type="checkbox" class="row-check" value="{{ $edge->id }}"></td>
+    @foreach($soaks as $index => $soak)
+        <tr data-id="{{ $soak->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $soak->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $edge->history->identifier->kode }}</td>
-            <td>{{ $edge->employee->nama }}</td>
-            <td>{{ $edge->tgl_mulai }}</td>
-            <td>{{ $edge->biji_masuk }}</td>
-            <td>{{ $edge->berat_masuk }}</td>
-            <td>{{ $edge->tgl_selesai }}</td>
-            <td>{{ $edge->biji_keluar }}</td>
-            <td>{{ $edge->berat_keluar }}</td>
+            <td>{{ $soak->history->identifier->kode }}</td>
+            <td>{{ $soak->employee->nama }}</td>
+            <td>{{ $soak->tgl_mulai }}</td>
+            <td>{{ $soak->biji_masuk }}</td>
+            <td>{{ $soak->berat_masuk }}</td>
+            <td>{{ $soak->tgl_selesai }}</td>
+            <td>{{ $soak->biji_keluar }}</td>
+            <td>{{ $soak->berat_keluar }}</td>
+            <td>{{ $soak->shift }}</td>
+            <td>{{ $soak->keterangan }}</td>
             <td>
-                @if($edge->status == 0)
-                    <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($edge->status == 1)
-                    <span class="badge bg-success">Disetujui</span>
+                @if($soak->status == 0)
+                <span class="badge bg-warning">Menunggu Persetujuan</span>
+                @elseif ($soak->status == 1)
+                <span class="badge bg-success">Disetujui</span>
                 @else
-                    <span class="badge bg-danger">Ditolak</span>
+                <span class="badge bg-danger">Ditolak</span>
                 @endif
             </td>
             <td>
@@ -93,6 +97,18 @@
         <label>Berat Setelah Proses</label>
         <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
     </div>
+    <div class="mb-3">
+        <label>Shift</label>
+        <select id="shift" class="form-control" required>
+            <option value="">-- Pilih Shift --</option>
+            <option value="{{ '1' }}">1</option>
+            <option value="{{ '2' }}">2</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Keterangan</label>
+        <input type="text" id="keterangan" class="form-control">
+    </div>
     {{-- <div class="mb-3">
         <label>Status</label>
         <select id="status" class="form-control" required>
@@ -106,7 +122,7 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/edges/${id}` : '/edges';
+    const url = id ? `/soaks/${id}` : '/soaks';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
@@ -119,6 +135,8 @@
         tgl_selesai: $('#tgl_selesai').val(),
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
+        shift: $('#shift').val(),
+        keterangan: $('#keterangan').val(),
         {{-- status: $('#status').val() --}}
     };
 
@@ -141,20 +159,21 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/edges/${id}`)
+        fetch(`/soaks/${id}`)
             .then(r => r.json())
-            .then(edge => {
-                $('#item_id').val(edge.id);
-                $('#histories_id').val(edge.histories_id);
-                $('#employees_id').val(edge.employees_id);
-                $('#tgl_mulai').val(edge.tgl_mulai);
-                $('#biji_masuk').val(edge.biji_masuk);
-                $('#berat_masuk').val(edge.berat_masuk);
-                $('#tgl_selesai').val(edge.tgl_selesai);
-                $('#biji_keluar').val(edge.biji_keluar);
-                $('#berat_keluar').val(edge.berat_keluar);
-                {{-- $('#status').val(edge.status); --}}
-                $('#modalTitle').text('Edit Sesek Kaki');
+            .then(soak => {
+                $('#item_id').val(soak.id);
+                $('#histories_id').val(soak.histories_id);
+                $('#employees_id').val(soak.employees_id);
+                $('#tgl_mulai').val(soak.tgl_mulai);
+                $('#biji_masuk').val(soak.biji_masuk);
+                $('#berat_masuk').val(soak.berat_masuk);
+                $('#tgl_selesai').val(soak.tgl_selesai);
+                $('#biji_keluar').val(soak.biji_keluar);
+                $('#berat_keluar').val(soak.berat_keluar);
+                $('#keterangan').val(soak.keterangan);
+                {{-- $('#status').val(soak.status); --}}
+                $('#modalTitle').text('Edit Perendaman');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -170,7 +189,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/edges/${id}`, {
+                fetch(`/soaks/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

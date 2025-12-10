@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Correction;
+use App\Models\Pick;
 use App\Models\History;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-class CorrectionController extends Controller
+class PickController extends Controller
 {
-    public string $obj = 'Inspeksi dan Koreksi';
+    public string $obj = 'Pencabutan Bulu';
     public function index(): View
     {
-        $corrections = Correction::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR04IK')->get();
+        $picks = Pick::with('history', 'employee')->latest()->get();
+        $histories = History::where('tujuan', 'PR05PB')->get();
         $employees = Employee::all();
 
-        return view('production.correction', compact('corrections', 'histories', 'employees'));
+        return view('production.correction', compact('picks', 'histories', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -38,8 +38,8 @@ class CorrectionController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_koreksi ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_koreksi
+            $validated['biji_masuk'] > $tracker->sisa_biji_cabut ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_cabut
         ){
             return response()->json([
                 'status' => 'error',
@@ -47,19 +47,19 @@ class CorrectionController extends Controller
             ], 422);
         }
 
-        $correction = Correction::create($validated);
+        $pick = Pick::create($validated);
 
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan',
-            'data' => $correction,
+            'data' => $pick,
         ]);
     }
 
     public function show(int $id): JsonResponse
     {
-        $correction = Correction::findOrFail($id);
-        return response()->json($correction);
+        $pick = Pick::findOrFail($id);
+        return response()->json($pick);
     }
 
     public function update(Request $request, int $id): JsonResponse
@@ -76,11 +76,11 @@ class CorrectionController extends Controller
             'keterangan' => 'nullable'
         ]);
 
-        $correction = Correction::findOrFail($id);
+        $pick = Pick::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_koreksi + $correction->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_koreksi + $correction->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_cabut + $pick->biji_masuk;
+        $berat_sisa = $tracker->sisa_berat_cabut + $pick->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||
@@ -92,7 +92,7 @@ class CorrectionController extends Controller
             ], 422);
         }
 
-        $correction->update($validated);
+        $pick->update($validated);
 
         return response()->json([
             'status' => 'success',
@@ -102,8 +102,8 @@ class CorrectionController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $correction = Correction::findOrFail($id);
-        $correction->delete();
+        $pick = Pick::findOrFail($id);
+        $pick->delete();
 
         return response()->json([
             'status' => 'success',
@@ -115,7 +115,7 @@ class CorrectionController extends Controller
     {
         $ids = $request->ids;
 
-        Correction::whereIn('id', $ids)->delete();
+        Pick::whereIn('id', $ids)->delete();
 
         return response()->json([
             'status' => 'success',

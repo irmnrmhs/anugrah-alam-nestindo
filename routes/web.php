@@ -33,7 +33,12 @@ use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\CorrectionController;
-use App\Models\Correction;
+use App\Http\Controllers\DryController;
+use App\Http\Controllers\EntryController;
+use App\Http\Controllers\PickController;
+use App\Http\Controllers\PullController;
+use App\Http\Controllers\RinseController;
+use App\Http\Controllers\SoakController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -272,6 +277,54 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/corrections/{id}', [CorrectionController::class, 'update'])->name('corrections.update');
     Route::delete('/corrections/{id}', [CorrectionController::class, 'destroy'])->name('corrections.destroy');
     Route::post('/corrections/delete-multiple', [CorrectionController::class, 'deleteMultiple']);
+    
+    // Pencabutan Bulu
+    Route::get('/picks', [PickController::class, 'index'])->name('picks.index');
+    Route::post('/picks', [PickController::class, 'store'])->name('picks.store');
+    Route::get('/picks/{id}', [PickController::class, 'show'])->name('picks.show');
+    Route::put('/picks/{id}', [PickController::class, 'update'])->name('picks.update');
+    Route::delete('/picks/{id}', [PickController::class, 'destroy'])->name('picks.destroy');
+    Route::post('/picks/delete-multiple', [PickController::class, 'deleteMultiple']);
+    
+    // Perendaman
+    Route::get('/soaks', [SoakController::class, 'index'])->name('soaks.index');
+    Route::post('/soaks', [SoakController::class, 'store'])->name('soaks.store');
+    Route::get('/soaks/{id}', [SoakController::class, 'show'])->name('soaks.show');
+    Route::put('/soaks/{id}', [SoakController::class, 'update'])->name('soaks.update');
+    Route::delete('/soaks/{id}', [SoakController::class, 'destroy'])->name('soaks.destroy');
+    Route::post('/soaks/delete-multiple', [SoakController::class, 'deleteMultiple']);
+    
+    // Cabut Bilas
+    Route::get('/rinses', [RinseController::class, 'index'])->name('rinses.index');
+    Route::post('/rinses', [RinseController::class, 'store'])->name('rinses.store');
+    Route::get('/rinses/{id}', [RinseController::class, 'show'])->name('rinses.show');
+    Route::put('/rinses/{id}', [RinseController::class, 'update'])->name('rinses.update');
+    Route::delete('/rinses/{id}', [RinseController::class, 'destroy'])->name('rinses.destroy');
+    Route::post('/rinses/delete-multiple', [RinseController::class, 'deleteMultiple']);
+    
+    // Masuk Cetak
+    Route::get('/entries', [EntryController::class, 'index'])->name('entries.index');
+    Route::post('/entries', [EntryController::class, 'store'])->name('entries.store');
+    Route::get('/entries/{id}', [EntryController::class, 'show'])->name('entries.show');
+    Route::put('/entries/{id}', [EntryController::class, 'update'])->name('entries.update');
+    Route::delete('/entries/{id}', [EntryController::class, 'destroy'])->name('entries.destroy');
+    Route::post('/entries/delete-multiple', [EntryController::class, 'deleteMultiple']);
+
+    // Keluar Cetak
+    Route::get('/pulls', [PullController::class, 'index'])->name('pulls.index');
+    Route::post('/pulls', [PullController::class, 'store'])->name('pulls.store');
+    Route::get('/pulls/{id}', [PullController::class, 'show'])->name('pulls.show');
+    Route::put('/pulls/{id}', [PullController::class, 'update'])->name('pulls.update');
+    Route::delete('/pulls/{id}', [PullController::class, 'destroy'])->name('pulls.destroy');
+    Route::post('/pulls/delete-multiple', [PullController::class, 'deleteMultiple']);
+
+    // Pengeringan
+    Route::get('/dries', [DryController::class, 'index'])->name('dries.index');
+    Route::post('/dries', [DryController::class, 'store'])->name('dries.store');
+    Route::get('/dries/{id}', [DryController::class, 'show'])->name('dries.show');
+    Route::put('/dries/{id}', [DryController::class, 'update'])->name('dries.update');
+    Route::delete('/dries/{id}', [DryController::class, 'destroy'])->name('dries.destroy');
+    Route::post('/dries/delete-multiple', [DryController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';
