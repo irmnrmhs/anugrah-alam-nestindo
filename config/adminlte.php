@@ -512,6 +512,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Pencabutan Bulu',
+                    'url'  => 'picks',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 

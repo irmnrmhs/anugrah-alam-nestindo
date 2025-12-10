@@ -33,7 +33,7 @@ use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\CorrectionController;
-use App\Models\Correction;
+use App\Http\Controllers\PickController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -272,6 +272,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/corrections/{id}', [CorrectionController::class, 'update'])->name('corrections.update');
     Route::delete('/corrections/{id}', [CorrectionController::class, 'destroy'])->name('corrections.destroy');
     Route::post('/corrections/delete-multiple', [CorrectionController::class, 'deleteMultiple']);
+    
+    // Pencabutan Bulu
+    Route::get('/picks', [PickController::class, 'index'])->name('picks.index');
+    Route::post('/picks', [PickController::class, 'store'])->name('picks.store');
+    Route::get('/picks/{id}', [PickController::class, 'show'])->name('picks.show');
+    Route::put('/picks/{id}', [PickController::class, 'update'])->name('picks.update');
+    Route::delete('/picks/{id}', [PickController::class, 'destroy'])->name('picks.destroy');
+    Route::post('/picks/delete-multiple', [PickController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

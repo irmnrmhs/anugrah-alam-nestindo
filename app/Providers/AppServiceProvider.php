@@ -17,6 +17,7 @@ use App\Models\ProductIdentifier;
 use App\Models\Edge;
 use App\Models\Wash;
 use App\Models\Correction;
+use App\Models\Pick;
 
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
@@ -30,6 +31,7 @@ use App\Observers\IdentifierObserver;
 use App\Observers\EdgeObserver;
 use App\Observers\WashObserver;
 use App\Observers\CorrectionObserver;
+use App\Observers\PickObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -84,6 +86,7 @@ class AppServiceProvider extends ServiceProvider
         Edge::observe(EdgeObserver::class);
         Wash::observe(WashObserver::class);
         Correction::observe(CorrectionObserver::class);
+        Pick::observe(PickObserver::class);
     }
 
     // 1. Grading BB (PR01GB)

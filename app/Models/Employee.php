@@ -56,4 +56,9 @@ class Employee extends Model
     {
         return $this->hasMany(Correction::class, 'employees_id');
     }
+
+    public function picks()
+    {
+        return $this->hasMany(Pick::class, 'employees_id');
+    }
 }
