@@ -53,6 +53,15 @@ class History extends Model
     {
         return $this->hasMany(Entry::class, 'histories_id');
     }
+    public function pulls()
+    {
+        return $this->hasMany(Pull::class, 'histories_id');
+    }
+
+    public function dries()
+    {
+        return $this->hasMany(Dry::class, 'histories_id');
+    }
 
     // 1. Sesek Kaki
     public function getTotalBijiSesekAttribute()
@@ -181,23 +190,65 @@ class History extends Model
     }
 
     // 7. Cetak Masuk
-    public function getTotalBijiEntryAttribute()
+    public function getTotalBijiMasukAttribute()
     {
         return $this->corrections()->sum('biji_masuk');
     }
 
-    public function getTotalBeratEntryAttribute()
+    public function getTotalBeratMasukAttribute()
     {
         return $this->corrections()->sum('berat_masuk');
     }
 
-    public function getSisaBijiEntryAttribute()
+    public function getSisaBijiMasukAttribute()
     {
-        return $this->biji - $this->total_biji_entry;
+        return $this->biji - $this->total_biji_masuk;
     }
 
-    public function getSisaBeratEntryAttribute()
+    public function getSisaBeratMasukAttribute()
     {
-        return $this->berat - $this->total_berat_entry;
+        return $this->berat - $this->total_berat_masuk;
+    }
+
+    // 7. Cetak Keluar
+    public function getTotalBijiKeluarAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratKeluarAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiKeluarAttribute()
+    {
+        return $this->biji - $this->total_biji_keluar;
+    }
+
+    public function getSisaBeratKeluarAttribute()
+    {
+        return $this->berat - $this->total_berat_keluar;
+    }
+
+    // 8. Pengeringan
+    public function getTotalBijiKeringAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratKeringAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiKeringAttribute()
+    {
+        return $this->biji - $this->total_biji_kering;
+    }
+
+    public function getSisaBeratKeringAttribute()
+    {
+        return $this->berat - $this->total_berat_kering;
     }
 }

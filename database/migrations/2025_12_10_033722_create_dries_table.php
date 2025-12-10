@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pulls', function (Blueprint $table) {
+        Schema::create('dries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('histories_id')->constrained('histories');
             $table->foreignId('employees_id')->constrained('employees');
             $table->date('tgl_mulai');
             $table->integer('biji_masuk');
             $table->decimal('berat_masuk', 7, 2);
+            $table->time('waktu_masuk');
             $table->date('tgl_selesai');
             $table->integer('biji_keluar')->default(0);
             $table->decimal('berat_keluar', 7, 2)->default(0);
+            $table->time('waktu_keluar')->nullable();
             $table->string('keterangan')->nullable();
             $table->integer('shift');
             $table->integer('status')->default(0);
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pulls');
+        Schema::dropIfExists('dries');
     }
 };

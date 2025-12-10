@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Pull extends Model
+class Dry extends Model
 {
     protected $fillable = [
         'histories_id',
@@ -12,9 +12,11 @@ class Pull extends Model
         'tgl_mulai',
         'biji_masuk',
         'berat_masuk',
+        'waktu_masuk',
         'tgl_selesai',
         'biji_keluar',
         'berat_keluar',
+        'waktu_keluar',
         'keterangan',
         'shift',
         'status'

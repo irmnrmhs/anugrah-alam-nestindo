@@ -76,4 +76,14 @@ class Employee extends Model
     {
         return $this->hasMany(Entry::class, 'employees_id');
     }
+    
+    public function pulls()
+    {
+        return $this->hasMany(Pull::class, 'employees_id');
+    }
+
+    public function dries()
+    {
+        return $this->hasMany(Dry::class, 'employees_id');
+    }
 }

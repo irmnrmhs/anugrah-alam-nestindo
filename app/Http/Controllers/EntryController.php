@@ -39,8 +39,8 @@ class EntryController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_bilas ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_bilas
+            $validated['biji_masuk'] > $tracker->sisa_biji_masuk ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_masuk
         ){
             return response()->json([
                 'status' => 'error',
@@ -81,8 +81,8 @@ class EntryController extends Controller
         $entry = Entry::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_rendam + $entry->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_rendam + $entry->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_masuk + $entry->biji_masuk;
+        $berat_sisa = $tracker->sisa_berat_masuk + $entry->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||

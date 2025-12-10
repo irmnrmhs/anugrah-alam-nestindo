@@ -21,6 +21,8 @@ use App\Models\Pick;
 use App\Models\Soak;
 use App\Models\Rinse;
 use App\Models\Entry;
+use App\Models\Pull;
+use App\Models\Dry;
 
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
@@ -38,6 +40,8 @@ use App\Observers\PickObserver;
 use App\Observers\SoakObserver;
 use App\Observers\RinseObserver;
 use App\Observers\EntryObserver;
+use App\Observers\PullObserver;
+use App\Observers\DryObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -96,6 +100,8 @@ class AppServiceProvider extends ServiceProvider
         Soak::observe(SoakObserver::class);
         Rinse::observe(RinseObserver::class);
         Entry::observe(EntryObserver::class);
+        Pull::observe(PullObserver::class);
+        Dry::observe(DryObserver::class);
     }
 
     // 1. Grading BB (PR01GB)

@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pull;
+use App\Models\Dry;
 use App\Models\History;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-class PullController extends Controller
+class DryController extends Controller
 {
-    public string $obj = 'Cetak Keluar';
+    public string $obj = 'Pengeringan';
     public function index(): View
     {
-        $pulls = Pull::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR08MC')->get();
+        $dries = Dry::with('history', 'employee')->latest()->get();
+        $histories = History::where('tujuan', 'PR09KC')->get();
         $employees = Employee::all();
 
-        return view('production.correction', compact('pulls', 'histories', 'employees'));
+        return view('production.correction', compact('dries', 'histories', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -29,9 +29,11 @@ class PullController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
+            'waktu_masuk' => 'required|time',
             'tgl_selesai' => 'required|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
+            'waktu_keluar' => 'required|time',
             'shift' => 'required',
             'keterangan' => 'nullable'
         ]);
@@ -39,8 +41,8 @@ class PullController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_keluar ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_keluar
+            $validated['biji_masuk'] > $tracker->sisa_biji_kering ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_kering
         ){
             return response()->json([
                 'status' => 'error',
@@ -48,19 +50,19 @@ class PullController extends Controller
             ], 422);
         }
 
-        $pull = Pull::create($validated);
+        $dry = Dry::create($validated);
 
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan',
-            'data' => $pull,
+            'data' => $dry,
         ]);
     }
 
     public function show(int $id): JsonResponse
     {
-        $pull = Pull::findOrFail($id);
-        return response()->json($pull);
+        $dry = Dry::findOrFail($id);
+        return response()->json($dry);
     }
 
     public function update(Request $request, int $id): JsonResponse
@@ -71,18 +73,20 @@ class PullController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
+            'waktu_masuk' => 'required|time',
             'tgl_selesai' => 'required|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
+            'waktu_keluar' => 'required|time',
             'shift' => 'required',
             'keterangan' => 'nullable'
         ]);
 
-        $pull = Pull::findOrFail($id);
+        $dry = Dry::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_masuk + $pull->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_masuk + $pull->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_masuk + $dry->biji_masuk;
+        $berat_sisa = $tracker->sisa_berat_masuk + $dry->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||
@@ -94,7 +98,7 @@ class PullController extends Controller
             ], 422);
         }
 
-        $pull->update($validated);
+        $dry->update($validated);
 
         return response()->json([
             'status' => 'success',
@@ -104,8 +108,8 @@ class PullController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $pull = Pull::findOrFail($id);
-        $pull->delete();
+        $dry = Dry::findOrFail($id);
+        $dry->delete();
 
         return response()->json([
             'status' => 'success',
@@ -117,7 +121,7 @@ class PullController extends Controller
     {
         $ids = $request->ids;
 
-        Pull::whereIn('id', $ids)->delete();
+        Dry::whereIn('id', $ids)->delete();
 
         return response()->json([
             'status' => 'success',

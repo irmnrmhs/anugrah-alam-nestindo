@@ -33,8 +33,10 @@ use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\CorrectionController;
+use App\Http\Controllers\DryController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\PickController;
+use App\Http\Controllers\PullController;
 use App\Http\Controllers\RinseController;
 use App\Http\Controllers\SoakController;
 
@@ -307,6 +309,22 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/entries/{id}', [EntryController::class, 'update'])->name('entries.update');
     Route::delete('/entries/{id}', [EntryController::class, 'destroy'])->name('entries.destroy');
     Route::post('/entries/delete-multiple', [EntryController::class, 'deleteMultiple']);
+
+    // Keluar Cetak
+    Route::get('/pulls', [PullController::class, 'index'])->name('pulls.index');
+    Route::post('/pulls', [PullController::class, 'store'])->name('pulls.store');
+    Route::get('/pulls/{id}', [PullController::class, 'show'])->name('pulls.show');
+    Route::put('/pulls/{id}', [PullController::class, 'update'])->name('pulls.update');
+    Route::delete('/pulls/{id}', [PullController::class, 'destroy'])->name('pulls.destroy');
+    Route::post('/pulls/delete-multiple', [PullController::class, 'deleteMultiple']);
+
+    // Pengeringan
+    Route::get('/dries', [DryController::class, 'index'])->name('dries.index');
+    Route::post('/dries', [DryController::class, 'store'])->name('dries.store');
+    Route::get('/dries/{id}', [DryController::class, 'show'])->name('dries.show');
+    Route::put('/dries/{id}', [DryController::class, 'update'])->name('dries.update');
+    Route::delete('/dries/{id}', [DryController::class, 'destroy'])->name('dries.destroy');
+    Route::post('/dries/delete-multiple', [DryController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';
