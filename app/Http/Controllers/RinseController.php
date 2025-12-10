@@ -18,7 +18,7 @@ class RinseController extends Controller
         $histories = History::where('tujuan', 'PR07CB')->get();
         $employees = Employee::all();
 
-        return view('production.correction', compact('rinses', 'histories', 'employees'));
+        return view('production.rinse', compact('rinses', 'histories', 'employees'));
     }
 
     public function store(Request $request): JsonResponse

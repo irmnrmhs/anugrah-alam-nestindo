@@ -18,7 +18,7 @@ class PullController extends Controller
         $histories = History::where('tujuan', 'PR08MC')->get();
         $employees = Employee::all();
 
-        return view('production.correction', compact('pulls', 'histories', 'employees'));
+        return view('production.pull', compact('pulls', 'histories', 'employees'));
     }
 
     public function store(Request $request): JsonResponse

@@ -18,7 +18,7 @@ class DryController extends Controller
         $histories = History::where('tujuan', 'PR09KC')->get();
         $employees = Employee::all();
 
-        return view('production.correction', compact('dries', 'histories', 'employees'));
+        return view('production.dry', compact('dries', 'histories', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -85,8 +85,8 @@ class DryController extends Controller
         $dry = Dry::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_masuk + $dry->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_masuk + $dry->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_kering + $dry->biji_masuk;
+        $berat_sisa = $tracker->sisa_berat_kering + $dry->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||

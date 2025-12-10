@@ -18,7 +18,7 @@ class PickController extends Controller
         $histories = History::where('tujuan', 'PR05PB')->get();
         $employees = Employee::all();
 
-        return view('production.correction', compact('picks', 'histories', 'employees'));
+        return view('production.pick', compact('picks', 'histories', 'employees'));
     }
 
     public function store(Request $request): JsonResponse

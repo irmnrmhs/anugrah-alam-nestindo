@@ -18,7 +18,7 @@ class SoakController extends Controller
         $histories = History::where('tujuan', 'PR06PR')->get();
         $employees = Employee::all();
 
-        return view('production.correction', compact('soaks', 'histories', 'employees'));
+        return view('production.soak', compact('soaks', 'histories', 'employees'));
     }
 
     public function store(Request $request): JsonResponse

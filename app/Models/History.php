@@ -129,33 +129,33 @@ class History extends Model
     // 4. Pencabutan Bulu
     public function getTotalBijiCabutAttribute()
     {
-        return $this->corrections()->sum('biji_masuk');
+        return $this->picks()->sum('biji_masuk');
     }
 
     public function getTotalBeratCabutAttribute()
     {
-        return $this->corrections()->sum('berat_masuk');
+        return $this->picks()->sum('berat_masuk');
     }
 
     public function getSisaBijiCabutAttribute()
     {
-        return $this->biji - $this->total_biji_cb;
+        return $this->biji - $this->total_biji_cabut;
     }
 
     public function getSisaBeratCabutAttribute()
     {
-        return $this->berat - $this->total_berat_cb;
+        return $this->berat - $this->total_berat_cabut;
     }
 
     // 5. Perendaman
     public function getTotalBijiRendamAttribute()
     {
-        return $this->corrections()->sum('biji_masuk');
+        return $this->soaks()->sum('biji_masuk');
     }
 
     public function getTotalBeratRendamAttribute()
     {
-        return $this->corrections()->sum('berat_masuk');
+        return $this->soaks()->sum('berat_masuk');
     }
 
     public function getSisaBijiRendamAttribute()
@@ -171,12 +171,12 @@ class History extends Model
     // 6. Cabut Bilas
     public function getTotalBijiBilasAttribute()
     {
-        return $this->corrections()->sum('biji_masuk');
+        return $this->rinses()->sum('biji_masuk');
     }
 
     public function getTotalBeratBilasAttribute()
     {
-        return $this->corrections()->sum('berat_masuk');
+        return $this->rinses()->sum('berat_masuk');
     }
 
     public function getSisaBijiBilasAttribute()
@@ -192,12 +192,12 @@ class History extends Model
     // 7. Cetak Masuk
     public function getTotalBijiMasukAttribute()
     {
-        return $this->corrections()->sum('biji_masuk');
+        return $this->entries()->sum('biji_masuk');
     }
 
     public function getTotalBeratMasukAttribute()
     {
-        return $this->corrections()->sum('berat_masuk');
+        return $this->entries()->sum('berat_masuk');
     }
 
     public function getSisaBijiMasukAttribute()
@@ -213,12 +213,12 @@ class History extends Model
     // 7. Cetak Keluar
     public function getTotalBijiKeluarAttribute()
     {
-        return $this->corrections()->sum('biji_masuk');
+        return $this->pulls()->sum('biji_masuk');
     }
 
     public function getTotalBeratKeluarAttribute()
     {
-        return $this->corrections()->sum('berat_masuk');
+        return $this->pulls()->sum('berat_masuk');
     }
 
     public function getSisaBijiKeluarAttribute()
@@ -234,12 +234,12 @@ class History extends Model
     // 8. Pengeringan
     public function getTotalBijiKeringAttribute()
     {
-        return $this->corrections()->sum('biji_masuk');
+        return $this->dries()->sum('biji_masuk');
     }
 
     public function getTotalBeratKeringAttribute()
     {
-        return $this->corrections()->sum('berat_masuk');
+        return $this->dries()->sum('berat_masuk');
     }
 
     public function getSisaBijiKeringAttribute()
