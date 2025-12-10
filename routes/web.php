@@ -34,6 +34,7 @@ use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\PickController;
+use App\Http\Controllers\RinseController;
 use App\Http\Controllers\SoakController;
 
 Route::get('/', function () {
@@ -289,6 +290,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/soaks/{id}', [SoakController::class, 'update'])->name('soaks.update');
     Route::delete('/soaks/{id}', [SoakController::class, 'destroy'])->name('soaks.destroy');
     Route::post('/soaks/delete-multiple', [SoakController::class, 'deleteMultiple']);
+    
+    // Cabut Bilas
+    Route::get('/rinses', [RinseController::class, 'index'])->name('rinses.index');
+    Route::post('/rinses', [RinseController::class, 'store'])->name('rinses.store');
+    Route::get('/rinses/{id}', [RinseController::class, 'show'])->name('rinses.show');
+    Route::put('/rinses/{id}', [RinseController::class, 'update'])->name('rinses.update');
+    Route::delete('/rinses/{id}', [RinseController::class, 'destroy'])->name('rinses.destroy');
+    Route::post('/rinses/delete-multiple', [RinseController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

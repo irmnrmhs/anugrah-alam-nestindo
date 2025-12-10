@@ -66,4 +66,9 @@ class Employee extends Model
     {
         return $this->hasMany(Soak::class, 'employees_id');
     }
+
+    public function rinses()
+    {
+        return $this->hasMany(Rinse::class, 'employees_id');
+    }
 }
