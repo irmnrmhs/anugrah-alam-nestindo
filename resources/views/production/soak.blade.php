@@ -1,9 +1,9 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Pencabutan Bulu';
-    $singular = 'Pencabutan Bulu';
-    $deleteMultipleUrl = '/picks/delete-multiple';
+    $title = 'Kelola Data Perendaman';
+    $singular = 'Perendaman';
+    $deleteMultipleUrl = '/soaks/delete-multiple';
 @endphp
 
 @section('table-headers')
@@ -17,28 +17,30 @@
     <th>Tanggal Selesai</th>
     <th>Biji Keluar</th>
     <th>Berat Keluar</th>
+    <th>Shift</th>
     <th>Keterangan</th>
     <th>Status</th>
 @stop
 
 @section('table-body')
-    @foreach($picks as $index => $pick)
-        <tr data-id="{{ $pick->id }}">
-            <td><input type="checkbox" class="row-check" value="{{ $pick->id }}"></td>
+    @foreach($soaks as $index => $soak)
+        <tr data-id="{{ $soak->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $soak->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $pick->history->identifier->kode }}</td>
-            <td>{{ $pick->employee->nama }}</td>
-            <td>{{ $pick->tgl_mulai }}</td>
-            <td>{{ $pick->biji_masuk }}</td>
-            <td>{{ $pick->berat_masuk }}</td>
-            <td>{{ $pick->tgl_selesai }}</td>
-            <td>{{ $pick->biji_keluar }}</td>
-            <td>{{ $pick->berat_keluar }}</td>
-            <td>{{ $pick->keterangan }}</td>
+            <td>{{ $soak->history->identifier->kode }}</td>
+            <td>{{ $soak->employee->nama }}</td>
+            <td>{{ $soak->tgl_mulai }}</td>
+            <td>{{ $soak->biji_masuk }}</td>
+            <td>{{ $soak->berat_masuk }}</td>
+            <td>{{ $soak->tgl_selesai }}</td>
+            <td>{{ $soak->biji_keluar }}</td>
+            <td>{{ $soak->berat_keluar }}</td>
+            <td>{{ $soak->shift }}</td>
+            <td>{{ $soak->keterangan }}</td>
             <td>
-                @if($pick->status == 0)
+                @if($soak->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($pick->status == 1)
+                @elseif ($soak->status == 1)
                 <span class="badge bg-success">Disetujui</span>
                 @else
                 <span class="badge bg-danger">Ditolak</span>
@@ -96,6 +98,14 @@
         <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control" required>
     </div>
     <div class="mb-3">
+        <label>Shift</label>
+        <select id="shift" class="form-control" required>
+            <option value="">-- Pilih Shift --</option>
+            <option value="{{ '1' }}">1</option>
+            <option value="{{ '2' }}">2</option>
+        </select>
+    </div>
+    <div class="mb-3">
         <label>Keterangan</label>
         <input type="text" id="keterangan" class="form-control">
     </div>
@@ -112,7 +122,7 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/picks/${id}` : '/picks';
+    const url = id ? `/soaks/${id}` : '/soaks';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
@@ -125,6 +135,7 @@
         tgl_selesai: $('#tgl_selesai').val(),
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
+        shift: $('#shift').val(),
         keterangan: $('#keterangan').val(),
         {{-- status: $('#status').val() --}}
     };
@@ -148,21 +159,21 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/picks/${id}`)
+        fetch(`/soaks/${id}`)
             .then(r => r.json())
-            .then(pick => {
-                $('#item_id').val(pick.id);
-                $('#histories_id').val(pick.histories_id);
-                $('#employees_id').val(pick.employees_id);
-                $('#tgl_mulai').val(pick.tgl_mulai);
-                $('#biji_masuk').val(pick.biji_masuk);
-                $('#berat_masuk').val(pick.berat_masuk);
-                $('#tgl_selesai').val(pick.tgl_selesai);
-                $('#biji_keluar').val(pick.biji_keluar);
-                $('#berat_keluar').val(pick.berat_keluar);
-                $('#keterangan').val(pick.keterangan);
-                {{-- $('#status').val(pick.status); --}}
-                $('#modalTitle').text('Edit Pencabutan Bulu');
+            .then(soak => {
+                $('#item_id').val(soak.id);
+                $('#histories_id').val(soak.histories_id);
+                $('#employees_id').val(soak.employees_id);
+                $('#tgl_mulai').val(soak.tgl_mulai);
+                $('#biji_masuk').val(soak.biji_masuk);
+                $('#berat_masuk').val(soak.berat_masuk);
+                $('#tgl_selesai').val(soak.tgl_selesai);
+                $('#biji_keluar').val(soak.biji_keluar);
+                $('#berat_keluar').val(soak.berat_keluar);
+                $('#keterangan').val(soak.keterangan);
+                {{-- $('#status').val(soak.status); --}}
+                $('#modalTitle').text('Edit Perendaman');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -178,7 +189,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/picks/${id}`, {
+                fetch(`/soaks/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

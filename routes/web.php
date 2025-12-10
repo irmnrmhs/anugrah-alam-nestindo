@@ -34,6 +34,7 @@ use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\PickController;
+use App\Http\Controllers\SoakController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -280,6 +281,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/picks/{id}', [PickController::class, 'update'])->name('picks.update');
     Route::delete('/picks/{id}', [PickController::class, 'destroy'])->name('picks.destroy');
     Route::post('/picks/delete-multiple', [PickController::class, 'deleteMultiple']);
+    
+    // Perendaman
+    Route::get('/soaks', [SoakController::class, 'index'])->name('soaks.index');
+    Route::post('/soaks', [SoakController::class, 'store'])->name('soaks.store');
+    Route::get('/soaks/{id}', [SoakController::class, 'show'])->name('soaks.show');
+    Route::put('/soaks/{id}', [SoakController::class, 'update'])->name('soaks.update');
+    Route::delete('/soaks/{id}', [SoakController::class, 'destroy'])->name('soaks.destroy');
+    Route::post('/soaks/delete-multiple', [SoakController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

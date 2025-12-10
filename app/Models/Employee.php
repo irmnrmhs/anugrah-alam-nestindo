@@ -61,4 +61,9 @@ class Employee extends Model
     {
         return $this->hasMany(Pick::class, 'employees_id');
     }
+
+    public function soaks()
+    {
+        return $this->hasMany(Soak::class, 'employees_id');
+    }
 }

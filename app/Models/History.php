@@ -39,6 +39,11 @@ class History extends Model
         return $this->hasMany(Pick::class, 'histories_id');
     }
 
+    public function soaks()
+    {
+        return $this->hasMany(Soak::class, 'histories_id');
+    }
+
     // 1. Sesek Kaki
     public function getTotalBijiSesekAttribute()
     {
@@ -115,11 +120,32 @@ class History extends Model
 
     public function getSisaBijiCabutAttribute()
     {
-        return $this->biji - $this->total_biji_cabut;
+        return $this->biji - $this->total_biji_cb;
     }
 
     public function getSisaBeratCabutAttribute()
     {
-        return $this->berat - $this->total_berat_cabut;
+        return $this->berat - $this->total_berat_cb;
+    }
+
+    // 5. Perendaman
+    public function getTotalBijiRendamAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratRendamAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiRendamAttribute()
+    {
+        return $this->biji - $this->total_biji_rendam;
+    }
+
+    public function getSisaBeratRendamAttribute()
+    {
+        return $this->berat - $this->total_berat_rendam;
     }
 }
