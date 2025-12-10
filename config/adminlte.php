@@ -518,6 +518,36 @@ return [
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Perendaman',
+                    'url'  => 'soaks',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Cabut Bilas',
+                    'url'  => 'rinses',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Cabut Bilas',
+                    'url'  => 'entries',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Cabut Bilas',
+                    'url'  => 'exits',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Cabut Bilas',
+                    'url'  => 'dries',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ]
             ],
         ],
 

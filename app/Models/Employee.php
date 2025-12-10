@@ -71,4 +71,9 @@ class Employee extends Model
     {
         return $this->hasMany(Rinse::class, 'employees_id');
     }
+
+    public function entries()
+    {
+        return $this->hasMany(Entry::class, 'employees_id');
+    }
 }

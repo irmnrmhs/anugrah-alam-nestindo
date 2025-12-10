@@ -33,6 +33,7 @@ use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\CorrectionController;
+use App\Http\Controllers\EntryController;
 use App\Http\Controllers\PickController;
 use App\Http\Controllers\RinseController;
 use App\Http\Controllers\SoakController;
@@ -298,6 +299,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/rinses/{id}', [RinseController::class, 'update'])->name('rinses.update');
     Route::delete('/rinses/{id}', [RinseController::class, 'destroy'])->name('rinses.destroy');
     Route::post('/rinses/delete-multiple', [RinseController::class, 'deleteMultiple']);
+    
+    // Masuk Cetak
+    Route::get('/entries', [EntryController::class, 'index'])->name('entries.index');
+    Route::post('/entries', [EntryController::class, 'store'])->name('entries.store');
+    Route::get('/entries/{id}', [EntryController::class, 'show'])->name('entries.show');
+    Route::put('/entries/{id}', [EntryController::class, 'update'])->name('entries.update');
+    Route::delete('/entries/{id}', [EntryController::class, 'destroy'])->name('entries.destroy');
+    Route::post('/entries/delete-multiple', [EntryController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

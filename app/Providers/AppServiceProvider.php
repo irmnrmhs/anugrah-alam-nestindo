@@ -20,6 +20,7 @@ use App\Models\Correction;
 use App\Models\Pick;
 use App\Models\Soak;
 use App\Models\Rinse;
+use App\Models\Entry;
 
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
@@ -36,6 +37,7 @@ use App\Observers\CorrectionObserver;
 use App\Observers\PickObserver;
 use App\Observers\SoakObserver;
 use App\Observers\RinseObserver;
+use App\Observers\EntryObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -93,6 +95,7 @@ class AppServiceProvider extends ServiceProvider
         Pick::observe(PickObserver::class);
         Soak::observe(SoakObserver::class);
         Rinse::observe(RinseObserver::class);
+        Entry::observe(EntryObserver::class);
     }
 
     // 1. Grading BB (PR01GB)

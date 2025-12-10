@@ -49,6 +49,11 @@ class History extends Model
         return $this->hasMany(Rinse::class, 'histories_id');
     }
 
+    public function entries()
+    {
+        return $this->hasMany(Entry::class, 'histories_id');
+    }
+
     // 1. Sesek Kaki
     public function getTotalBijiSesekAttribute()
     {
@@ -173,5 +178,26 @@ class History extends Model
     public function getSisaBeratBilasAttribute()
     {
         return $this->berat - $this->total_berat_bilas;
+    }
+
+    // 7. Cetak Masuk
+    public function getTotalBijiEntryAttribute()
+    {
+        return $this->corrections()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratEntryAttribute()
+    {
+        return $this->corrections()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiEntryAttribute()
+    {
+        return $this->biji - $this->total_biji_entry;
+    }
+
+    public function getSisaBeratEntryAttribute()
+    {
+        return $this->berat - $this->total_berat_entry;
     }
 }
