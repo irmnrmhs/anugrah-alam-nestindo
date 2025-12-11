@@ -405,6 +405,13 @@ return [
                     'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
                     'icon' => 'fas fa-users',
                 ],
+                [   'header' => 'Produksi' ],
+                [
+                    'text' => 'Grade Produk Jadi',
+                    'url'  => 'fp-grades',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 
@@ -488,12 +495,6 @@ return [
             'text' => 'Produksi',
             'icon' => 'fas fa-folder',
             'submenu' => [
-                [
-                    'text' => 'Grade Produk Jadi',
-                    'url'  => 'fp-grades',
-                    'can'  => ['Super Admin', 'Admin Produksi'],
-                    'icon' => 'fas fa-users',
-                ],
                 [
                     'text' => 'Tracker',
                     'url'  => 'histories',

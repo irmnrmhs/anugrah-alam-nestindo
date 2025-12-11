@@ -58,7 +58,7 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
-        grades_id: $('#grades_id').val(),
+        grade: $('#grade').val(),
         keterangan: $('#keterangan').val(),
         status: $('#status').val()
     };
@@ -86,8 +86,8 @@
             .then(r => r.json())
             .then(grade => {
                 $('#item_id').val(grade.id);
-                $('#grade').val(grade.grade)
-                $('#keterangan').val(grade.keterangan)
+                $('#grade').val(grade.grade);
+                $('#keterangan').val(grade.keterangan);
                 $('#status').val(grade.status);
                 $('#modalTitle').text('Edit Grade Produk Jadi');
                 new bootstrap.Modal('#crudModal').show();
