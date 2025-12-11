@@ -31,20 +31,18 @@ class ProductIdentifierController extends Controller
             'berat' => 'required|numeric|min:0|max:99999.99'
         ]);
 
-        // CEK STOK RAW MATERIAL
-        $rm = RawMaterial::findOrFail($validated['rms_id']);
-        $stokBiji = $rm->biji_sisa;
-        $stokBerat = $rm->berat_sisa;
+        $rm = RawMaterial::with('arrival')->find($validated['rms_id']);
+
+        $stokBiji = $rm->biji_sisa_identifier;
+        $stokBerat = $rm->berat_sisa_identifier;
 
         if ($validated['biji'] > $stokBiji || $validated['berat'] > $stokBerat) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa bahan baku',
+                'message' => 'Melebihi stok sisa',
             ], 422);
         }
 
-        // Buat kode identifier
-        $rm = RawMaterial::with('arrival')->find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
         $supplier = $rm->arrival->dcertificate->supplier->kode;
 
@@ -82,10 +80,10 @@ class ProductIdentifierController extends Controller
 
         $rm = RawMaterial::findOrFail($validated['rms_id']);
 
-        if ($validated['biji'] > $rm->biji_sisa || $validated['berat'] > $rm->berat_sisa) {
+        if ($validated['biji'] > $rm->biji_sisa_identifier || $validated['berat'] > $rm->berat_sisa_identifier) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa bahan baku',
+                'message' => 'Melebihi stok sisa',
             ], 422);
         }
 
