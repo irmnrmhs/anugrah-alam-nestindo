@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fp_stocks', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fproducts_id')->constrained('finished_products');
+            $table->foreignId('histories_id')->constrained('histories');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->date('tgl_keluar');
-            $table->integer('biji_keluar');
-            $table->decimal('berat_keluar', 7, 2);
-            $table->string('keterangan')->nullable();
+            $table->foreignId('grades_id')->constrained('fp_grades');
+            $table->string('kode')->unique();
+            $table->date('tgl_mulai');
+            $table->integer('biji');
+            $table->decimal('berat', 7, 2);
+            $table->date('tgl_selesai');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fp_stocks');
+        Schema::dropIfExists('products');
     }
 };

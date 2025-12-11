@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Entry;
+use App\Models\Product;
 use App\Models\History;
 use App\Models\Employee;
+use App\Models\Grade;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-class EntryController extends Controller
+class ProductController extends Controller
 {
-    public string $obj = 'Cetak Masuk';
+    public string $obj = 'Pengidentifikasi Produk';
     public function index(): View
     {
-        $entries = Entry::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR07CB')->get();
+        $products = Product::with('history', 'employee', 'grade')->latest()->get();
+        $histories = History::where('tujuan', 'PR11GP')->get();
         $employees = Employee::all();
+        $grades = Grade::all();
 
-        return view('production.entry', compact('entries', 'histories', 'employees'));
+        return view('production.product', compact('products', 'histories', 'employees', 'grades'));
     }
 
     public function store(Request $request): JsonResponse
@@ -26,21 +28,20 @@ class EntryController extends Controller
         $validated = $request->validate([
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
+            'grades_id' => 'required|exists:fp_grades,id',
             'tgl_mulai' => 'required|date',
-            'biji_masuk' => 'required|integer|min:0',
-            'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99',
-            'shift' => 'required',
-            'keterangan' => 'nullable'
+            'biji' => 'required|integer|min:0',
+            'berat' => 'required|numeric|min:0|max:99999.99',
+            'tgl_selesai' => 'required|date'
         ]);
 
         $tracker = History::find($validated['histories_id']);
 
+        $validated['kode'] = 'Test';
+
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_entry ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_entry
+            $validated['biji'] > $tracker->sisa_biji_produk ||
+            $validated['berat'] > $tracker->sisa_berat_produk
         ){
             return response()->json([
                 'status' => 'error',
@@ -48,19 +49,19 @@ class EntryController extends Controller
             ], 422);
         }
 
-        $entry = Entry::create($validated);
+        $product = Product::create($validated);
 
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan',
-            'data' => $entry,
+            'data' => $product,
         ]);
     }
 
     public function show(int $id): JsonResponse
     {
-        $entry = Entry::findOrFail($id);
-        return response()->json($entry);
+        $product = Product::findOrFail($id);
+        return response()->json($product);
     }
 
     public function update(Request $request, int $id): JsonResponse
@@ -68,25 +69,22 @@ class EntryController extends Controller
         $validated = $request->validate([
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
+            'grades_id' => 'required|exists:fp_grades,id',
             'tgl_mulai' => 'required|date',
-            'biji_masuk' => 'required|integer|min:0',
-            'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99',
-            'shift' => 'required',
-            'keterangan' => 'nullable'
+            'biji' => 'required|integer|min:0',
+            'berat' => 'required|numeric|min:0|max:99999.99',
+            'tgl_selesai' => 'required|date'
         ]);
 
-        $entry = Entry::findOrFail($id);
+        $product = Product::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_entry + $entry->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_entry + $entry->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_produk + $product->biji_masuk;
+        $berat_sisa = $tracker->sisa_berat_produk + $product->berat_keluar;
 
         if(
-            $validated['biji_masuk'] > $biji_sisa ||
-            $validated['berat_masuk'] > $berat_sisa
+            $validated['biji'] > $biji_sisa ||
+            $validated['berat'] > $berat_sisa
         ){
             return response()->json([
                 'status' => 'error',
@@ -94,7 +92,7 @@ class EntryController extends Controller
             ], 422);
         }
 
-        $entry->update($validated);
+        $product->update($validated);
 
         return response()->json([
             'status' => 'success',
@@ -104,8 +102,8 @@ class EntryController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $entry = Entry::findOrFail($id);
-        $entry->delete();
+        $product = Product::findOrFail($id);
+        $product->delete();
 
         return response()->json([
             'status' => 'success',
@@ -117,7 +115,7 @@ class EntryController extends Controller
     {
         $ids = $request->ids;
 
-        Entry::whereIn('id', $ids)->delete();
+        Product::whereIn('id', $ids)->delete();
 
         return response()->json([
             'status' => 'success',

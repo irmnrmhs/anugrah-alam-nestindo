@@ -11,4 +11,9 @@ class FpGrade extends Model
         'keterangan',
         'status'
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'grades_id');
+    }
 }

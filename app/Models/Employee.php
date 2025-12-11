@@ -86,4 +86,14 @@ class Employee extends Model
     {
         return $this->hasMany(Dry::class, 'employees_id');
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'employees_id');
+    }
+    
+    public function fpstocks()
+    {
+        return $this->hasMany(FinishedProduct::class, 'employees_id');
+    }
 }
