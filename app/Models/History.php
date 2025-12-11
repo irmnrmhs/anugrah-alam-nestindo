@@ -53,6 +53,7 @@ class History extends Model
     {
         return $this->hasMany(Entry::class, 'histories_id');
     }
+    
     public function pulls()
     {
         return $this->hasMany(Pull::class, 'histories_id');
@@ -61,6 +62,11 @@ class History extends Model
     public function dries()
     {
         return $this->hasMany(Dry::class, 'histories_id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'histories_id');
     }
 
     // 1. Sesek Kaki
@@ -190,24 +196,24 @@ class History extends Model
     }
 
     // 7. Cetak Masuk
-    public function getTotalBijiMasukAttribute()
+    public function getTotalBijiEntryAttribute()
     {
         return $this->entries()->sum('biji_masuk');
     }
 
-    public function getTotalBeratMasukAttribute()
+    public function getTotalBeratEntryAttribute()
     {
         return $this->entries()->sum('berat_masuk');
     }
 
-    public function getSisaBijiMasukAttribute()
+    public function getSisaBijiEntryAttribute()
     {
-        return $this->biji - $this->total_biji_masuk;
+        return $this->biji - $this->total_biji_entry;
     }
 
-    public function getSisaBeratMasukAttribute()
+    public function getSisaBeratEntryAttribute()
     {
-        return $this->berat - $this->total_berat_masuk;
+        return $this->berat - $this->total_berat_entry;
     }
 
     // 7. Cetak Keluar
@@ -250,5 +256,26 @@ class History extends Model
     public function getSisaBeratKeringAttribute()
     {
         return $this->berat - $this->total_berat_kering;
+    }
+
+    // 9. Grading Produk Jadi
+    public function getTotalBijiProdukAttribute()
+    {
+        return $this->products()->sum('biji_masuk');
+    }
+
+    public function getTotalBeratProdukAttribute()
+    {
+        return $this->products()->sum('berat_masuk');
+    }
+
+    public function getSisaBijiProdukAttribute()
+    {
+        return $this->biji - $this->total_biji_produk;
+    }
+
+    public function getSisaBeratProdukAttribute()
+    {
+        return $this->berat - $this->total_berat_produk;
     }
 }

@@ -104,7 +104,7 @@
                 @elseif ($history->tujuan === 'PR07CB')
                     {{ $history->sisa_biji_bilas }}
                 @elseif ($history->tujuan === 'PR08MC')
-                    {{ $history->sisa_biji_masuk }}
+                    {{ $history->sisa_biji_entry }}
                 @elseif ($history->tujuan === 'PR09KC')
                     {{ $history->sisa_biji_keluar }}
                 @elseif ($history->tujuan === 'PR10PK')
@@ -131,7 +131,7 @@
                 @elseif ($history->tujuan === 'PR07CB')
                     {{ $history->sisa_berat_bilas }}
                 @elseif ($history->tujuan === 'PR08MC')
-                    {{ $history->sisa_berat_masuk }}
+                    {{ $history->sisa_berat_entry }}
                 @elseif ($history->tujuan === 'PR09KC')
                     {{ $history->sisa_berat_keluar }}
                 @elseif ($history->tujuan === 'PR10PK')

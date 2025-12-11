@@ -188,6 +188,7 @@
                 $('#berat_keluar').val(dry.berat_keluar);
                 $('#waktu_keluar').val(dry.waktu_keluar);
                 $('#keterangan').val(dry.keterangan);
+                $('#shift').val(dry.shift);
                 {{-- $('#status').val(dry.status); --}}
                 $('#modalTitle').text('Edit Masuk Cetak');
                 new bootstrap.Modal('#crudModal').show();

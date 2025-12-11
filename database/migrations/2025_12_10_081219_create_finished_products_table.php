@@ -13,14 +13,10 @@ return new class extends Migration
     {
         Schema::create('finished_products', function (Blueprint $table) {
             $table->id();
-            $table->string('kode');
-            $table->foreignId('histories_id')->constrained('histories');
-            $table->foreignId('employees_id')->constrained('employees');
-            $table->foreignId('grades_id')->constrained('fp_grades');
-            $table->date('tgl_mulai');
-            $table->integer('biji');
-            $table->decimal('berat', 7, 2);
-            $table->date('tgl_selesai');
+            $table->string('kode')->unique();
+            $table->foreignId('products_id')->constrained('products')->unique();
+            $table->integer('biji')->default(0);
+            $table->decimal('berat', 7, 2)->default(0);
             $table->timestamps();
         });
     }

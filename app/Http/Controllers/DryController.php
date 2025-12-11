@@ -34,8 +34,8 @@ class DryController extends Controller
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
             'waktu_keluar' => 'required|time',
-            'shift' => 'required',
-            'keterangan' => 'nullable'
+            'keterangan' => 'nullable',
+            'shift' => 'required'
         ]);
 
         $tracker = History::find($validated['histories_id']);

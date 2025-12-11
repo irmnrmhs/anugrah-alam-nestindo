@@ -31,7 +31,7 @@ class Grade extends Model
 
     public function identifiers()
     {
-        return $this->hasMany(ProductIdentifier::class, 'grades_Id');
+        return $this->hasMany(ProductIdentifier::class, 'grades_id');
     }
 
     // Accessor

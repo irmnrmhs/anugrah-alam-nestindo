@@ -554,6 +554,12 @@ return [
                     'url'  => 'dries',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Grading Produk Jadi',
+                    'url'  => 'products',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
                 ]
             ],
         ],
