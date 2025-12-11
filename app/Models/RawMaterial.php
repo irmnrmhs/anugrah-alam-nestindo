@@ -63,26 +63,12 @@ class RawMaterial extends Model
         return $this->berat - $this->total_berat_keluar;
     }
 
-    // public function getTotalDipakaiBijiAttribute()
-    // {
-    //     return $this->productIdentifiers->sum('biji');
-    // }
+    // Product Identifier Sisa
+    public function getBijiSisaIdentifierAttribute(){
+        return $this->total_biji_keluar - $this->identifiers()->sum('biji');
+    }
 
-    // public function getTotalDipakaiBeratAttribute()
-    // {
-    //     return $this->productIdentifiers->sum('berat');
-    // }
-
-    // /**
-    //  * Sisa stok yang boleh dipakai ProductIdentifier
-    //  */
-    // public function getSisaUntukIdentifikasiBijiAttribute()
-    // {
-    //     return $this->total_keluar_biji - $this->total_dipakai_biji;
-    // }
-
-    // public function getSisaUntukIdentifikasiBeratAttribute()
-    // {
-    //     return $this->total_keluar_berat - $this->total_dipakai_berat;
-    // }
+    public function getBeratSisaIdentifierAttribute(){
+        return $this->total_berat_keluar - $this->identifiers()->sum('berat');
+    }
 }

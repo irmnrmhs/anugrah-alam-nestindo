@@ -27,7 +27,17 @@ class RinseObserver
      */
     public function updated(Rinse $rinse): void
     {
-        //
+        $history = History::where('identifiers_id', $rinse->history->identifiers_id)
+            ->where('asal', 'PR07CB')
+            ->where('tujuan', 'PR08MC')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $rinse->biji_masuk,
+                'berat' => $rinse->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class RinseObserver
      */
     public function deleted(Rinse $rinse): void
     {
-        //
+        History::where('identifiers_id', $rinse->history->identifiers_id)
+            ->where('asal', 'PR07CB')
+            ->where('tujuan', 'PR08MC')
+            ->delete();
     }
 
     /**

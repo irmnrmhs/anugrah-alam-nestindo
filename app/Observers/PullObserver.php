@@ -27,7 +27,17 @@ class PullObserver
      */
     public function updated(Pull $pull): void
     {
-        //
+        $history = History::where('identifiers_id', $pull->history->identifiers_id)
+            ->where('asal', 'PR09KC')
+            ->where('tujuan', 'PR10PK')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $pull->biji_masuk,
+                'berat' => $pull->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class PullObserver
      */
     public function deleted(Pull $pull): void
     {
-        //
+        History::where('identifiers_id', $pull->history->identifiers_id)
+            ->where('asal', 'PR09KC')
+            ->where('tujuan', 'PR10PK')
+            ->delete();
     }
 
     /**

@@ -27,7 +27,17 @@ class WashObserver
      */
     public function updated(Wash $wash): void
     {
-        //
+        $history = History::where('identifiers_id', $wash->history->identifiers_id)
+            ->where('asal', 'PR03PC')
+            ->where('tujuan', 'PR04IK')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $wash->biji_masuk,
+                'berat' => $wash->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class WashObserver
      */
     public function deleted(Wash $wash): void
     {
-        //
+        History::where('identifiers_id', $wash->history->identifiers_id)
+            ->where('asal', 'PR03PC')
+            ->where('tujuan', 'PR04IK')
+            ->delete();
     }
 
     /**

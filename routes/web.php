@@ -39,6 +39,7 @@ use App\Http\Controllers\PickController;
 use App\Http\Controllers\PullController;
 use App\Http\Controllers\RinseController;
 use App\Http\Controllers\SoakController;
+use App\Http\Controllers\FpGradeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -325,6 +326,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/dries/{id}', [DryController::class, 'update'])->name('dries.update');
     Route::delete('/dries/{id}', [DryController::class, 'destroy'])->name('dries.destroy');
     Route::post('/dries/delete-multiple', [DryController::class, 'deleteMultiple']);
+
+    // Grade Bahan Baku
+    Route::get('/fp-grades', [FpGradeController::class, 'index'])->name('fp-grades.index');
+    Route::post('/fp-grades', [FpGradeController::class, 'store'])->name('fp-grades.store');
+    Route::get('/fp-grades/{id}', [FpGradeController::class, 'show'])->name('fp-grades.show');
+    Route::put('/fp-grades/{id}', [FpGradeController::class, 'update'])->name('fp-grades.update');
+    Route::delete('/fp-grades/{id}', [FpGradeController::class, 'destroy'])->name('fp-grades.destroy');
+    Route::post('/fp-grades/delete-multiple', [FpGradeController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

@@ -30,22 +30,12 @@ class ProductIdentifier extends Model
         return $this->hasMany(History::class, 'identifiers_id');
     }
 
-    public function getStokBijiAttribute()
-    {
-        return $this->rawMaterial()->sum('total_biji_keluar') - $this->biji;
-    }
-
-    public function getStokBeratAttribute()
-    {
-        return $this->rawMaterial()->sum('total_berat_keluar') - $this->berat;
-    }
-
-    public function getSisaBijiAttribute()
+    public function getBijiSisaAttribute()
     {
         return $this->stok_biji - $this->biji;
     }
 
-    public function getSisaBeratAttribute()
+    public function getBeratSisaAttribute()
     {
         return $this->stok_berat - $this->berat;
     }
