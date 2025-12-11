@@ -110,7 +110,7 @@
                 @elseif ($history->tujuan === 'PR10PK')
                     {{ $history->sisa_biji_kering }}
                 @elseif ($history->tujuan === 'PR11GP')
-                    <span>Grading Produk Jadi</span>
+                    {{ $history->sisa_biji_produk }}
                 @elseif ($history->tujuan === 'PR12PK')
                     <span>Stok Produk Jadi</span>
                 @elseif ($history->tujuan === 'PR13GP')
@@ -137,7 +137,7 @@
                 @elseif ($history->tujuan === 'PR10PK')
                     {{ $history->sisa_berat_kering }}
                 @elseif ($history->tujuan === 'PR11GP')
-                    <span>Grading Produk Jadi</span>
+                    {{ $history->sisa_berat_produk }}
                 @elseif ($history->tujuan === 'PR12PK')
                     <span>Stok Produk Jadi</span>
                 @elseif ($history->tujuan === 'PR13GP')

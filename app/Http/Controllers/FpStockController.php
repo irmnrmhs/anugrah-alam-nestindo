@@ -14,11 +14,11 @@ class FpStockController extends Controller
     public string $obj = 'Stok Bahan Baku';
     public function index(): View
     {
-        $stocks = RmStock::with('rawMaterial', 'employee')->latest()->get();
-        $rms = RawMaterial::all();
+        $stocks = FinishedProduct::with('rawMaterial', 'employee')->latest()->get();
+        $fproducts = FinishedProduct::all();
         $employees = Employee::all();
 
-        return view('raw-material.rmStock', compact('stocks', 'rms', 'employees'));
+        return view('raw-material.fp-stock', compact('stocks', 'fproducts', 'employees'));
     }
 
     public function store(Request $request): JsonResponse

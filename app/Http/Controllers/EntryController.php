@@ -15,7 +15,7 @@ class EntryController extends Controller
     public function index(): View
     {
         $entries = Entry::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR07CB')->get();
+        $histories = History::where('tujuan', 'PR08MC')->get();
         $employees = Employee::all();
 
         return view('production.entry', compact('entries', 'histories', 'employees'));
