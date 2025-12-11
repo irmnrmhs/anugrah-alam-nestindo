@@ -261,12 +261,12 @@ class History extends Model
     // 9. Grading Produk Jadi
     public function getTotalBijiProdukAttribute()
     {
-        return $this->products()->sum('biji_masuk');
+        return $this->products()->sum('biji');
     }
 
     public function getTotalBeratProdukAttribute()
     {
-        return $this->products()->sum('berat_masuk');
+        return $this->products()->sum('berat');
     }
 
     public function getSisaBijiProdukAttribute()

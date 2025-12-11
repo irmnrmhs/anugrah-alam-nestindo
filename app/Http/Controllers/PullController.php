@@ -15,7 +15,7 @@ class PullController extends Controller
     public function index(): View
     {
         $pulls = Pull::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR08MC')->get();
+        $histories = History::where('tujuan', 'PR09KC')->get();
         $employees = Employee::all();
 
         return view('production.pull', compact('pulls', 'histories', 'employees'));

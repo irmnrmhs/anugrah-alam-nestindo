@@ -15,7 +15,10 @@ class WashController extends Controller
     public function index(): View
     {
         $washes = Wash::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR03PC')->get();
+        $histories = History::where('tujuan', 'PR03PC')->whereHas('edges', function($q) {
+            $q->where('status', 1);
+        })->get();
+
         $employees = Employee::all();
 
         return view('production.wash', compact('washes', 'histories', 'employees'));

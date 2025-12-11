@@ -15,7 +15,7 @@ class DryController extends Controller
     public function index(): View
     {
         $dries = Dry::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR09KC')->get();
+        $histories = History::where('tujuan', 'PR10PK')->get();
         $employees = Employee::all();
 
         return view('production.dry', compact('dries', 'histories', 'employees'));
@@ -29,11 +29,11 @@ class DryController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'waktu_masuk' => 'required|time',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99',
-            'waktu_keluar' => 'required|time',
+            'waktu_masuk' => 'required|date_format:H:i',
+            'tgl_selesai' => 'nullable|date',
+            'biji_keluar' => 'nullable|integer|min:0',
+            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
+            'waktu_keluar' => 'nullable|date_format:H:i',
             'keterangan' => 'nullable',
             'shift' => 'required'
         ]);
@@ -73,13 +73,13 @@ class DryController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'waktu_masuk' => 'required|time',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99',
-            'waktu_keluar' => 'required|time',
-            'shift' => 'required',
-            'keterangan' => 'nullable'
+            'waktu_masuk' => 'required|date_format:H:i',
+            'tgl_selesai' => 'nullable|date',
+            'biji_keluar' => 'nullable|integer|min:0',
+            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
+            'waktu_keluar' => 'nullable|date_format:H:i',
+            'keterangan' => 'nullable',
+            'shift' => 'required'
         ]);
 
         $dry = Dry::findOrFail($id);
