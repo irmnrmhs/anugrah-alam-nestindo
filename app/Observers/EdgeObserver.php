@@ -34,8 +34,8 @@ class EdgeObserver
 
         if ($history) {
             $history->update([
-                'biji'  => $edge->biji_keluar,
-                'berat' => $edge->berat_keluar,
+                'biji'  => $edge->biji_masuk,
+                'berat' => $edge->berat_masuk,
             ]);
         }
     }

@@ -27,7 +27,17 @@ class DryObserver
      */
     public function updated(Dry $dry): void
     {
-        //
+        $history = History::where('identifiers_id', $dry->history->identifiers_id)
+            ->where('asal', 'PR10PK')
+            ->where('tujuan', 'PR11GP')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $dry->biji_masuk,
+                'berat' => $dry->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class DryObserver
      */
     public function deleted(Dry $dry): void
     {
-        //
+        History::where('identifiers_id', $dry->history->identifiers_id)
+            ->where('asal', 'PR10PK')
+            ->where('tujuan', 'PR11GP')
+            ->delete();
     }
 
     /**

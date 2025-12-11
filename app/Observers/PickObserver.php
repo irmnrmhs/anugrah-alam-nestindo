@@ -27,7 +27,17 @@ class PickObserver
      */
     public function updated(Pick $pick): void
     {
-        //
+        $history = History::where('identifiers_id', $pick->history->identifiers_id)
+            ->where('asal', 'PR05PB')
+            ->where('tujuan', 'PR06PR')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $pick->biji_masuk,
+                'berat' => $pick->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class PickObserver
      */
     public function deleted(Pick $pick): void
     {
-        //
+        History::where('identifiers_id', $pick->history->identifiers_id)
+            ->where('asal', 'PR05PB')
+            ->where('tujuan', 'PR06PR')
+            ->delete();
     }
 
     /**

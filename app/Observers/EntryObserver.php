@@ -27,7 +27,17 @@ class EntryObserver
      */
     public function updated(Entry $entry): void
     {
-        //
+        $history = History::where('identifiers_id', $entry->history->identifiers_id)
+            ->where('asal', 'PR08MC')
+            ->where('tujuan', 'PR09KC')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $entry->biji_masuk,
+                'berat' => $entry->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class EntryObserver
      */
     public function deleted(Entry $entry): void
     {
-        //
+        History::where('identifiers_id', $entry->history->identifiers_id)
+            ->where('asal', 'PR02SK')
+            ->where('tujuan', 'PR03PC')
+            ->delete();
     }
 
     /**

@@ -27,7 +27,17 @@ class SoakObserver
      */
     public function updated(Soak $soak): void
     {
-        //
+        $history = History::where('identifiers_id', $soak->history->identifiers_id)
+            ->where('asal', 'PR06PR')
+            ->where('tujuan', 'PR07CB')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $soak->biji_masuk,
+                'berat' => $soak->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class SoakObserver
      */
     public function deleted(Soak $soak): void
     {
-        //
+        History::where('identifiers_id', $soak->history->identifiers_id)
+            ->where('asal', 'PR06PR')
+            ->where('tujuan', 'PR07CB')
+            ->delete();
     }
 
     /**

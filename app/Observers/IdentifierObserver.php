@@ -27,12 +27,17 @@ class IdentifierObserver
      */
     public function updated(ProductIdentifier $productIdentifier): void
     {
-        // if ($productIdentifier->wasChanged('identifiers_id')) {
-        //     History::where('identifiers_id', $productIdentifier->id)
-        //         ->update([
-        //             'identifiers_id' => $productIdentifier->identifiers_id
-        //         ]);
-        // }
+        $history = History::where('identifiers_id', $productIdentifier->history->identifiers_id)
+            ->where('asal', 'PR01GB')
+            ->where('tujuan', 'PR02SK')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $productIdentifier->biji_masuk,
+                'berat' => $productIdentifier->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -40,7 +45,10 @@ class IdentifierObserver
      */
     public function deleted(ProductIdentifier $productIdentifier): void
     {
-        //
+        History::where('identifiers_id', $productIdentifier->history->identifiers_id)
+            ->where('asal', 'PR01GB')
+            ->where('tujuan', 'PR02SK')
+            ->delete();
     }
 
     /**

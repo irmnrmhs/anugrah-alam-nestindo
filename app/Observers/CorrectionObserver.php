@@ -27,7 +27,17 @@ class CorrectionObserver
      */
     public function updated(Correction $correction): void
     {
-        //
+        $history = History::where('identifiers_id', $correction->history->identifiers_id)
+            ->where('asal', 'PR04IK')
+            ->where('tujuan', 'PR05PB')
+            ->first();
+
+        if ($history) {
+            $history->update([
+                'biji'  => $correction->biji_masuk,
+                'berat' => $correction->berat_masuk,
+            ]);
+        }
     }
 
     /**
@@ -35,7 +45,10 @@ class CorrectionObserver
      */
     public function deleted(Correction $correction): void
     {
-        //
+        History::where('identifiers_id', $correction->history->identifiers_id)
+            ->where('asal', 'PR04IK')
+            ->where('tujuan', 'PR05PB')
+            ->delete();
     }
 
     /**
