@@ -3,28 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\FinishedProduct;
-use App\Models\RawMaterial;
 use App\Models\Employee;
+use App\Models\FpStock;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class FpStockController extends Controller
 {
-    public string $obj = 'Stok Bahan Baku';
+    public string $obj = 'Stok Produk Jadi';
     public function index(): View
     {
-        $stocks = FinishedProduct::with('rawMaterial', 'employee')->latest()->get();
+        $stocks = FpStock::with('fproducts', 'employee')->latest()->get();
         $fproducts = FinishedProduct::all();
         $employees = Employee::all();
 
-        return view('raw-material.fp-stock', compact('stocks', 'fproducts', 'employees'));
+        return view('production.fp-stock', compact('stocks', 'fproducts', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'rms_id' => 'required|exists:raw_materials,id',
+            'fproducts_id' => 'required|exists:finished_products,id',
             'employees_id' => 'required|exists:employees,id',
             'tgl_keluar' => 'required|date',
             'biji_keluar' => 'required|integer|min:0',
@@ -32,11 +32,11 @@ class FpStockController extends Controller
             'keterangan' => 'nullable'
         ]);
 
-        $raw = RawMaterial::find($validated['rms_id']);
+        $fproduct = FinishedProduct::find($validated['fproducts_id']);
 
         if (
-            $validated['biji_keluar'] > $raw->biji_sisa ||
-            $validated['berat_keluar'] > $raw->berat_sisa
+            $validated['biji_keluar'] > $fproduct->biji_sisa ||
+            $validated['berat_keluar'] > $fproduct->berat_sisa
         ) {
             return response()->json([
                 'status' => 'error',
@@ -44,7 +44,7 @@ class FpStockController extends Controller
             ], 422);
         }
 
-        RmStock::create($validated);
+        FpStock::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -54,18 +54,18 @@ class FpStockController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $stock = RmStock::with('rawMaterial', 'employee')->findOrFail($id);
+        $stock = FpStock::with('fproducts', 'employee')->findOrFail($id);
         return response()->json($stock);
     }
 
     public function materialInfo($id)
     {
-        $raw = RawMaterial::findOrFail($id);
-        $lastOut = RmStock::where('rms_id', $id)->latest()->first();
+        $fproduct = FinishedProduct::findOrFail($id);
+        $lastOut = FpStock::where('fproducts_id', $id)->latest()->first();
 
         return response()->json([
-            'biji_sisa' => $raw->biji_sisa,
-            'berat_sisa' => $raw->berat_sisa,
+            'biji_sisa' => $fproduct->biji,
+            'berat_sisa' => $fproduct->berat,
             'last_date' => $lastOut?->tgl_keluar,
         ]);
     }
@@ -73,7 +73,7 @@ class FpStockController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'rms_id' => 'required|exists:raw_materials,id',
+            'fproducts_id' => 'required|exists:finished_products,id',
             'employees_id' => 'required|exists:employees,id',
             'tgl_keluar' => 'required|date',
             'biji_keluar' => 'required|integer|min:0',
@@ -81,12 +81,11 @@ class FpStockController extends Controller
             'keterangan' => 'nullable'
         ]);
 
-        $stock = RmStock::findOrFail($id);
-        $raw = RawMaterial::find($validated['rms_id']);
+        $stock = FpStock::findOrFail($id);
+        $fproduct = FinishedProduct::find($validated['fproducts_id']);
 
-        // hitung sisa aktual
-        $biji_sisa = $raw->biji_sisa + $stock->biji_keluar;
-        $berat_sisa = $raw->berat_sisa + $stock->berat_keluar;
+        $biji_sisa = $fproduct->biji_sisa + $stock->biji_keluar;
+        $berat_sisa = $fproduct->berat_sisa + $stock->berat_keluar;
 
         if (
             $validated['biji_keluar'] > $biji_sisa ||
@@ -108,7 +107,7 @@ class FpStockController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $stock = RmStock::findOrFail($id);
+        $stock = FpStock::findOrFail($id);
         $stock->delete();
 
         return response()->json([
@@ -121,7 +120,7 @@ class FpStockController extends Controller
     {
         $ids = $request->ids;
 
-        RmStock::whereIn('id', $ids)->delete();
+        FpStock::whereIn('id', $ids)->delete();
 
         return response()->json([
             'status' => 'success',
