@@ -12,7 +12,7 @@
     <th>Kode Produk</th>
     <th>Karyawan</th>
     <th>Grade</th>
-    <th>Kode Produk</th>
+    <th>Kode Grade</th>
     <th>Tanggal Mulai</th>
     <th>Jumlah Biji</th>
     <th>Berat</th>
@@ -26,7 +26,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $product->history->identifier->kode }}</td>
             <td>{{ $product->employee->nama }}</td>
-            <td>{{ $product->grade->nama }}</td>
+            <td>{{ $product->grade->grade }}</td>
             <td>{{ $product->kode }}</td>
             <td>{{ $product->tgl_mulai }}</td>
             <td>{{ $product->biji }}</td>
@@ -88,7 +88,7 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/[products]/${id}` : '/[products]';
+    const url = id ? `/products/${id}` : '/products';
     const method = id ? 'PUT' : 'POST';
 
     const data = {

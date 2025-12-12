@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\History;
 use App\Models\Employee;
-use App\Models\Grade;
+use App\Models\FpGrade;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -18,7 +18,7 @@ class ProductController extends Controller
         $products = Product::with('history', 'employee', 'grade')->latest()->get();
         $histories = History::where('tujuan', 'PR11GP')->get();
         $employees = Employee::all();
-        $grades = Grade::all();
+        $grades = FpGrade::all();
 
         return view('production.product', compact('products', 'histories', 'employees', 'grades'));
     }
@@ -35,9 +35,11 @@ class ProductController extends Controller
             'tgl_selesai' => 'required|date'
         ]);
 
-        $tracker = History::find($validated['histories_id']);
+        $tracker = History::with('identifier')->find($validated['histories_id']);
 
-        $validated['kode'] = 'Test';
+        $grade = FpGrade::find($validated['grades_id']);
+        $pi = preg_replace('/[^A-Za-z0-9]/', '', $tracker->identifier->kode);
+        $validated['kode'] = $grade->kode . "-" . $pi;
 
         if(
             $validated['biji'] > $tracker->sisa_biji_produk ||
@@ -77,7 +79,11 @@ class ProductController extends Controller
         ]);
 
         $product = Product::findOrFail($id);
-        $tracker = History::find($validated['histories_id']);
+        $tracker = History::with('identifier')->find($validated['histories_id']);
+
+        $grade = FpGrade::find($validated['grades_id']);
+        $pi = preg_replace('/[^A-Za-z0-9]/', '', $tracker->identifier->kode);
+        $validated['kode'] = $grade->kode . "-" . $pi;
 
         $biji_sisa = $tracker->sisa_biji_produk + $product->biji_masuk;
         $berat_sisa = $tracker->sisa_berat_produk + $product->berat_keluar;

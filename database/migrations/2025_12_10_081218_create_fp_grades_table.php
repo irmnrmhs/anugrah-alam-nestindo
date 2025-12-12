@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('fp_grades', function (Blueprint $table) {
             $table->id();
+            $table->string('kode');
             $table->string('grade')->unique();
             $table->string('keterangan')->nullable();
             $table->boolean('status');

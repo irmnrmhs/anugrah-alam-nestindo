@@ -560,6 +560,12 @@ return [
                     'url'  => 'products',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Produk Jadi',
+                    'url'  => 'fp-products',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
                 ]
             ],
         ],

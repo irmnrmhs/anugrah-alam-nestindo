@@ -7,6 +7,7 @@
 
 @section('table-headers')
     <th>No</th>
+    <th>Kode</th>
     <th>Grade</th>
     <th>Keterangan</th>
     <th>Status</th>
@@ -16,6 +17,7 @@
     @foreach($grades as $index => $grade)
         <tr data-id="{{ $grade->id }}">
             <td>{{ $index + 1 }}</td>
+            <td>{{ $grade->kode }}</td>
             <td>{{ $grade->grade }}</td>
             <td>{{ $grade->keterangan}}</td>
             <td>
@@ -34,6 +36,10 @@
 @stop
 
 @section('form-fields')
+    <div class="mb-3">
+        <label>Kode Grade</label>
+        <input type="text" id="kode" class="form-control" required>
+    </div>
     <div class="mb-3">
         <label>Grade Produk Jadi</label>
         <input type="text" id="grade" class="form-control" required>
@@ -58,6 +64,7 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
+        kode: $('#kode').val(),
         grade: $('#grade').val(),
         keterangan: $('#keterangan').val(),
         status: $('#status').val()
@@ -86,6 +93,7 @@
             .then(r => r.json())
             .then(grade => {
                 $('#item_id').val(grade.id);
+                $('#kode').val(grade.kode);
                 $('#grade').val(grade.grade);
                 $('#keterangan').val(grade.keterangan);
                 $('#status').val(grade.status);
