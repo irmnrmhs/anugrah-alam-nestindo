@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Arrival;
 use App\Models\FinishedProduct;
 use App\Models\Product;
-use App\Models\RawMaterial;
 use Illuminate\View\View;
 
 class FinishedController extends Controller

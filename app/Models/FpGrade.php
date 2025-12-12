@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FpGrade extends Model
 {
     protected $fillable = [
+        'kode',
         'grade',
         'keterangan',
         'status'

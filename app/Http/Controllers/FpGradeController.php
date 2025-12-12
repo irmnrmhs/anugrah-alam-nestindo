@@ -19,6 +19,7 @@ class FpGradeController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
+            'kode' => 'required|unique:fp_grades,kode',
             'grade' => 'required|unique:fp_grades,grade',
             'keterangan' => 'nullable',
             'status' => 'required|boolean'
@@ -41,6 +42,7 @@ class FpGradeController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
+            'kode' => 'required|unique:fp_grades,kode,' . $id,
             'grade' => 'required|unique:fp_grades,grade,' . $id,
             'keterangan' => 'nullable',
             'status' => 'required|boolean'

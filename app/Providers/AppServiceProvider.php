@@ -23,6 +23,7 @@ use App\Models\Rinse;
 use App\Models\Entry;
 use App\Models\Pull;
 use App\Models\Dry;
+use App\Models\Product;
 
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
@@ -42,6 +43,7 @@ use App\Observers\RinseObserver;
 use App\Observers\EntryObserver;
 use App\Observers\PullObserver;
 use App\Observers\DryObserver;
+use App\Observers\ProductObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -102,6 +104,7 @@ class AppServiceProvider extends ServiceProvider
         Entry::observe(EntryObserver::class);
         Pull::observe(PullObserver::class);
         Dry::observe(DryObserver::class);
+        Product::observe(ProductObserver::class);
     }
 
     // 1. Grading BB (PR01GB)

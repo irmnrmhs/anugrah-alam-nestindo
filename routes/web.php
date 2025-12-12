@@ -40,6 +40,8 @@ use App\Http\Controllers\PullController;
 use App\Http\Controllers\RinseController;
 use App\Http\Controllers\SoakController;
 use App\Http\Controllers\FpGradeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\FinishedController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -334,6 +336,19 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/fp-grades/{id}', [FpGradeController::class, 'update'])->name('fp-grades.update');
     Route::delete('/fp-grades/{id}', [FpGradeController::class, 'destroy'])->name('fp-grades.destroy');
     Route::post('/fp-grades/delete-multiple', [FpGradeController::class, 'deleteMultiple']);
+
+    // Produk
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+    Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::post('/products/delete-multiple', [ProductController::class, 'deleteMultiple']);
+
+    // Produk Jadi
+    Route::get('/fp-products', [FinishedController::class, 'index'])->name('fp-products.index');
+    Route::get('/fp-products-info/{id}', [FinishedController::class, 'info']);
+
 });
 
 require __DIR__.'/auth.php';

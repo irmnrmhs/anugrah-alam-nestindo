@@ -20,7 +20,7 @@ class FinishedProduct extends Model
 
     public function fpstocks()
     {
-        return $this->hasMany(FpStock::class, 'stocks_id');
+        return $this->hasMany(FpStock::class, 'fproducts_id');
     }
 
     // total biji keluar
