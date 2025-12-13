@@ -20,13 +20,13 @@ class FinishedController extends Controller
     public function info($id)
     {
         $product = FinishedProduct::with(['fpstocks' => function($q){
-            $q->latest('tgl_masuk');
+            $q->latest('tgl_keluar');
         }])->findOrFail($id);
 
         return response()->json([
             'biji_sisa'  => $product->biji_sisa,
             'berat_sisa' => $product->berat_sisa,
-            'last_date'  => optional($product->fpstocks->first())->tgl_masuk,
+            'last_date'  => optional($product->fpstocks->first())->tgl_keluar,
         ]);
     }
 }

@@ -14,7 +14,7 @@ class FpStockController extends Controller
     public string $obj = 'Stok Produk Jadi';
     public function index(): View
     {
-        $stocks = FpStock::with('fproducts', 'employee')->latest()->get();
+        $stocks = FpStock::with('fproduct', 'employee')->latest()->get();
         $fproducts = FinishedProduct::all();
         $employees = Employee::all();
 
@@ -54,11 +54,11 @@ class FpStockController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $stock = FpStock::with('fproducts', 'employee')->findOrFail($id);
+        $stock = FpStock::with('fproduct', 'employee')->findOrFail($id);
         return response()->json($stock);
     }
 
-    public function materialInfo($id)
+    public function productInfo($id)
     {
         $fproduct = FinishedProduct::findOrFail($id);
         $lastOut = FpStock::where('fproducts_id', $id)->latest()->first();
