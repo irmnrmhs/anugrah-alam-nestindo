@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\SteamOfficerController;
+use Complex\Functions;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
@@ -95,5 +97,10 @@ class Employee extends Model
     public function fpstocks()
     {
         return $this->hasMany(FinishedProduct::class, 'employees_id');
+    }
+
+    public function officer()
+    {
+        return $this->hasOne(SteamOfficer::class, 'employees_id');
     }
 }

@@ -102,7 +102,7 @@ class DryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => $this->obj . ' berhasil diperbarui'
+            'message' => $this->obj . ' berhasil perbaharui',
         ]);
     }
 
@@ -113,7 +113,7 @@ class DryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data kedatangan berhasil dihapus.',
+            'message' => $this->obj . ' berhasil dihapus',
         ]);
     }
 

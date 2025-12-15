@@ -9,7 +9,7 @@ use App\Http\Controllers\PickController;
 use App\Http\Controllers\PullController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SoakController;
-use App\Http\Controllers\TypeController;
+use App\Http\Controllers\NestTypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WashController;
 use App\Http\Controllers\BlendController;
@@ -43,6 +43,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
+use App\Http\Controllers\SteamOfficerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -358,6 +359,22 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/fp-stocks/{id}', [FpStockController::class, 'update'])->name('fp-stocks.update');
     Route::delete('/fp-stocks/{id}', [FpStockController::class, 'destroy'])->name('fp-stocks.destroy');
     Route::post('/fp-stocks/delete-multiple', [FpStockController::class, 'deleteMultiple']);
+
+    // Tipe Sarang
+    Route::get('/nests', [NestTypeController::class, 'index'])->name('nests.index');
+    Route::post('/nests', [NestTypeController::class, 'store'])->name('nests.store');
+    Route::get('/nests/{id}', [NestTypeController::class, 'show'])->name('nests.show');
+    Route::put('/nests/{id}', [NestTypeController::class, 'update'])->name('nests.update');
+    Route::delete('/nests/{id}', [NestTypeController::class, 'destroy'])->name('nests.destroy');
+    Route::post('/nests/delete-multiple', [NestTypeController::class, 'deleteMultiple']);
+
+    // Petugas Pemanas
+    Route::get('/officers', [SteamOfficerController::class, 'index'])->name('officers.index');
+    Route::post('/officers', [SteamOfficerController::class, 'store'])->name('officers.store');
+    Route::get('/officers/{id}', [SteamOfficerController::class, 'show'])->name('officers.show');
+    Route::put('/officers/{id}', [SteamOfficerController::class, 'update'])->name('officers.update');
+    Route::delete('/officers/{id}', [SteamOfficerController::class, 'destroy'])->name('officers.destroy');
+    Route::post('/officers/delete-multiple', [SteamOfficerController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

@@ -407,6 +407,18 @@ return [
                 ],
                 [   'header' => 'Produksi' ],
                 [
+                    'text' => 'Tipe Sarang',
+                    'url'  => 'nests',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Petugas Pemanas',
+                    'url'  => 'officers',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Grade Produk Jadi',
                     'url'  => 'fp-grades',
                     'can'  => ['Super Admin', 'Admin Produksi'],
