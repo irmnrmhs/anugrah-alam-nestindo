@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('steam_officers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employees_id')->constrained('employees');
-            $table->boolean('status');
+            $table->foreignId('employees_id')->constrained('employees')->unique();
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

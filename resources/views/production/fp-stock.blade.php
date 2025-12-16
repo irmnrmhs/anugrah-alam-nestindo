@@ -85,7 +85,7 @@
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
-        <input type="text" id="keterangan" class="form-control" required>
+        <input type="text" id="keterangan" class="form-control">
     </div>
 @stop
 

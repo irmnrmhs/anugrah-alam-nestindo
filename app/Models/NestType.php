@@ -10,4 +10,9 @@ class NestType extends Model
         'type',
         'keterangan'
     ];
+
+    public function steams()
+    {
+        return $this->hasMany(Steam::class, 'nests_id');
+    }
 }

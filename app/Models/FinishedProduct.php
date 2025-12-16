@@ -23,6 +23,11 @@ class FinishedProduct extends Model
         return $this->hasMany(FpStock::class, 'fproducts_id');
     }
 
+    public function steams()
+    {
+        return $this->hasMany(Steam::class, 'fproducts_id');
+    }
+
     // total biji keluar
     public function getTotalBijiKeluarAttribute()
     {

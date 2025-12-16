@@ -43,6 +43,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
+use App\Http\Controllers\SteamController;
 use App\Http\Controllers\SteamOfficerController;
 
 Route::get('/', function () {
@@ -375,6 +376,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/officers/{id}', [SteamOfficerController::class, 'update'])->name('officers.update');
     Route::delete('/officers/{id}', [SteamOfficerController::class, 'destroy'])->name('officers.destroy');
     Route::post('/officers/delete-multiple', [SteamOfficerController::class, 'deleteMultiple']);
+
+    // Steaming
+    Route::get('/steams', [SteamController::class, 'index'])->name('steams.index');
+    Route::post('/steams', [SteamController::class, 'store'])->name('steams.store');
+    Route::get('/steams/{id}', [SteamController::class, 'show'])->name('steams.show');
+    Route::put('/steams/{id}', [SteamController::class, 'update'])->name('steams.update');
+    Route::delete('/steams/{id}', [SteamController::class, 'destroy'])->name('steams.destroy');
+    Route::post('/steams/delete-multiple', [SteamController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';

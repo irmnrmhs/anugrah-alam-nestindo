@@ -584,6 +584,12 @@ return [
                     'url'  => 'fp-stocks',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Steaming',
+                    'url'  => 'steams',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
                 ]
             ],
         ],
