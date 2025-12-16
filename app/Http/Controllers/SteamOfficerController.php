@@ -12,7 +12,7 @@ class SteamOfficerController extends Controller
 {
     public function index(): View
     {
-        $officers = SteamOfficer::latest()->get();
+        $officers = SteamOfficer::with('employee')->latest()->get();
         $employees = Employee::all();
         return view('masters.steam-officer', compact('officers', 'employees'));
     }
@@ -20,7 +20,7 @@ class SteamOfficerController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'employees_id' => 'required|exists:employees,id|unique:steams,employees_id',
+            'employees_id' => 'required|exists:employees,id|unique:steam_officers,employees_id',
             'status' => 'required|boolean'
         ]);
 
@@ -35,14 +35,14 @@ class SteamOfficerController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $officer = SteamOfficer::with('area')->findOrFail($id);
+        $officer = SteamOfficer::with('employee')->findOrFail($id);
         return response()->json($officer);
     }
 
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'employees_id' => 'required|exists:employees,id|unique:steams,employees_id',
+            'employees_id' => 'required|exists:employees,id|unique:steam_officers,employees_id',
             'status' => 'required|boolean'
         ]);
 

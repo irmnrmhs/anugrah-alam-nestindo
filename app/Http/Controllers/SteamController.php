@@ -29,10 +29,10 @@ class SteamController extends Controller
             'fproducts_id' => 'required|exists:finished_products,id',
             'officers_id' => 'required|exists:steam_officers,id',
             'nests_id' => 'required|exists:nest_types,id',
-            'penambahan' => 'boolean',
-            'sumber_panas' => 'boolean',
+            'penambahan' => 'required|boolean',
+            'sumber_panas' => 'required|boolean',
             'tgl_pemanasan' => 'required|date',
-            'standar' => 'boolean',
+            'standar' => 'required|boolean',
             'suhu_awal' => 'required|numeric|max:999.99',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
@@ -43,6 +43,32 @@ class SteamController extends Controller
             'jml_tray' => 'required|integer|min:0|max:6',
             'keterangan' => 'nullable'
         ]);
+
+        $fproduct = FinishedProduct::with(
+            'product.history.identifier.rawMaterial.arrival.dcertificate.wbhouse'
+        )->findOrFail($validated['fproducts_id']);
+
+        $kd_product = $fproduct->product->kode;
+
+        $noreg = $fproduct->product
+            ->history
+            ->identifier
+            ->rawMaterial
+            ->arrival
+            ->dcertificate
+            ->wbhouse
+            ->kode;
+
+        $tgl = date('dmy', strtotime($validated['tgl_pemanasan']));
+
+        $validated['kode'] = $kd_product . $noreg . '-' . $tgl;
+
+        // if (Steam::where('kode', $validated['kode'])->exists()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Gagal: Kode Batch otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa kembali.',
+        //     ], 409);
+        // }
 
         $steam = Steam::create($validated);
 
@@ -66,22 +92,37 @@ class SteamController extends Controller
             'fproducts_id' => 'required|exists:finished_products,id',
             'officers_id' => 'required|exists:steam_officers,id',
             'nests_id' => 'required|exists:nest_types,id',
-            'penambahan' => 'boolean',
-            'sumber_panas' => 'boolean',
+            'penambahan' => 'required|boolean',
+            'sumber_panas' => 'required|boolean',
             'tgl_pemanasan' => 'required|date',
-            'standar' => 'boolean',
+            'standar' => 'required|boolean',
             'suhu_awal' => 'required|numeric|max:999.99',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
             'suhu' => 'required|numeric|max:99999.99',
             'waktu' => 'required|date_format:H:i',
             'suhu_total' => 'required|numeric|max:999.99',
-            'jml_tray' => 'required|integer|min:0|max:6',
             'waktu_total' => 'required|date_format:H:i',
+            'jml_tray' => 'required|integer|min:0|max:6',
             'keterangan' => 'nullable'
         ]);
 
+        $kd_product = FinishedProduct::with('product')->find($validated['fproducts_id']);
+        $kd_product = $kd_product->product->kode;
+
+        $tgl = $validated['tgl_pemanasan'];
+        $noreg = $kd_product->product->history->identifier->rawMaterial->arrival->dcertificate->wbhouse->kode;
+        $tgl = date('dmy', strtotime($tgl));
+        $validated['kode'] = $kd_product . $noreg . "-" . $tgl;
+
         $steam = Steam::findOrFail($id);
+        
+        // if (Steam::where('kode', $validated['kode'])->exists()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Gagal: Kode Batch otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa kembali.',
+        //     ], 409);
+        // }
 
         $steam->update($validated);
 
@@ -107,29 +148,57 @@ class SteamController extends Controller
     {
         $validated = $request->validate([
             'items' => 'required|array|min:1',
+
             'items.*.fproducts_id'   => 'required|exists:finished_products,id',
-            'items.*.officers_id'   => 'required|exists:steam_officers,id',
-            'items.*.nests_id' => 'required|exists:nest_types,id',
-            'items.*.penambahan' => 'boolean',
-            'items.*.sumber_panas' => 'boolean',
-            'items.*.tgl_pemanasan' => 'required|date',
-            'items.*.standar' => 'boolean',
-            'items.*.suhu_awal' => 'required|numeric|max:999.99',
-            'items.*.biji' => 'required|integer|min:0',
-            'items.*.berat' => 'required|numeric|min:0|max:99999.99',
-            'items.*.suhu' => 'required|numeric|max:99999.99',
-            'items.*.waktu' => 'required|date_format:H:i',
-            'items.*.suhu_total' => 'required|numeric|max:999.99',
-            'items.*.jml_tray' => 'required|integer|min:0|max:6',
-            'items.*.waktu_total' => 'required|date_format:H:i',
-            'items.*.keterangan' => 'nullable'
+            'items.*.officers_id'    => 'required|exists:steam_officers,id',
+            'items.*.nests_id'       => 'required|exists:nest_types,id',
+
+            'items.*.penambahan'     => 'required|boolean',
+            'items.*.sumber_panas'   => 'required|boolean',
+            'items.*.tgl_pemanasan'  => 'required|date',
+            'items.*.standar'        => 'required|boolean',
+
+            'items.*.suhu_awal'      => 'required|numeric|max:999.99',
+            'items.*.biji'           => 'required|integer|min:0',
+            'items.*.berat'          => 'required|numeric|min:0|max:99999.99',
+
+            'items.*.suhu'           => 'required|numeric|max:99999.99',
+            'items.*.waktu'          => 'required|date_format:H:i',
+            'items.*.suhu_total'     => 'required|numeric|max:999.99',
+            'items.*.waktu_total'    => 'required|date_format:H:i',
+
+            'items.*.jml_tray'       => 'required|integer|min:0|max:6',
+            'items.*.keterangan'     => 'nullable|string',
         ]);
 
         $items = $validated['items'];
+        $now = now();
 
-        foreach ($items as $item) {
-            Steam::create($item);
+        foreach ($items as &$item) {
+
+            $fproduct = FinishedProduct::with(
+                'product.history.identifier.rawMaterial.arrival.dcertificate.wbhouse'
+            )->findOrFail($item['fproducts_id']);
+
+            $kd_product = $fproduct->product->kode;
+
+            $noreg = $fproduct->product
+                ->history
+                ->identifier
+                ->rawMaterial
+                ->arrival
+                ->dcertificate
+                ->wbhouse
+                ->kode;
+
+            $tgl = date('dmy', strtotime($item['tgl_pemanasan']));
+
+            $item['kode'] = $kd_product . $noreg . '-' . $tgl;
+            $item['created_at'] = $now;
+            $item['updated_at'] = $now;
         }
+
+        Steam::insert($items);
 
         return response()->json([
             'status' => 'success',
