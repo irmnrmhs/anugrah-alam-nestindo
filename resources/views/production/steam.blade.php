@@ -88,7 +88,7 @@
     <div class="mb-3">
         <label>Petugas Pemanas</label>
         <select id="officers_id" class="form-control" required>
-            <option value="">-- Pilih Tipe Sarang Walet --</option>
+            <option value="">-- Pilih Petugas Pemanas --</option>
             @foreach($officers as $officer)
                 <option value="{{ $officer->id }}">{{ $officer->employee->nama }}</option>
             @endforeach

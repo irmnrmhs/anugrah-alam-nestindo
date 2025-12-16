@@ -44,6 +44,21 @@ class SteamController extends Controller
             'keterangan' => 'nullable'
         ]);
 
+        $kd_product = FinishedProduct::with('product')->find($validated['fproducts_id']);
+        $kd_product = $kd_product->product->kode;
+
+        $tgl = $validated['tgl_pemanasan'];
+        $noreg = $kd_product->product->history->identifier->rawMaterial->arrival->dcertificate->wbhouse->kode;
+        $tgl = date('dmy', strtotime($tgl));
+        $validated['kode'] = $kd_product . $noreg . "-" . $tgl;
+
+        if (Steam::where('kode', $validated['kode'])->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal: Kode Batch otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa kembali.',
+            ], 409);
+        }
+
         $steam = Steam::create($validated);
 
         return response()->json([
@@ -81,7 +96,22 @@ class SteamController extends Controller
             'keterangan' => 'nullable'
         ]);
 
+        $kd_product = FinishedProduct::with('product')->find($validated['fproducts_id']);
+        $kd_product = $kd_product->product->kode;
+
+        $tgl = $validated['tgl_pemanasan'];
+        $noreg = $kd_product->product->history->identifier->rawMaterial->arrival->dcertificate->wbhouse->kode;
+        $tgl = date('dmy', strtotime($tgl));
+        $validated['kode'] = $kd_product . $noreg . "-" . $tgl;
+
         $steam = Steam::findOrFail($id);
+        
+        if (Steam::where('kode', $validated['kode'])->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal: Kode Batch otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa kembali.',
+            ], 409);
+        }
 
         $steam->update($validated);
 
