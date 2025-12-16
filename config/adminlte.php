@@ -407,6 +407,18 @@ return [
                 ],
                 [   'header' => 'Produksi' ],
                 [
+                    'text' => 'Tipe Sarang',
+                    'url'  => 'nests',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Petugas Pemanas',
+                    'url'  => 'officers',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Grade Produk Jadi',
                     'url'  => 'fp-grades',
                     'can'  => ['Super Admin', 'Admin Produksi'],
@@ -564,6 +576,18 @@ return [
                 [
                     'text' => 'Produk Jadi',
                     'url'  => 'fp-products',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Stok Produk Jadi',
+                    'url'  => 'fp-stocks',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Steaming',
+                    'url'  => 'steams',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ]

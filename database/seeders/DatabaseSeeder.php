@@ -37,6 +37,8 @@ class DatabaseSeeder extends Seeder
             DetailSkpSeeder::class,
             ArrivalSeeder::class,
             ContainerSeeder::class,
+            FpGradeSeeder::class,
+            NestTypeSeeder::class,
         ]);
         
         // User::factory(10)->create();

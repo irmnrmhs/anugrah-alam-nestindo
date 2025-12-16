@@ -16,9 +16,9 @@ class FpStock extends Model
         'keterangan'
     ];
 
-    public function fproducts()
+    public function fproduct()
     {
-        return $this->hasMany(FinishedProduct::class, 'fproducts_id');
+        return $this->belongsTo(FinishedProduct::class, 'fproducts_id');
     }
 
     public function employee()

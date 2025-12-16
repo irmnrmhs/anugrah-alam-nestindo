@@ -2,46 +2,49 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\DryController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\EdgeController;
+use App\Http\Controllers\PickController;
+use App\Http\Controllers\PullController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\TypeController;
+use App\Http\Controllers\SoakController;
+use App\Http\Controllers\NestTypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WashController;
 use App\Http\Controllers\BlendController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\EntryController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\RinseController;
 use App\Http\Controllers\ShapeController;
 use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FeatherController;
+use App\Http\Controllers\FpGradeController;
+use App\Http\Controllers\FpStockController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RmStockController;
 use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FinishedController;
 use App\Http\Controllers\RmResultController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DetailSkpController;
+use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\ProductIdentifierController;
-use App\Http\Controllers\CorrectionController;
-use App\Http\Controllers\DryController;
-use App\Http\Controllers\EntryController;
-use App\Http\Controllers\PickController;
-use App\Http\Controllers\PullController;
-use App\Http\Controllers\RinseController;
-use App\Http\Controllers\SoakController;
-use App\Http\Controllers\FpGradeController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\FinishedController;
+use App\Http\Controllers\SteamController;
+use App\Http\Controllers\SteamOfficerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -349,6 +352,38 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/fp-products', [FinishedController::class, 'index'])->name('fp-products.index');
     Route::get('/fp-products-info/{id}', [FinishedController::class, 'info']);
 
+    
+    // Stok Produk Jadi
+    Route::get('/fp-stocks', [FpStockController::class, 'index'])->name('fp-stocks.index');
+    Route::post('/fp-stocks', [FpStockController::class, 'store'])->name('fp-stocks.store');
+    Route::get('/fp-stocks/{id}', [FpStockController::class, 'show'])->name('fp-stocks.show');
+    Route::put('/fp-stocks/{id}', [FpStockController::class, 'update'])->name('fp-stocks.update');
+    Route::delete('/fp-stocks/{id}', [FpStockController::class, 'destroy'])->name('fp-stocks.destroy');
+    Route::post('/fp-stocks/delete-multiple', [FpStockController::class, 'deleteMultiple']);
+
+    // Tipe Sarang
+    Route::get('/nests', [NestTypeController::class, 'index'])->name('nests.index');
+    Route::post('/nests', [NestTypeController::class, 'store'])->name('nests.store');
+    Route::get('/nests/{id}', [NestTypeController::class, 'show'])->name('nests.show');
+    Route::put('/nests/{id}', [NestTypeController::class, 'update'])->name('nests.update');
+    Route::delete('/nests/{id}', [NestTypeController::class, 'destroy'])->name('nests.destroy');
+    Route::post('/nests/delete-multiple', [NestTypeController::class, 'deleteMultiple']);
+
+    // Petugas Pemanas
+    Route::get('/officers', [SteamOfficerController::class, 'index'])->name('officers.index');
+    Route::post('/officers', [SteamOfficerController::class, 'store'])->name('officers.store');
+    Route::get('/officers/{id}', [SteamOfficerController::class, 'show'])->name('officers.show');
+    Route::put('/officers/{id}', [SteamOfficerController::class, 'update'])->name('officers.update');
+    Route::delete('/officers/{id}', [SteamOfficerController::class, 'destroy'])->name('officers.destroy');
+    Route::post('/officers/delete-multiple', [SteamOfficerController::class, 'deleteMultiple']);
+
+    // Steaming
+    Route::get('/steams', [SteamController::class, 'index'])->name('steams.index');
+    Route::post('/steams', [SteamController::class, 'store'])->name('steams.store');
+    Route::get('/steams/{id}', [SteamController::class, 'show'])->name('steams.show');
+    Route::put('/steams/{id}', [SteamController::class, 'update'])->name('steams.update');
+    Route::delete('/steams/{id}', [SteamController::class, 'destroy'])->name('steams.destroy');
+    Route::post('/steams/delete-multiple', [SteamController::class, 'deleteMultiple']);
 });
 
 require __DIR__.'/auth.php';
