@@ -148,6 +148,14 @@
 const modal = new bootstrap.Modal('#crudModal');
 
 function openModal(type, title, data = null) {
+    $('#btnAddArea').on('click', function () {
+        openModal('area', 'Tambah Area');
+    });
+
+    $('#btnAddWBHouse').on('click', function () {
+        openModal('wbhouse', 'Tambah Rumah Burung');
+    });
+    
     $('#formCRUD')[0].reset();
     $('#item_id').val(data?.id ?? '');
     $('#type_category').val(type);
