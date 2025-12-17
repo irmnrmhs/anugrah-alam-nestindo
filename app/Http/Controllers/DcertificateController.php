@@ -183,7 +183,6 @@ class DcertificateController extends Controller
         $pdf = Pdf::loadView('exports.skp', compact('dcertificate'))
                 ->setPaper('A4', 'portrait');
 
-        // return $pdf->download('SKP-' . $dcertificate->no_skp . '.pdf');
         $filename = 'SKP-' . str_replace(['/', '\\'], '-', $dcertificate->no_skp) . '.pdf';
 
         return $pdf->download($filename);

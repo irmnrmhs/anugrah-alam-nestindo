@@ -34,9 +34,6 @@
     @endforeach
 @stop
 
-{{-- ===========================
-    MODAL 1 : INPUT KODE + JUMLAH
-=========================== --}}
 @section('form-fields')
     <div class="mb-3">
         <label>Kode Bahan Baku</label>
@@ -64,10 +61,8 @@
         return;
     }
 
-    // Tutup modal pertama
     bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
 
-    // ====== Generate modal kedua ======
     let html = '';
     for (let i = 1; i <= jumlah; i++) {
         html += `
@@ -97,7 +92,6 @@
     $('#secondModalBody').html(html);
     $('#secondModal').modal('show');
 
-    // Submit modal kedua
     $('#btnSubmitAll').off().on('click', function () {
         let list = [];
 
@@ -131,9 +125,6 @@
 @stop
 
 @section('custom-js')
-    // ===============================
-    // BUTTON EDIT
-    // ===============================
     $(document).on('click', '.btnEdit', function () {
         const id = $(this).closest('tr').data('id');
 
@@ -141,12 +132,8 @@
             .then(r => r.json())
             .then(container => {
 
-                // Simpan ID ke hidden input (kalau diperlukan)
                 $('#item_id').val(container.id);
 
-                // ===============================
-                // Generate FORM untuk modal kedua
-                // ===============================
                 let html = `
                     <label>Biji</label>
                     <input type="number" class="form-control mb-2" id="edit_biji"
@@ -175,9 +162,6 @@
                 $('#secondModalBody').html(html);
                 $('#secondModal').modal('show');
 
-                // ==================================
-                // PROSES UPDATE SAAT KLIK SIMPAN
-                // ==================================
                 $('#btnSubmitAll').off().on('click', function () {
 
                     let payload = {
@@ -209,16 +193,12 @@
             });
     });
 
-
-    // ===============================
-    // BUTTON DELETE (tetap seperti semula)
-    // ===============================
     $(document).on('click', '.btnDelete', function () {
         const id = $(this).closest('tr').data('id');
 
         Swal.fire({
-            title: 'Hapus?',
-            text: 'Data tidak bisa dikembalikan!',
+            title: 'Anda Yakin?',
+            text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true
         }).then(res => {
@@ -243,10 +223,6 @@
 
 @stop
 
-
-{{-- =======================
-  MODAL KEDUA
-======================= --}}
 @section('content')
 @parent
 

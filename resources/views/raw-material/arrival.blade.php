@@ -14,8 +14,6 @@
     <th>No. SKP</th>
     <th>Mobil</th>
     <th>Supir</th>
-    {{-- <th>Kadar Air</th> --}}
-    {{-- <th>Penerima</th> --}}
     <th>Kondisi</th>
     <th>Keterangan</th>
 @stop
@@ -30,7 +28,6 @@
             <td>{{ $arrival->dcertificate->no_skp }}</td>
             <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
             <td>{{ $arrival->employee->nama }}</td>
-            {{-- <td>{{ $arrival->employee->nama }}</td> --}}
             <td>{{ $arrival->kondisi }}</td>
             <td>{{ $arrival->keterangan }}</td>
             <td>
@@ -110,7 +107,6 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
-        <!-- kode: $('#kode').val(), -->
         dcertificates_id: $('#dcertificates_id').val(),
         cars_id: $('#cars_id').val(),
         employees_id: $('#employees_id').val(),
@@ -132,18 +128,15 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan SKP belum digunakan.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan SKP belum digunakan.', 'error'));
 @stop
 
 @section('custom-js')
-    // Jika checklist "Semua Kondisi"
     $(document).on('change', '#kondisi_all', function() {
         const checked = $(this).is(':checked');
         $('.kondisi-item').prop('checked', checked);
     });
 
-    // Jika ada perubahan di checkbox individu,
-    // master menjadi on bila SEMUA individu tercentang
     $(document).on('change', '.kondisi-item', function() {
         const allChecked = $('.kondisi-item:checked').length === $('.kondisi-item').length;
         $('#kondisi_all').prop('checked', allChecked);
@@ -155,7 +148,6 @@
             .then(r => r.json())
             .then(arrival => {
                 $('#item_id').val(arrival.id);
-                <!-- $('#kode').val(arrival.kode); -->
                 $('#dcertificates_id').val(arrival.dcertificates_id);
                 $('#cars_id').val(arrival.cars_id);
                 $('#employees_id').val(arrival.employees_id);
@@ -179,8 +171,8 @@
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
-            title: 'Yakin hapus?',
-            text: 'Data tidak bisa dikembalikan!',
+            title: 'Anda Yakin?',
+            text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, hapus',

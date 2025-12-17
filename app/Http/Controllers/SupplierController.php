@@ -10,6 +10,7 @@ use Illuminate\View\View;
 
 class SupplierController extends Controller
 {
+    public string $obj = 'Supplier';
     public function index(): View
     {
         $suppliers = Supplier::with('category')->latest()->get();
@@ -32,7 +33,7 @@ class SupplierController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data Supplier berhasil ditambahkan.',
+            'message' => $this->obj . ' berhasil ditambahkan.',
             'data' => $supplier,
         ]);
     }
@@ -60,7 +61,7 @@ class SupplierController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data Supplier berhasil diperbarui.',
+            'message' => $this->obj . ' berhasil diperbarui.',
             'data' => $supplier,
         ]);
     }
@@ -72,7 +73,7 @@ class SupplierController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data supplier berhasil dihapus.',
+            'message' => $this->obj . ' berhasil dihapus.',
         ]);
     }
 }

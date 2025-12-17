@@ -121,15 +121,6 @@
         <label>Keterangan</label>
         <input type="text" id="keterangan" class="form-control">
     </div>
-    {{-- <div class="mb-3">
-        <label>Status</label>
-        <select id="status" class="form-control" required>
-            <option value="">-- Pilih Status --</option>
-            <option value="{{ 0 }}">{{ 'Menunggu Persetujuan' }}</option>
-            <option value="{{ 1 }}">{{ 'Disetujui' }}</option>
-            <option value="{{ 2 }}">{{ 'Ditolak' }}</option>
-        </select>
-    </div> --}}
 @stop
 
 @section('form-submit-script')
@@ -150,8 +141,7 @@
         berat_keluar: $('#berat_keluar').val(),
         waktu_keluar: $('#waktu_keluar').val(),
         shift: $('#shift').val(),
-        keterangan: $('#keterangan').val(),
-        {{-- status: $('#status').val() --}}
+        keterangan: $('#keterangan').val()
     };
 
     fetch(url, {
@@ -167,7 +157,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan data diisi lengkap.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap.', 'error'));
 @stop
 
 @section('custom-js')
@@ -189,7 +179,6 @@
                 $('#waktu_keluar').val(dry.waktu_keluar);
                 $('#keterangan').val(dry.keterangan);
                 $('#shift').val(dry.shift);
-                {{-- $('#status').val(dry.status); --}}
                 $('#modalTitle').text('Edit Masuk Cetak');
                 new bootstrap.Modal('#crudModal').show();
             });
@@ -198,8 +187,8 @@
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
-            title: 'Yakin hapus?',
-            text: 'Data tidak bisa dikembalikan!',
+            title: 'Anda Yakin?',
+            text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, hapus',

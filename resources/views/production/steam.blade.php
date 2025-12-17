@@ -304,8 +304,8 @@
             const id = $(this).closest('tr').data('id');
 
             Swal.fire({
-                title: 'Hapus?',
-                text: 'Data tidak bisa dikembalikan!',
+            title: 'Anda Yakin?',
+            text: 'Data tidak dapat dikembalikan',
                 icon: 'warning',
                 showCancelButton: true
             }).then(res => {

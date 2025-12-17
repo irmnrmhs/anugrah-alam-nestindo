@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
 
 class GradeController extends Controller
 {
-    public string $obj = 'Grade';
+    public string $obj = 'Grade Bahan Baku';
 
     public function index(): View
     {
@@ -28,7 +28,6 @@ class GradeController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            // 'grade' => 'required|unique:grades,grade',
             'shapes_id' => 'required|exists:shapes,id',
             'feathers_id' => 'required|exists:feathers,id',
             'colors_id' => 'required|exists:colors,id',
@@ -42,7 +41,7 @@ class GradeController extends Controller
 
         $grade = Grade::create($validated);
 
-        $message = "Grade baru berhasil ditambahkan dengan kode {$grade->grade}.";
+        $message = $this->obj . " berhasil ditambahkan dengan kode {$grade->grade}.";
 
         return response()->json([
             'status' => 'success',
@@ -60,7 +59,6 @@ class GradeController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            // 'grade' => 'required|unique:grades,grade,' . $id,
             'shapes_id' => 'required|exists:shapes,id',
             'feathers_id' => 'required|exists:feathers,id',
             'colors_id' => 'required|exists:colors,id',
@@ -77,7 +75,7 @@ class GradeController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Grade berhasil diperbarui.',
+            'message' => $this->obj . ' berhasil diperbarui.',
             'data' => $grade,
         ]);
     }

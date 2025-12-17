@@ -83,7 +83,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan kode dan Area tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode dan Area tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')
@@ -105,8 +105,8 @@
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
-            title: 'Yakin hapus?',
-            text: 'Data tidak bisa dikembalikan!',
+            title: 'Anda Yakin?',
+            text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, hapus',

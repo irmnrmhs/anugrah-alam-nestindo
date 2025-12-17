@@ -28,8 +28,6 @@
         <tr data-id="{{ $history->id }}">
             <td>{{ $index + 1 }}</td>
             <td>{{ $history->identifier->kode }}</td>
-            {{-- <td>{{ $history->asal }}</td>
-            <td>{{ $history->tujuan }}</td> --}}
             <td>
                 @if($history->asal === 'PR01GB')
                     <span>Grading Bahan Baku</span>

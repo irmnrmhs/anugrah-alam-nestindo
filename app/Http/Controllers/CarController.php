@@ -27,7 +27,7 @@ class CarController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Departemen berhasil ditambahkan.',
+            'message' => 'Data Mobil berhasil ditambahkan.',
             'data' => $car,
         ]);
     }
@@ -49,7 +49,7 @@ class CarController extends Controller
 
         return response()->json([
                 'status' => 'success',
-                'message' => 'Departemen berhasil diperbaharui.',
+                'message' => 'Data Mobil berhasil diperbaharui.',
                 'data' => $car,
         ]);
     }
@@ -61,7 +61,7 @@ class CarController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Departemen berhasil dihapus.',
+            'message' => 'Data Mobil berhasil dihapus.',
         ]);
     }
 }
