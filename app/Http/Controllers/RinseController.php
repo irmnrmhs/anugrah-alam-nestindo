@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class RinseController extends Controller
 {
-    public string $obj = 'Perendaman';
+    public string $obj = 'Cabut Bilas';
     public function index(): View
     {
         $rinses = Rinse::with('history', 'employee')->latest()->get();
@@ -109,7 +109,7 @@ class RinseController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data kedatangan berhasil dihapus.',
+            'message' => $this->obj . ' berhasil dihapus.',
         ]);
     }
 

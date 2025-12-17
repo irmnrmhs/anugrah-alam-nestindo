@@ -10,6 +10,7 @@ use Illuminate\View\View;
 
 class WBHouseController extends Controller
 {
+    public string $obj = 'Rumah Burung';
     public function index(): View
     {
         $wbhouses = WBHouse::latest()->get();
@@ -31,7 +32,7 @@ class WBHouseController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data Rumah Burung berhasil ditambahkan.',
+            'message' => $this->obj . ' berhasil ditambahkan.',
             'data' => $wbhouse,
         ]);
     }
@@ -58,7 +59,7 @@ class WBHouseController extends Controller
 
         return response()->json([
                 'status'  => 'success',
-                'message' => 'Data Rumah Burung berhasil diperbaharui.',
+                'message' => $this->obj . ' berhasil diperbaharui.',
                 'data'    => $wbhouse,
         ]);
     }
@@ -70,7 +71,7 @@ class WBHouseController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data Rumah Burung berhasil dihapus.',
+            'message' => $this->obj . ' berhasil dihapus.',
         ]);
     }
 

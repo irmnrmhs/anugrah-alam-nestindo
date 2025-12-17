@@ -32,14 +32,11 @@ class ContainerController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        // Buat kontainer
         $container = Container::create($validated);
 
-        // Ambil kode arrival (karena kode = milik arrival)
         $arrival = Arrival::find($validated['arrivals_id']);
         $kode = $arrival->kode;
 
-        // Update RawMaterial
         $raw = RawMaterial::firstOrCreate(
             ['kode' => $kode],
             ['biji' => 0, 'berat' => 0]
@@ -61,7 +58,6 @@ class ContainerController extends Controller
         $container = Container::with('arrival', 'employee')->findOrFail($id);
         return response()->json($container);
     }
-
 
     public function update(Request $request, int $id): JsonResponse
     {
@@ -155,14 +151,11 @@ class ContainerController extends Controller
 
         foreach ($items as $item) {
 
-            // Insert container
             $container = Container::create($item);
 
-            // Ambil kode arrival
             $arrival = Arrival::find($item['arrivals_id']);
             $kode = $arrival->kode;
 
-            // Update raw material
             $raw = RawMaterial::firstOrCreate(
                 ['kode' => $kode],
                 ['biji' => 0, 'berat' => 0]

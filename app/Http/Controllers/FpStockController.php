@@ -48,7 +48,7 @@ class FpStockController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Stok keluar berhasil ditambahkan'
+            'message' => $this->obj . ' berhasil ditambahkan'
         ]);
     }
 
@@ -101,7 +101,7 @@ class FpStockController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Stok berhasil diperbarui'
+            'message' => $this->obj . ' berhasil diperbarui'
         ]);
     }
 

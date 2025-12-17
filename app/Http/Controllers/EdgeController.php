@@ -105,7 +105,7 @@ class EdgeController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data kedatangan berhasil dihapus.',
+            'message' => $this->obj . ' berhasil dihapus.',
         ]);
     }
 

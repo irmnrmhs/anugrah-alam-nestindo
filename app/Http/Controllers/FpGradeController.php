@@ -10,6 +10,7 @@ use Illuminate\View\View;
 
 class FpGradeController extends Controller
 {
+    public string $obj = 'Grade Produk Jadi';
     public function index(): View
     {
         $grades = FpGrade::latest()->get();
@@ -29,7 +30,7 @@ class FpGradeController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Departemen berhasil ditambahkan.',
+            'message' => $this->obj . ' berhasil ditambahkan.',
             'data' => $grade,
         ]);
     }
@@ -53,7 +54,7 @@ class FpGradeController extends Controller
 
         return response()->json([
                 'status' => 'success',
-                'message' => 'Departemen berhasil diperbaharui.',
+                'message' => $this->obj . ' berhasil diperbaharui.',
                 'data' => $grade,
         ]);
     }
@@ -65,7 +66,7 @@ class FpGradeController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Departemen berhasil dihapus.',
+            'message' => $this->obj . ' berhasil dihapus.',
         ]);
     }
 }

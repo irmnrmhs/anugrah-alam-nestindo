@@ -51,12 +51,11 @@ class ProductIdentifierController extends Controller
 
         $validated['kode'] = $cleanGrade . '-' . $cleanKode . $supplier;
 
-        // SIMPAN
         $identifier = ProductIdentifier::create($validated);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Pengidentifikasi Produk berhasil ditambahkan',
+            'message' => $this->obj . ' berhasil ditambahkan',
             'data' => $identifier,
         ]);
     }

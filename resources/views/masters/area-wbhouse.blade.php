@@ -7,8 +7,6 @@
 
 @section('content')
 <div class="row">
-
-    {{-- ========================= AREA ========================= --}}
     <div class="col-12">
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -18,7 +16,6 @@
                     Tambah Area
                 </button>
 
-                {{-- Tombol collapse dengan icon yang akan berubah --}}
                 <button class="btn btn-outline-secondary btn-sm p-1 toggle-icon"
                     type="button" data-bs-toggle="collapse" data-bs-target="#collapseArea"
                     aria-expanded="true">
@@ -66,9 +63,6 @@
         </div>
     </div>
 
-
-
-    {{-- ========================= WBHOUSE ========================= --}}
     <div class="col-12">
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -78,7 +72,6 @@
                     Tambah Rumah Burung
                 </button>
 
-                {{-- Tombol collapse dengan icon --}}
                 <button class="btn btn-outline-secondary btn-sm p-1 toggle-icon"
                     type="button" data-bs-toggle="collapse" data-bs-target="#collapseWBHouse"
                     aria-expanded="true">
@@ -121,12 +114,8 @@
             </div>
         </div>
     </div>
-
 </div>
 
-
-
-{{-- MODAL CRUD --}}
 <div class="modal fade" id="crudModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -152,8 +141,6 @@
     </div>
 </div>
 @endsection
-
-
 
 @section('js')
 @parent
@@ -224,9 +211,6 @@ function openModal(type, title, data = null) {
     modal.show();
 }
 
-
-
-// ====================== EDIT ======================
 $(document).on('click', '.btnEditArea', function () {
     const id = $(this).closest('tr').data('id');
     fetch(`/areas/${id}`)
@@ -241,9 +225,6 @@ $(document).on('click', '.btnEditWBHouse', function () {
         .then(data => openModal('wbhouse', 'Edit Rumah Burung', data));
 });
 
-
-
-// ====================== DELETE ======================
 function deleteItem(url) {
     Swal.fire({
         title: 'Hapus data ini?',
@@ -270,9 +251,6 @@ $(document).on('click', '.btnDeleteWBHouse', function () {
     deleteItem(`/wbhouses/${$(this).closest('tr').data('id')}`);
 });
 
-
-
-// ====================== SUBMIT FORM ======================
 $('#formCRUD').submit(e => {
     e.preventDefault();
 
@@ -314,27 +292,21 @@ $('#formCRUD').submit(e => {
         .then(() => location.reload()));
 });
 
-
-
-// ====================== TOGGLE ICON COLLAPSE ======================
 $('.collapse').each(function () {
     const collapseId = '#' + $(this).attr('id');
 
-    // Jika collapse dibuka → ikon minus
     $(collapseId).on('shown.bs.collapse', function () {
         $(`[data-bs-target="${collapseId}"] i`)
             .removeClass('fa-plus')
             .addClass('fa-minus');
     });
 
-    // Jika collapse ditutup → ikon plus
     $(collapseId).on('hidden.bs.collapse', function () {
         $(`[data-bs-target="${collapseId}"] i`)
             .removeClass('fa-minus')
             .addClass('fa-plus');
     });
 
-    // Set icon awal sesuai kondisi awal
     if (!$(collapseId).hasClass('show')) {
         $(`[data-bs-target="${collapseId}"] i`)
             .removeClass('fa-minus')

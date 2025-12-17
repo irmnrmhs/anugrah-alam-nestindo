@@ -63,13 +63,6 @@ class SteamController extends Controller
 
         $validated['kode'] = $kd_product . $noreg . '-' . $tgl;
 
-        // if (Steam::where('kode', $validated['kode'])->exists()) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Gagal: Kode Batch otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa kembali.',
-        //     ], 409);
-        // }
-
         $steam = Steam::create($validated);
 
         return response()->json([
@@ -116,13 +109,6 @@ class SteamController extends Controller
         $validated['kode'] = $kd_product . $noreg . "-" . $tgl;
 
         $steam = Steam::findOrFail($id);
-        
-        // if (Steam::where('kode', $validated['kode'])->exists()) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Gagal: Kode Batch otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa kembali.',
-        //     ], 409);
-        // }
 
         $steam->update($validated);
 

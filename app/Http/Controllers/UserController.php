@@ -35,7 +35,7 @@ class UserController extends Controller
                 'regex:/^[a-zA-Z0-9._]+$/'
             ],
             'email' => 'nullable|email',
-            'password' => 'required', // tetap wajib
+            'password' => 'required',
             'roles_id' => 'required|exists:roles,id',
             'employees_id' => 'required|exists:employees,id',
         ]);
@@ -75,7 +75,6 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        // Jika password dikosongkan → jangan update password
         if (!empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {

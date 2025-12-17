@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class RmStockController extends Controller
 {
-    public string $obj = 'Stok Bahan Baku';
+    public string $obj = 'Stok keluar';
     public function index(): View
     {
         $stocks = RmStock::with('rawMaterial', 'employee')->latest()->get();
@@ -48,7 +48,7 @@ class RmStockController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Stok keluar berhasil ditambahkan'
+            'message' => $this->obj . ' berhasil ditambahkan'
         ]);
     }
 
@@ -84,7 +84,6 @@ class RmStockController extends Controller
         $stock = RmStock::findOrFail($id);
         $raw = RawMaterial::find($validated['rms_id']);
 
-        // hitung sisa aktual
         $biji_sisa = $raw->biji_sisa + $stock->biji_keluar;
         $berat_sisa = $raw->berat_sisa + $stock->berat_keluar;
 
@@ -102,7 +101,7 @@ class RmStockController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Stok berhasil diperbarui'
+            'message' => $this->obj . ' berhasil diperbarui'
         ]);
     }
 

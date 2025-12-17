@@ -93,15 +93,6 @@
         <label>Berat Setelah Proses</label>
         <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
     </div>
-    {{-- <div class="mb-3">
-        <label>Status</label>
-        <select id="status" class="form-control" required>
-            <option value="">-- Pilih Status --</option>
-            <option value="{{ 0 }}">{{ 'Menunggu Persetujuan' }}</option>
-            <option value="{{ 1 }}">{{ 'Disetujui' }}</option>
-            <option value="{{ 2 }}">{{ 'Ditolak' }}</option>
-        </select>
-    </div> --}}
 @stop
 
 @section('form-submit-script')
@@ -118,8 +109,7 @@
         berat_masuk: $('#berat_masuk').val(),
         tgl_selesai: $('#tgl_selesai').val(),
         biji_keluar: $('#biji_keluar').val(),
-        berat_keluar: $('#berat_keluar').val(),
-        {{-- status: $('#status').val() --}}
+        berat_keluar: $('#berat_keluar').val()
     };
 
     fetch(url, {
@@ -135,7 +125,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan data diisi lengkap.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap.', 'error'));
 @stop
 
 @section('custom-js')
@@ -153,7 +143,6 @@
                 $('#tgl_selesai').val(wash.tgl_selesai);
                 $('#biji_keluar').val(wash.biji_keluar);
                 $('#berat_keluar').val(wash.berat_keluar);
-                {{-- $('#status').val(wash.status); --}}
                 $('#modalTitle').text('Edit Pencucian');
                 new bootstrap.Modal('#crudModal').show();
             });
@@ -162,8 +151,8 @@
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
-            title: 'Yakin hapus?',
-            text: 'Data tidak bisa dikembalikan!',
+            title: 'Anda Yakin?',
+            text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, hapus',

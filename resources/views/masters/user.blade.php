@@ -12,7 +12,6 @@
     <th>Role</th>
     <th>Karyawan</th>
     <th>Username</th>
-    {{-- <th>Email</th> --}}
 @stop
 
 @section('table-body')
@@ -23,7 +22,6 @@
             <td>{{ $user->role->name }}</td>
             <td>{{ $user->employee->nama }}</td>
             <td>{{ $user->username }}</td>
-            {{-- <td>{{ $user->email }}</td> --}}
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -60,14 +58,9 @@
            class="form-control"
            required
            pattern="^[a-zA-Z0-9._]{3,30}$"
-           oninvalid="this.setCustomValidity('Tidak boleh mengandung spasi dan hanya boleh huruf, angka, titik, dan underscore')"
+           oninvalid="this.setCustomValidity('Wajib diisi. Minimal 3 huruf, tidak boleh mengandung spasi, angka, titik, dan underscore')"
            oninput="this.setCustomValidity('')">
     </div>
-
-    {{-- <div class="mb-3">
-        <label>Email</label>
-        <input type="email" id="email" class="form-control">
-    </div> --}}
 
     <div class="mb-3">
         <label>Password</label>
@@ -85,7 +78,6 @@
         roles_id: $('#roles_id').val(),
         employees_id: $('#employees_id').val(),
         username: $('#username').val(),
-        {{-- email: $('#email').val(), --}}
         password: $('#password').val()
     };
 
@@ -102,7 +94,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal mengirim data. Pastikan data diisi lengkap dan username tidak duplikat.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap dan username tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')
@@ -115,7 +107,6 @@
                 $('#roles_id').val(user.roles_id);
                 $('#employees_id').val(user.employees_id);
                 $('#username').val(user.username);
-                {{-- $('#email').val(user.email); --}}
                 $('#password').val('');
                 $('#modalTitle').text('Edit User');
                 new bootstrap.Modal('#crudModal').show();
@@ -125,8 +116,8 @@
     $(document).on('click', '.btnDelete', function() {
         const id = $(this).closest('tr').data('id');
         Swal.fire({
-            title: 'Yakin hapus?',
-            text: 'Data tidak bisa dikembalikan!',
+            title: 'Anda Yakin?',
+            text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, hapus',
