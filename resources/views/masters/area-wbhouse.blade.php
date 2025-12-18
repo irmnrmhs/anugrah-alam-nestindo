@@ -132,7 +132,7 @@
                 <div class="modal-body" id="modalBody"></div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button class="btn btn-primary" type="submit">Simpan</button>
                 </div>
 
@@ -289,15 +289,39 @@ $('#formCRUD').submit(e => {
             kapasitas: $('#kapasitas').val(),
         };
     }
-
     fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
         body: JSON.stringify(payload)
     })
-    .then(r => r.json())
-    .then(out => Swal.fire('Sukses', out.message, 'success')
-        .then(() => location.reload()));
+    .then(async r => {
+        const data = await r.json();
+        if (!r.ok) throw data;
+        return data;
+    })
+    .then(out => {
+        Swal.fire('Sukses', out.message, 'success')
+            .then(() => location.reload());
+    })
+    .catch(err => {
+        Swal.fire(
+            'Error',
+            err.message || 'Terjadi kesalahan',
+            'error'
+        );
+    });
+
+    // fetch(url, {
+    //     method,
+    //     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+    //     body: JSON.stringify(payload)
+    // })
+    // .then(r => r.json())
+    // .then(out => Swal.fire('Sukses', out.message, 'success')
+    //     .then(() => location.reload()));
 });
 
 $('.collapse').each(function () {

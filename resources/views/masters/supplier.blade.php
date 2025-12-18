@@ -75,18 +75,29 @@
 
     fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(data)
     })
     .then(res => res.json())
     .then(res => {
-        if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-        } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
+    if (res.status === 'success') {
+        Swal.fire('Sukses', res.message, 'success')
+            .then(() => location.reload());
+    } else {
+        Swal.fire(
+                'Gagal',
+                res.message || Object.values(res.errors || {}).join('\n'),
+                'error'
+            );
         }
     })
-    .catch(() => Swal.fire('Error', 'Kode dan Nama Supplier tidak boleh duplikat', 'error'));
+    .catch(err => {
+        Swal.fire(
+            'Error',
+            'Terjadi kesalahan. Pastikan data valid dan tidak duplikat.',
+            'error'
+        );
+    });
 @stop
 
 @section('custom-js')
