@@ -1,16 +1,16 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Supplier';
+    $title = 'Kelola Data Supplier';
     $singular = 'Supplier';
 @endphp
 
 @section('table-headers')
     <th>No</th>
     <th>Kode</th>
-    <th>Nama</th>
+    <th>Nama Supplier</th>
     <th>Alamat</th>
-    <th>No. Telp</th>
+    <th>No. Telepon</th>
     <th>Kategori</th>
 @stop
 
@@ -75,18 +75,18 @@
 
     fetch(url, {
         method: method,
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
-    .then(r => r.json())
+    .then(res => res.json())
     .then(res => {
         if (res.status === 'success') {
             Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
         } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
+            Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode dan nama tidak duplikat', 'error'));;
+    .catch(() => Swal.fire('Error', 'Kode dan Nama Supplier tidak boleh duplikat', 'error'));
 @stop
 
 @section('custom-js')

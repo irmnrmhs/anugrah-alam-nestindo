@@ -1,8 +1,8 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Grade';
-    $singular = 'Grade';
+    $title = 'Kelola Data Grade Bahan Baku';
+    $singular = 'Grade Bahan Baku';
 @endphp
 
 @section('table-headers')

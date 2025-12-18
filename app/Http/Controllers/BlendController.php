@@ -13,16 +13,16 @@ class BlendController extends Controller
     public function type()
     {
         return view('masters.types', [
-            'shapes'   => Shape::orderBy('kode')->get(),
-            'feathers' => Feather::orderBy('kode')->get(),
-            'colors'   => Color::orderBy('kode')->get(),
+            'shapes'   => Shape::latest()->get(),
+            'feathers' => Feather::latest()->get(),
+            'colors'   => Color::latest()->get(),
         ]);
     }
 
     public function area_wbhouse() {
         return view('masters.area-wbhouse', [
-            'areas'    => Area::orderBy('kode')->get(),
-            'wbhouses' => WBHouse::with('area')->orderBy('kode')->get(),
+            'areas'    => Area::latest()->get(),
+            'wbhouses' => WBHouse::with('area')->latest()->get(),
         ]);
     }
 }

@@ -398,6 +398,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Bahan Baku', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Grade Bahan Baku',
+                    'url'  => 'grades',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
                 [   'header' => 'Quality Control' ],
                 [
                     'text' => 'Jenis Uji',
@@ -432,12 +438,6 @@ return [
             'text' => 'Bahan Baku',
             'icon' => 'fas fa-folder',
             'submenu' => [
-                [
-                    'text' => 'Grade',
-                    'url'  => 'grades',
-                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
-                    'icon' => 'fas fa-users',
-                ],
                 [
                     'text' => 'Pengiriman',
                     'url'  => 'dcertificates',

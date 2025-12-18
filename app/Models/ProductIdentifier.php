@@ -30,6 +30,11 @@ class ProductIdentifier extends Model
         return $this->hasMany(History::class, 'identifiers_id');
     }
 
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'suppliers_id');
+    }
+
     public function getBijiSisaAttribute()
     {
         return $this->stok_biji - $this->biji;

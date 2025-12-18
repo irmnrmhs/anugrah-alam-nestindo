@@ -237,7 +237,8 @@ function deleteItem(url) {
         .then(out => {
             Swal.fire('Sukses', out.message, 'success')
                 .then(() => location.reload());
-        });
+        })
+        .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode dan Area tidak duplikat', 'error'));
     });
 }
 

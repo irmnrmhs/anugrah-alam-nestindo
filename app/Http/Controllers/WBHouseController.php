@@ -13,7 +13,7 @@ class WBHouseController extends Controller
     public string $obj = 'Rumah Burung';
     public function index(): View
     {
-        $wbhouses = WBHouse::latest()->get();
+        $wbhouses = WBHouse::with('area')->latest()->get();
         $areas = Area::all();
         return view('masters.wbhouse', compact('wbhouses', 'areas'));
     }

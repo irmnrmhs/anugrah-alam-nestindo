@@ -148,14 +148,6 @@
 const modal = new bootstrap.Modal('#crudModal');
 
 function openModal(type, title, data = null) {
-    $('#btnAddArea').on('click', function () {
-        openModal('area', 'Tambah Area');
-    });
-
-    $('#btnAddWBHouse').on('click', function () {
-        openModal('wbhouse', 'Tambah Rumah Burung');
-    });
-    
     $('#formCRUD')[0].reset();
     $('#item_id').val(data?.id ?? '');
     $('#type_category').val(type);
@@ -219,6 +211,14 @@ function openModal(type, title, data = null) {
     modal.show();
 }
 
+$('#btnAddArea').on('click', function () {
+    openModal('area', 'Tambah Area');
+});
+
+$('#btnAddWBHouse').on('click', function () {
+    openModal('wbhouse', 'Tambah Rumah Burung');
+});
+
 $(document).on('click', '.btnEditArea', function () {
     const id = $(this).closest('tr').data('id');
     fetch(`/areas/${id}`)
@@ -235,7 +235,7 @@ $(document).on('click', '.btnEditWBHouse', function () {
 
 function deleteItem(url) {
     Swal.fire({
-        title: 'Hapus data ini?',
+        title: 'Yakin hapus?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus'
