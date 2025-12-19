@@ -23,9 +23,4 @@ class Supplier extends Model
     {
         return $this->hasMany(Dcertificate::class, 'suppliers_id');
     }
-    
-    public function identifiers()
-    {
-        return $this->hasMany(ProductIdentifier::class, 'suppliers_id');
-    }
 }
