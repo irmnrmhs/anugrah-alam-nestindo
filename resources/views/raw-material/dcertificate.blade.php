@@ -13,7 +13,6 @@
     <th>Rumah Burung</th>
     <th>Nomor SKP</th>
     <th>Tanggal SKP</th>
-    <th>Detail Pengiriman</th>
 @stop
 
 @section('table-body')
@@ -25,7 +24,6 @@
             <td>{{ $dcertificate->wbhouse->nama }}</td>
             <td>{{ $dcertificate->no_skp }}</td>
             <td>{{ $dcertificate->tgl_skp }}</td>
-            <td></td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
