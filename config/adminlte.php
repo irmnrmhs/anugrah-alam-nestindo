@@ -386,11 +386,23 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Rumah Burung',
-                    'url'  => 'areas-wbhouses',
+                    'text' => 'Area',
+                    'url'  => 'areas',
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Rumah Burung',
+                    'url'  => 'wbhouses',
+                    'can'  => ['Super Admin', 'Administrasi'],
+                    'icon' => 'fas fa-users',
+                ],
+                // [
+                //     'text' => 'Rumah Burung',
+                //     'url'  => 'areas-wbhouses',
+                //     'can'  => ['Super Admin', 'Administrasi'],
+                //     'icon' => 'fas fa-users',
+                // ],
                 [   'header' => 'Bahan Baku' ],
                 [
                     'text' => 'Kategori Grade',

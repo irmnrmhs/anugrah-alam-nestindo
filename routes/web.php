@@ -140,7 +140,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
 
     // Blend UI
     Route::get('/types', [BlendController::class, 'type'])->name('types.type');
-    Route::get('/areas-wbhouses', [BlendController::class, 'area_wbhouse'])->name('areas-wbhouses.area_wbhouse');
+    // Route::get('/areas-wbhouses', [BlendController::class, 'area_wbhouse'])->name('areas-wbhouses.area_wbhouse');
 
     // Jenis Grade
     Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');

@@ -24,8 +24,8 @@ class WBHouseController extends Controller
             'kode'      => 'required|string|max:25|unique:w_b_houses,kode',
             'nama'      => 'required|unique:w_b_houses,nama',
             'alamat'    => 'nullable',
-            'areas_id'  => 'required|exists:areas,id',
-            'kapasitas' => 'nullable|numeric|min:0|max:99999.99',
+            'areas_id'  => 'required|required|exists:areas,id',
+            'kapasitas' => 'numeric|min:0|max:99999.99',
         ]);
 
         $wbhouse = WBHouse::create($validated);
@@ -50,7 +50,7 @@ class WBHouseController extends Controller
             'nama'      => 'required|unique:w_b_houses,nama,' . $id,
             'alamat'    => 'nullable',
             'areas_id'  => 'required|exists:areas,id',
-            'kapasitas' => 'nullable|numeric|min:0|max:99999.99',
+            'kapasitas' => 'required|numeric|min:0|max:99999.99',
 
         ]);
 
