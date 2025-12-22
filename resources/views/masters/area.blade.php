@@ -47,6 +47,7 @@
     <div class="mb-3">
         <label>KH</label>
         <select id="kh" class="form-control" required>
+            <option value="">-- Pilih --</option>
             <option value="1">Ya</option>
             <option value="0">Tidak</option>
         </select>

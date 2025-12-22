@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Illuminate\Validation\Rule;
 
 class TestTypeController extends Controller
 {
@@ -23,7 +24,13 @@ class TestTypeController extends Controller
     {
         $validated = $request->validate([
             'categories_id' => 'required|exists:categories,id',
-            'nama_uji' => 'required|string|max:100',
+            // 'nama_uji' => 'required|string|max:100',
+            'nama uji' => [
+                'required',
+                Rule::unique('test_types')->where(function ($query) use ($request) {
+                    return $query->where('categories_id', $request->categories_id);
+                }),
+            ],
             'satuan' => 'required|string|max:100',
             'standar_maksimal' => 'required|numeric|min:0|max:999.999',
             'standar_minimal' => 'required|numeric|min:0|max:999.999',
@@ -49,7 +56,12 @@ class TestTypeController extends Controller
     {
         $validated = $request->validate([
             'categories_id' => 'required|exists:categories,id',
-            'nama_uji' => 'required|string|max:100',
+            'nama uji' => [
+                'required',
+                Rule::unique('test_types')->where(function ($query) use ($request) {
+                    return $query->where('categories_id', $request->categories_id);
+                }),
+            ],
             'satuan' => 'required|string|max:100',
             'standar_maksimal' => 'required|numeric|min:0|max:999.999',
             'standar_minimal' => 'required|numeric|min:0|max:999.999',

@@ -18,10 +18,10 @@ return new class extends Migration
             $table->date('tgl_mulai');
             $table->integer('biji_masuk');
             $table->decimal('berat_masuk', 7, 2);
-            $table->date('tgl_selesai');
-            $table->integer('biji_keluar')->default(0);
-            $table->decimal('berat_keluar', 7, 2)->default(0);
-            $table->integer('status')->default(0);
+            $table->date('tgl_selesai')->nullable();
+            $table->integer('biji_keluar')->default(0)->nullable();
+            $table->decimal('berat_keluar', 7, 2)->default(0)->nullable();
+            $table->integer('status')->default(0)->nullable();
             $table->timestamps();
         });
     }

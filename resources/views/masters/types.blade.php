@@ -16,8 +16,6 @@
                     <i class="fas fa-minus"></i>
                 </button>
             </div>
-        </div>
-        <div class="collapse show" id="collapseShape">
             <div class="card-body p-2">
                 <table class="table table-bordered table-striped" id="tableShape">
                     <thead>

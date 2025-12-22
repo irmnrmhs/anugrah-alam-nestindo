@@ -113,8 +113,8 @@
         <label>Shift</label>
         <select id="shift" class="form-control" required>
             <option value="">-- Pilih Shift --</option>
-            <option value="{{ '1' }}">1</option>
-            <option value="{{ '2' }}">2</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
         </select>
     </div>
     <div class="mb-3">
@@ -191,7 +191,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

@@ -96,7 +96,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan NIP tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode grade tidak sama. Jika sama maka ubah pada grade yang sesuai.', 'error'));
 @stop
 
 @section('custom-js')
@@ -123,7 +123,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

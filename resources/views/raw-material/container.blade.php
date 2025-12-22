@@ -70,16 +70,16 @@
                 <h6>Kontainer ${i}</h6>
 
                 <label>Biji</label>
-                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0">
+                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0" required>
 
                 <label>Berat</label>
-                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01">
+                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01" required>
 
                 <label>Keterangan</label>
                 <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}">
 
                 <label>Petugas</label>
-                <select class="form-control kont-petugas" data-index="${i}">
+                <select class="form-control kont-petugas" data-index="${i}" required>
                     <option value="">-- Pilih Petugas --</option>
                     @foreach($employees as $employee)
                         <option value="{{ $employee->id }}">{{ $employee->nama }}</option>

@@ -23,9 +23,9 @@ class RmResultController extends Controller
     {
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
-            'kadar_air' => 'nullable|numeric|min:0|max:999.99',
-            'kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',
-            'kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
+            'kadar_air' => 'required|numeric|min:0|max:999.99',
+            'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
+            'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
         $result = RmResult::create($validated);
@@ -48,9 +48,9 @@ class RmResultController extends Controller
     {
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
-            'kadar_air' => 'nullable|numeric|min:0|max:999.99',
-            'kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',
-            'kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
+            'kadar_air' => 'required|numeric|min:0|max:999.99',
+            'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
+            'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
         $result = RmResult::findOrFail($id);
