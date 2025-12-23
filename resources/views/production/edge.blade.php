@@ -30,9 +30,9 @@
             <td>{{ $edge->tgl_mulai }}</td>
             <td>{{ $edge->biji_masuk }}</td>
             <td>{{ $edge->berat_masuk }}</td>
-            <td>{{ $edge->tgl_selesai }}</td>
-            <td>{{ $edge->biji_keluar }}</td>
-            <td>{{ $edge->berat_keluar }}</td>
+            <td>{{ empty($edge->tgl_selesai) ? '-' : $edge->tgl_selesai }}</td>
+            <td>{{ empty($edge->biji_keluar) ? 0 : $edge->biji_keluar }}</td>
+            <td>{{ empty($edge->berat_keluar) ? 0 : $edge->berat_keluar }}</td>
             <td>
                 @if($edge->status == 0)
                     <span class="badge bg-warning">Menunggu Persetujuan</span>

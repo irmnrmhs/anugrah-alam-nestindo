@@ -65,10 +65,10 @@ class RawMaterial extends Model
 
     // Product Identifier Sisa
     public function getBijiSisaIdentifierAttribute(){
-        return $this->total_biji_keluar - $this->identifiers()->sum('biji');
+        return $this->biji - $this->identifiers()->sum('biji');
     }
 
     public function getBeratSisaIdentifierAttribute(){
-        return $this->total_berat_keluar - $this->identifiers()->sum('berat');
+        return $this->berat - $this->identifiers()->sum('berat');
     }
 }

@@ -31,9 +31,9 @@
             <td>{{ $correction->tgl_mulai }}</td>
             <td>{{ $correction->biji_masuk }}</td>
             <td>{{ $correction->berat_masuk }}</td>
-            <td>{{ $correction->tgl_selesai }}</td>
-            <td>{{ $correction->biji_keluar }}</td>
-            <td>{{ $correction->berat_keluar }}</td>
+            <td>{{ empty($correction->tgl_selesai) ? '-' : $correction->tgl_selesai }}</td>
+            <td>{{ empty($correction->biji_keluar) ? 0 : $correction->biji_keluar }}</td>
+            <td>{{ empty($correction->berat_keluar) ? 0 : $correction->berat_keluar }}</td>
             <td>{{ empty($correction->keterangan) ? '-' : $correction->keterangan }}</td>
             <td>
                 @if($correction->status == 0)

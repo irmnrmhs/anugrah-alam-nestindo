@@ -239,6 +239,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/identifiers/{id}', [ProductIdentifierController::class, 'update'])->name('identifiers.update');
     Route::delete('/identifiers/{id}', [ProductIdentifierController::class, 'destroy'])->name('identifiers.destroy');
     Route::post('/identifiers/delete-multiple', [ProductIdentifierController::class, 'deleteMultiple']);
+    Route::get('/raw-material-info-pi/{id}', [ProductIdentifierController::class, 'materialInfo']);
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');

@@ -26,7 +26,8 @@ class ArrivalController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'dcertificates_id'  => 'required|exists:dcertificates,id|unique:arrivals,dcertificates_id',
+            'dcertificates_id'  => 'required|exists:dcertificates,id',
+            // 'dcertificates_id'  => 'required|exists:dcertificates,id|unique:arrivals,dcertificates_id',
             'cars_id'           => 'required|exists:cars,id',
             'employees_id'      => 'required|exists:employees,id',
             'tgl_kedatangan'    => 'required|date',
@@ -42,12 +43,12 @@ class ArrivalController extends Controller
         $format_tgl = date('dmy', strtotime($tgl_kedatangan));
         $validated['kode'] = $kode_wbhouse . '-' . $format_tgl;
 
-        if (Arrival::where('kode', $validated['kode'])->exists()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal: Kode Kedatangan otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa SKP atau tanggal kedatangan.',
-            ], 409);
-        }
+        // if (Arrival::where('kode', $validated['kode'])->exists()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Gagal: Kode Kedatangan otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa SKP atau tanggal kedatangan.',
+        //     ], 409);
+        // }
         
         $arrival = Arrival::create($validated);
 
@@ -67,7 +68,8 @@ class ArrivalController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'dcertificates_id'  => 'required|exists:dcertificates,id|unique:arrivals,dcertificates_id,' . $id,
+            'dcertificates_id'  => 'required|exists:dcertificates,id',
+            // 'dcertificates_id'  => 'required|exists:dcertificates,id|unique:arrivals,dcertificates_id,' . $id,
             'cars_id'           => 'required|exists:cars,id',
             'employees_id'      => 'required|exists:employees,id',
             'tgl_kedatangan'   => 'required|date',
@@ -86,12 +88,12 @@ class ArrivalController extends Controller
 
         $arrival = Arrival::findOrFail($id);
         
-        if (Arrival::where('kode', $validated['kode'])->where('id', '!=', $id)->exists()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal: Kode Kedatangan otomatis yang diperbarui (' . $validated['kode'] . ') sudah ada.',
-            ], 409);
-        }
+        // if (Arrival::where('kode', $validated['kode'])->where('id', '!=', $id)->exists()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Gagal: Kode Kedatangan otomatis yang diperbarui (' . $validated['kode'] . ') sudah ada.',
+        //     ], 409);
+        // }
 
         $arrival->update($validated);
 

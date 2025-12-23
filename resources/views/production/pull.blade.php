@@ -32,9 +32,9 @@
             <td>{{ $pull->tgl_mulai }}</td>
             <td>{{ $pull->biji_masuk }}</td>
             <td>{{ $pull->berat_masuk }}</td>
-            <td>{{ $pull->tgl_selesai }}</td>
-            <td>{{ $pull->biji_keluar }}</td>
-            <td>{{ $pull->berat_keluar }}</td>
+            <td>{{ empty($pull->tgl_selesai) ? '-' : $pull->tgl_selesai }}</td>
+            <td>{{ empty($pull->biji_keluar) ? 0 : $pull->biji_keluar }}</td>
+            <td>{{ empty($pull->berat_keluar) ? 0 : $pull->berat_keluar }}</td>
             <td>{{ $pull->shift }}</td>
             <td>{{ empty($pull->keterangan) ? '-' : $pull->keterangan }}</td>
             <td>

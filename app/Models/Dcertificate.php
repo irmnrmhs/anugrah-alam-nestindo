@@ -31,7 +31,7 @@ class Dcertificate extends Model
 
     public function arrival()
     {
-        return $this->hasOne(Arrival::class, 'dcertificates_id');
+        return $this->hasMany(Arrival::class, 'dcertificates_id');
     }
 
     public function details()

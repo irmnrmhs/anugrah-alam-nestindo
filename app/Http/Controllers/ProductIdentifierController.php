@@ -66,6 +66,17 @@ class ProductIdentifierController extends Controller
         return response()->json($identifier);
     }
 
+    public function materialInfo($id)
+    {
+        $raw = RawMaterial::findOrFail($id);
+        $lastOut = ProductIdentifier::where('rms_id', $id)->latest()->first();
+
+        return response()->json([
+            'biji_sisa' => $raw->biji_sisa_identifiers,
+            'berat_sisa' => $raw->berat_sisa_identifiers,
+            'last_date' => $lastOut?->tanggal,
+        ]);
+    }
 
     public function update(Request $request, int $id): JsonResponse
     {

@@ -32,9 +32,9 @@
             <td>{{ $soak->tgl_mulai }}</td>
             <td>{{ $soak->biji_masuk }}</td>
             <td>{{ $soak->berat_masuk }}</td>
-            <td>{{ $soak->tgl_selesai }}</td>
-            <td>{{ $soak->biji_keluar }}</td>
-            <td>{{ $soak->berat_keluar }}</td>
+            <td>{{ empty($soak->tgl_selesai) ? '-' : $soak->tgl_selesai }}</td>
+            <td>{{ empty($soak->biji_keluar) ? 0 : $soak->biji_keluar }}</td>
+            <td>{{ empty($soak->berat_keluar) ? 0 : $soak->berat_keluar }}</td>
             <td>{{ $soak->shift }}</td>
             <td>{{ empty($soak->keterangan) ? '-' : $soak->keterangan }}</td>
             <td>
