@@ -145,7 +145,8 @@
 @section('js')
 @parent
 <script>
-const modal = new bootstrap.Modal('#crudModal');
+const modalElement = document.getElementById('crudModal');
+const modal = new bootstrap.Modal(modalElement);
 
 function openModal(type, title, data = null) {
     $('#formCRUD')[0].reset();

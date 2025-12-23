@@ -64,7 +64,7 @@
 
     <div class="mb-3">
         <label>Password</label>
-        <input type="password" id="password" class="form-control" placeholder="Isi jika ingin ubah password">
+        <input type="password" id="password" class="form-control">
     </div>
 @stop
 
@@ -72,6 +72,7 @@
     const id = $('#item_id').val();
     const url = id ? `/users/${id}` : '/users';
     const method = id ? 'PUT' : 'POST';
+    $('#password').removeAttr('placeholder');
 
     const data = {
         _token: '{{ csrf_token() }}',
@@ -108,6 +109,7 @@
                 $('#employees_id').val(user.employees_id);
                 $('#username').val(user.username);
                 $('#password').val('');
+                $('#password').attr('placeholder', 'Kosongkan jika tidak diubah');
                 $('#modalTitle').text('Edit User');
                 new bootstrap.Modal('#crudModal').show();
             });
@@ -120,7 +122,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

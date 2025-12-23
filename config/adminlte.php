@@ -388,6 +388,15 @@ return [
                 [
                     'text' => 'Area',
                     'url'  => 'areas',
+<<<<<<< HEAD
+                    'can'  => ['Super Admin', 'Administrasi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Rumah Burung',
+                    'url'  => 'wbhouses',
+=======
+>>>>>>> e07762816cd0f84e0065bb8c8f16b03c20d8b60e
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
@@ -397,6 +406,12 @@ return [
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
+                // [
+                //     'text' => 'Rumah Burung',
+                //     'url'  => 'areas-wbhouses',
+                //     'can'  => ['Super Admin', 'Administrasi'],
+                //     'icon' => 'fas fa-users',
+                // ],
                 [   'header' => 'Bahan Baku' ],
                 [
                     'text' => 'Kategori Grade',

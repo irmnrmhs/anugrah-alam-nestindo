@@ -58,7 +58,7 @@
     </div>
     <div class="mb-3">
         <label>Kapasitas</label>
-        <input type="number" id="kapasitas" step="0.01" min="0" max="99999.99" class="form-control">
+        <input type="number" id="kapasitas" step="0.01" min="0" max="99999.99" class="form-control" required>
     </div>
 @stop
 
@@ -116,7 +116,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

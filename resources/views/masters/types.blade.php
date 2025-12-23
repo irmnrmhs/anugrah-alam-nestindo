@@ -220,23 +220,41 @@ $(document).on('click', '.btnEditColor', function() {
 
 function deleteItem(url) {
     Swal.fire({
-        title: 'Yakin hapus?',
+        title: 'Anda Yakin?',
+        text: 'Data tidak dapat dikembalikan',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Ya, hapus'
-    }).then(r => {
-        if (!r.isConfirmed) return;
-
-        fetch(url, {
-            method: 'DELETE',
-            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-        })
-        .then(res => res.json())
-        .then(out => {
-            Swal.fire('Sukses', out.message, 'success')
-                .then(() => location.reload());
-        })
-        .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode dan Area tidak duplikat', 'error'));
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Batal'
+    }).then(result => {
+        if (result.isConfirmed) {
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    Swal.fire('Terhapus!', res.message, 'success')
+                        .then(() => location.reload());
+                } else {
+                    Swal.fire(
+                        'Gagal',
+                        res.message || 'Tidak bisa menghapus data',
+                        'error'
+                    );
+                }
+            })
+            .catch(() => {
+                Swal.fire(
+                    'Error',
+                    'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.',
+                    'error'
+                );
+            });
+        }
     });
 }
 
@@ -249,7 +267,6 @@ $(document).on('click', '.btnDeleteFeather', function() {
 $(document).on('click', '.btnDeleteColor', function() {
     deleteItem(`/colors/${$(this).closest('tr').data('id')}`);
 });
-
 
 $('#formType').submit(e => {
     e.preventDefault();
@@ -276,10 +293,21 @@ $('#formType').submit(e => {
         headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         body: JSON.stringify(payload)
     })
-    .then(res => res.json())
-    .then(out => {
-        Swal.fire('Sukses', out.message, 'success')
-            .then(() => location.reload());
+    .then(r => r.json())
+    .then(res => {
+        if (res.status === 'success') {
+            Swal.fire('Sukses', res.message, 'success')
+                .then(() => location.reload());
+        } else {
+            Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
+        }
+    })
+    .catch(() => {
+        Swal.fire(
+            'Error',
+            'Gagal menyimpan data. Pastikan kode dan jenis tidak duplikat.',
+            'error'
+        );
     });
 });
 </script>
