@@ -12,14 +12,31 @@ class EdgeObserver
      */
     public function created(Edge $edge): void
     {
-        History::create([
-            'identifiers_id' => $edge->history->identifiers_id,
-            'asal' => 'PR02SK',
-            'tujuan' => 'PR03PC',
-            'biji' => $edge->biji_keluar ?? 0,
-            'berat' => $edge->berat_keluar ?? 0,
-            'status' => 0
-        ]);
+        if (!$edge->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $edge->history->identifiers_id)
+            ->where('asal', 'PR02SK')
+            ->where('tujuan', 'PR03PC')
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $edge->getOriginal('biji_keluar') ?? 0);
+        $history->decrement('berat', $edge->getOriginal('berat_keluar') ?? 0);
+
+        $history->increment('biji', $edge->biji_keluar ?? 0);
+        $history->increment('berat', $edge->berat_keluar ?? 0);
+
+        // History::create([
+        //     'identifiers_id' => $edge->history->identifiers_id,
+        //     'asal' => 'PR02SK',
+        //     'tujuan' => 'PR03PC',
+        //     'biji' => $edge->biji_keluar ?? 0,
+        //     'berat' => $edge->berat_keluar ?? 0,
+        //     'status' => 0
+        // ]);
     }
 
     /**
@@ -32,12 +49,26 @@ class EdgeObserver
             ->where('tujuan', 'PR03PC')
             ->first();
 
-        if ($history) {
-            $history->update([
-                'biji'  => $edge->biji_masuk,
-                'berat' => $edge->berat_masuk,
-            ]);
+        if (!$history) return;
+
+        $history->decrement('biji', $edge->biji_keluar ?? 0);
+        $history->decrement('berat', $edge->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
         }
+
+        // $history = History::where('identifiers_id', $edge->history->identifiers_id)
+        //     ->where('asal', 'PR02SK')
+        //     ->where('tujuan', 'PR03PC')
+        //     ->first();
+
+        // if ($history) {
+        //     $history->update([
+        //         'biji'  => $edge->biji_masuk,
+        //         'berat' => $edge->berat_masuk,
+        //     ]);
+        // }
     }
 
     /**

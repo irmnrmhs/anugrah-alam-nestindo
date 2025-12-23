@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('tujuan');
             $table->integer('biji');
             $table->decimal('berat', 7, 3);
+            // $table->unique(['identifiers_id', 'asal', 'tujuan']);
             // $table->integer('biji_sisa');
             // $table->decimal('berat_sisa', 7, 3);
             $table->timestamps();
