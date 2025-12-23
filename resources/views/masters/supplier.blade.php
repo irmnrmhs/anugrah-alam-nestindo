@@ -20,8 +20,8 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $supplier->kode }}</td>
             <td>{{ $supplier->nama }}</td>
-            <td>{{ $supplier->alamat }}</td>
-            <td>{{ $supplier->no_telp }}</td>
+            <td>{{ empty($supplier->alamat) ? '-' : $supplier->alamat }}</td>
+            <td>{{ empty($supplier->no_telp) ? '-' : $supplier->no_telp }}</td>
             <td>{{ $supplier->category->kategori }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>

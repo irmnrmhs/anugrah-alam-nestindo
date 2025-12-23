@@ -36,7 +36,7 @@
             <td>{{ $rinse->biji_keluar }}</td>
             <td>{{ $rinse->berat_keluar }}</td>
             <td>{{ $rinse->shift }}</td>
-            <td>{{ $rinse->keterangan }}</td>
+            <td>{{ empty($rinse->keterangan) ? '-' : $rinse->keterangan }}</td>
             <td>
                 @if($rinse->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -161,6 +161,7 @@
                 $('#tgl_selesai').val(rinse.tgl_selesai);
                 $('#biji_keluar').val(rinse.biji_keluar);
                 $('#berat_keluar').val(rinse.berat_keluar);
+                $('#shift').val(rinse.shift);
                 $('#keterangan').val(rinse.keterangan);
                 $('#modalTitle').text('Edit Cabut Bilas');
                 new bootstrap.Modal('#crudModal').show();

@@ -40,7 +40,7 @@
             <td>{{ $dry->berat_keluar }}</td>
             <td>{{ $dry->waktu_keluar }}</td>
             <td>{{ $dry->shift }}</td>
-            <td>{{ $dry->keterangan }}</td>
+            <td>{{ empty($dry->keterangan) ? '-' : $dry->keterangan }}</td>
             <td>
                 @if($dry->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>

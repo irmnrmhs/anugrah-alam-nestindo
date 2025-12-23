@@ -36,7 +36,7 @@
             <td>{{ $soak->biji_keluar }}</td>
             <td>{{ $soak->berat_keluar }}</td>
             <td>{{ $soak->shift }}</td>
-            <td>{{ $soak->keterangan }}</td>
+            <td>{{ empty($soak->keterangan) ? '-' : $soak->keterangan }}</td>
             <td>
                 @if($soak->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -161,6 +161,7 @@
                 $('#tgl_selesai').val(soak.tgl_selesai);
                 $('#biji_keluar').val(soak.biji_keluar);
                 $('#berat_keluar').val(soak.berat_keluar);
+                $('#shift').val(soak.shift);
                 $('#keterangan').val(soak.keterangan);
                 $('#modalTitle').text('Edit Perendaman');
                 new bootstrap.Modal('#crudModal').show();

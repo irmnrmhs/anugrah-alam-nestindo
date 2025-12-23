@@ -386,8 +386,14 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Area',
+                    'url'  => 'areas',
+                    'can'  => ['Super Admin', 'Administrasi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Rumah Burung',
-                    'url'  => 'areas-wbhouses',
+                    'url'  => 'wbhouses',
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],

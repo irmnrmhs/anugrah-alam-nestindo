@@ -26,7 +26,7 @@
                     <span class="badge bg-danger">Tidak</span>
                 @endif
             </td>
-            <td>{{ $area->keterangan }}</td>
+            <td>{{ empty($area->keterangan) ? '-' : $area->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>

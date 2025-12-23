@@ -18,7 +18,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $category->kode }}</td>
             <td>{{ $category->kategori }}</td>
-            <td>{{ $category->keterangan }}</td>
+            <td>{{ empty($category->keterangan) ? '-' : $category->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>

@@ -34,7 +34,7 @@
             <td>{{ $pick->tgl_selesai }}</td>
             <td>{{ $pick->biji_keluar }}</td>
             <td>{{ $pick->berat_keluar }}</td>
-            <td>{{ $pick->keterangan }}</td>
+            <td>{{ empty($pick->keterangan) ? '-' : $pick->keterangan }}</td>
             <td>
                 @if($pick->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>

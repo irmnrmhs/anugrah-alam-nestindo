@@ -23,9 +23,9 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $wbhouse->kode }}</td>
             <td>{{ $wbhouse->nama }}</td>
-            <td>{{ $wbhouse->alamat }}</td>
+            <td>{{ empty($wbhouse->alamat) ? '-' : $wbhouse->alamat }}</td>
             <td>{{ $wbhouse->area->area }}</td>
-            <td>{{ $wbhouse->kapasitas }}</td>
+            <td>{{ empty($wbhouse->kapasitas) ? 0 : $wbhouse->kapasitas }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>

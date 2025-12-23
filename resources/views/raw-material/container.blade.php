@@ -24,7 +24,7 @@
             <td>{{ $container->arrival->kode }}</td>
             <td>{{ $container->biji }}</td>
             <td>{{ $container->berat }}</td>
-            <td>{{ $container->keterangan }}</td>
+            <td>{{ empty($container->keterangan) ? '-' : $container->keterangan }}</td>
             <td>{{ $container->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>

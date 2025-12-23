@@ -19,7 +19,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $grade->kode }}</td>
             <td>{{ $grade->grade }}</td>
-            <td>{{ $grade->keterangan}}</td>
+            <td>{{ empty($grade->keterangan) ? '-' : $grade->keterangan}}</td>
             <td>
                 @if($grade->status)
                     <span class="badge bg-success">Aktif</span>

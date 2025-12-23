@@ -36,7 +36,7 @@
             <td>{{ $entry->biji_keluar }}</td>
             <td>{{ $entry->berat_keluar }}</td>
             <td>{{ $entry->shift }}</td>
-            <td>{{ $entry->keterangan }}</td>
+            <td>{{ empty($entry->keterangan) ? '-' : $entry->keterangan }}</td>
             <td>
                 @if($entry->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -161,6 +161,7 @@
                 $('#tgl_selesai').val(entry.tgl_selesai);
                 $('#biji_keluar').val(entry.biji_keluar);
                 $('#berat_keluar').val(entry.berat_keluar);
+                $('#shift').val(entry.shift);
                 $('#keterangan').val(entry.keterangan);
                 $('#modalTitle').text('Edit Masuk Cetak');
                 new bootstrap.Modal('#crudModal').show();

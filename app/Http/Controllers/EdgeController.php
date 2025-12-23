@@ -78,7 +78,7 @@ class EdgeController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         $biji_sisa = $tracker->sisa_biji_sesek + $edge->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_sesek + $edge->berat_keluar;
+        $berat_sisa = $tracker->sisa_berat_sesek + $edge->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||

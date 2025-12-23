@@ -21,9 +21,9 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $customer->kode }}</td>
             <td>{{ $customer->nama }}</td>
-            <td>{{ $customer->alamat }}</td>
-            <td>{{ $customer->no_telp }}</td>
-            <td>{{ $customer->fax }}</td>
+            <td>{{ empty($customer->alamat) ? '-' : $customer->alamat }}</td>
+            <td>{{ empty($customer->no_telp) ? '-' : $customer->no_telp }}</td>
+            <td>{{ empty($customer->fax) ? '-' : $customer->fax }}</td>
             <td>{{ $customer->negara }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>

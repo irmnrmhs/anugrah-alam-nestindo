@@ -29,7 +29,7 @@
             <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
             <td>{{ $arrival->employee->nama }}</td>
             <td>{{ $arrival->kondisi }}</td>
-            <td>{{ $arrival->keterangan }}</td>
+            <td>{{ empty($arrival->keterangan) ? '-' : $arrival->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
