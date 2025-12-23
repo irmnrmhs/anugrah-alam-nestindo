@@ -16,8 +16,8 @@ class PickObserver
             'identifiers_id' => $pick->history->identifiers_id,
             'asal' => 'PR05PB',
             'tujuan' => 'PR06PR',
-            'biji' => $pick->biji_keluar,
-            'berat' => $pick->berat_keluar,
+            'biji' => $pick->biji_keluar ?? 0,
+            'berat' => $pick->berat_keluar ?? 0,
             'status' => 0
         ]);
     }

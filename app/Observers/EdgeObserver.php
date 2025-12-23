@@ -16,8 +16,8 @@ class EdgeObserver
             'identifiers_id' => $edge->history->identifiers_id,
             'asal' => 'PR02SK',
             'tujuan' => 'PR03PC',
-            'biji' => $edge->biji_keluar,
-            'berat' => $edge->berat_keluar,
+            'biji' => $edge->biji_keluar ?? 0,
+            'berat' => $edge->berat_keluar ?? 0,
             'status' => 0
         ]);
     }

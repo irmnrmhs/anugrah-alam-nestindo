@@ -16,8 +16,8 @@ class IdentifierObserver
             'identifiers_id' => $productIdentifier->id,
             'asal' => 'PR01GB',
             'tujuan' => 'PR02SK',
-            'biji' => $productIdentifier->biji,
-            'berat' => $productIdentifier->berat,
+            'biji' => $productIdentifier->biji ?? 0,
+            'berat' => $productIdentifier->berat ?? 0,
             'status' => 0
         ]);
     }

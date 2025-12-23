@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class EdgeController extends Controller
 {
-    public string $obj = 'Kedatangan';
+    public string $obj = 'Sesek Kaki';
     public function index(): View
     {
         $edges = Edge::with('history', 'employee')->latest()->get();
@@ -46,6 +46,16 @@ class EdgeController extends Controller
             ], 422);
         }
 
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
+            ], 422);
+        }
+
         $edge = Edge::create($validated);
 
         return response()->json([
@@ -69,9 +79,9 @@ class EdgeController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99'
+            'tgl_selesai' => 'nullable|date',
+            'biji_keluar' => 'nullable|integer|min:0',
+            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99'
         ]);
 
         $edge = Edge::findOrFail($id);
@@ -90,6 +100,16 @@ class EdgeController extends Controller
             ], 422);
         }
 
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
+            ], 422);
+        }
+        
         $edge->update($validated);
 
         return response()->json([

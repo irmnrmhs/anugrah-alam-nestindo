@@ -25,7 +25,7 @@ class TestTypeController extends Controller
         $validated = $request->validate([
             'categories_id' => 'required|exists:categories,id',
             // 'nama_uji' => 'required|string|max:100',
-            'nama uji' => [
+            'nama_uji' => [
                 'required',
                 Rule::unique('test_types')->where(function ($query) use ($request) {
                     return $query->where('categories_id', $request->categories_id);
@@ -56,11 +56,11 @@ class TestTypeController extends Controller
     {
         $validated = $request->validate([
             'categories_id' => 'required|exists:categories,id',
-            'nama uji' => [
+            'nama_uji' => [
                 'required',
-                Rule::unique('test_types')->where(function ($query) use ($request) {
-                    return $query->where('categories_id', $request->categories_id);
-                }),
+                Rule::unique('test_types')
+                    ->where(fn ($q) => $q->where('categories_id', $request->categories_id))
+                    ->ignore($id),
             ],
             'satuan' => 'required|string|max:100',
             'standar_maksimal' => 'required|numeric|min:0|max:999.999',

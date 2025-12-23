@@ -28,9 +28,9 @@
             <td>{{ $product->employee->nama }}</td>
             <td>{{ $product->grade->grade }}</td>
             <td>{{ $product->kode }}</td>
-            <td>{{ $product->tgl_mulai }}</td>
-            <td>{{ $product->biji }}</td>
-            <td>{{ $product->berat }}</td>
+            <td>{{ empty($product->tgl_mulai) ? '-' : $product->tgl_mulai }}</td>
+            <td>{{ empty($product->biji) ? 0 : $product->biji }}</td>
+            <td>{{ empty($product->berat) ? 0 : $product->berat }}</td>
             <td>{{ $product->tgl_selesai }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>

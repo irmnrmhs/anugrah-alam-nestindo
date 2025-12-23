@@ -24,9 +24,9 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $stock->fproduct->kode }}</td>
             <td>{{ $stock->employee->nama }}</td>
-            <td>{{ $stock->tgl_keluar }}</td>
-            <td>{{ $stock->biji_keluar }}</td>
-            <td>{{ $stock->berat_keluar }}</td>
+            <td>{{ empty($stock->tgl_keluar) ? '-' : $stock->tgl_keluar }}</td>
+            <td>{{ empty($stock->biji_keluar) ? 0 : $stock->biji_keluar }}</td>
+            <td>{{ empty($stock->berat_keluar) ? 0 : $stock->berat_keluar }}</td>
             <td>{{ empty($stock->keterangan) ? '-' : $stock->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>

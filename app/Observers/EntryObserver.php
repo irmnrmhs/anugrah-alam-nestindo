@@ -16,8 +16,8 @@ class EntryObserver
             'identifiers_id' => $entry->history->identifiers_id,
             'asal' => 'PR08MC',
             'tujuan' => 'PR09KC',
-            'biji' => $entry->biji_keluar,
-            'berat' => $entry->berat_keluar,
+            'biji' => $entry->biji_keluar ?? 0,
+            'berat' => $entry->berat_keluar ?? 0,
             'status' => 0
         ]);
     }

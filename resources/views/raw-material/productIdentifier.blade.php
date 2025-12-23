@@ -46,6 +46,22 @@
             @endforeach
         </select>
     </div>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
+            <input type="text" id="last_out_date" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Biji Sisa</label>
+            <input type="number" id="biji_sisa" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Berat Sisa</label>
+            <input type="number" id="berat_sisa" class="form-control" readonly>
+        </div>
+    </div>
     <div class="mb-3">
         <label>Grade</label>
         <select id="grades_id" class="form-control" required>
@@ -100,6 +116,24 @@
 @stop
 
 @section('custom-js')
+    $('#rms_id').on('change', function () {
+        const id = $(this).val();
+        if (!id) return;
+
+        fetch(`/raw-material-info-pi/${id}`)
+            .then(r => r.json())
+            .then(info => {
+                $('#biji_sisa').val(info.biji_sisa);
+                $('#berat_sisa').val(info.berat_sisa);
+                $('#last_out_date').val(info.last_date ?? '-');
+            })
+            .catch(() => {
+                $('#biji_sisa').val('-');
+                $('#berat_sisa').val('-');
+                $('#last_out_date').val('-');
+            });
+    });
+
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
         fetch(`/identifiers/${id}`)

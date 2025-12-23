@@ -31,9 +31,9 @@
             <td>{{ $pick->tgl_mulai }}</td>
             <td>{{ $pick->biji_masuk }}</td>
             <td>{{ $pick->berat_masuk }}</td>
-            <td>{{ $pick->tgl_selesai }}</td>
-            <td>{{ $pick->biji_keluar }}</td>
-            <td>{{ $pick->berat_keluar }}</td>
+            <td>{{ empty($pick->tgl_selesai) ? '-' : $pick->tgl_selesai }}</td>
+            <td>{{ empty($pick->biji_keluar) ? 0 : $pick->biji_keluar }}</td>
+            <td>{{ empty($pick->berat_keluar) ? 0 : $pick->berat_keluar }}</td>
             <td>{{ empty($pick->keterangan) ? '-' : $pick->keterangan }}</td>
             <td>
                 @if($pick->status == 0)

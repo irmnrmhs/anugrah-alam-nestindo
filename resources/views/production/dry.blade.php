@@ -35,10 +35,10 @@
             <td>{{ $dry->biji_masuk }}</td>
             <td>{{ $dry->berat_masuk }}</td>
             <td>{{ $dry->waktu_masuk }}</td>
-            <td>{{ $dry->tgl_selesai }}</td>
-            <td>{{ $dry->biji_keluar }}</td>
-            <td>{{ $dry->berat_keluar }}</td>
-            <td>{{ $dry->waktu_keluar }}</td>
+            <td>{{ empty($dry->tgl_selesai) ? '-' : $dry->tgl_selesai }}</td>
+            <td>{{ empty($dry->biji_keluar) ? 0 : $dry->biji_keluar }}</td>
+            <td>{{ empty($dry->berat_keluar) ? 0 : $dry->berat_keluar }}</td>
+            <td>{{ empty($dry->waktu_keluar) ? '-' : $dry->waktu_keluar }}</td>
             <td>{{ $dry->shift }}</td>
             <td>{{ empty($dry->keterangan) ? '-' : $dry->keterangan }}</td>
             <td>

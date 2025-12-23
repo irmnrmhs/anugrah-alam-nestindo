@@ -30,9 +30,9 @@
             <td>{{ $wash->tgl_mulai }}</td>
             <td>{{ $wash->biji_masuk }}</td>
             <td>{{ $wash->berat_masuk }}</td>
-            <td>{{ $wash->tgl_selesai }}</td>
-            <td>{{ $wash->biji_keluar }}</td>
-            <td>{{ $wash->berat_keluar }}</td>
+            <td>{{ empty($wash->tgl_selesai) ? '-' : $wash->tgl_selesai }}</td>
+            <td>{{ empty($wash->biji_keluar) ? 0 : $wash->biji_keluar }}</td>
+            <td>{{ empty($wash->berat_keluar) ? 0 : $wash->berat_keluar }}</td>
             <td>
                 @if($wash->status == 0)
                     <span class="badge bg-warning">Menunggu Persetujuan</span>

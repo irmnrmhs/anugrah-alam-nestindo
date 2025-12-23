@@ -16,8 +16,8 @@ class PullObserver
             'identifiers_id' => $pull->history->identifiers_id,
             'asal' => 'PR09KC',
             'tujuan' => 'PR10PK',
-            'biji' => $pull->biji_keluar,
-            'berat' => $pull->berat_keluar,
+            'biji' => $pull->biji_keluar ?? 0,
+            'berat' => $pull->berat_keluar ?? 0,
             'status' => 0
         ]);
     }
