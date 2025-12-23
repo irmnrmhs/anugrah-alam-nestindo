@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class EdgeController extends Controller
 {
-    public string $obj = 'Kedatangan';
+    public string $obj = 'Sesek Kaki';
     public function index(): View
     {
         $edges = Edge::with('history', 'employee')->latest()->get();
@@ -43,6 +43,16 @@ class EdgeController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
             ], 422);
         }
 
@@ -90,6 +100,16 @@ class EdgeController extends Controller
             ], 422);
         }
 
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
+            ], 422);
+        }
+        
         $edge->update($validated);
 
         return response()->json([

@@ -16,8 +16,8 @@ class SoakObserver
             'identifiers_id' => $soak->history->identifiers_id,
             'asal' => 'PR06PR',
             'tujuan' => 'PR07CB',
-            'biji' => $soak->biji_keluar,
-            'berat' => $soak->berat_keluar,
+            'biji' => $soak->biji_keluar ?? 0,
+            'berat' => $soak->berat_keluar ?? 0,
             'status' => 0
         ]);
     }

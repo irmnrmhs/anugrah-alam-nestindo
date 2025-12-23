@@ -15,8 +15,8 @@ class ProductObserver
         FinishedProduct::create([
             'kode' => $product->kode,
             'products_id' => $product->id,
-            'biji' => $product->biji,
-            'berat' => $product->berat,
+            'biji' => $product->biji ?? 0,
+            'berat' => $product->berat ?? 0,
         ]);
     }
 

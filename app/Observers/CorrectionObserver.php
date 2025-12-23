@@ -16,8 +16,8 @@ class CorrectionObserver
             'identifiers_id' => $correction->history->identifiers_id,
             'asal' => 'PR04IK',
             'tujuan' => 'PR05PB',
-            'biji' => $correction->biji_keluar,
-            'berat' => $correction->berat_keluar,
+            'biji' => $correction->biji_keluar ?? 0,
+            'berat' => $correction->berat_keluar ?? 0,
             'status' => 0
         ]);
     }

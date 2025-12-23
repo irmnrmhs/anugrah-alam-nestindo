@@ -16,8 +16,8 @@ class WashObserver
             'identifiers_id' => $wash->history->identifiers_id,
             'asal' => 'PR03PC',
             'tujuan' => 'PR04IK',
-            'biji' => $wash->biji_keluar,
-            'berat' => $wash->berat_keluar,
+            'biji' => $wash->biji_keluar ?? 0,
+            'berat' => $wash->berat_keluar ?? 0,
             'status' => 0
         ]);
     }

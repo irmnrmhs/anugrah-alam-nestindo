@@ -17,10 +17,12 @@
     <th>Kode Produk</th>
     <th>Asal</th>
     <th>Tujuan</th>
-    <th>Total Biji</th>
-    <th>Total Berat</th>
-    <th>Sisa Biji</th>
-    <th>Sisa Berat</th>
+    <th>Biji Awal</th>
+    <th>Berat Awal</th>
+    <th>Biji Sisa</th>
+    <th>Berat Sisa</th>
+    <th>Biji Diproses</th>
+    <th>Berat Diproses</th>
 @stop
 
 @section('table-body')
@@ -136,6 +138,60 @@
                     {{ $history->sisa_berat_kering }}
                 @elseif ($history->tujuan === 'PR11GP')
                     {{ $history->sisa_berat_produk }}
+                @elseif ($history->tujuan === 'PR12PK')
+                    <span>Stok Produk Jadi</span>
+                @elseif ($history->tujuan === 'PR13GP')
+                    <span>Steaming</span>
+                @endif
+            </td>
+            <td>
+                @if ($history->tujuan === 'PR02SK')
+                    {{ $history->total_biji_sesek }}
+                @elseif ($history->tujuan === 'PR03PC')
+                    {{ $history->total_biji_cuci }}
+                @elseif ($history->tujuan === 'PR04IK')
+                    {{ $history->total_biji_koreksi }}
+                @elseif ($history->tujuan === 'PR05PB')
+                    {{ $history->total_biji_cabut }}
+                @elseif ($history->tujuan === 'PR06PR')
+                    {{ $history->total_biji_rendam }}
+                @elseif ($history->tujuan === 'PR07CB')
+                    {{ $history->total_biji_bilas }}
+                @elseif ($history->tujuan === 'PR08MC')
+                    {{ $history->total_biji_entry }}
+                @elseif ($history->tujuan === 'PR09KC')
+                    {{ $history->total_biji_keluar }}
+                @elseif ($history->tujuan === 'PR10PK')
+                    {{ $history->total_biji_kering }}
+                @elseif ($history->tujuan === 'PR11GP')
+                    {{ $history->total_biji_produk }}
+                @elseif ($history->tujuan === 'PR12PK')
+                    <span>Stok Produk Jadi</span>
+                @elseif ($history->tujuan === 'PR13GP')
+                    <span>Steaming</span>
+                @endif
+            </td>
+            <td>
+                @if ($history->tujuan === 'PR02SK')
+                    {{ $history->total_berat_sesek }}
+                @elseif ($history->tujuan === 'PR03PC')
+                    {{ $history->total_berat_cuci }}
+                @elseif ($history->tujuan === 'PR04IK')
+                    {{ $history->total_berat_koreksi }}
+                @elseif ($history->tujuan === 'PR05PB')
+                    {{ $history->total_berat_cabut }}
+                @elseif ($history->tujuan === 'PR06PR')
+                    {{ $history->total_berat_rendam }}
+                @elseif ($history->tujuan === 'PR07CB')
+                    {{ $history->total_berat_bilas }}
+                @elseif ($history->tujuan === 'PR08MC')
+                    {{ $history->total_berat_entry }}
+                @elseif ($history->tujuan === 'PR09KC')
+                    {{ $history->total_berat_keluar }}
+                @elseif ($history->tujuan === 'PR10PK')
+                    {{ $history->total_berat_kering }}
+                @elseif ($history->tujuan === 'PR11GP')
+                    {{ $history->total_berat_produk }}
                 @elseif ($history->tujuan === 'PR12PK')
                     <span>Stok Produk Jadi</span>
                 @elseif ($history->tujuan === 'PR13GP')

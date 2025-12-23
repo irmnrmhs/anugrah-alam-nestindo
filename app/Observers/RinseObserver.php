@@ -16,8 +16,8 @@ class RinseObserver
             'identifiers_id' => $rinse->history->identifiers_id,
             'asal' => 'PR07CB',
             'tujuan' => 'PR08MC',
-            'biji' => $rinse->biji_keluar,
-            'berat' => $rinse->berat_keluar,
+            'biji' => $rinse->biji_keluar ?? 0,
+            'berat' => $rinse->berat_keluar ?? 0,
             'status' => 0
         ]);
     }

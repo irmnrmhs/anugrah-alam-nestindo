@@ -16,8 +16,8 @@ class DryObserver
             'identifiers_id' => $dry->history->identifiers_id,
             'asal' => 'PR10PK',
             'tujuan' => 'PR11GP',
-            'biji' => $dry->biji_keluar,
-            'berat' => $dry->berat_keluar,
+            'biji' => $dry->biji_keluar ?? 0,
+            'berat' => $dry->berat_keluar ?? 0,
             'status' => 0
         ]);
     }
