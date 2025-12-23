@@ -132,7 +132,7 @@
                 <div class="modal-body" id="modalBody"></div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button class="btn btn-primary" type="submit">Simpan</button>
                 </div>
 
@@ -145,7 +145,8 @@
 @section('js')
 @parent
 <script>
-const modal = new bootstrap.Modal('#crudModal');
+const modalElement = document.getElementById('crudModal');
+const modal = new bootstrap.Modal(modalElement);
 
 function openModal(type, title, data = null) {
     $('#formCRUD')[0].reset();
@@ -211,6 +212,14 @@ function openModal(type, title, data = null) {
     modal.show();
 }
 
+$('#btnAddArea').on('click', function () {
+    openModal('area', 'Tambah Area');
+});
+
+$('#btnAddWBHouse').on('click', function () {
+    openModal('wbhouse', 'Tambah Rumah Burung');
+});
+
 $(document).on('click', '.btnEditArea', function () {
     const id = $(this).closest('tr').data('id');
     fetch(`/areas/${id}`)
@@ -227,7 +236,7 @@ $(document).on('click', '.btnEditWBHouse', function () {
 
 function deleteItem(url) {
     Swal.fire({
-        title: 'Hapus data ini?',
+        title: 'Yakin hapus?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus'
@@ -281,15 +290,39 @@ $('#formCRUD').submit(e => {
             kapasitas: $('#kapasitas').val(),
         };
     }
-
     fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
         body: JSON.stringify(payload)
     })
-    .then(r => r.json())
-    .then(out => Swal.fire('Sukses', out.message, 'success')
-        .then(() => location.reload()));
+    .then(async r => {
+        const data = await r.json();
+        if (!r.ok) throw data;
+        return data;
+    })
+    .then(out => {
+        Swal.fire('Sukses', out.message, 'success')
+            .then(() => location.reload());
+    })
+    .catch(err => {
+        Swal.fire(
+            'Error',
+            err.message || 'Terjadi kesalahan',
+            'error'
+        );
+    });
+
+    // fetch(url, {
+    //     method,
+    //     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+    //     body: JSON.stringify(payload)
+    // })
+    // .then(r => r.json())
+    // .then(out => Swal.fire('Sukses', out.message, 'success')
+    //     .then(() => location.reload()));
 });
 
 $('.collapse').each(function () {

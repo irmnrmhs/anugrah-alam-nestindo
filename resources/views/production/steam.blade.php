@@ -48,7 +48,7 @@
                 <td>{{ $steam->suhu_total }}</td>
                 <td>{{ $steam->waktu_total }}</td>
                 <td>{{ $steam->jml_tray }}</td>
-                <td>{{ $steam->keterangan }}</td>
+                <td>{{ empty($steam->keterangan) ? '-' : $steam->keterangan }}</td>
                 <td>
                     <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                     <button class="btn btn-sm btn-danger btnDelete">Hapus</button>

@@ -29,7 +29,7 @@
             <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
             <td>{{ $arrival->employee->nama }}</td>
             <td>{{ $arrival->kondisi }}</td>
-            <td>{{ $arrival->keterangan }}</td>
+            <td>{{ empty($arrival->keterangan) ? '-' : $arrival->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -128,7 +128,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan SKP belum digunakan.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kondisi diisi dan SKP belum digunakan.', 'error'));
 @stop
 
 @section('custom-js')
@@ -175,7 +175,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

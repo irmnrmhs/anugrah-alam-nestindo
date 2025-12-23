@@ -11,7 +11,7 @@ class Supplier extends Model
         'nama',
         'alamat',
         'no_telp',
-        'categories_id' 
+        'categories_id'
     ];
 
     public function category()
@@ -23,9 +23,4 @@ class Supplier extends Model
     {
         return $this->hasMany(Dcertificate::class, 'suppliers_id');
     }
-    
-    // public function identifiers()
-    // {
-    //     return $this->hasMany(ProductIdentifier::class, 'suppliers_id');
-    // }
 }

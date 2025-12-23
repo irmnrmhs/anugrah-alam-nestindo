@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('types_id')->constrained('test_types');
             $table->foreignId('rms_id')->constrained('raw_materials');
-            $table->decimal('kadar_air', 5, 2)->nullable();
-            $table->decimal('kadar_nitrit', 4, 1)->nullable();
-            $table->decimal('kadar_aluminium', 4, 1)->nullable();
+            $table->decimal('kadar_air', 5, 2)->default(0);
+            $table->decimal('kadar_nitrit', 4, 1)->default(0);
+            $table->decimal('kadar_aluminium', 4, 1)->default(0);
             $table->timestamps();
         });
     }

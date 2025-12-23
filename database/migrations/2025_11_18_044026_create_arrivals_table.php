@@ -20,7 +20,7 @@ return new class extends Migration
             // $table->foreignId('receivers_id')->constrained('employees');
             $table->date('tgl_kedatangan');
             $table->string('kondisi');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

@@ -29,9 +29,9 @@ class EdgeController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99'
+            'tgl_selesai' => 'nullable|date',
+            'biji_keluar' => 'nullable|integer|min:0',
+            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99'
         ]);
 
         $tracker = History::find($validated['histories_id']);
@@ -78,7 +78,7 @@ class EdgeController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         $biji_sisa = $tracker->sisa_biji_sesek + $edge->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_sesek + $edge->berat_keluar;
+        $berat_sisa = $tracker->sisa_berat_sesek + $edge->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||

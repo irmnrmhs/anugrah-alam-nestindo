@@ -1,16 +1,16 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Supplier';
+    $title = 'Kelola Data Supplier';
     $singular = 'Supplier';
 @endphp
 
 @section('table-headers')
     <th>No</th>
     <th>Kode</th>
-    <th>Nama</th>
+    <th>Nama Supplier</th>
     <th>Alamat</th>
-    <th>No. Telp</th>
+    <th>No. Telepon</th>
     <th>Kategori</th>
 @stop
 
@@ -20,8 +20,8 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $supplier->kode }}</td>
             <td>{{ $supplier->nama }}</td>
-            <td>{{ $supplier->alamat }}</td>
-            <td>{{ $supplier->no_telp }}</td>
+            <td>{{ empty($supplier->alamat) ? '-' : $supplier->alamat }}</td>
+            <td>{{ empty($supplier->no_telp) ? '-' : $supplier->no_telp }}</td>
             <td>{{ $supplier->category->kategori }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -75,18 +75,29 @@
 
     fetch(url, {
         method: method,
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(data)
     })
-    .then(r => r.json())
+    .then(res => res.json())
     .then(res => {
-        if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-        } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
+    if (res.status === 'success') {
+        Swal.fire('Sukses', res.message, 'success')
+            .then(() => location.reload());
+    } else {
+        Swal.fire(
+                'Gagal',
+                res.message || Object.values(res.errors || {}).join('\n'),
+                'error'
+            );
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode dan nama tidak duplikat', 'error'));;
+    .catch(err => {
+        Swal.fire(
+            'Error',
+            'Terjadi kesalahan. Pastikan data valid dan tidak duplikat.',
+            'error'
+        );
+    });
 @stop
 
 @section('custom-js')
@@ -113,7 +124,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

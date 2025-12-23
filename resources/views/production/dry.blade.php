@@ -40,7 +40,7 @@
             <td>{{ $dry->berat_keluar }}</td>
             <td>{{ $dry->waktu_keluar }}</td>
             <td>{{ $dry->shift }}</td>
-            <td>{{ $dry->keterangan }}</td>
+            <td>{{ empty($dry->keterangan) ? '-' : $dry->keterangan }}</td>
             <td>
                 @if($dry->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -113,8 +113,8 @@
         <label>Shift</label>
         <select id="shift" class="form-control" required>
             <option value="">-- Pilih Shift --</option>
-            <option value="{{ '1' }}">1</option>
-            <option value="{{ '2' }}">2</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
         </select>
     </div>
     <div class="mb-3">
@@ -191,7 +191,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

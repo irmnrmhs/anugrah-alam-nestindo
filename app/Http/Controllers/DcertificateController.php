@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 
 class DcertificateController extends Controller
 {
-    public string $obj = 'Grade';
+    public string $obj = 'Data Pengiriman';
     public function index(): View
     {
         $dcertificates = Dcertificate::with('company', 'supplier', 'wbhouse')->latest()->get();

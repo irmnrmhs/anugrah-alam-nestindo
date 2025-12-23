@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Supplier;
 use App\Models\Category;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -15,18 +15,17 @@ class SupplierController extends Controller
     {
         $suppliers = Supplier::with('category')->latest()->get();
         $categories = Category::all();
-
         return view('masters.supplier', compact('suppliers', 'categories'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'kode' => 'required|string|max:25|unique:suppliers,kode',
-            'nama' => 'required|string|max:255|unique:suppliers,kode',
-            'alamat' => 'nullable',
-            'no_telp' => 'nullable',
-            'categories_id' => 'required|exists:categories,id',
+            'kode'      => 'required|unique:suppliers,kode',
+            'nama'      => 'required|unique:suppliers,nama',
+            'alamat'    => 'nullable',
+            'no_telp'  => 'nullable',
+            'categories_id' => 'required|exists:categories,id'
         ]);
 
         $supplier = Supplier::create($validated);
@@ -40,29 +39,27 @@ class SupplierController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $supplier = Supplier::findOrFail($id);
+        $supplier = Supplier::with('category')->findOrFail($id);
         return response()->json($supplier);
     }
-
 
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'kode' => 'required|string|max:25|unique:suppliers,kode,' .$id,
-            'nama' => 'required|string|max:255|unique:suppliers,kode,' .$id,
-            'alamat' => 'nullable',
-            'no_telp' => 'nullable',
-            'categories_id' => 'required|exists:categories,id',
+            'kode'      => 'required|unique:suppliers,kode,' . $id,
+            'nama'      => 'required|unique:suppliers,nama,' . $id,
+            'alamat'    => 'nullable',
+            'no_telp'  => 'nullable',
+            'categories_id' => 'required|exists:categories,id'
         ]);
 
         $supplier = Supplier::findOrFail($id);
-
         $supplier->update($validated);
 
         return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil diperbarui.',
-            'data' => $supplier,
+                'status'  => 'success',
+                'message' => $this->obj . ' berhasil diperbaharui.',
+                'data'    => $supplier,
         ]);
     }
 

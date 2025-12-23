@@ -1,8 +1,8 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Grade';
-    $singular = 'Grade';
+    $title = 'Kelola Data Grade Bahan Baku';
+    $singular = 'Grade Bahan Baku';
 @endphp
 
 @section('table-headers')
@@ -126,7 +126,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

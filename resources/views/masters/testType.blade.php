@@ -47,7 +47,11 @@
     </div>
     <div class="mb-3">
         <label>Satuan</label>
-        <input type="text" id="satuan" class="form-control" required>
+        <select id="satuan" class="form-control" required>
+            <option value="">-- Pilih Satuan --</option>
+            <option value="%">%</option>
+            <option value="mg/kg">mg/kg</option>
+        </select>
     </div>
     <div class="mb-3">
         <label>Standar Minimal</label>
@@ -86,7 +90,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kategori dan nama uji belum dibuat.', 'error'));
 @stop
 
 @section('custom-js')
@@ -113,7 +117,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

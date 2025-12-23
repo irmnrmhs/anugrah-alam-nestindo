@@ -1,4 +1,4 @@
-@extends('layouts.form')
+    @extends('layouts.form')
 
 @php
     $title = 'Kelola Mobil';
@@ -50,7 +50,7 @@
 
     fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         body: JSON.stringify(data)
     })
     .then(r => r.json())
@@ -85,7 +85,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

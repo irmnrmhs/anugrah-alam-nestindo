@@ -43,7 +43,7 @@ class SteamOfficerController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'employees_id' => 'required|exists:employees,id|unique:steam_officers,employees_id',
+            'employees_id' => 'required|exists:employees,id|unique:steam_officers,employees_id,' . $id,
             'status' => 'required|boolean'
         ]);
 

@@ -36,7 +36,7 @@
             <td>{{ $pull->biji_keluar }}</td>
             <td>{{ $pull->berat_keluar }}</td>
             <td>{{ $pull->shift }}</td>
-            <td>{{ $pull->keterangan }}</td>
+            <td>{{ empty($pull->keterangan) ? '-' : $pull->keterangan }}</td>
             <td>
                 @if($pull->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -161,6 +161,7 @@
                 $('#tgl_selesai').val(pull.tgl_selesai);
                 $('#biji_keluar').val(pull.biji_keluar);
                 $('#berat_keluar').val(pull.berat_keluar);
+                $('#shift').val(pull.shift);
                 $('#keterangan').val(pull.keterangan);
                 $('#modalTitle').text('Edit Masuk Cetak');
                 new bootstrap.Modal('#crudModal').show();
@@ -174,7 +175,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

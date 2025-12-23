@@ -26,7 +26,7 @@
                     <span class="badge bg-danger">Tidak</span>
                 @endif
             </td>
-            <td>{{ $area->keterangan }}</td>
+            <td>{{ empty($area->keterangan) ? '-' : $area->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -47,6 +47,7 @@
     <div class="mb-3">
         <label>KH</label>
         <select id="kh" class="form-control" required>
+            <option value="">-- Pilih --</option>
             <option value="1">Ya</option>
             <option value="0">Tidak</option>
         </select>
@@ -109,7 +110,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

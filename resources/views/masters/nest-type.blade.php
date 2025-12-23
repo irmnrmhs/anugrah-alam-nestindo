@@ -16,7 +16,7 @@
         <tr data-id="{{ $nest->id }}">
             <td>{{ $index + 1 }}</td>
             <td>{{ $nest->type }}</td>
-            <td>{{ $nest->keterangan }}</td>
+            <td>{{ empty($nest->keterangan) ? '-' : $nest->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -85,7 +85,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

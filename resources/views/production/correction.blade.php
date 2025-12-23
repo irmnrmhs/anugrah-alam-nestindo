@@ -34,7 +34,7 @@
             <td>{{ $correction->tgl_selesai }}</td>
             <td>{{ $correction->biji_keluar }}</td>
             <td>{{ $correction->berat_keluar }}</td>
-            <td>{{ $correction->keterangan }}</td>
+            <td>{{ empty($correction->keterangan) ? '-' : $correction->keterangan }}</td>
             <td>
                 @if($correction->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -163,7 +163,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

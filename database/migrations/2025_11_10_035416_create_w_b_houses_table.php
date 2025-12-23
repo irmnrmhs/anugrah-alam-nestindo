@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nama')->unique();
             $table->string('alamat')->nullable();
             $table->foreignId('areas_id')->constrained('areas');
-            $table->decimal('kapasitas', 7, 2)->nullable();
+            $table->decimal('kapasitas', 7, 2);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wbhouses');
+        Schema::dropIfExists('w_b_houses');
     }
 };

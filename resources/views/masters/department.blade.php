@@ -18,7 +18,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $department->kd_dept }}</td>
             <td>{{ $department->nama_dept }}</td>
-            <td>{{ $department->deskripsi }}</td>
+            <td>{{ empty($department->deskripsi) ? '-' : $department->deskripsi }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -94,7 +94,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

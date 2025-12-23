@@ -27,7 +27,7 @@
             <td>{{ $stock->tgl_keluar }}</td>
             <td>{{ $stock->biji_keluar }}</td>
             <td>{{ $stock->berat_keluar }}</td>
-            <td>{{ $stock->keterangan }}</td>
+            <td>{{ empty($stock->keterangan) ? '-' : $stock->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -85,7 +85,7 @@
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
-        <input type="text" id="keterangan" class="form-control" required>
+        <input type="text" id="keterangan" class="form-control">
     </div>
 @stop
 
@@ -163,7 +163,7 @@
             text: 'Data tidak dapat dikembalikan',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
+            confirmButtonText: 'Ya',
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {

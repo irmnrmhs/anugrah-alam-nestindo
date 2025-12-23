@@ -14,38 +14,38 @@
             <div class="mb-3">
                 <label for="ikh">IKH</label>
                 <input type="text" id="ikh" name="ikh" class="form-control" 
-                       value="{{ $company->ikh ?? '' }}" required>
+                       value="{{ $company->ikh ?? '-' }}" required>
             </div>
 
             <div class="mb-3">
                 <label for="nama">Nama Perusahaan</label>
                 <input type="text" id="nama" name="nama" class="form-control" 
-                       value="{{ $company->nama ?? '' }}" required>
+                       value="{{ $company->nama ?? '-' }}" required>
             </div>
 
             <div class="mb-3">
                 <label for="alamat">Alamat</label>
-                <textarea id="alamat" name="alamat" class="form-control">{{ $company->alamat ?? '' }}</textarea>
+                <textarea id="alamat" name="alamat" class="form-control">{{ $company->alamat ?? '-' }}</textarea>
             </div>
 
             <div class="mb-3">
                 <label for="telp">Telepon</label>
                 <input type="text" id="telp" name="telp" class="form-control" 
-                       value="{{ $company->telp ?? '' }}">
+                       value="{{ $company->telp ?? '-' }}">
             </div>
 
             <div class="mb-3">
                 <label for="fax">Fax</label>
                 <input type="text" id="fax" name="fax" class="form-control" 
-                       value="{{ $company->fax ?? '' }}">
+                       value="{{ $company->fax ?? '-' }}">
             </div>
 
             <div class="mb-3">
                 <label>Negara</label>
                 <select id="negara" class="form-control">
-                    <option value="{{ $company->negara ?? '' }}">{{$company->negara ?? '-- Pilih Negara --'}}</option>
+                    <option value="{{ $company->negara ?? '-' }}">{{$company->negara ?? '-- Pilih Negara --'}}</option>
                         @foreach($countries as $country)
-                            <option value="{{ $country ?? '' }}">{{ $country ?? '' }}</option>
+                            <option value="{{ $country ?? '-' }}">{{ $country ?? '-' }}</option>
                         @endforeach
                 </select>
             </div>

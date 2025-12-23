@@ -13,7 +13,7 @@ class WBHouseController extends Controller
     public string $obj = 'Rumah Burung';
     public function index(): View
     {
-        $wbhouses = WBHouse::latest()->get();
+        $wbhouses = WBHouse::with('area')->latest()->get();
         $areas = Area::all();
         return view('masters.wbhouse', compact('wbhouses', 'areas'));
     }
@@ -24,8 +24,8 @@ class WBHouseController extends Controller
             'kode'      => 'required|string|max:25|unique:w_b_houses,kode',
             'nama'      => 'required|unique:w_b_houses,nama',
             'alamat'    => 'nullable',
-            'areas_id'  => 'required|exists:areas,id',
-            'kapasitas' => 'nullable|numeric|min:0|max:99999.99',
+            'areas_id'  => 'required|required|exists:areas,id',
+            'kapasitas' => 'numeric|min:0|max:99999.99',
         ]);
 
         $wbhouse = WBHouse::create($validated);
@@ -47,10 +47,10 @@ class WBHouseController extends Controller
     {
         $validated = $request->validate([
             'kode'      => 'required|string|max:25|unique:w_b_houses,kode,' . $id,
-            'nama'      => 'required|unique:w_b_houses,kode,' . $id,
+            'nama'      => 'required|unique:w_b_houses,nama,' . $id,
             'alamat'    => 'nullable',
             'areas_id'  => 'required|exists:areas,id',
-            'kapasitas' => 'nullable|numeric|min:0|max:99999.99',
+            'kapasitas' => 'required|numeric|min:0|max:99999.99',
 
         ]);
 
