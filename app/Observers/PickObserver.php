@@ -12,7 +12,39 @@ class PickObserver
      */
     public function created(Pick $pick): void
     {
-        if (!$pick->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (
+            empty($pick->biji_keluar) &&
+            empty($pick->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $pick->history->identifiers_id)
+            ->where('asal', 'PR05PB')
+            ->where('tujuan', 'PR06PR')
+            ->first();
+
+        if (!$history) {
+            $history = History::create([
+                'identifiers_id' => $pick->history->identifiers_id,
+                'asal' => 'PR05PB',
+                'tujuan' => 'PR06PR',
+                'biji' => 0,
+                'berat' => 0,
+                'status' => 0
+            ]);
+        }
+
+        $history->increment('biji', $pick->biji_keluar);
+        $history->increment('berat', $pick->berat_keluar);
+    }
+
+    /**
+     * Handle the Pick "updated" event.
+     */
+    public function updated(Pick $pick): void
+    {
+        if (!$pick->wasChanged(['biji_keluar', 'berat_keluar'])) {
             return;
         }
 
@@ -28,26 +60,6 @@ class PickObserver
 
         $history->increment('biji', $pick->biji_keluar ?? 0);
         $history->increment('berat', $pick->berat_keluar ?? 0);
-    }
-
-    /**
-     * Handle the Pick "updated" event.
-     */
-    public function updated(Pick $pick): void
-    {
-        $history = History::where('identifiers_id', $pick->history->identifiers_id)
-            ->where('asal', 'PR05PB')
-            ->where('tujuan', 'PR06PR')
-            ->first();
-
-        if (!$history) return;
-
-        $history->decrement('biji', $pick->biji_keluar ?? 0);
-        $history->decrement('berat', $pick->berat_keluar ?? 0);
-
-        if ($history->biji <= 0 && $history->berat <= 0) {
-            $history->delete();
-        }
     }
 
     /**

@@ -12,7 +12,39 @@ class PullObserver
      */
     public function created(Pull $pull): void
     {
-        if (!$pull->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (
+            empty($pull->biji_keluar) &&
+            empty($pull->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $pull->history->identifiers_id)
+            ->where('asal', 'PR09KC')
+            ->where('tujuan', 'PR10PK')
+            ->first();
+
+        if (!$history) {
+            $history = History::create([
+                'identifiers_id' => $pull->history->identifiers_id,
+                'asal' => 'PR09KC',
+                'tujuan' => 'PR10PK',
+                'biji' => 0,
+                'berat' => 0,
+                'status' => 0
+            ]);
+        }
+
+        $history->increment('biji', $pull->biji_keluar);
+        $history->increment('berat', $pull->berat_keluar);
+    }
+
+    /**
+     * Handle the Pull "updated" event.
+     */
+    public function updated(Pull $pull): void
+    {
+        if (!$pull->wasChanged(['biji_keluar', 'berat_keluar'])) {
             return;
         }
 
@@ -28,26 +60,6 @@ class PullObserver
 
         $history->increment('biji', $pull->biji_keluar ?? 0);
         $history->increment('berat', $pull->berat_keluar ?? 0);
-    }
-
-    /**
-     * Handle the Pull "updated" event.
-     */
-    public function updated(Pull $pull): void
-    {
-        $history = History::where('identifiers_id', $pull->history->identifiers_id)
-            ->where('asal', 'PR09KC')
-            ->where('tujuan', 'PR10PK')
-            ->first();
-
-        if (!$history) return;
-
-        $history->decrement('biji', $pull->biji_keluar ?? 0);
-        $history->decrement('berat', $pull->berat_keluar ?? 0);
-
-        if ($history->biji <= 0 && $history->berat <= 0) {
-            $history->delete();
-        }
     }
 
     /**

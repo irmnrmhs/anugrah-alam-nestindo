@@ -12,7 +12,39 @@ class CorrectionObserver
      */
     public function created(Correction $correction): void
     {
-        if (!$correction->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (
+            empty($correction->biji_keluar) &&
+            empty($correction->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $correction->history->identifiers_id)
+            ->where('asal', 'PR04IK')
+            ->where('tujuan', 'PR05PB')
+            ->first();
+
+        if (!$history) {
+            $history = History::create([
+                'identifiers_id' => $correction->history->identifiers_id,
+                'asal' => 'PR04IK',
+                'tujuan' => 'PR05PB',
+                'biji' => 0,
+                'berat' => 0,
+                'status' => 0
+            ]);
+        }
+
+        $history->increment('biji', $correction->biji_keluar);
+        $history->increment('berat', $correction->berat_keluar);
+    }
+
+    /**
+     * Handle the Correction "updated" event.
+     */
+    public function updated(Correction $correction): void
+    {
+        if (!$correction->wasChanged(['biji_keluar', 'berat_keluar'])) {
             return;
         }
 
@@ -28,26 +60,6 @@ class CorrectionObserver
 
         $history->increment('biji', $correction->biji_keluar ?? 0);
         $history->increment('berat', $correction->berat_keluar ?? 0);
-    }
-
-    /**
-     * Handle the Correction "updated" event.
-     */
-    public function updated(Correction $correction): void
-    {
-        $history = History::where('identifiers_id', $correction->history->identifiers_id)
-            ->where('asal', 'PR04IK')
-            ->where('tujuan', 'PR05PB')
-            ->first();
-
-        if (!$history) return;
-
-        $history->decrement('biji', $correction->biji_keluar ?? 0);
-        $history->decrement('berat', $correction->berat_keluar ?? 0);
-
-        if ($history->biji <= 0 && $history->berat <= 0) {
-            $history->delete();
-        }
     }
 
     /**

@@ -12,7 +12,39 @@ class IdentifierObserver
      */
     public function created(ProductIdentifier $productIdentifier): void
     {
-        if (!$productIdentifier->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (
+            empty($productIdentifier->biji_keluar) &&
+            empty($productIdentifier->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $productIdentifier->history->identifiers_id)
+            ->where('asal', 'PR01GB')
+            ->where('tujuan', 'PR02SK')
+            ->first();
+
+        if (!$history) {
+            $history = History::create([
+                'identifiers_id' => $productIdentifier->history->identifiers_id,
+                'asal' => 'PR01GB',
+                'tujuan' => 'PR02SK',
+                'biji' => 0,
+                'berat' => 0,
+                'status' => 0
+            ]);
+        }
+
+        $history->increment('biji', $productIdentifier->biji_keluar);
+        $history->increment('berat', $productIdentifier->berat_keluar);
+    }
+
+    /**
+     * Handle the ProductIdentifier "updated" event.
+     */
+    public function updated(ProductIdentifier $productIdentifier): void
+    {
+        if (!$productIdentifier->wasChanged(['biji_keluar', 'berat_keluar'])) {
             return;
         }
 
@@ -28,26 +60,6 @@ class IdentifierObserver
 
         $history->increment('biji', $productIdentifier->biji_keluar ?? 0);
         $history->increment('berat', $productIdentifier->berat_keluar ?? 0);
-    }
-
-    /**
-     * Handle the ProductIdentifier "updated" event.
-     */
-    public function updated(ProductIdentifier $productIdentifier): void
-    {
-        $history = History::where('identifiers_id', $productIdentifier->history->identifiers_id)
-            ->where('asal', 'PR01GB')
-            ->where('tujuan', 'PR02SK')
-            ->first();
-
-        if (!$history) return;
-
-        $history->decrement('biji', $productIdentifier->biji_keluar ?? 0);
-        $history->decrement('berat', $productIdentifier->berat_keluar ?? 0);
-
-        if ($history->biji <= 0 && $history->berat <= 0) {
-            $history->delete();
-        }
     }
 
     /**

@@ -12,7 +12,39 @@ class WashObserver
      */
     public function created(Wash $wash): void
     {
-        if (!$wash->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (
+            empty($wash->biji_keluar) &&
+            empty($wash->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $wash->history->identifiers_id)
+            ->where('asal', 'PR03PC')
+            ->where('tujuan', 'PR04IK')
+            ->first();
+
+        if (!$history) {
+            $history = History::create([
+                'identifiers_id' => $wash->history->identifiers_id,
+                'asal' => 'PR03PC',
+                'tujuan' => 'PR04IK',
+                'biji' => 0,
+                'berat' => 0,
+                'status' => 0
+            ]);
+        }
+
+        $history->increment('biji', $wash->biji_keluar);
+        $history->increment('berat', $wash->berat_keluar);
+    }
+
+    /**
+     * Handle the Wash "updated" event.
+     */
+    public function updated(Wash $wash): void
+    {
+        if (!$wash->wasChanged(['biji_keluar', 'berat_keluar'])) {
             return;
         }
 
@@ -28,26 +60,6 @@ class WashObserver
 
         $history->increment('biji', $wash->biji_keluar ?? 0);
         $history->increment('berat', $wash->berat_keluar ?? 0);
-    }
-
-    /**
-     * Handle the Wash "updated" event.
-     */
-    public function updated(Wash $wash): void
-    {
-        $history = History::where('identifiers_id', $wash->history->identifiers_id)
-            ->where('asal', 'PR03PC')
-            ->where('tujuan', 'PR04IK')
-            ->first();
-
-        if (!$history) return;
-
-        $history->decrement('biji', $wash->biji_keluar ?? 0);
-        $history->decrement('berat', $wash->berat_keluar ?? 0);
-
-        if ($history->biji <= 0 && $history->berat <= 0) {
-            $history->delete();
-        }
     }
 
     /**
