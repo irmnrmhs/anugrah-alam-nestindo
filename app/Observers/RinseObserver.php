@@ -12,14 +12,22 @@ class RinseObserver
      */
     public function created(Rinse $rinse): void
     {
-        History::create([
-            'identifiers_id' => $rinse->history->identifiers_id,
-            'asal' => 'PR07CB',
-            'tujuan' => 'PR08MC',
-            'biji' => $rinse->biji_keluar ?? 0,
-            'berat' => $rinse->berat_keluar ?? 0,
-            'status' => 0
-        ]);
+        if (!$rinse->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $rinse->history->identifiers_id)
+            ->where('asal', 'PR07CB')
+            ->where('tujuan', 'PR08MC')
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $rinse->getOriginal('biji_keluar') ?? 0);
+        $history->decrement('berat', $rinse->getOriginal('berat_keluar') ?? 0);
+
+        $history->increment('biji', $rinse->biji_keluar ?? 0);
+        $history->increment('berat', $rinse->berat_keluar ?? 0);
     }
 
     /**
@@ -32,11 +40,13 @@ class RinseObserver
             ->where('tujuan', 'PR08MC')
             ->first();
 
-        if ($history) {
-            $history->update([
-                'biji'  => $rinse->biji_masuk,
-                'berat' => $rinse->berat_masuk,
-            ]);
+        if (!$history) return;
+
+        $history->decrement('biji', $rinse->biji_keluar ?? 0);
+        $history->decrement('berat', $rinse->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
         }
     }
 

@@ -12,14 +12,22 @@ class CorrectionObserver
      */
     public function created(Correction $correction): void
     {
-        History::create([
-            'identifiers_id' => $correction->history->identifiers_id,
-            'asal' => 'PR04IK',
-            'tujuan' => 'PR05PB',
-            'biji' => $correction->biji_keluar ?? 0,
-            'berat' => $correction->berat_keluar ?? 0,
-            'status' => 0
-        ]);
+        if (!$correction->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $correction->history->identifiers_id)
+            ->where('asal', 'PR04IK')
+            ->where('tujuan', 'PR05PB')
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $correction->getOriginal('biji_keluar') ?? 0);
+        $history->decrement('berat', $correction->getOriginal('berat_keluar') ?? 0);
+
+        $history->increment('biji', $correction->biji_keluar ?? 0);
+        $history->increment('berat', $correction->berat_keluar ?? 0);
     }
 
     /**
@@ -32,11 +40,13 @@ class CorrectionObserver
             ->where('tujuan', 'PR05PB')
             ->first();
 
-        if ($history) {
-            $history->update([
-                'biji'  => $correction->biji_masuk,
-                'berat' => $correction->berat_masuk,
-            ]);
+        if (!$history) return;
+
+        $history->decrement('biji', $correction->biji_keluar ?? 0);
+        $history->decrement('berat', $correction->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
         }
     }
 
