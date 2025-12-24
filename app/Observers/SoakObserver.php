@@ -67,10 +67,26 @@ class SoakObserver
      */
     public function deleted(Soak $soak): void
     {
-        History::where('identifiers_id', $soak->history->identifiers_id)
+        if (
+            empty($soak->biji_keluar) &&
+            empty($soak->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $soak->history->identifiers_id)
             ->where('asal', 'PR06PR')
             ->where('tujuan', 'PR07CB')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $soak->biji_keluar ?? 0);
+        $history->decrement('berat', $soak->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

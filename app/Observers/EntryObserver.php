@@ -67,10 +67,26 @@ class EntryObserver
      */
     public function deleted(Entry $entry): void
     {
-        History::where('identifiers_id', $entry->history->identifiers_id)
+        if (
+            empty($entry->biji_keluar) &&
+            empty($entry->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $entry->history->identifiers_id)
             ->where('asal', 'PR08MC')
             ->where('tujuan', 'PR09KC')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $entry->biji_keluar ?? 0);
+        $history->decrement('berat', $entry->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

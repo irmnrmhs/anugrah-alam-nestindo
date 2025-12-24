@@ -67,10 +67,26 @@ class WashObserver
      */
     public function deleted(Wash $wash): void
     {
-        History::where('identifiers_id', $wash->history->identifiers_id)
+        if (
+            empty($wash->biji_keluar) &&
+            empty($wash->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $wash->history->identifiers_id)
             ->where('asal', 'PR03PC')
             ->where('tujuan', 'PR04IK')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $wash->biji_keluar ?? 0);
+        $history->decrement('berat', $wash->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

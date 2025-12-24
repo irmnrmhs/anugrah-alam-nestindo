@@ -67,10 +67,26 @@ class DryObserver
      */
     public function deleted(Dry $dry): void
     {
-        History::where('identifiers_id', $dry->history->identifiers_id)
+        if (
+            empty($dry->biji_keluar) &&
+            empty($dry->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $dry->history->identifiers_id)
             ->where('asal', 'PR10PK')
             ->where('tujuan', 'PR11GP')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $dry->biji_keluar ?? 0);
+        $history->decrement('berat', $dry->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

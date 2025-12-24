@@ -67,10 +67,26 @@ class PullObserver
      */
     public function deleted(Pull $pull): void
     {
-        History::where('identifiers_id', $pull->history->identifiers_id)
+        if (
+            empty($pull->biji_keluar) &&
+            empty($pull->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $pull->history->identifiers_id)
             ->where('asal', 'PR09KC')
             ->where('tujuan', 'PR10PK')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $pull->biji_keluar ?? 0);
+        $history->decrement('berat', $pull->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

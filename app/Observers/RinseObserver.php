@@ -67,10 +67,26 @@ class RinseObserver
      */
     public function deleted(Rinse $rinse): void
     {
-        History::where('identifiers_id', $rinse->history->identifiers_id)
+        if (
+            empty($rinse->biji_keluar) &&
+            empty($rinse->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $rinse->history->identifiers_id)
             ->where('asal', 'PR07CB')
             ->where('tujuan', 'PR08MC')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $rinse->biji_keluar ?? 0);
+        $history->decrement('berat', $rinse->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

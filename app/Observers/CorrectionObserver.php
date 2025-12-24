@@ -67,10 +67,26 @@ class CorrectionObserver
      */
     public function deleted(Correction $correction): void
     {
-        History::where('identifiers_id', $correction->history->identifiers_id)
+        if (
+            empty($correction->biji_keluar) &&
+            empty($correction->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $correction->history->identifiers_id)
             ->where('asal', 'PR04IK')
             ->where('tujuan', 'PR05PB')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $correction->biji_keluar ?? 0);
+        $history->decrement('berat', $correction->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**
