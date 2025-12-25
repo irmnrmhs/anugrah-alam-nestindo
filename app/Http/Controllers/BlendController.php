@@ -13,9 +13,9 @@ class BlendController extends Controller
     public function type()
     {
         return view('masters.types', [
-            'shapes'   => Shape::latest()->get(),
-            'feathers' => Feather::latest()->get(),
-            'colors'   => Color::latest()->get(),
+            'shapes'   => Shape::latest()->paginate(10),
+            'feathers' => Feather::latest()->paginate(10),
+            'colors'   => Color::latest()->paginate(10),
         ]);
     }
 

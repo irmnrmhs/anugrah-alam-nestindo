@@ -76,7 +76,7 @@
                 <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01" required>
 
                 <label>Keterangan</label>
-                <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}">
+                <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}" placeholder="Optional (tidak wajib diisi)">
 
                 <label>Petugas</label>
                 <select class="form-control kont-petugas" data-index="${i}" required>

@@ -397,12 +397,6 @@ return [
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
-                [
-                    'text' => 'Rumah Burung',
-                    'url'  => 'wbhouses',
-                    'can'  => ['Super Admin', 'Administrasi'],
-                    'icon' => 'fas fa-users',
-                ],
                 // [
                 //     'text' => 'Rumah Burung',
                 //     'url'  => 'areas-wbhouses',

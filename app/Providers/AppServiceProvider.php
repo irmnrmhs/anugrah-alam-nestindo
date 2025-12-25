@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Pagination\Paginator;
 
 use App\Models\Shape;
 use App\Models\Feather;
@@ -85,6 +86,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('view-dashboard', function ($user) {
             return $user->role->name !== 'User';
         });
+
+        Paginator::useBootstrap();
 
         Shape::observe(ShapeObserver::class);
         Feather::observe(FeatherObserver::class);

@@ -32,11 +32,11 @@ class ProductIdentifier extends Model
 
     public function getBijiSisaAttribute()
     {
-        return $this->stok_biji - $this->biji;
+        return $this->biji - $this->biji;
     }
 
     public function getBeratSisaAttribute()
     {
-        return $this->stok_berat - $this->berat;
+        return $this->berat - $this->berat;
     }
 }
