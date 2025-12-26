@@ -28,18 +28,21 @@
                     </thead>
                     <tbody>
                         @foreach($shapes as $i => $s)
-                            <tr data-id="{{ $s->id }}">
-                                <td>{{ $i+1 }}</td>
-                                <td>{{ $s->kode }}</td>
-                                <td>{{ $s->jenis_bentuk }}</td>
-                                <td>
-                                    <button class="btn btn-warning btn-sm btnEditShape">Edit</button>
-                                    <button class="btn btn-danger btn-sm btnDeleteShape">Hapus</button>
-                                </td>
-                            </tr>
+                        <tr data-id="{{ $s->id }}">
+                            <td>{{ $shapes->firstItem() + $i }}</td>
+                            <td>{{ $s->kode }}</td>
+                            <td>{{ $s->jenis_bentuk }}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm btnEditShape">Edit</button>
+                                <button class="btn btn-danger btn-sm btnDeleteShape">Hapus</button>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-2">
+                    {{ $shapes->links() }}
+                </div>
             </div>
         </div>
     </div>

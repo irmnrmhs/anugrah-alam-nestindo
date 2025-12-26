@@ -94,10 +94,12 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     // Employee
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
     Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
-    Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
     Route::put('/employees/{id}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     Route::post('/employees/delete-multiple', [EmployeeController::class, 'deleteMultiple']);
+    Route::get('/employees/template', [EmployeeController::class, 'downloadTemplate'])->name('employees.template');
+    Route::post('/employees/import', [EmployeeController::class, 'import'])->name('employees.import');
+    Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
     
     // Area
     Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');

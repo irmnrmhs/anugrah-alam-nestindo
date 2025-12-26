@@ -8,6 +8,9 @@
         @if (empty($hideAddButton))
             <button class="btn btn-primary" id="btnAdd">Tambah {{ $singular ?? 'Data' }}</button>
         @endif
+        @if (empty($hideImportButton))
+            <button class="btn btn-primary" id="btnImport">Import {{ $singular ?? 'Data' }}</button>
+        @endif
     </div>
 @stop
 
@@ -61,6 +64,42 @@
             </div>
         </div>
     </div>
+    {{-- Modal Import --}}
+    <div class="modal fade" id="importModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="importForm" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Import {{ $singular ?? 'Data' }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label>File Excel</label>
+                            <input type="file" name="file" id="importFile" class="form-control" required>
+                            <small class="text-muted">
+                                Format: xls / xlsx |
+                                <a href="{{ route('employees.template') }}">
+                                    Download Template
+                                </a>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Import
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -77,6 +116,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+
     // ==== Multi Delete Universal ====
     function toggleBulkDeleteButton() {
         const selected = $('.row-check:checked').length;
@@ -146,6 +186,40 @@
             $('#item_id').val('');
             $('#modalTitle').text('Tambah {{ $singular ?? "Data" }}');
             modal.show();
+        });
+
+        // ==== Import ====
+        const importModal = new bootstrap.Modal('#importModal');
+
+        $('#btnImport').click(() => {
+            $('#importForm')[0].reset();
+            importModal.show();
+        });
+
+        $('#importForm').submit(function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            fetch("{{ route('employees.import') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    Swal.fire('Sukses', res.message, 'success')
+                        .then(() => location.reload());
+                } else {
+                    Swal.fire('Gagal', res.message || 'Import gagal', 'error');
+                }
+            })
+            .catch(() => {
+                Swal.fire('Error', 'Terjadi kesalahan saat import', 'error');
+            });
         });
 
         // Submit Form
