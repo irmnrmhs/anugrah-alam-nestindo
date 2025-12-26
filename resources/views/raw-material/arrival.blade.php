@@ -132,12 +132,20 @@
 @stop
 
 @section('custom-js')
+    function syncKondisiAll() {
+        const total = $('.kondisi-item').length;
+        const checked = $('.kondisi-item:checked').length;
+
+        $('#kondisi_all').prop('checked', total > 0 && total === checked);
+    }
+
     $(document).on('change', '#kondisi_all', function() {
         const checked = $(this).is(':checked');
         $('.kondisi-item').prop('checked', checked);
     });
 
     $(document).on('change', '.kondisi-item', function() {
+        syncKondisiAll();
         const allChecked = $('.kondisi-item:checked').length === $('.kondisi-item').length;
         $('#kondisi_all').prop('checked', allChecked);
     });
@@ -155,13 +163,20 @@
                 $('#keterangan').val(arrival.keterangan);
                 
                 $('.kondisi-item').prop('checked', false);
-                if (arrival.kondisi) {
-                    const kondisiList = arrival.kondisi.toLowerCase().replace('bebas dari ', '').split(', ');
-                    kondisiList.forEach(function(k) {
-                        $('.kondisi-item[value="'+k.trim().toLowerCase()+'"]').prop('checked', true);
+                $('#kondisi_all').prop('checked', false);
 
+                if (arrival.kondisi) {
+                    const kondisiList = arrival.kondisi
+                        .toLowerCase()
+                        .replace('bebas dari ', '')
+                        .split(', ');
+
+                    kondisiList.forEach(function(k) {
+                        $('.kondisi-item[value="'+k.trim()+'"]').prop('checked', true);
                     });
                 }
+
+                syncKondisiAll();
 
                 $('#modalTitle').text('Edit Kedatangan');
                 new bootstrap.Modal('#crudModal').show();

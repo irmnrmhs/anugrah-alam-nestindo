@@ -12,14 +12,31 @@ class EntryObserver
      */
     public function created(Entry $entry): void
     {
-        History::create([
-            'identifiers_id' => $entry->history->identifiers_id,
-            'asal' => 'PR08MC',
-            'tujuan' => 'PR09KC',
-            'biji' => $entry->biji_keluar ?? 0,
-            'berat' => $entry->berat_keluar ?? 0,
-            'status' => 0
-        ]);
+        if (
+            empty($entry->biji_keluar) &&
+            empty($entry->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $entry->history->identifiers_id)
+            ->where('asal', 'PR08MC')
+            ->where('tujuan', 'PR09KC')
+            ->first();
+
+        if (!$history) {
+            $history = History::create([
+                'identifiers_id' => $entry->history->identifiers_id,
+                'asal' => 'PR08MC',
+                'tujuan' => 'PR09KC',
+                'biji' => 0,
+                'berat' => 0,
+                'status' => 0
+            ]);
+        }
+
+        $history->increment('biji', $entry->biji_keluar);
+        $history->increment('berat', $entry->berat_keluar);
     }
 
     /**
@@ -27,17 +44,22 @@ class EntryObserver
      */
     public function updated(Entry $entry): void
     {
+        if (!$entry->wasChanged(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
         $history = History::where('identifiers_id', $entry->history->identifiers_id)
             ->where('asal', 'PR08MC')
             ->where('tujuan', 'PR09KC')
             ->first();
 
-        if ($history) {
-            $history->update([
-                'biji'  => $entry->biji_masuk,
-                'berat' => $entry->berat_masuk,
-            ]);
-        }
+        if (!$history) return;
+
+        $history->decrement('biji', $entry->getOriginal('biji_keluar') ?? 0);
+        $history->decrement('berat', $entry->getOriginal('berat_keluar') ?? 0);
+
+        $history->increment('biji', $entry->biji_keluar ?? 0);
+        $history->increment('berat', $entry->berat_keluar ?? 0);
     }
 
     /**
@@ -45,10 +67,26 @@ class EntryObserver
      */
     public function deleted(Entry $entry): void
     {
-        History::where('identifiers_id', $entry->history->identifiers_id)
-            ->where('asal', 'PR02SK')
-            ->where('tujuan', 'PR03PC')
-            ->delete();
+        if (
+            empty($entry->biji_keluar) &&
+            empty($entry->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $entry->history->identifiers_id)
+            ->where('asal', 'PR08MC')
+            ->where('tujuan', 'PR09KC')
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $entry->biji_keluar ?? 0);
+        $history->decrement('berat', $entry->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

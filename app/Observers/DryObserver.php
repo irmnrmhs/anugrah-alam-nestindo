@@ -12,14 +12,31 @@ class DryObserver
      */
     public function created(Dry $dry): void
     {
-        History::create([
-            'identifiers_id' => $dry->history->identifiers_id,
-            'asal' => 'PR10PK',
-            'tujuan' => 'PR11GP',
-            'biji' => $dry->biji_keluar ?? 0,
-            'berat' => $dry->berat_keluar ?? 0,
-            'status' => 0
-        ]);
+        if (
+            empty($dry->biji_keluar) &&
+            empty($dry->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $dry->history->identifiers_id)
+            ->where('asal', 'PR10PK')
+            ->where('tujuan', 'PR11GP')
+            ->first();
+
+        if (!$history) {
+            $history = History::create([
+                'identifiers_id' => $dry->history->identifiers_id,
+                'asal' => 'PR10PK',
+                'tujuan' => 'PR11GP',
+                'biji' => 0,
+                'berat' => 0,
+                'status' => 0
+            ]);
+        }
+
+        $history->increment('biji', $dry->biji_keluar);
+        $history->increment('berat', $dry->berat_keluar);   
     }
 
     /**
@@ -27,17 +44,22 @@ class DryObserver
      */
     public function updated(Dry $dry): void
     {
+        if (!$dry->wasChanged(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
         $history = History::where('identifiers_id', $dry->history->identifiers_id)
             ->where('asal', 'PR10PK')
             ->where('tujuan', 'PR11GP')
             ->first();
 
-        if ($history) {
-            $history->update([
-                'biji'  => $dry->biji_masuk,
-                'berat' => $dry->berat_masuk,
-            ]);
-        }
+        if (!$history) return;
+
+        $history->decrement('biji', $dry->getOriginal('biji_keluar') ?? 0);
+        $history->decrement('berat', $dry->getOriginal('berat_keluar') ?? 0);
+
+        $history->increment('biji', $dry->biji_keluar ?? 0);
+        $history->increment('berat', $dry->berat_keluar ?? 0);
     }
 
     /**
@@ -45,10 +67,26 @@ class DryObserver
      */
     public function deleted(Dry $dry): void
     {
-        History::where('identifiers_id', $dry->history->identifiers_id)
+        if (
+            empty($dry->biji_keluar) &&
+            empty($dry->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $dry->history->identifiers_id)
             ->where('asal', 'PR10PK')
             ->where('tujuan', 'PR11GP')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $dry->biji_keluar ?? 0);
+        $history->decrement('berat', $dry->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

@@ -7,6 +7,9 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\EmployeesImport;
+use App\Exports\EmployeesTemplateExport;
 
 class EmployeeController extends Controller
 {
@@ -84,4 +87,27 @@ class EmployeeController extends Controller
             'message' => 'Data terpilih berhasil dihapus'
         ]);
     }
+
+    public function import(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        Excel::import(new EmployeesImport, $request->file('file'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $this->obj . ' berhasil diimport'
+        ]);
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(
+            new EmployeesTemplateExport,
+            'template_import_karyawan.xlsx'
+        );
+    }
+
 }

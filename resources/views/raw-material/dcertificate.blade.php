@@ -97,6 +97,7 @@
 @section('custom-js')
     $('#wbhouses_id').on('change', function () {
         const id = $(this).val();
+        const isEdit = $('#item_id').val(); // cek edit / create
 
         if (!id) return;
 
@@ -104,12 +105,13 @@
             .then(r => r.json())
             .then(wb => {
                 const kh = wb.area?.kh;
+
                 if (kh == 1) {
                     $('#no_skp').prop('disabled', false);
-                    $('#no_skp').val('');
+                    if (!isEdit) $('#no_skp').val('');
                 } else {
                     $('#no_skp').prop('disabled', true);
-                    $('#no_skp').val('AUTO');
+                    if (!isEdit) $('#no_skp').val('AUTO');
                 }
             });
     });
@@ -123,8 +125,10 @@
                 $('#companies_id').val(dcertificate.companies_id);
                 $('#suppliers_id').val(dcertificate.suppliers_id);
                 $('#wbhouses_id').val(dcertificate.wbhouses_id);
+                $('#no_skp').val(dcertificate.no_skp);
                 $('#tgl_skp').val(dcertificate.tgl_skp);
                 $('#modalTitle').text('Edit SKP');
+                $('#wbhouses_id').trigger('change');
                 new bootstrap.Modal('#crudModal').show();
             });
     });

@@ -128,9 +128,9 @@
                 $('#last_out_date').val(info.last_date ?? '-');
             })
             .catch(() => {
-                $('#biji_sisa').val('-');
-                $('#berat_sisa').val('-');
-                $('#last_out_date').val('-');
+                $('#biji_sisa').val();
+                $('#berat_sisa').val();
+                $('#last_out_date').val();
             });
     });
 
@@ -140,7 +140,7 @@
             .then(r => r.json())
             .then(identifier => {
                 $('#item_id').val(identifier.id);
-                $('#rms_id').val(identifier.rms_id);
+                $('#rms_id').val(identifier.rms_id).trigger('change');
                 $('#grades_id').val(identifier.grades_id);
                 $('#tanggal').val(identifier.tanggal);
                 $('#biji').val(identifier.biji);

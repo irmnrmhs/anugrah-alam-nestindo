@@ -12,14 +12,31 @@ class SoakObserver
      */
     public function created(Soak $soak): void
     {
-        History::create([
-            'identifiers_id' => $soak->history->identifiers_id,
-            'asal' => 'PR06PR',
-            'tujuan' => 'PR07CB',
-            'biji' => $soak->biji_keluar ?? 0,
-            'berat' => $soak->berat_keluar ?? 0,
-            'status' => 0
-        ]);
+        if (
+            empty($soak->biji_keluar) &&
+            empty($soak->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $soak->history->identifiers_id)
+            ->where('asal', 'PR06PR')
+            ->where('tujuan', 'PR07CB')
+            ->first();
+
+        if (!$history) {
+            $history = History::create([
+                'identifiers_id' => $soak->history->identifiers_id,
+                'asal' => 'PR06PR',
+                'tujuan' => 'PR07CB',
+                'biji' => 0,
+                'berat' => 0,
+                'status' => 0
+            ]);
+        }
+
+        $history->increment('biji', $soak->biji_keluar);
+        $history->increment('berat', $soak->berat_keluar);
     }
 
     /**
@@ -27,17 +44,22 @@ class SoakObserver
      */
     public function updated(Soak $soak): void
     {
+        if (!$soak->wasChanged(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
         $history = History::where('identifiers_id', $soak->history->identifiers_id)
             ->where('asal', 'PR06PR')
             ->where('tujuan', 'PR07CB')
             ->first();
 
-        if ($history) {
-            $history->update([
-                'biji'  => $soak->biji_masuk,
-                'berat' => $soak->berat_masuk,
-            ]);
-        }
+        if (!$history) return;
+
+        $history->decrement('biji', $soak->getOriginal('biji_keluar') ?? 0);
+        $history->decrement('berat', $soak->getOriginal('berat_keluar') ?? 0);
+
+        $history->increment('biji', $soak->biji_keluar ?? 0);
+        $history->increment('berat', $soak->berat_keluar ?? 0);
     }
 
     /**
@@ -45,10 +67,26 @@ class SoakObserver
      */
     public function deleted(Soak $soak): void
     {
-        History::where('identifiers_id', $soak->history->identifiers_id)
+        if (
+            empty($soak->biji_keluar) &&
+            empty($soak->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $soak->history->identifiers_id)
             ->where('asal', 'PR06PR')
             ->where('tujuan', 'PR07CB')
-            ->delete();
+            ->first();
+
+        if (!$history) return;
+
+        $history->decrement('biji', $soak->biji_keluar ?? 0);
+        $history->decrement('berat', $soak->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

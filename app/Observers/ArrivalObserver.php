@@ -12,13 +12,14 @@ class ArrivalObserver
      */
     public function created(Arrival $arrival): void
     {
-        // otomatis membuat RawMaterial baru berdasarkan kode arrival
-        RawMaterial::create([
-            'kode' => $arrival->kode,
-            'arrivals_id' => $arrival->id,
-            'biji' => 0,
-            'berat' => 0,
-        ]);
+        if(!$arrival){
+            RawMaterial::create([
+                'kode' => $arrival->kode,
+                'arrivals_id' => $arrival->id,
+                'biji' => 0,
+                'berat' => 0,
+            ]);
+        }
     }
 
     /**
@@ -26,11 +27,20 @@ class ArrivalObserver
      */
     public function updated(Arrival $arrival): void
     {
-        if ($arrival->wasChanged('kode')) {
-            RawMaterial::where('arrivals_id', $arrival->id)
-                ->update([
-                    'kode' => $arrival->kode
-                ]);
+        if(!$arrival){
+            RawMaterial::create([
+                'kode' => $arrival->kode,
+                'arrivals_id' => $arrival->id,
+                'biji' => 0,
+                'berat' => 0,
+            ]);
+        }else{
+            if ($arrival->wasChanged('kode')) {
+                RawMaterial::where('arrivals_id', $arrival->id)
+                    ->update([
+                        'kode' => $arrival->kode
+                    ]);
+            }
         }
     }
 
