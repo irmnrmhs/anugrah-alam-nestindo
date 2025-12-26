@@ -12,14 +12,10 @@ class ArrivalObserver
      */
     public function created(Arrival $arrival): void
     {
-        if(!$arrival){
-            RawMaterial::create([
-                'kode' => $arrival->kode,
-                'arrivals_id' => $arrival->id,
-                'biji' => 0,
-                'berat' => 0,
-            ]);
-        }
+        RawMaterial::firstOrCreate(
+            ['kode' => $arrival->kode],
+            ['biji' => 0, 'berat' => 0]
+        );
     }
 
     /**
@@ -27,19 +23,15 @@ class ArrivalObserver
      */
     public function updated(Arrival $arrival): void
     {
-        if(!$arrival){
-            RawMaterial::create([
-                'kode' => $arrival->kode,
-                'arrivals_id' => $arrival->id,
-                'biji' => 0,
-                'berat' => 0,
-            ]);
-        }else{
-            if ($arrival->wasChanged('kode')) {
-                RawMaterial::where('arrivals_id', $arrival->id)
-                    ->update([
-                        'kode' => $arrival->kode
-                    ]);
+        if ($arrival->wasChanged('kode')) {
+
+            $oldKode = $arrival->getOriginal('kode');
+
+            $stillUsed = Arrival::where('kode', $oldKode)->exists();
+
+            if (!$stillUsed) {
+                RawMaterial::where('kode', $oldKode)
+                    ->update(['kode' => $arrival->kode]);
             }
         }
     }
@@ -49,7 +41,10 @@ class ArrivalObserver
      */
     public function deleted(Arrival $arrival): void
     {
-        //
+        $stillUsed = Arrival::where('kode', $arrival->kode)->exists();
+        if (!$stillUsed) {
+            RawMaterial::where('kode', $arrival->kode)->delete();
+        }
     }
 
     /**
