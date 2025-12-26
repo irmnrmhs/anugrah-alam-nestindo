@@ -33,15 +33,15 @@ class ProductIdentifierController extends Controller
 
         $rm = RawMaterial::with('arrival')->find($validated['rms_id']);
 
-        $stokBiji = $rm->biji_sisa_identifier;
-        $stokBerat = $rm->berat_sisa_identifier;
+        // $stokBiji = $rm->biji_sisa_identifier;
+        // $stokBerat = $rm->berat_sisa_identifier;
 
-        if ($validated['biji'] > $stokBiji || $validated['berat'] > $stokBerat) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Melebihi stok sisa',
-            ], 422);
-        }
+        // if ($validated['biji'] > $stokBiji || $validated['berat'] > $stokBerat) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Melebihi stok sisa',
+        //     ], 422);
+        // }
 
         $grade = Grade::find($validated['grades_id']);
         $supplier = $rm->arrival->dcertificate->supplier->kode;
