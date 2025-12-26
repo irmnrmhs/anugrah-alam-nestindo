@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Jenis Bentuk';
     $singular = 'Jenis Bentuk';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Jenis Bulu';
     $singular = 'Jenis Bulu';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

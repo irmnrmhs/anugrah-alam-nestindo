@@ -4,6 +4,7 @@
     $title = 'Kelola Stok Bahan Baku';
     $singular = 'Stok Bahan Baku';
     $deleteMultipleUrl = '/rmstocks/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

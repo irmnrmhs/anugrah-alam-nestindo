@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Kategori';
     $singular = 'Kategori';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

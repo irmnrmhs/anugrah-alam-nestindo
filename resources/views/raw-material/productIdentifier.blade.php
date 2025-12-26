@@ -81,7 +81,7 @@
     </div>
     <div class="mb-3">
         <label>Berat</label>
-        <input type="number" id="berat" step="0.001" min="0" max="99999.99" class="form-control" required>
+        <input type="number" id="berat" step="0.01" min="0" max="99999.99" class="form-control" required>
     </div>
 @stop
 

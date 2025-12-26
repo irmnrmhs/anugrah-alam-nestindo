@@ -3,6 +3,7 @@
     $singular = 'Bahan Baku';
     $hideAddButton = true;
     $hideActions = true;
+    $hideImportButton = true;
 @endphp
 
 @extends('layouts.form')

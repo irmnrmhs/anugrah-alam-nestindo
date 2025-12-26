@@ -4,6 +4,7 @@
     $title = 'Kelola Data Perendaman';
     $singular = 'Perendaman';
     $deleteMultipleUrl = '/soaks/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

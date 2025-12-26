@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Data Grade Bahan Baku';
     $singular = 'Grade Bahan Baku';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

@@ -30,13 +30,13 @@ class ProductIdentifier extends Model
         return $this->hasMany(History::class, 'identifiers_id');
     }
 
-    public function getBijiSisaAttribute()
-    {
-        return $this->biji - $this->biji;
-    }
+    // public function getBijiSisaAttribute()
+    // {
+    //     return $this->biji - $this->biji;
+    // }
 
-    public function getBeratSisaAttribute()
-    {
-        return $this->berat - $this->berat;
-    }
+    // public function getBeratSisaAttribute()
+    // {
+    //     return $this->berat - $this->berat;
+    // }
 }

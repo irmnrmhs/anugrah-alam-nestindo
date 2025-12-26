@@ -4,6 +4,7 @@
     $title = 'Kelola Data Pengeringan';
     $singular = 'Pengeringan';
     $deleteMultipleUrl = '/dries/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

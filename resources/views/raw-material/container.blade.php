@@ -4,6 +4,7 @@
     $title = 'Kelola Kontainer';
     $singular = 'Kontainer';
     $deleteMultipleUrl = '/containers/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

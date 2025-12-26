@@ -40,6 +40,6 @@ class Arrival extends Model
 
     public function rawMaterial()
     {
-        return $this->hasOne(RawMaterial::class, 'arrivals_id');
+        return $this->belongsTo(RawMaterial::class, 'kode', 'kode');
     }
 }

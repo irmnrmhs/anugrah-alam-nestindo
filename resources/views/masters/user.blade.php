@@ -4,6 +4,7 @@
     $title = 'Kelola Pengguna';
     $singular = 'User';
     $deleteMultipleUrl = '/users/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

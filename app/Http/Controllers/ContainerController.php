@@ -16,7 +16,7 @@ class ContainerController extends Controller
     public function index(): View
     {
         $containers = Container::with('arrival', 'employee')->oldest()->get();
-        $arrivals = Arrival::select('kode')->distinct()->orderBy('kode')->get();
+        $arrivals = Arrival::orderBy('kode')->get()->unique('kode')->values();
         $employees = Employee::all();
 
         return view('raw-material.container', compact('containers', 'arrivals', 'employees'));

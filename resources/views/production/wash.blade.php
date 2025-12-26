@@ -4,6 +4,7 @@
     $title = 'Kelola Data Pencucian';
     $singular = 'Pencucian';
     $deleteMultipleUrl = '/washes/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

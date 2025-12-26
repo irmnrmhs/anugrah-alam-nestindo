@@ -19,9 +19,9 @@ class RawMaterial extends Model
     //     return $this->hasMany(Container::class, 'raw_materials_id');
     // }
 
-    public function arrival()
+    public function arrivals()
     {
-        return $this->belongsTo(Arrival::class, 'arrivals_id');
+        return $this->hasMany(Arrival::class, 'kode', 'kode');
     }
     
     public function rmResults()

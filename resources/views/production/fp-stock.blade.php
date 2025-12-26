@@ -4,6 +4,7 @@
     $title = 'Kelola Stok Produk Jadi';
     $singular = 'Stok Produk Jadi';
     $deleteMultipleUrl = '/fp-stocks/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

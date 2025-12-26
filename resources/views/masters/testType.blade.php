@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Data Jenis Uji';
     $singular = 'Jenis Uji';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

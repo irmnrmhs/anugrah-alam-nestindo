@@ -4,6 +4,7 @@
     $title = 'Kelola Data Sesek Kaki';
     $singular = 'Sesek Kaki';
     $deleteMultipleUrl = '/edges/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

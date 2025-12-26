@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Data Supplier';
     $singular = 'Supplier';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

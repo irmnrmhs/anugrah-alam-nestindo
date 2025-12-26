@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Jenis Warna';
     $singular = 'Jenis Warna';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

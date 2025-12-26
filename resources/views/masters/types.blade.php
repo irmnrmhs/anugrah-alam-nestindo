@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Kategori Grade';
     $hideAddButton = true;
+    $hideImportButton = true;
 @endphp
 
 @section('content')
@@ -12,36 +13,44 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <strong>Bentuk</strong>
                 <button class="btn btn-sm btn-primary" id="btnAddShape">Tambah Bentuk</button>
-                <button class="btn btn-outline-secondary btn-sm p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShape" aria-expanded="true" aria-controls="collapseShape">
+                {{-- <button class="btn btn-outline-secondary btn-sm p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShape" aria-expanded="true" aria-controls="collapseShape">
+                    <i class="fas fa-minus"></i>
+                </button> --}}
+                <button class="btn btn-outline-secondary btn-sm p-1 toggle-icon"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseShape">
                     <i class="fas fa-minus"></i>
                 </button>
             </div>
-            <div class="card-body p-2">
-                <table class="table table-bordered table-striped" id="tableShape">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kode</th>
-                            <th>Jenis Bentuk</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($shapes as $i => $s)
-                        <tr data-id="{{ $s->id }}">
-                            <td>{{ $shapes->firstItem() + $i }}</td>
-                            <td>{{ $s->kode }}</td>
-                            <td>{{ $s->jenis_bentuk }}</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btnEditShape">Edit</button>
-                                <button class="btn btn-danger btn-sm btnDeleteShape">Hapus</button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div class="mt-2">
-                    {{ $shapes->links() }}
+            <div id="collapseShape" class="collapse show">
+                <div class="card-body p-2">
+                    <table class="table table-bordered table-striped" id="tableShape">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Jenis Bentuk</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($shapes as $i => $s)
+                            <tr data-id="{{ $s->id }}">
+                                <td>{{ $shapes->firstItem() + $i }}</td>
+                                <td>{{ $s->kode }}</td>
+                                <td>{{ $s->jenis_bentuk }}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm btnEditShape">Edit</button>
+                                    <button class="btn btn-danger btn-sm btnDeleteShape">Hapus</button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="mt-2">
+                        {{ $shapes->links() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -313,5 +322,14 @@ $('#formType').submit(e => {
         );
     });
 });
+
+$('#collapseShape').on('hide.bs.collapse', function () {
+    $('.toggle-icon i').removeClass('fa-minus').addClass('fa-plus');
+});
+
+$('#collapseShape').on('show.bs.collapse', function () {
+    $('.toggle-icon i').removeClass('fa-plus').addClass('fa-minus');
+});
+
 </script>
 @endsection

@@ -4,6 +4,7 @@
     $title = 'Kelola Detail Pengiriman';
     $singular = 'Detail Pengiriman';
     $deleteMultipleUrl = '/details/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

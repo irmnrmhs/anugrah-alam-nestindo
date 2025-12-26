@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Role';
     $singular = 'Role';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

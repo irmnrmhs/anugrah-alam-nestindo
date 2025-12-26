@@ -4,6 +4,7 @@
     $title = 'Kelola Data Masuk Cetak';
     $singular = 'Masuk Cetak';
     $deleteMultipleUrl = '/entries/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')
