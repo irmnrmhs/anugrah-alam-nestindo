@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Tipe Sarang';
     $singular = 'Tipe Sarang';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

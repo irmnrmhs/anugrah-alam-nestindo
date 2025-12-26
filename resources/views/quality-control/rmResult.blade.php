@@ -4,6 +4,7 @@
     $title = 'Kelola Hasil Uji';
     $singular = 'Hasil Uji';
     $deleteMultipleUrl = '/rm-results/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

@@ -4,6 +4,7 @@
     $title = 'Kelola Data Petugas Steam';
     $singular = 'Petugas Steam';
     $deleteMultipleUrl = '/officers/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

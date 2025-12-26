@@ -4,6 +4,7 @@
     $title = 'Kelola Data Pencabutan Bulu';
     $singular = 'Pencabutan Bulu';
     $deleteMultipleUrl = '/picks/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

@@ -3,6 +3,7 @@
     $singular = 'Tracker';
     $hideAddButton = true;
     $hideActions = true;
+    $hideImportButton = true;
 @endphp
 
 @extends('layouts.form')

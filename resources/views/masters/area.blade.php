@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Area';
     $singular = 'Area';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

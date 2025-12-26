@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Departemen';
     $singular = 'Departemen';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

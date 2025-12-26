@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Mobil';
     $singular = 'Mobil';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

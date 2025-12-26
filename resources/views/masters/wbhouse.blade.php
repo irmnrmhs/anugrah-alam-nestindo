@@ -4,6 +4,7 @@
     $title = 'Kelola Rumah Burung';
     $singular = 'Rumah Burung';
     $deleteMultipleUrl = '/wbhouses/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

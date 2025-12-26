@@ -3,6 +3,7 @@
 @php
     $title = 'Kelola Data Grade Produk Jadi';
     $singular = 'Grade Produk Jadi';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

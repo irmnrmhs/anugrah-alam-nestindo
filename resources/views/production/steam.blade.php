@@ -4,6 +4,7 @@
         $title = 'Kelola Steam';
         $singular = 'Steam';
         $deleteMultipleUrl = '/steams/delete-multiple';
+        $hideImportButton = true;
     @endphp
 
     @section('table-headers')

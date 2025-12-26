@@ -4,6 +4,7 @@
     $title = 'Kelola Data Cabut Bilas';
     $singular = 'Cabut Bilas';
     $deleteMultipleUrl = '/rinses/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

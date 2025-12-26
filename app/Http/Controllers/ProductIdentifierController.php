@@ -51,6 +51,13 @@ class ProductIdentifierController extends Controller
 
         $validated['kode'] = $cleanGrade . '-' . $cleanKode . $supplier;
 
+        if (ProductIdentifier::where('kode', $validated['kode'])->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Kode produk sudah ada'
+            ], 422);
+        }
+
         $identifier = ProductIdentifier::create($validated);
 
         return response()->json([

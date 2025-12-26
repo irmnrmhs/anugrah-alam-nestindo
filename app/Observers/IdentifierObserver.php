@@ -13,20 +13,20 @@ class IdentifierObserver
     public function created(ProductIdentifier $productIdentifier): void
     {
         if (
-            empty($productIdentifier->biji_keluar) &&
-            empty($productIdentifier->berat_keluar)
+            empty($productIdentifier->biji) &&
+            empty($productIdentifier->berat)
         ) {
             return;
         }
 
-        $history = History::where('identifiers_id', $productIdentifier->history->identifiers_id)
+        $history = History::where('identifiers_id', $productIdentifier->histories->identifiers_id)
             ->where('asal', 'PR01GB')
             ->where('tujuan', 'PR02SK')
             ->first();
 
         if (!$history) {
             $history = History::create([
-                'identifiers_id' => $productIdentifier->history->identifiers_id,
+                'identifiers_id' => $productIdentifier->histories->identifiers_id,
                 'asal' => 'PR01GB',
                 'tujuan' => 'PR02SK',
                 'biji' => 0,
@@ -35,8 +35,8 @@ class IdentifierObserver
             ]);
         }
 
-        $history->increment('biji', $productIdentifier->biji_keluar);
-        $history->increment('berat', $productIdentifier->berat_keluar);
+        $history->increment('biji', $productIdentifier->biji);
+        $history->increment('berat', $productIdentifier->berat);
     }
 
     /**
@@ -44,22 +44,22 @@ class IdentifierObserver
      */
     public function updated(ProductIdentifier $productIdentifier): void
     {
-        if (!$productIdentifier->wasChanged(['biji_keluar', 'berat_keluar'])) {
+        if (!$productIdentifier->wasChanged(['biji', 'berat'])) {
             return;
         }
 
-        $history = History::where('identifiers_id', $productIdentifier->history->identifiers_id)
+        $history = History::where('identifiers_id', $productIdentifier->histories->identifiers_id)
             ->where('asal', 'PR01GB')
             ->where('tujuan', 'PR02SK')
             ->first();
 
         if (!$history) return;
 
-        $history->decrement('biji', $productIdentifier->getOriginal('biji_keluar') ?? 0);
-        $history->decrement('berat', $productIdentifier->getOriginal('berat_keluar') ?? 0);
+        $history->decrement('biji', $productIdentifier->getOriginal('biji') ?? 0);
+        $history->decrement('berat', $productIdentifier->getOriginal('berat') ?? 0);
 
-        $history->increment('biji', $productIdentifier->biji_keluar ?? 0);
-        $history->increment('berat', $productIdentifier->berat_keluar ?? 0);
+        $history->increment('biji', $productIdentifier->biji ?? 0);
+        $history->increment('berat', $productIdentifier->berat ?? 0);
     }
 
     /**
@@ -68,21 +68,21 @@ class IdentifierObserver
     public function deleted(ProductIdentifier $productIdentifier): void
     {
         if (
-            empty($productIdentifier->biji_keluar) &&
-            empty($productIdentifier->berat_keluar)
+            empty($productIdentifier->biji) &&
+            empty($productIdentifier->berat)
         ) {
             return;
         }
 
-        $history = History::where('identifiers_id', $productIdentifier->history->identifiers_id)
+        $history = History::where('identifiers_id', $productIdentifier->histories->identifiers_id)
             ->where('asal', 'PR01GB')
             ->where('tujuan', 'PR02SK')
             ->first();
 
         if (!$history) return;
 
-        $history->decrement('biji', $productIdentifier->biji_keluar ?? 0);
-        $history->decrement('berat', $productIdentifier->berat_keluar ?? 0);
+        $history->decrement('biji', $productIdentifier->biji ?? 0);
+        $history->decrement('berat', $productIdentifier->berat ?? 0);
 
         if ($history->biji <= 0 && $history->berat <= 0) {
             $history->delete();

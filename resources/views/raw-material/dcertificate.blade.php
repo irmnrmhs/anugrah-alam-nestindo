@@ -4,6 +4,7 @@
     $title = 'Kelola Data Pengiriman';
     $singular = 'Pengiriman';
     $deleteMultipleUrl = '/dcertificates/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

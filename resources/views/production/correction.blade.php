@@ -4,6 +4,7 @@
     $title = 'Kelola Data Inspeksi dan Koreksi';
     $singular = 'Inspeksi dan Koreksi';
     $deleteMultipleUrl = '/corrections/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

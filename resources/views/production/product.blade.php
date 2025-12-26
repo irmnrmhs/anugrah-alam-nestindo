@@ -4,6 +4,7 @@
     $title = 'Kelola Data Produk Jadi';
     $singular = 'Produk Jadi';
     $deleteMultipleUrl = '/products/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')

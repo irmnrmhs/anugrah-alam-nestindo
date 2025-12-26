@@ -4,6 +4,7 @@
     $title = 'Kelola Data Kedatangan';
     $singular = 'Kedatangan';
     $deleteMultipleUrl = '/arrivals/delete-multiple';
+    $hideImportButton = true;
 @endphp
 
 @section('table-headers')
