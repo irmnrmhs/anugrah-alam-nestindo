@@ -12,21 +12,18 @@ class IdentifierObserver
      */
     public function created(ProductIdentifier $productIdentifier): void
     {
-        if (
-            empty($productIdentifier->biji) &&
-            empty($productIdentifier->berat)
-        ) {
+        if ($productIdentifier->biji <= 0 && $productIdentifier->berat <= 0) {
             return;
         }
 
-        $history = History::where('identifiers_id', $productIdentifier->histories->identifiers_id)
+        $history = History::where('identifiers_id', $productIdentifier->id)
             ->where('asal', 'PR01GB')
             ->where('tujuan', 'PR02SK')
             ->first();
 
         if (!$history) {
             $history = History::create([
-                'identifiers_id' => $productIdentifier->histories->identifiers_id,
+                'identifiers_id' => $productIdentifier->id,
                 'asal' => 'PR01GB',
                 'tujuan' => 'PR02SK',
                 'biji' => 0,
@@ -48,7 +45,7 @@ class IdentifierObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $productIdentifier->histories->identifiers_id)
+        $history = History::where('identifiers_id', $productIdentifier->id)
             ->where('asal', 'PR01GB')
             ->where('tujuan', 'PR02SK')
             ->first();
@@ -67,14 +64,7 @@ class IdentifierObserver
      */
     public function deleted(ProductIdentifier $productIdentifier): void
     {
-        if (
-            empty($productIdentifier->biji) &&
-            empty($productIdentifier->berat)
-        ) {
-            return;
-        }
-
-        $history = History::where('identifiers_id', $productIdentifier->histories->identifiers_id)
+        $history = History::where('identifiers_id', $productIdentifier->id)
             ->where('asal', 'PR01GB')
             ->where('tujuan', 'PR02SK')
             ->first();
@@ -94,7 +84,7 @@ class IdentifierObserver
      */
     public function deleting(ProductIdentifier $productIdentifier): void
     {
-        $productIdentifier->histories()->delete();
+        // $productIdentifier->histories()->delete();
     }
 
     /**
