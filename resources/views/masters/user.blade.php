@@ -59,7 +59,7 @@
            class="form-control"
            required
            pattern="^[a-zA-Z0-9._]{3,30}$"
-           oninvalid="this.setCustomValidity('Wajib diisi. Minimal 3 huruf, tidak boleh mengandung spasi, angka, titik, dan underscore')"
+           oninvalid="this.setCustomValidity('Wajib diisi. Minimal 3 huruf, tidak boleh mengandung spasi. Hanya titik dan underscore yang diperbolehkan.')"
            oninput="this.setCustomValidity('')">
     </div>
 
