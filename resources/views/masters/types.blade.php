@@ -13,9 +13,6 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <strong>Bentuk</strong>
                 <button class="btn btn-sm btn-primary" id="btnAddShape">Tambah Bentuk</button>
-                {{-- <button class="btn btn-outline-secondary btn-sm p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShape" aria-expanded="true" aria-controls="collapseShape">
-                    <i class="fas fa-minus"></i>
-                </button> --}}
                 <button class="btn btn-outline-secondary btn-sm p-1 toggle-icon"
                     type="button"
                     data-bs-toggle="collapse"
@@ -48,9 +45,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="mt-2">
-                        {{ $shapes->links() }}
-                    </div>
+                    {{ $shapes->appends(request()->except('shape_page'))->links() }}
                 </div>
             </div>
         </div>
@@ -61,31 +56,42 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <strong>Bulu</strong>
                 <button class="btn btn-primary btn-sm" id="btnAddFeather">Tambah Bulu</button>
+                <button class="btn btn-outline-secondary btn-sm p-1 toggle-icon"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseFeather">
+                    <i class="fas fa-minus"></i>
+                </button>
             </div>
-            <div class="card-body p-2">
-                <table class="table table-bordered table-striped" id="tableFeather">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kode</th>
-                            <th>Jenis Bulu</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($feathers as $i => $f)
-                            <tr data-id="{{ $f->id }}">
-                                <td>{{ $i+1 }}</td>
-                                <td>{{ $f->kode }}</td>
-                                <td>{{ $f->jenis_bulu }}</td>
-                                <td>
-                                    <button class="btn btn-warning btn-sm btnEditFeather">Edit</button>
-                                    <button class="btn btn-danger btn-sm btnDeleteFeather">Hapus</button>
-                                </td>
+            <div id="collapseFeather" class="collapse show">
+                <div class="card-body p-2">
+                    <table class="table table-bordered table-striped" id="tableFeather">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Jenis Bulu</th>
+                                <th>Aksi</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($feathers as $i => $f)
+                                <tr data-id="{{ $f->id }}">
+                                    <td>{{ $i+1 }}</td>
+                                    <td>{{ $f->kode }}</td>
+                                    <td>{{ $f->jenis_bulu }}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm btnEditFeather">Edit</button>
+                                        <button class="btn btn-danger btn-sm btnDeleteFeather">Hapus</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="mt-2">
+                        {{ $feathers->links() }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -95,31 +101,42 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <strong>Warna</strong>
                 <button class="btn btn-primary btn-sm" id="btnAddColor">Tambah Warna</button>
+                <button class="btn btn-outline-secondary btn-sm p-1 toggle-icon"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseColor">
+                    <i class="fas fa-minus"></i>
+                </button>
             </div>
-            <div class="card-body p-2">
-                <table class="table table-bordered table-striped" id="tableColor">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kode</th>
-                            <th>Jenis Warna</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($colors as $i => $c)
-                            <tr data-id="{{ $c->id }}">
-                                <td>{{ $i+1 }}</td>
-                                <td>{{ $c->kode }}</td>
-                                <td>{{ $c->jenis_warna }}</td>
-                                <td>
-                                    <button class="btn btn-warning btn-sm btnEditColor">Edit</button>
-                                    <button class="btn btn-danger btn-sm btnDeleteColor">Hapus</button>
-                                </td>
+            <div id="collapseColor" class="collapse show">
+                <div class="card-body p-2">
+                    <table class="table table-bordered table-striped" id="tableColor">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Jenis Warna</th>
+                                <th>Aksi</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($colors as $i => $c)
+                                <tr data-id="{{ $c->id }}">
+                                    <td>{{ $i+1 }}</td>
+                                    <td>{{ $c->kode }}</td>
+                                    <td>{{ $c->jenis_warna }}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm btnEditColor">Edit</button>
+                                        <button class="btn btn-danger btn-sm btnDeleteColor">Hapus</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="mt-2">
+                        {{ $colors->links() }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -328,6 +345,22 @@ $('#collapseShape').on('hide.bs.collapse', function () {
 });
 
 $('#collapseShape').on('show.bs.collapse', function () {
+    $('.toggle-icon i').removeClass('fa-plus').addClass('fa-minus');
+});
+
+$('#collapseFeather').on('hide.bs.collapse', function () {
+    $('.toggle-icon i').removeClass('fa-minus').addClass('fa-plus');
+});
+
+$('#collapseFeather').on('show.bs.collapse', function () {
+    $('.toggle-icon i').removeClass('fa-plus').addClass('fa-minus');
+});
+
+$('#collapseColor').on('hide.bs.collapse', function () {
+    $('.toggle-icon i').removeClass('fa-minus').addClass('fa-plus');
+});
+
+$('#collapseColor').on('show.bs.collapse', function () {
     $('.toggle-icon i').removeClass('fa-plus').addClass('fa-minus');
 });
 
