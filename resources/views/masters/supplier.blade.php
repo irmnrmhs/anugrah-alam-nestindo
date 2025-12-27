@@ -76,29 +76,18 @@
 
     fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         body: JSON.stringify(data)
     })
     .then(res => res.json())
     .then(res => {
     if (res.status === 'success') {
-        Swal.fire('Sukses', res.message, 'success')
-            .then(() => location.reload());
+        Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
     } else {
-        Swal.fire(
-                'Gagal',
-                res.message || Object.values(res.errors || {}).join('\n'),
-                'error'
-            );
+        Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(err => {
-        Swal.fire(
-            'Error',
-            'Terjadi kesalahan. Pastikan data valid dan tidak duplikat.',
-            'error'
-        );
-    });
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')
