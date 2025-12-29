@@ -36,6 +36,22 @@ class ArrivalObserver
         }
     }
 
+    public function deleting(Arrival $arrival): void
+    {
+        $rawUsedWithValue = RawMaterial::where('kode', $arrival->kode)
+            ->where(function ($q) {
+                $q->where('biji', '>', 0)
+                  ->orWhere('berat', '>', 0);
+            })
+            ->exists();
+
+        if ($rawUsedWithValue) {
+            throw new \Exception(
+                'Gagal hapus. Kode bahan baku sudah digunakan dan memiliki nilai.'
+            );
+        }
+    }
+
     /**
      * Handle the Arrival "deleted" event.
      */

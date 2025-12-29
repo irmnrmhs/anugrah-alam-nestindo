@@ -106,32 +106,40 @@ class ArrivalController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $arrival = Arrival::findOrFail($id);
+        try {
+            $arrival = Arrival::findOrFail($id);
 
-        $kode = $arrival->kode;
+            $arrival->delete();
 
-        $count = Arrival::where('kode', $kode)->count();
-
-        if ($count <= 1) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data kedatangan berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal hapus, pastikan data tidak terintegrasi dengan data lainnya.'
+                'message' => $e->getMessage()
             ], 409);
         }
-
-        $arrival->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data kedatangan berhasil dihapus.'
-        ]);
-
+        
         // $arrival = Arrival::findOrFail($id);
+
+        // $kode = $arrival->kode;
+
+        // $count = Arrival::where('kode', $kode)->count();
+
+        // if ($count <= 1) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Gagal hapus, pastikan data tidak terintegrasi dengan data lainnya.'
+        //     ], 409);
+        // }
+
         // $arrival->delete();
 
         // return response()->json([
         //     'status' => 'success',
-        //     'message' => 'Data kedatangan berhasil dihapus.',
+        //     'message' => 'Data kedatangan berhasil dihapus.'
         // ]);
     }
 

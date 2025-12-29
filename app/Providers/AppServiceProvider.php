@@ -25,6 +25,7 @@ use App\Models\Entry;
 use App\Models\Pull;
 use App\Models\Dry;
 use App\Models\Product;
+use App\Models\Area;
 
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
@@ -45,6 +46,7 @@ use App\Observers\EntryObserver;
 use App\Observers\PullObserver;
 use App\Observers\DryObserver;
 use App\Observers\ProductObserver;
+use App\Observers\AreaObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -96,6 +98,7 @@ class AppServiceProvider extends ServiceProvider
         Arrival::observe(ArrivalObserver::class);
         Supplier::observe(SupplierObserver::class);
         Dcertificate::observe(DCertificateObserver::class);
+        Area::observe(AreaObserver::class);
         Grade::observe(GradeObserver::class);
         ProductIdentifier::observe(IdentifierObserver::class);
         Edge::observe(EdgeObserver::class);
