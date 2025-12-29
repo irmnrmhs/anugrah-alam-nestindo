@@ -129,7 +129,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kondisi diisi dan SKP belum digunakan.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kondisi diisi dan kode tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')
