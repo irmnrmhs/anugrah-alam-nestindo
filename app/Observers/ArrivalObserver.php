@@ -42,6 +42,7 @@ class ArrivalObserver
     public function deleted(Arrival $arrival): void
     {
         $stillUsed = Arrival::where('kode', $arrival->kode)->exists();
+
         if (!$stillUsed) {
             RawMaterial::where('kode', $arrival->kode)->delete();
         }
