@@ -34,14 +34,15 @@ class DcertificateController extends Controller
             'suppliers_id' => 'required|exists:suppliers,id',
             'wbhouses_id' => 'required|exists:w_b_houses,id',
             'no_skp' => $request->kh == 1 ? 'required' : 'nullable',
-            'tgl_skp' => [
-                'required',
-                'date',
-                Rule::unique('dcertificates')->where(function ($query) use ($request) {
-                    return $query->where('suppliers_id', $request->suppliers_id)
-                                ->where('wbhouses_id', $request->wbhouses_id);
-                }),
-            ]
+            'tgl_skp' => 'required|date',
+            // 'tgl_skp' => [
+            //     'required',
+            //     'date',
+            //     Rule::unique('dcertificates')->where(function ($query) use ($request) {
+            //         return $query->where('suppliers_id', $request->suppliers_id)
+            //                     ->where('wbhouses_id', $request->wbhouses_id);
+            //     }),
+            // ]
         ]);
 
         $wb = WBHouse::with('area')->find($validated['wbhouses_id']);
@@ -55,7 +56,6 @@ class DcertificateController extends Controller
             }
         }
 
-        // versi kode global
         if ($wb->area->kh == 0) {
 
             $area = $wb->area->kode;
@@ -68,7 +68,6 @@ class DcertificateController extends Controller
             $roman = $romanArr[$bulan];
             $tahun = Carbon::parse($validated['tgl_skp'])->year;
 
-            // 🔥 AMBIL NOMOR TERAKHIR (GLOBAL, TANPA FILTER AREA/BULAN/TAHUN)
             $last = Dcertificate::where('no_skp', 'like', 'AAN/SKP/%')
                 ->orderByRaw(
                     "CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(no_skp,'/',3),'/',-1) AS UNSIGNED) DESC"
@@ -90,43 +89,7 @@ class DcertificateController extends Controller
                 $roman . '/' .
                 $tahun;
         }
-
-        // versi kode reset pertahun
-        // if ($wb->area->kh == 0) {
-
-        //     $area = $wb->area->kode;
-
-        //     $bln = Carbon::parse($validated['tgl_skp'])->month;
-        //     $romanArr = [
-        //         1=>'I', 2=>'II', 3=>'III', 4=>'IV', 5=>'V', 6=>'VI',
-        //         7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'
-        //     ];
-        //     $roman = $romanArr[$bln];
-        //     $thn = date('Y', strtotime($validated['tgl_skp']));
-
-
-        //     $pattern = "AAN/SKP/%/%/%/{$thn}";
-
-        //     $last = Dcertificate::where('no_skp', 'like', $pattern)
-        //             ->orderByRaw("CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(no_skp,'/',3),'/',-1) AS UNSIGNED) DESC")
-        //             ->first();
-
-        //     if ($last) {
-        //         $parts = explode('/', $last->no_skp);
-        //         $lastNum = (int) $parts[2];
-        //         $nextNumber = $lastNum + 1;
-        //     } else {
-        //         $nextNumber = 1;
-        //     }
-
-        //     $validated['no_skp'] =
-        //         'AAN/SKP/' .
-        //         str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' .
-        //         $area . '/' .
-        //         $roman . '/' .
-        //         $thn;
-        // }
-
+ 
         $dcertificate = Dcertificate::create($validated);
 
         return response()->json([
@@ -144,38 +107,35 @@ class DcertificateController extends Controller
 
     public function update(Request $request, int $id): JsonResponse
     {
+        $dcertificate = Dcertificate::findOrFail($id);
+        $wb = WBHouse::with('area')->findOrFail($request->wbhouses_id);
+
         $validated = $request->validate([
             'companies_id' => 'required|exists:companies,id',
             'suppliers_id' => 'required|exists:suppliers,id',
             'wbhouses_id'  => 'required|exists:w_b_houses,id',
+            'tgl_skp'      => 'required|date',
             'no_skp'       => 'nullable|string|max:100',
-            'tgl_skp'      => [
-                'required',
-                'date',
-                Rule::unique('dcertificates')
-                    ->ignore($id)
-                    ->where(function ($query) use ($request) {
-                        return $query->where('suppliers_id', $request->suppliers_id)
-                                    ->where('wbhouses_id', $request->wbhouses_id);
-                    }),
-            ],
         ]);
-
-        $dcertificate = Dcertificate::findOrFail($id);
-        $wb = WBHouse::with('area')->findOrFail($validated['wbhouses_id']);
 
         if ($wb->area->kh == 1) {
             if (empty($validated['no_skp'])) {
                 return response()->json([
-                    'status'  => 'error',
+                    'status' => 'error',
                     'message' => 'Nomor SKP wajib diisi oleh nomor KH'
                 ], 422);
             }
 
             $dcertificate->update($validated);
         }
-
+        
         if ($wb->area->kh == 0) {
+
+            $oldNo = $dcertificate->no_skp;
+
+            $parts = explode('/', $oldNo);
+
+            $number = $parts[2];
 
             $area  = $wb->area->kode;
             $bulan = Carbon::parse($validated['tgl_skp'])->month;
@@ -187,28 +147,15 @@ class DcertificateController extends Controller
             ];
             $roman = $romanArr[$bulan];
 
-            $last = Dcertificate::where('no_skp', 'like', 'AAN/SKP/%')
-                ->where('id', '!=', $dcertificate->id)
-                ->orderByRaw(
-                    "CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(no_skp,'/',3),'/',-1) AS UNSIGNED) DESC"
-                )
-                ->first();
-
-            $nextNumber = $last
-                ? ((int) explode('/', $last->no_skp)[2]) + 1
-                : 1;
-
             $validated['no_skp'] =
                 'AAN/SKP/' .
-                str_pad($nextNumber, 3, '0', STR_PAD_LEFT) . '/' .
+                $number . '/' .
                 $area . '/' .
                 $roman . '/' .
                 $tahun;
 
             $dcertificate->update($validated);
         }
-
-        $dcertificate->update($validated);
 
         return response()->json([
             'status'  => 'success',

@@ -19,7 +19,7 @@
         <tr data-id="{{ $officer->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $officer->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $officer->employee->nama }}</td>
+            <td>{{ $officer->employee->nama }} ({{ $officer->employee->nip }})</td>
             <td>
                 @if($officer->status == 1)
                     <span class="badge bg-success">Aktif</span>
@@ -41,7 +41,7 @@
         <select id="employees_id" class="form-control" required>
             <option value="">-- Pilih Karyawan --</option>
             @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+                <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
             @endforeach
         </select>
     </div>

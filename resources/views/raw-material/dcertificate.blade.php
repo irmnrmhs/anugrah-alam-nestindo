@@ -98,7 +98,7 @@
 @section('custom-js')
     $('#wbhouses_id').on('change', function () {
         const id = $(this).val();
-        const isEdit = $('#item_id').val(); // cek edit / create
+        const isEdit = $('#item_id').val();
 
         if (!id) return;
 
@@ -107,12 +107,26 @@
             .then(wb => {
                 const kh = wb.area?.kh;
 
-                if (kh == 1) {
-                    $('#no_skp').prop('disabled', false);
-                    if (!isEdit) $('#no_skp').val('');
+                if (!isEdit) {
+                    if(kh == 1){
+                        $('#no_skp').prop('disabled', false);
+                        $('#no_skp').val('');
+                    }else{
+                        $('#no_skp').prop('disabled', true);
+                        $('#no_skp').val('AUTO');
+                    }
                 } else {
-                    $('#no_skp').prop('disabled', true);
-                    if (!isEdit) $('#no_skp').val('AUTO');
+                    if(kh == 1){
+                        $('#no_skp').prop('disabled', false);
+                        if($('#no_skp').val() == 'AUTO'){
+                            $('#no_skp').val('');
+                        }else{
+                            $('#no_skp').val();
+                        }
+                    }else{
+                        $('#no_skp').prop('disabled', true);
+                        $('#no_skp').val('AUTO');
+                    }
                 }
             });
     });
