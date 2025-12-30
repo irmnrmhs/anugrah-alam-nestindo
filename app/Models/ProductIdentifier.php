@@ -30,13 +30,31 @@ class ProductIdentifier extends Model
         return $this->hasMany(History::class, 'identifiers_id');
     }
 
+    public function getTotalBijiKeluarAttribute()
+    {
+        return $this->sum('biji');
+    }
+
+    public function getTotalBeratKeluarAttribute()
+    {
+        return $this->sum('berat');
+    }
+
+    public function getBijiSisaAttribute(){
+        return $this->rawMaterial()->biji - $this->rawMaterial()->biji_sisa - $this->total_biji_keluar;
+    }
+
+    public function getBeratSisaAttribute(){
+        return $this->rawMaterial()->berat - $this->rawMaterial()->berat_sisa - $this->total_berat_keluar;
+    }
+
     // public function getBijiSisaAttribute()
     // {
-    //     return $this->biji - $this->biji;
+    //     return $this->biji < $this->rawMaterial()->biji_sisa_identifier;
     // }
 
     // public function getBeratSisaAttribute()
     // {
-    //     return $this->berat - $this->berat;
+    //     return $this->berat < $this->rawMaterial()->berat_sisa_identifier;
     // }
 }

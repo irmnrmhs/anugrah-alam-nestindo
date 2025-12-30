@@ -42,6 +42,7 @@ use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\SteamController;
 use App\Http\Controllers\SteamOfficerController;
@@ -90,6 +91,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/departments/{id}', [DepartmentController::class, 'show'])->name('departments.show');
     Route::put('/departments/{id}', [DepartmentController::class, 'update'])->name('departments.update');
     Route::delete('/departments/{id}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+    
+    // Jabatan
+    Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
+    Route::post('/positions', [PositionController::class, 'store'])->name('positions.store');
+    Route::get('/positions/{id}', [PositionController::class, 'show'])->name('positions.show');
+    Route::put('/positions/{id}', [PositionController::class, 'update'])->name('positions.update');
+    Route::delete('/positions/{id}', [PositionController::class, 'destroy'])->name('positions.destroy');
 
     // Employee
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');

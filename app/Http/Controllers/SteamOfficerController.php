@@ -14,7 +14,7 @@ class SteamOfficerController extends Controller
     public function index(): View
     {
         $officers = SteamOfficer::with('employee')->latest()->get();
-        $employees = Employee::all();
+        $employees = Employee::where('status', 1)->get();
         return view('masters.steam-officer', compact('officers', 'employees'));
     }
 

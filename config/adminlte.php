@@ -355,6 +355,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Jabatan',
+                    'url'  => 'positions',
+                    'can'  => ['Super Admin', 'Admin Human Resource'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Karyawan',
                     'url'  => 'employees',
                     'can'  => ['Super Admin', 'Admin Human Resource'],

@@ -58,9 +58,9 @@ class WBHouseController extends Controller
         $wbhouse->update($validated);
 
         return response()->json([
-                'status'  => 'success',
-                'message' => $this->obj . ' berhasil diperbaharui.',
-                'data'    => $wbhouse,
+            'status'  => 'success',
+            'message' => $this->obj . ' berhasil diperbaharui.',
+            'data'    => $wbhouse,
         ]);
     }
 

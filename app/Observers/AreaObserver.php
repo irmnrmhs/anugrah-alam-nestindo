@@ -19,7 +19,32 @@ class AreaObserver
      */
     public function updated(Area $area): void
     {
-        //
+        if (!$area->wasChanged('kode')) {
+            return;
+        }
+
+        $wbhouses = $area->wbhouses()->with('dcertificates')->get();
+
+        foreach ($wbhouses as $wbhouse) {
+            foreach ($wbhouse->dcertificates as $dcertificate) {
+
+                if (!$dcertificate->no_skp) {
+                    continue;
+                }
+
+                $parts = explode('/', $dcertificate->no_skp);
+
+                if (count($parts) < 6) {
+                    continue;
+                }
+
+                $parts[3] = $area->kode;
+
+                $dcertificate->updateQuietly([
+                    'no_skp' => implode('/', $parts)
+                ]);
+            }
+        }
     }
 
     /**

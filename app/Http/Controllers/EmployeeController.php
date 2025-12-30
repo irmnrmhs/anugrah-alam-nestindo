@@ -10,16 +10,18 @@ use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\EmployeesImport;
 use App\Exports\EmployeesTemplateExport;
+use App\Models\Position;
 
 class EmployeeController extends Controller
 {
     public string $obj = 'Karyawan';
     public function index(): View
     {
-        $employees = Employee::with('department')->latest()->get();
+        $employees = Employee::with('position', 'department')->latest()->get();
+        $positions = Position::all();
         $departments = Department::all();
 
-        return view('masters.employee', compact('employees', 'departments'));
+        return view('masters.employee', compact('employees', 'positions', 'departments'));
     }
 
     public function store(Request $request): JsonResponse
@@ -27,7 +29,9 @@ class EmployeeController extends Controller
         $validated = $request->validate([
             'nip' => 'required|string|max:25|unique:employees,nip',
             'nama' => 'required|string|max:255',
+            'positions_id' => 'nullable|exists:positions,id',
             'dept_id' => 'required|exists:departments,id',
+            'status' => 'required|boolean'
         ]);
 
         $employee = Employee::create($validated);
@@ -51,7 +55,9 @@ class EmployeeController extends Controller
         $validated = $request->validate([
             'nip' => 'required|string|max:25|unique:employees,nip,' . $id,
             'nama' => 'required|string|max:255',
+            'positions_id' => 'nullable|exists:positions,id',
             'dept_id' => 'required|exists:departments,id',
+            'status' => 'required|boolean'
         ]);
 
         $employee = Employee::findOrFail($id);
