@@ -11,7 +11,9 @@
     <th>No</th>
     <th>NIP</th>
     <th>Nama</th>
+    <th>Posisi</th>
     <th>Departemen</th>
+    <th>Status</th>
 @stop
 
 @section('table-body')
@@ -21,7 +23,15 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $employee->nip }}</td>
             <td>{{ $employee->nama }}</td>
+            <td>{{ empty($employee->position->posisi) ? '-': $employee->position->posisi }}</td>
             <td>{{ $employee->department->nama_dept }}</td>
+            <td>
+                @if($employee->status == 1)
+                    <span class="badge bg-success">Aktif</span>
+                @else
+                    <span class="badge bg-danger">Tidak Aktif</span>
+                @endif
+            </td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -42,12 +52,28 @@
     </div>
 
     <div class="mb-3">
+        <label>Posisi</label>
+        <select id="positions_id" class="form-control">
+            <option value="">Pilih Jabatan (boleh kosong)</option>
+            @foreach($positions as $position)
+                <option value="{{ $position->id }}">{{ $position->posisi }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
         <label>Departemen</label>
         <select id="dept_id" class="form-control" required>
             <option value="">-- Pilih Departemen --</option>
             @foreach($departments as $department)
                 <option value="{{ $department->id }}">{{ $department->nama_dept }}</option>
             @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Status</label>
+        <select id="status" class="form-control" required>
+            <option value=1>Aktif</option>
+            <option value=0>Non Aktif</option>
         </select>
     </div>
 @stop
@@ -61,7 +87,9 @@
         _token: '{{ csrf_token() }}',
         nip: $('#nip').val(),
         nama: $('#nama').val(),
+        positions_id: $('#positions_id').val(),
         dept_id: $('#dept_id').val(),
+        status: $('#status').val()
     };
 
     fetch(url, {
@@ -89,7 +117,9 @@
                 $('#item_id').val(employee.id);
                 $('#nip').val(employee.nip);
                 $('#nama').val(employee.nama);
+                $('#positions_id').val(employee.positions_id);
                 $('#dept_id').val(employee.dept_id);
+                $('#status').val(employee.status);
                 $('#modalTitle').text('Edit Karyawan');
                 new bootstrap.Modal('#crudModal').show();
             });

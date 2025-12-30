@@ -47,7 +47,7 @@ class ArrivalObserver
 
         if ($rawUsedWithValue) {
             throw new \Exception(
-                'Gagal hapus. Kode bahan baku sudah digunakan dan memiliki nilai.'
+                'Gagal hapus. Kode bahan baku sudah diproses.'
             );
         }
     }

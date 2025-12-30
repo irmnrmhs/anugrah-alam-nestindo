@@ -83,7 +83,7 @@
                 <select class="form-control kont-petugas" data-index="${i}" required>
                     <option value="">-- Pilih Petugas --</option>
                     @foreach($employees as $employee)
-                        <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+                        <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
                     @endforeach
                 </select>
             </div>
@@ -154,7 +154,7 @@
                         @foreach($employees as $employee)
                             <option value="{{ $employee->id }}"
                                 ${container.employees_id == "{{ $employee->id }}" ? 'selected' : ''}>
-                                {{ $employee->nama }}
+                                {{ $employee->nama }} ({{ $employee->nip }})
                             </option>
                         @endforeach
                     </select>

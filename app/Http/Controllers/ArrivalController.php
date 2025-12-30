@@ -16,7 +16,10 @@ class ArrivalController extends Controller
     public function index(): View
     {
         $arrivals = Arrival::with('employee', 'car', 'dcertificate')->latest()->get();
-        $employees = Employee::all();
+        $employees = Employee::whereHas('position', function ($q) {
+            $q->where('posisi', 'Supir');
+        })->get();
+
         $cars = Car::all();
         $dcertificates = Dcertificate::all();
 

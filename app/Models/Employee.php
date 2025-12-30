@@ -11,7 +11,9 @@ class Employee extends Model
     protected $fillable = [
         'nip',
         'nama',
+        'positions_id',
         'dept_id',
+        'status'
     ];
 
     // public function user()
@@ -102,5 +104,10 @@ class Employee extends Model
     public function officer()
     {
         return $this->hasOne(SteamOfficer::class, 'employees_id');
+    }
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class, 'positions_id');
     }
 }
