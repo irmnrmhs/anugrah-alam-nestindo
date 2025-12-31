@@ -88,31 +88,7 @@ class EdgeObserver
      */
     public function deleted(Edge $edge): void
     {
-        if (
-            empty($edge->biji_keluar) &&
-            empty($edge->berat_keluar)
-        ) {
-            return;
-        }
-
-        $history = History::where('identifiers_id', $edge->history->identifiers_id)
-            ->where('asal', 'PR02SK')
-            ->where('tujuan', 'PR03PC')
-            ->first();
-
-        if (!$history) return;
-
-        $history->decrement('biji', $edge->biji_keluar ?? 0);
-        $history->decrement('berat', $edge->berat_keluar ?? 0);
-
-        if ($history->biji <= 0 && $history->berat <= 0) {
-            $history->delete();
-        }
-
-        // History::where('identifiers_id', $edge->history->identifiers_id)
-        //     ->where('asal', 'PR02SK')
-        //     ->where('tujuan', 'PR03PC')
-        //     ->delete();
+        
     }
 
     /**

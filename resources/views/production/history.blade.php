@@ -22,8 +22,8 @@
     <th>Berat Awal</th>
     <th>Biji Sisa</th>
     <th>Berat Sisa</th>
-    <th>Biji Diproses</th>
-    <th>Berat Diproses</th>
+    {{-- <th>Biji Diproses</th>
+    <th>Berat Diproses</th> --}}
 @stop
 
 @section('table-body')
@@ -145,11 +145,11 @@
                     <span>Steaming</span>
                 @endif
             </td>
-            <td>
+            {{-- <td>
                 @if ($history->tujuan === 'PR02SK')
-                    {{ $history->total_biji_sesek }}
+                    {{ $history->diproses_biji_sesek }}
                 @elseif ($history->tujuan === 'PR03PC')
-                    {{ $history->total_biji_cuci }}
+                    {{ $history->diproses_biji_cuci }}
                 @elseif ($history->tujuan === 'PR04IK')
                     {{ $history->total_biji_koreksi }}
                 @elseif ($history->tujuan === 'PR05PB')
@@ -198,7 +198,7 @@
                 @elseif ($history->tujuan === 'PR13GP')
                     <span>Steaming</span>
                 @endif
-            </td>
+            </td> --}}
         </tr>
     @endforeach
 @stop

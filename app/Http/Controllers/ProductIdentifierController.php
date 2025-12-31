@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Grade;
 use App\Models\ProductIdentifier;
 use App\Models\RawMaterial;
-use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -43,15 +42,15 @@ class ProductIdentifierController extends Controller
         // $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier->kode;
         $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
 
-        if (
-            $validated['biji'] < $rm->biji_sisa_identifier ||
-            $validated['berat'] < $rm->berat_sisa_identifier
-        ) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Melebihi stok sisa',
-            ], 422);
-        }
+        // if (
+        //     $validated['biji'] > $rm->biji_sisa_identifier ||
+        //     $validated['berat'] > $rm->berat_sisa_identifier
+        // ) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Melebihi stok sisa',
+        //     ], 422);
+        // }
 
         $identifier = ProductIdentifier::create($validated);
 
