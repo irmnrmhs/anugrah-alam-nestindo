@@ -118,13 +118,25 @@ class ContainerController extends Controller
     {
         $container = Container::findOrFail($id);
 
-        $kode = $container->arrival->kode;
-
-        $raw = RawMaterial::where('kode', $kode)->first();
+        $raw = RawMaterial::where('kode', $container->arrival->kode)->first();
 
         if ($raw) {
-            $raw->biji -= $container->biji;
-            $raw->berat -= $container->berat;
+
+            $bijiBaru  = $raw->biji  - $container->biji;
+            $beratBaru = $raw->berat - $container->berat;
+
+            $bijiSisaBaru  = $bijiBaru  - $raw->total_biji_keluar;
+            $beratSisaBaru = $beratBaru - $raw->total_berat_keluar;
+
+            if ($bijiSisaBaru < 0 || $beratSisaBaru < 0) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Kontainer tidak bisa dihapus karena stok bahan baku tidak mencukupi'
+                ], 422);
+            }
+
+            $raw->biji  = $bijiBaru;
+            $raw->berat = $beratBaru;
             $raw->save();
         }
 

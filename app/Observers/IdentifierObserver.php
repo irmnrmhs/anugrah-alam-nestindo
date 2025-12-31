@@ -64,19 +64,7 @@ class IdentifierObserver
      */
     public function deleted(ProductIdentifier $productIdentifier): void
     {
-        $history = History::where('identifiers_id', $productIdentifier->id)
-            ->where('asal', 'PR01GB')
-            ->where('tujuan', 'PR02SK')
-            ->first();
-
-        if (!$history) return;
-
-        $history->decrement('biji', $productIdentifier->biji ?? 0);
-        $history->decrement('berat', $productIdentifier->berat ?? 0);
-
-        if ($history->biji <= 0 && $history->berat <= 0) {
-            $history->delete();
-        }
+        
     }
 
     /**

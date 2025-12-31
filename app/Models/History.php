@@ -90,15 +90,15 @@ class History extends Model
         return $this->berat - $this->total_berat_sesek;
     }
 
-    public function getDiprosesBijiSesekAttribute()
-    {
-        return $this->diproses_biji -= $this->sisa_biji_sesek;
-    }
+    // public function getDiprosesBijiSesekAttribute()
+    // {
+    //     return $this->diproses_biji -= $this->sisa_biji_sesek;
+    // }
 
-    public function getDiprosesBeratSesekAttribute()
-    {
-        return $this->sisa_berat_sesek -= $this->diproses_berat;
-    }
+    // public function getDiprosesBeratSesekAttribute()
+    // {
+    //     return $this->sisa_berat_sesek -= $this->diproses_berat;
+    // }
 
     // 2. Pencucian
     public function getTotalBijiCuciAttribute()
