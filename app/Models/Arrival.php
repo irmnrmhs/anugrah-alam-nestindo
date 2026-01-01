@@ -42,4 +42,13 @@ class Arrival extends Model
     {
         return $this->belongsTo(RawMaterial::class, 'kode', 'kode');
     }
+
+    public function generateKode(): string
+    {
+        $kodeWb = $this->dcertificate->wbhouse->kode;
+        $tgl = date('dmy', strtotime($this->tgl_kedatangan));
+
+        return $kodeWb . '-' . $tgl;
+    }
+
 }
