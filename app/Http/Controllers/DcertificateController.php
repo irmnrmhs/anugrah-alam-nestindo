@@ -34,15 +34,15 @@ class DcertificateController extends Controller
             'suppliers_id' => 'required|exists:suppliers,id',
             'wbhouses_id' => 'required|exists:w_b_houses,id',
             'no_skp' => $request->kh == 1 ? 'required' : 'nullable',
-            'tgl_skp' => 'required|date',
-            // 'tgl_skp' => [
-            //     'required',
-            //     'date',
-            //     Rule::unique('dcertificates')->where(function ($query) use ($request) {
-            //         return $query->where('suppliers_id', $request->suppliers_id)
-            //                     ->where('wbhouses_id', $request->wbhouses_id);
-            //     }),
-            // ]
+            // 'tgl_skp' => 'required|date',
+            'tgl_skp' => [
+                'required',
+                'date',
+                Rule::unique('dcertificates')->where(function ($query) use ($request) {
+                    return $query->where('suppliers_id', $request->suppliers_id)
+                                ->where('wbhouses_id', $request->wbhouses_id);
+                }),
+            ]
         ]);
 
         $wb = WBHouse::with('area')->find($validated['wbhouses_id']);
@@ -101,7 +101,7 @@ class DcertificateController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $dcertificate = Dcertificate::with('company', 'supplier', 'wbhouse')->findOrFail($id);
+        $dcertificate = Dcertificate::with('company', 'supplier', 'wbhouse.area')->findOrFail($id);
         return response()->json($dcertificate);
     }
 
@@ -115,7 +115,17 @@ class DcertificateController extends Controller
             'suppliers_id' => 'required|exists:suppliers,id',
             'wbhouses_id'  => 'required|exists:w_b_houses,id',
             'tgl_skp'      => 'required|date',
-            'no_skp'       => 'nullable|string|max:100',
+            // 'no_skp'       => 'nullable|string|max:100',
+            'tgl_skp' => [
+                'required',
+                'date',
+                Rule::unique('dcertificates')
+                    ->where(fn ($q) =>
+                        $q->where('suppliers_id', $request->suppliers_id)
+                        ->where('wbhouses_id', $request->wbhouses_id)
+                    )
+                    ->ignore($id),
+            ]
         ]);
 
         if ($wb->area->kh == 1) {

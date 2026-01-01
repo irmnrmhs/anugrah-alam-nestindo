@@ -20,16 +20,23 @@ class ShapeObserver
      */
     public function updated(Shape $shape): void
     {
-        $grades = Grade::where('shapes_id', $shape->id)->get();
+        $grades = Grade::with(['feather', 'color'])
+            ->where('shapes_id', $shape->id)
+            ->get();
 
         foreach ($grades as $grade) {
-            $newGrade = strtoupper(
+
+            if (!$grade->feather || !$grade->color) {
+                continue;
+            }
+
+            $grade->grade = strtoupper(
                 $shape->kode . '-' .
                 $grade->feather->kode . '-' .
                 $grade->color->kode
             );
 
-            $grade->update(['grade' => $newGrade]);
+            $grade->saveQuietly();
         }
     }
 

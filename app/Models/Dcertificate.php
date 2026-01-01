@@ -29,7 +29,7 @@ class Dcertificate extends Model
         return $this->belongsTo(WBHouse::class, 'wbhouses_id');
     }
 
-    public function arrival()
+    public function arrivals()
     {
         return $this->hasMany(Arrival::class, 'dcertificates_id');
     }

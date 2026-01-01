@@ -20,16 +20,23 @@ class FeatherObserver
      */
     public function updated(Feather $feather): void
     {
-        $grades = Grade::where('feathers_id', $feather->id)->get();
+        $grades = Grade::with(['shape', 'color'])
+            ->where('feathers_id', $feather->id)
+            ->get();
 
         foreach ($grades as $grade) {
-            $newGrade = strtoupper(
+
+            if (!$grade->shape || !$grade->color) {
+                continue;
+            }
+
+            $grade->grade = strtoupper(
                 $grade->shape->kode . '-' .
                 $feather->kode . '-' .
                 $grade->color->kode
             );
 
-            $grade->update(['grade' => $newGrade]);
+            $grade->saveQuietly();
         }
     }
 

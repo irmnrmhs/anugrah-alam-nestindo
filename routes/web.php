@@ -126,6 +126,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/wbhouses/{id}', function($id){
         return App\Models\WBHouse::with('area')->findOrFail($id);
     });
+    Route::get('/wbhouses/by-kh/{kh}', [WBHouseController::class, 'byKh']);
 
     // Jenis Bulu
     Route::get('/feathers', [FeatherController::class, 'index'])->name('feathers.index');

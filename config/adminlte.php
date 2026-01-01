@@ -410,10 +410,28 @@ return [
                 //     'icon' => 'fas fa-users',
                 // ],
                 [   'header' => 'Bahan Baku' ],
+                // [
+                //     'text' => 'Kategori Grade',
+                //     'url'  => 'types',
+                //     'can'  => ['Super Admin', 'Admin Bahan Baku', 'Administrasi'],
+                //     'icon' => 'fas fa-users',
+                // ],
                 [
-                    'text' => 'Kategori Grade',
-                    'url'  => 'types',
-                    'can'  => ['Super Admin', 'Admin Bahan Baku', 'Administrasi'],
+                    'text' => 'Grade Bentuk',
+                    'url'  => 'shapes',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Grade Bulu',
+                    'url'  => 'feathers',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Grade Warna',
+                    'url'  => 'colors',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
                 [

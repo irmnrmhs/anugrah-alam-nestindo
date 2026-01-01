@@ -25,31 +25,31 @@ class WBHouse extends Model
         return $this->hasMany(Dcertificate::class, 'wbhouses_id');
     }
 
-    protected static function booted()
-    {
-        static::updated(function ($wbhouse) {
+    // protected static function booted()
+    // {
+    //     static::updated(function ($wbhouse) {
 
-            // jalankan hanya jika kolom 'kode' berubah
-            if ($wbhouse->wasChanged('kode')) {
+    //         // jalankan hanya jika kolom 'kode' berubah
+    //         if ($wbhouse->wasChanged('kode')) {
 
-                // ambil semua SKP (dcertificates) yang terhubung
-                $dcertIds = $wbhouse->dcertificates()->pluck('id');
+    //             // ambil semua SKP (dcertificates) yang terhubung
+    //             $dcertIds = $wbhouse->dcertificates()->pluck('id');
 
-                if ($dcertIds->count() === 0) {
-                    return; // tidak ada data arrival yang perlu diupdate
-                }
+    //             if ($dcertIds->count() === 0) {
+    //                 return; // tidak ada data arrival yang perlu diupdate
+    //             }
 
-                // update semua arrival yang memakai dcertificates tersebut
-                \App\Models\Arrival::whereIn('dcertificates_id', $dcertIds)
-                    ->chunkById(100, function ($arrivals) use ($wbhouse) {
-                        foreach ($arrivals as $arrival) {
-                            $tgl = date('dmy', strtotime($arrival->tgl_kedatangan));
-                            $arrival->update([
-                                'kode' => $wbhouse->kode . '-' . $tgl
-                            ]);
-                        }
-                    });
-            }
-        });
-    }
+    //             // update semua arrival yang memakai dcertificates tersebut
+    //             \App\Models\Arrival::whereIn('dcertificates_id', $dcertIds)
+    //                 ->chunkById(100, function ($arrivals) use ($wbhouse) {
+    //                     foreach ($arrivals as $arrival) {
+    //                         $tgl = date('dmy', strtotime($arrival->tgl_kedatangan));
+    //                         $arrival->update([
+    //                             'kode' => $wbhouse->kode . '-' . $tgl
+    //                         ]);
+    //                     }
+    //                 });
+    //         }
+    //     });
+    // }
 }

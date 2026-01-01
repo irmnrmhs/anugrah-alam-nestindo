@@ -86,4 +86,13 @@ class WBHouseController extends Controller
             'message' => 'Data terpilih berhasil dihapus'
         ]);
     }
+
+    public function byKh(int $kh): JsonResponse
+    {
+        $wbhouses = WBHouse::whereHas('area', function ($q) use ($kh) {
+            $q->where('kh', $kh);
+        })->get(['id','nama']);
+
+        return response()->json($wbhouses);
+    }
 }
