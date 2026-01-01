@@ -131,20 +131,42 @@
             });
     });
 
-    $(document).on('click', '.btnEdit', function() {
+    $(document).on('click', '.btnEdit', function () {
         const id = $(this).closest('tr').data('id');
+
         fetch(`/dcertificates/${id}`)
             .then(r => r.json())
             .then(dcertificate => {
+
+                const kh = dcertificate.wbhouse.area.kh;
+
                 $('#item_id').val(dcertificate.id);
                 $('#companies_id').val(dcertificate.companies_id);
                 $('#suppliers_id').val(dcertificate.suppliers_id);
-                $('#wbhouses_id').val(dcertificate.wbhouses_id);
-                $('#no_skp').val(dcertificate.no_skp);
                 $('#tgl_skp').val(dcertificate.tgl_skp);
-                $('#modalTitle').text('Edit SKP');
-                $('#wbhouses_id').trigger('change');
-                new bootstrap.Modal('#crudModal').show();
+                $('#no_skp').val(dcertificate.no_skp);
+
+                fetch(`/wbhouses/by-kh/${kh}`)
+                    .then(r => r.json())
+                    .then(wbhouses => {
+                        const select = $('#wbhouses_id');
+                        select.empty().append('<option value="">-- Pilih Rumah Burung --</option>');
+
+                        wbhouses.forEach(wb => {
+                            select.append(
+                                `<option value="${wb.id}">${wb.nama}</option>`
+                            );
+                        });
+
+                        // set value yg diedit
+                        select.val(dcertificate.wbhouses_id);
+
+                        // trigger KH logic (AUTO / MANUAL SKP)
+                        select.trigger('change');
+
+                        $('#modalTitle').text('Edit SKP');
+                        new bootstrap.Modal('#crudModal').show();
+                    });
             });
     });
 
