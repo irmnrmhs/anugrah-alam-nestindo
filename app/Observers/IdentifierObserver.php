@@ -64,7 +64,19 @@ class IdentifierObserver
      */
     public function deleted(ProductIdentifier $productIdentifier): void
     {
-        
+        // $history = History::where('identifiers_id', $productIdentifier->id)
+        //     ->where('asal', 'PR01GB')
+        //     ->where('tujuan', 'PR02SK')
+        //     ->first();
+
+        // if(
+        //     $history->biji != $history->sisa_biji_sesek || 
+        //     $history->berat != $history->sisa_berat_sesek
+        // ){
+        //     $productIdentifier->histories()->delete();
+        //     $history->increment('biji', $productIdentifier->biji ?? 0);
+        //     $history->increment('berat', $productIdentifier->berat ?? 0);
+        // }
     }
 
     /**
@@ -73,6 +85,23 @@ class IdentifierObserver
     public function deleting(ProductIdentifier $productIdentifier): void
     {
         // $productIdentifier->histories()->delete();
+        $history = History::where('identifiers_id', $productIdentifier->id)
+            ->where('asal', 'PR01GB')
+            ->where('tujuan', 'PR02SK')
+            ->first();
+
+        if (!$history) return;
+        
+        if (
+            $history->sisa_biji_sesek < $history->biji ||
+            $history->sisa_berat_sesek < $history->berat
+        ) {
+            throw new \Exception(
+                'Data tidak dapat dihapus karena stok sudah digunakan'
+            );
+        }
+
+        $history->delete();
     }
 
     /**
