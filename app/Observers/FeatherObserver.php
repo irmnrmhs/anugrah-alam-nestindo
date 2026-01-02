@@ -18,8 +18,34 @@ class FeatherObserver
     /**
      * Handle the Feather "updated" event.
      */
+    // public function updated(Feather $feather): void
+    // {
+    //     $grades = Grade::with(['shape', 'color'])
+    //         ->where('feathers_id', $feather->id)
+    //         ->get();
+
+    //     foreach ($grades as $grade) {
+
+    //         if (!$grade->shape || !$grade->color) {
+    //             continue;
+    //         }
+
+    //         $grade->grade = strtoupper(
+    //             $grade->shape->kode . '-' .
+    //             $feather->kode . '-' .
+    //             $grade->color->kode
+    //         );
+
+    //         $grade->saveQuietly();
+    //     }
+    // }
+
     public function updated(Feather $feather): void
     {
+        if (!$feather->wasChanged('kode')) {
+            return;
+        }
+
         $grades = Grade::with(['shape', 'color'])
             ->where('feathers_id', $feather->id)
             ->get();
@@ -36,7 +62,7 @@ class FeatherObserver
                 $grade->color->kode
             );
 
-            $grade->saveQuietly();
+            $grade->save();
         }
     }
 

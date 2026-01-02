@@ -19,38 +19,68 @@ class GradeObserver
     /**
      * Handle the Grade "updated" event.
      */
+    // public function updated(Grade $grade): void
+    // {
+    //     // Arrival
+    //     if (!$grade->wasChanged('grade')) {
+    //         return;
+    //     }
+
+    //     DB::transaction(function () use ($grade) {
+
+    //         $identifiers = ProductIdentifier::with([
+    //             'rawMaterial.arrival.dcertificate.supplier'
+    //         ])->where('grades_id', $grade->id)->get();
+
+    //         foreach ($identifiers as $identifier) {
+    //             if (
+    //                 !$identifier->rawMaterial ||
+    //                 !$identifier->rawMaterial->arrival ||
+    //                 !$identifier->rawMaterial->arrival->dcertificate ||
+    //                 !$identifier->rawMaterial->arrival->dcertificate->supplier
+    //             ) {
+    //                 continue;
+    //             }
+
+    //             $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
+    //             $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $identifier->rawMaterial->kode);
+    //             // $supplier = $identifier->rawMaterial->arrival->dcertificate->supplier->kode;
+
+    //             // $kodeBaru = $cleanGrade . '-' . $cleanKode . $supplier;
+    //             $kodeBaru = $cleanGrade . '-' . $cleanKode;
+
+    //             $identifier->update([
+    //                 'kode' => $kodeBaru,
+    //             ]);
+    //         }
+    //     });
+    // }
+
     public function updated(Grade $grade): void
     {
-        // Arrival
         if (!$grade->wasChanged('grade')) {
             return;
         }
 
-        DB::transaction(function () use ($grade) {
+        $identifiers = ProductIdentifier::with('rawMaterial')
+            ->where('grades_id', $grade->id)
+            ->get();
 
-            $identifiers = ProductIdentifier::with([
-                'rawMaterial.arrival.dcertificate.supplier'
-            ])->where('grades_id', $grade->id)->get();
-
+        DB::transaction(function () use ($identifiers, $grade) {
             foreach ($identifiers as $identifier) {
-                if (
-                    !$identifier->rawMaterial ||
-                    !$identifier->rawMaterial->arrival ||
-                    !$identifier->rawMaterial->arrival->dcertificate ||
-                    !$identifier->rawMaterial->arrival->dcertificate->supplier
-                ) {
+
+                if (!$identifier->rawMaterial) {
                     continue;
                 }
 
                 $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
-                $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $identifier->rawMaterial->kode);
-                // $supplier = $identifier->rawMaterial->arrival->dcertificate->supplier->kode;
+                $cleanKode  = preg_replace('/[^A-Za-z0-9]/', '', $identifier->rawMaterial->kode);
 
-                // $kodeBaru = $cleanGrade . '-' . $cleanKode . $supplier;
-                $kodeBaru = $cleanGrade . '-' . $cleanKode;
-
-                $identifier->update([
-                    'kode' => $kodeBaru,
+                $identifier->updateQuietly([
+                    'kode' => ProductIdentifier::generateKode(
+                        $grade->grade,
+                        $identifier->rawMaterial->kode
+                    )
                 ]);
             }
         });
