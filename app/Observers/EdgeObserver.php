@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Edge;
 use App\Models\History;
+use Illuminate\Validation\ValidationException;
 
 class EdgeObserver
 {
@@ -89,6 +90,39 @@ class EdgeObserver
     public function deleted(Edge $edge): void
     {
         
+    }
+
+    public function deleting(Edge $edge): void
+    {
+        if (
+            empty($edge->biji_keluar) &&
+            empty($edge->berat_keluar)
+        ) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $edge->history->identifiers_id)
+            ->where('asal', 'PR02SK')
+            ->where('tujuan', 'PR03PC')
+            ->first();
+
+        if (!$history) return;
+
+        if (
+            ($edge->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
+            ($edge->berat_keluar ?? 0) > $history->sisa_berat_cuci
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
+
+        $history->decrement('biji', $edge->biji_keluar ?? 0);
+        $history->decrement('berat', $edge->berat_keluar ?? 0);
+
+        if ($history->biji <= 0 && $history->berat <= 0) {
+            $history->delete();
+        }
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class EdgeController extends Controller
 {
@@ -120,24 +121,43 @@ class EdgeController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $edge = Edge::findOrFail($id);
-        $edge->delete();
+        try {
+            $edge = Edge::findOrFail($id);
+            $edge->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil dihapus.',
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => $this->obj . ' berhasil dihapus.',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menghapus data',
+            ], 500);
+        }
     }
 
     public function deleteMultiple(Request $request): JsonResponse
     {
-        $ids = $request->ids;
+        try {
+            foreach ($request->ids as $id) {
+                Edge::findOrFail($id)->delete();
+            }
 
-        Edge::whereIn('id', $ids)->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data terpilih berhasil dihapus'
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data terpilih berhasil dihapus'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
 }
