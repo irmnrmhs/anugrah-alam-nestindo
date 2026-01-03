@@ -17,7 +17,8 @@ class WashObserver
             empty($wash->biji_keluar) &&
             empty($wash->berat_keluar)
         ) {
-            return;
+            $wash->biji_keluar = 0;
+            $wash->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $wash->history->identifiers_id)

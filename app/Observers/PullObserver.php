@@ -17,7 +17,8 @@ class PullObserver
             empty($pull->biji_keluar) &&
             empty($pull->berat_keluar)
         ) {
-            return;
+            $pull->biji_keluar = 0;
+            $pull->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $pull->history->identifiers_id)

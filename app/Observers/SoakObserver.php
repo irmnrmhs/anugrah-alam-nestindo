@@ -17,7 +17,8 @@ class SoakObserver
             empty($soak->biji_keluar) &&
             empty($soak->berat_keluar)
         ) {
-            return;
+            $soak->biji_keluar = 0;
+            $soak->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $soak->history->identifiers_id)

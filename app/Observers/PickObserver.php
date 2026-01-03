@@ -17,7 +17,8 @@ class PickObserver
             empty($pick->biji_keluar) &&
             empty($pick->berat_keluar)
         ) {
-            return;
+            $pick->biji_keluar = 0;
+            $pick->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $pick->history->identifiers_id)

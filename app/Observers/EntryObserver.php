@@ -17,7 +17,8 @@ class EntryObserver
             empty($entry->biji_keluar) &&
             empty($entry->berat_keluar)
         ) {
-            return;
+            $entry->biji_keluar = 0;
+            $entry->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $entry->history->identifiers_id)

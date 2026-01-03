@@ -17,7 +17,9 @@ class WashController extends Controller
     {
         $washes = Wash::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR03PC')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.wash', compact('washes', 'histories', 'employees'));
     }

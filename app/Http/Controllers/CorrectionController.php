@@ -17,7 +17,9 @@ class CorrectionController extends Controller
     {
         $corrections = Correction::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR04IK')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.correction', compact('corrections', 'histories', 'employees'));
     }

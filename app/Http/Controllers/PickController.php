@@ -17,7 +17,9 @@ class PickController extends Controller
     {
         $picks = Pick::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR05PB')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.pick', compact('picks', 'histories', 'employees'));
     }

@@ -125,6 +125,27 @@ class EmployeeSeeder extends Seeder
             'dept_id' => 10
         ]);
 
+        Employee::create([
+            'nip' => '18',
+            'nama' => 'A',
+            'positions_id' => 3,
+            'dept_id' => 10
+        ]);
+
+        Employee::create([
+            'nip' => '19',
+            'nama' => 'B',
+            'positions_id' => 3,
+            'dept_id' => 10
+        ]);
+
+        Employee::create([
+            'nip' => '20',
+            'nama' => 'C',
+            'positions_id' => 3,
+            'dept_id' => 10
+        ]);
+
         // Employee::create([
         //     'nip' => '1010',
         //     'nama' => 'Nama User',

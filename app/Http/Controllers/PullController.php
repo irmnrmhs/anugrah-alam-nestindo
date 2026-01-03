@@ -17,7 +17,9 @@ class PullController extends Controller
     {
         $pulls = Pull::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR09KC')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.pull', compact('pulls', 'histories', 'employees'));
     }

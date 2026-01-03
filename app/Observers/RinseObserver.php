@@ -17,7 +17,8 @@ class RinseObserver
             empty($rinse->biji_keluar) &&
             empty($rinse->berat_keluar)
         ) {
-            return;
+            $rinse->biji_keluar = 0;
+            $rinse->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $rinse->history->identifiers_id)

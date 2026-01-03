@@ -17,7 +17,9 @@ class EdgeController extends Controller
     {
         $edges = Edge::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR02SK')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.edge', compact('edges', 'histories', 'employees'));
     }

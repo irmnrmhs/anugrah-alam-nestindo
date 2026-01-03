@@ -17,7 +17,8 @@ class CorrectionObserver
             empty($correction->biji_keluar) &&
             empty($correction->berat_keluar)
         ) {
-            return;
+            $correction->biji_keluar = 0;
+            $correction->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $correction->history->identifiers_id)

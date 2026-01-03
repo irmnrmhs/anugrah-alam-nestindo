@@ -17,7 +17,9 @@ class EntryController extends Controller
     {
         $entries = Entry::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR08MC')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.entry', compact('entries', 'histories', 'employees'));
     }
