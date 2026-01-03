@@ -20,5 +20,9 @@ class PositionSeeder extends Seeder
         Position::create([
             'posisi' => 'Supir'
         ]);
+
+        Position::create([
+            'posisi' => 'Karyawan'
+        ]);
     }
 }

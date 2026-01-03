@@ -17,7 +17,8 @@ class DryObserver
             empty($dry->biji_keluar) &&
             empty($dry->berat_keluar)
         ) {
-            return;
+            $dry->biji_keluar = 0;
+            $dry->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $dry->history->identifiers_id)

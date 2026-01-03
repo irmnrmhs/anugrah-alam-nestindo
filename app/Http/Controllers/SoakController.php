@@ -17,7 +17,9 @@ class SoakController extends Controller
     {
         $soaks = Soak::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR06PR')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.soak', compact('soaks', 'histories', 'employees'));
     }

@@ -17,7 +17,9 @@ class DryController extends Controller
     {
         $dries = Dry::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR10PK')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.dry', compact('dries', 'histories', 'employees'));
     }
@@ -60,6 +62,8 @@ class DryController extends Controller
                 'message' => 'Melebihi biji masuk atau berat masuk',
             ], 422);
         }
+
+        $validated['waktu_keluar'] = $validated['waktu_keluar'] ?: null;
 
         $dry = Dry::create($validated);
 
@@ -119,6 +123,8 @@ class DryController extends Controller
             ], 422);
         }
 
+        $validated['waktu_keluar'] = $validated['waktu_keluar'] ?: null;
+        
         $dry->update($validated);
 
         return response()->json([

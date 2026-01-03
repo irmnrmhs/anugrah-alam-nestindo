@@ -17,7 +17,9 @@ class RinseController extends Controller
     {
         $rinses = Rinse::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR07CB')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
 
         return view('production.rinse', compact('rinses', 'histories', 'employees'));
     }
