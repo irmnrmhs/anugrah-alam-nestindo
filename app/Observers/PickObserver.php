@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Pick;
 use App\Models\History;
+use Illuminate\Validation\ValidationException;
 
 class PickObserver
 {
@@ -67,11 +68,17 @@ class PickObserver
      */
     public function deleted(Pick $pick): void
     {
+        // 
+    }
+
+    public function deleting(Pick $pick): void
+    {
         if (
             empty($pick->biji_keluar) &&
             empty($pick->berat_keluar)
         ) {
-            return;
+            $pick->biji_keluar = 0;
+            $pick->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $pick->history->identifiers_id)
@@ -80,6 +87,15 @@ class PickObserver
             ->first();
 
         if (!$history) return;
+
+        if (
+            ($pick->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
+            ($pick->berat_keluar ?? 0) > $history->sisa_berat_cuci
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
 
         $history->decrement('biji', $pick->biji_keluar ?? 0);
         $history->decrement('berat', $pick->berat_keluar ?? 0);

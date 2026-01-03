@@ -20,12 +20,12 @@ return new class extends Migration
             $table->decimal('berat_masuk', 7, 2);
             $table->time('waktu_masuk');
             $table->date('tgl_selesai');
-            $table->integer('biji_keluar')->default(0);
-            $table->decimal('berat_keluar', 7, 2)->default(0);
+            $table->integer('biji_keluar')->default(0)->nullable();
+            $table->decimal('berat_keluar', 7, 2)->default(0)->nullable();
             $table->time('waktu_keluar')->nullable();
+            $table->integer('status')->default(0)->nullable();
             $table->string('keterangan')->nullable();
             $table->integer('shift');
-            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

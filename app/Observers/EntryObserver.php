@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Entry;
 use App\Models\History;
+use Illuminate\Validation\ValidationException;
 
 class EntryObserver
 {
@@ -67,19 +68,34 @@ class EntryObserver
      */
     public function deleted(Entry $entry): void
     {
+        // 
+    }
+
+    public function deleting(Entry $entry): void
+    {
         if (
             empty($entry->biji_keluar) &&
             empty($entry->berat_keluar)
         ) {
-            return;
+            $entry->biji_keluar = 0;
+            $entry->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $entry->history->identifiers_id)
-            ->where('asal', 'PR08MC')
-            ->where('tujuan', 'PR09KC')
+            ->where('asal', 'PR03PC')
+            ->where('tujuan', 'PR04IK')
             ->first();
 
         if (!$history) return;
+
+        if (
+            ($entry->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
+            ($entry->berat_keluar ?? 0) > $history->sisa_berat_cuci
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
 
         $history->decrement('biji', $entry->biji_keluar ?? 0);
         $history->decrement('berat', $entry->berat_keluar ?? 0);

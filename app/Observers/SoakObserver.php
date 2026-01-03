@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Soak;
 use App\Models\History;
+use Illuminate\Validation\ValidationException;
 
 class SoakObserver
 {
@@ -67,11 +68,17 @@ class SoakObserver
      */
     public function deleted(Soak $soak): void
     {
+        // 
+    }
+
+    public function deleting(Soak $soak): void
+    {
         if (
             empty($soak->biji_keluar) &&
             empty($soak->berat_keluar)
         ) {
-            return;
+            $soak->biji_keluar = 0;
+            $soak->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $soak->history->identifiers_id)
@@ -80,6 +87,15 @@ class SoakObserver
             ->first();
 
         if (!$history) return;
+
+        if (
+            ($soak->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
+            ($soak->berat_keluar ?? 0) > $history->sisa_berat_cuci
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
 
         $history->decrement('biji', $soak->biji_keluar ?? 0);
         $history->decrement('berat', $soak->berat_keluar ?? 0);
