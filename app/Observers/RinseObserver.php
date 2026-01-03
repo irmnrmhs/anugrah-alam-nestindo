@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Rinse;
 use App\Models\History;
+use Illuminate\Validation\ValidationException;
 
 class RinseObserver
 {
@@ -67,11 +68,17 @@ class RinseObserver
      */
     public function deleted(Rinse $rinse): void
     {
+        // 
+    }
+
+    public function deleting(Rinse $rinse): void
+    {
         if (
             empty($rinse->biji_keluar) &&
             empty($rinse->berat_keluar)
         ) {
-            return;
+            $rinse->biji_keluar = 0;
+            $rinse->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $rinse->history->identifiers_id)
@@ -80,6 +87,15 @@ class RinseObserver
             ->first();
 
         if (!$history) return;
+
+        if (
+            ($rinse->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
+            ($rinse->berat_keluar ?? 0) > $history->sisa_berat_cuci
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
 
         $history->decrement('biji', $rinse->biji_keluar ?? 0);
         $history->decrement('berat', $rinse->berat_keluar ?? 0);

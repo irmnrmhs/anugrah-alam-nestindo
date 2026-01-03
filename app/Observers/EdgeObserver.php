@@ -17,7 +17,8 @@ class EdgeObserver
             empty($edge->biji_keluar) &&
             empty($edge->berat_keluar)
         ) {
-            return;
+            $edge->biji_keluar = 0;
+            $edge->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $edge->history->identifiers_id)
@@ -89,7 +90,7 @@ class EdgeObserver
      */
     public function deleted(Edge $edge): void
     {
-        
+        // 
     }
 
     public function deleting(Edge $edge): void

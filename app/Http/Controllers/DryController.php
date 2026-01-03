@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Dry;
 use App\Models\History;
 use App\Models\Employee;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class DryController extends Controller
 {
@@ -47,6 +48,16 @@ class DryController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
             ], 422);
         }
 
@@ -98,6 +109,16 @@ class DryController extends Controller
             ], 422);
         }
 
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
+            ], 422);
+        }
+
         $dry->update($validated);
 
         return response()->json([
@@ -108,24 +129,43 @@ class DryController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $dry = Dry::findOrFail($id);
-        $dry->delete();
+        try {
+            $dry = Dry::findOrFail($id);
+            $dry->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil dihapus',
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => $this->obj . ' berhasil dihapus.',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menghapus data',
+            ], 500);
+        }
     }
 
     public function deleteMultiple(Request $request): JsonResponse
     {
-        $ids = $request->ids;
+        try {
+            foreach ($request->ids as $id) {
+                Dry::findOrFail($id)->delete();
+            }
 
-        Dry::whereIn('id', $ids)->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data terpilih berhasil dihapus'
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data terpilih berhasil dihapus'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
 }

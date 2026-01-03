@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Rinse;
 use App\Models\History;
 use App\Models\Employee;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class RinseController extends Controller
 {
@@ -29,9 +30,9 @@ class RinseController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99',
+            'tgl_selesai' => 'nullable|date',
+            'biji_keluar' => 'nullable|integer|min:0',
+            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
             'shift' => 'required',
             'keterangan' => 'nullable'
         ]);
@@ -45,6 +46,16 @@ class RinseController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
             ], 422);
         }
 
@@ -71,9 +82,9 @@ class RinseController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99',
+            'tgl_selesai' => 'nullable|date',
+            'biji_keluar' => 'nullable|integer|min:0',
+            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
             'shift' => 'required',
             'keterangan' => 'nullable'
         ]);
@@ -94,6 +105,16 @@ class RinseController extends Controller
             ], 422);
         }
 
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
+            ], 422);
+        }
+
         $rinse->update($validated);
 
         return response()->json([
@@ -104,24 +125,43 @@ class RinseController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $rinse = Rinse::findOrFail($id);
-        $rinse->delete();
+        try {
+            $rinse = Rinse::findOrFail($id);
+            $rinse->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil dihapus.',
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => $this->obj . ' berhasil dihapus.',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menghapus data',
+            ], 500);
+        }
     }
 
     public function deleteMultiple(Request $request): JsonResponse
     {
-        $ids = $request->ids;
+        try {
+            foreach ($request->ids as $id) {
+                Rinse::findOrFail($id)->delete();
+            }
 
-        Rinse::whereIn('id', $ids)->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data terpilih berhasil dihapus'
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data terpilih berhasil dihapus'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
 }

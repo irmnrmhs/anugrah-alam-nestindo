@@ -2,8 +2,9 @@
 
 namespace App\Observers;
 
-use App\Models\Correction;
 use App\Models\History;
+use App\Models\Correction;
+use Illuminate\Validation\ValidationException;
 
 class CorrectionObserver
 {
@@ -67,11 +68,17 @@ class CorrectionObserver
      */
     public function deleted(Correction $correction): void
     {
+        // 
+    }
+
+    public function deleting(Correction $correction): void
+    {
         if (
             empty($correction->biji_keluar) &&
             empty($correction->berat_keluar)
         ) {
-            return;
+            $correction->biji_keluar = 0;
+            $correction->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $correction->history->identifiers_id)
@@ -81,6 +88,15 @@ class CorrectionObserver
 
         if (!$history) return;
 
+        if (
+            ($correction->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
+            ($correction->berat_keluar ?? 0) > $history->sisa_berat_cuci
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
+
         $history->decrement('biji', $correction->biji_keluar ?? 0);
         $history->decrement('berat', $correction->berat_keluar ?? 0);
 
@@ -88,7 +104,7 @@ class CorrectionObserver
             $history->delete();
         }
     }
-
+    
     /**
      * Handle the Correction "restored" event.
      */

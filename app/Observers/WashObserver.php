@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Wash;
 use App\Models\History;
+use Illuminate\Validation\ValidationException;
 
 class WashObserver
 {
@@ -67,11 +68,17 @@ class WashObserver
      */
     public function deleted(Wash $wash): void
     {
+        // 
+    }
+
+    public function deleting(Wash $wash): void
+    {
         if (
             empty($wash->biji_keluar) &&
             empty($wash->berat_keluar)
         ) {
-            return;
+            $wash->biji_keluar = 0;
+            $wash->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $wash->history->identifiers_id)
@@ -80,6 +87,15 @@ class WashObserver
             ->first();
 
         if (!$history) return;
+
+        if (
+            ($wash->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
+            ($wash->berat_keluar ?? 0) > $history->sisa_berat_cuci
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
 
         $history->decrement('biji', $wash->biji_keluar ?? 0);
         $history->decrement('berat', $wash->berat_keluar ?? 0);

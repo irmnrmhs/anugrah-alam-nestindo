@@ -18,8 +18,34 @@ class ColorObserver
     /**
      * Handle the Color "updated" event.
      */
+    // public function updated(Color $color): void
+    // {
+    //     $grades = Grade::with(['shape', 'feather'])
+    //         ->where('colors_id', $color->id)
+    //         ->get();
+
+    //     foreach ($grades as $grade) {
+
+    //         if (!$grade->shape || !$grade->feather) {
+    //             continue;
+    //         }
+
+    //         $grade->grade = strtoupper(
+    //             $grade->shape->kode . '-' .
+    //             $grade->feather->kode . '-' .
+    //             $color->kode
+    //         );
+
+    //         $grade->saveQuietly();
+    //     }
+    // }
+
     public function updated(Color $color): void
     {
+        if (!$color->wasChanged('kode')) {
+            return;
+        }
+
         $grades = Grade::with(['shape', 'feather'])
             ->where('colors_id', $color->id)
             ->get();
@@ -36,7 +62,7 @@ class ColorObserver
                 $color->kode
             );
 
-            $grade->saveQuietly();
+            $grade->save();
         }
     }
 

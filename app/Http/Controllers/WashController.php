@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Wash;
 use App\Models\History;
 use App\Models\Employee;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class WashController extends Controller
 {
@@ -16,7 +17,6 @@ class WashController extends Controller
     {
         $washes = Wash::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR03PC')->get();
-
         $employees = Employee::all();
 
         return view('production.wash', compact('washes', 'histories', 'employees'));
@@ -30,9 +30,9 @@ class WashController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99'
+            'tgl_selesai' => 'nullable|date',
+            'biji_keluar' => 'nullable|integer|min:0',
+            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99'
         ]);
 
         $tracker = History::find($validated['histories_id']);
@@ -44,6 +44,16 @@ class WashController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
             ], 422);
         }
 
@@ -70,9 +80,9 @@ class WashController extends Controller
             'tgl_mulai' => 'required|date',
             'biji_masuk' => 'required|integer|min:0',
             'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99'
+            'tgl_selesai' => 'nullable|date',
+            'biji_keluar' => 'nullable|integer|min:0',
+            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99'
         ]);
 
         $wash = Wash::findOrFail($id);
@@ -91,6 +101,16 @@ class WashController extends Controller
             ], 422);
         }
 
+        if(
+            $validated['biji_keluar'] > $validated['biji_masuk'] ||
+            $validated['berat_keluar'] > $validated['berat_masuk']
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi biji masuk atau berat masuk',
+            ], 422);
+        }
+
         $wash->update($validated);
 
         return response()->json([
@@ -102,24 +122,43 @@ class WashController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $wash = Wash::findOrFail($id);
-        $wash->delete();
+        try {
+            $wash = Wash::findOrFail($id);
+            $wash->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil dihapus.',
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => $this->obj . ' berhasil dihapus.',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menghapus data',
+            ], 500);
+        }
     }
 
     public function deleteMultiple(Request $request): JsonResponse
     {
-        $ids = $request->ids;
+        try {
+            foreach ($request->ids as $id) {
+                Wash::findOrFail($id)->delete();
+            }
 
-        Wash::whereIn('id', $ids)->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data terpilih berhasil dihapus'
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data terpilih berhasil dihapus'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
 }

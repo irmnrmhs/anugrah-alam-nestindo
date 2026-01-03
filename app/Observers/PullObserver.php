@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Pull;
 use App\Models\History;
+use Illuminate\Validation\ValidationException;
 
 class PullObserver
 {
@@ -67,11 +68,17 @@ class PullObserver
      */
     public function deleted(Pull $pull): void
     {
+        // 
+    }
+
+    public function deleting(Pull $pull): void
+    {
         if (
             empty($pull->biji_keluar) &&
             empty($pull->berat_keluar)
         ) {
-            return;
+            $pull->biji_keluar = 0;
+            $pull->berat_keluar = 0;
         }
 
         $history = History::where('identifiers_id', $pull->history->identifiers_id)
@@ -80,6 +87,15 @@ class PullObserver
             ->first();
 
         if (!$history) return;
+
+        if (
+            ($pull->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
+            ($pull->berat_keluar ?? 0) > $history->sisa_berat_cuci
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
 
         $history->decrement('biji', $pull->biji_keluar ?? 0);
         $history->decrement('berat', $pull->berat_keluar ?? 0);
