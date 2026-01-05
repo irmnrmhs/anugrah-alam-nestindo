@@ -11,7 +11,7 @@
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Kode Produk</th>
-    <th>Karyawan</th>
+    <th>Petugas</th>
     <th>Tanggal Mulai</th>
     <th>Jumlah Biji</th>
     <th>Berat</th>

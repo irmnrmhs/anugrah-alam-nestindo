@@ -417,19 +417,19 @@ return [
                 //     'icon' => 'fas fa-users',
                 // ],
                 [
-                    'text' => 'Grade Bentuk',
+                    'text' => 'Jenis Bentuk',
                     'url'  => 'shapes',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Grade Bulu',
+                    'text' => 'Jenis Bulu',
                     'url'  => 'feathers',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Grade Warna',
+                    'text' => 'Jenis Warna',
                     'url'  => 'colors',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
@@ -501,7 +501,7 @@ return [
                 [
                     'text' => 'Bahan Baku',
                     'url'  => 'rawMaterials',
-                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'can'  => ['Super Admin'],
                     'icon' => 'fas fa-users',
                 ],
                 [   
@@ -536,6 +536,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
                     'icon' => 'fas fa-users',
                 ],
+                [
+                    'text' => 'Hasil Uji Produk Jadi',
+                    'url'  => 'fp-results',
+                    'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 
@@ -546,7 +552,7 @@ return [
                 [
                     'text' => 'Tracker',
                     'url'  => 'histories',
-                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'can'  => ['Super Admin'],
                     'icon' => 'fas fa-users',
                 ],
                 [
@@ -612,7 +618,7 @@ return [
                 [
                     'text' => 'Produk Jadi',
                     'url'  => 'fp-products',
-                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'can'  => ['Super Admin'],
                     'icon' => 'fas fa-users',
                 ],
                 [
@@ -627,6 +633,19 @@ return [
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
                 ]
+            ],
+        ],
+
+        [
+            'text' => 'Laporan',
+            'icon' => 'fas fa-folder',
+            'submenu' => [
+                [
+                    'text' => 'Summary Produksi',
+                    'url'  => 'on-progress',
+                    'can'  => ['Super Admin'],
+                    'icon' => 'fas fa-users',
+                ],
             ],
         ],
 

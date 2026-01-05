@@ -126,7 +126,7 @@
         const id = $(this).val();
         if (!id) return;
 
-        fetch(`/fp-stocks-info/${id}`)
+        fetch(`/product-info/${id}`)
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);

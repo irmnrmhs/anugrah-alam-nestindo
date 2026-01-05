@@ -16,7 +16,7 @@ class RmStockController extends Controller
     {
         $stocks = RmStock::with('rawMaterial', 'employee')->latest()->get();
         $rms = RawMaterial::all();
-        $employees = Employee::all();
+        $employees = Employee::where('status', 1)->get();
 
         return view('raw-material.rmStock', compact('stocks', 'rms', 'employees'));
     }

@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rm_results', function (Blueprint $table) {
+        Schema::create('fp_results', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('types_id')->constrained('test_types');
-            $table->foreignId('rms_id')->constrained('raw_materials');
+            $table->foreignId('products_id')->constrained('finished_products');
             $table->decimal('kadar_air', 5, 2)->default(0);
             $table->decimal('kadar_nitrit', 4, 1)->default(0);
             $table->decimal('kadar_aluminium', 4, 1)->default(0);
-            $table->decimal('ccp1', 4, 1)->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rm_results');
+        Schema::dropIfExists('fp_results');
     }
 };

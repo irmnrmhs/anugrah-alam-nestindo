@@ -1,8 +1,8 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Hasil Uji';
-    $singular = 'Hasil Uji';
+    $title = 'Kelola Hasil Uji Bahan Baku';
+    $singular = 'Hasil Uji Bahan Baku';
     $deleteMultipleUrl = '/rm-results/delete-multiple';
     $hideImportButton = true;
 @endphp
@@ -14,6 +14,7 @@
     <th>Kadar Air</th>
     <th>Kadar Nitrit</th>
     <th>Kadar Aluminium</th>
+    <th>Kadar Nitrit Selama Proses (CCP1)</th>
 @stop
 
 @section('table-body')
@@ -25,6 +26,7 @@
             <td>{{ $result->kadar_air }}</td>
             <td>{{ $result->kadar_nitrit }}</td>
             <td>{{ $result->kadar_aluminium }}</td>
+            <td>{{ $result->ccp1 }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -76,6 +78,9 @@
 
                 <label>Kadar Aluminium</label>
                 <input type="number" class="form-control mb-2 kadar-aluminium" data-index="${i}" step="0.01" min="0" max="999.99">
+
+                <label>Kadar Nitrit Setelah Proses</label>
+                <input type="number" class="form-control mb-2 ccp1" data-index="${i}" step="0.01" min="0" max="999.99">
             </div>
         `;
     }
@@ -91,7 +96,8 @@
                 rms_id,
                 kadar_air: $(`.kadar-air[data-index="${i}"]`).val(),
                 kadar_nitrit: $(`.kadar-nitrit[data-index="${i}"]`).val(),
-                kadar_aluminium: $(`.kadar-aluminium[data-index="${i}"]`).val()
+                kadar_aluminium: $(`.kadar-aluminium[data-index="${i}"]`).val(),
+                ccp1: $(`.ccp1[data-index="${i}"]`).val()
             });
         }
 
@@ -137,6 +143,10 @@
                     <input type="number" class="form-control mb-2" id="edit_aluminium"
                         value="${result.kadar_aluminium}" step="0.01" min="0" max="999.99">
 
+                    <label>Kadar Nitrit Selama Proses</label>
+                    <input type="number" class="form-control mb-2" id="edit_ccp1"
+                        value="${result.ccp1}" step="0.01" min="0" max="999.99">
+
                 `;
 
                 $('#secondModalBody').html(html);
@@ -148,7 +158,8 @@
                         rms_id: result.rms_id,
                         kadar_air: parseFloat($('#edit_air').val()),
                         kadar_nitrit: parseFloat($('#edit_nitrit').val()),
-                        kadar_aluminium: parseFloat($('#edit_aluminium').val())
+                        kadar_aluminium: parseFloat($('#edit_aluminium').val()),
+                        ccp1: parseFloat($('#edit_ccp1').val())
                     };
 
                     fetch(`/rm-results/${result.id}`, {
@@ -217,8 +228,8 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button class="btn btn-primary" id="btnSubmitAll">Simpan Semua</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
             </div>
 
         </div>

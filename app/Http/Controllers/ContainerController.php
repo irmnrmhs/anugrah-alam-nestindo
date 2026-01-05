@@ -17,7 +17,7 @@ class ContainerController extends Controller
     {
         $containers = Container::with('arrival', 'employee')->oldest()->get();
         $arrivals = Arrival::orderBy('kode')->get()->unique('kode')->values();
-        $employees = Employee::all();
+        $employees = Employee::where('status', 1)->get();
 
         return view('raw-material.container', compact('containers', 'arrivals', 'employees'));
     }

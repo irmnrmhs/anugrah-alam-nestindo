@@ -16,7 +16,7 @@ class SteamController extends Controller
     public function index(): View
     {
         $steams = Steam::with('officer', 'nest', 'fproduct')->latest()->get();
-        $officers = SteamOfficer::all();
+        $officers = SteamOfficer::where('status', 1)->get();
         $nests = NestType::all();
         $fproducts = FinishedProduct::all();
 

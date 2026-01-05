@@ -64,8 +64,8 @@ class FpStockController extends Controller
         $lastOut = FpStock::where('fproducts_id', $id)->latest()->first();
 
         return response()->json([
-            'biji_sisa' => $fproduct->biji,
-            'berat_sisa' => $fproduct->berat,
+            'biji_sisa' => $fproduct->biji_sisa,
+            'berat_sisa' => $fproduct->berat_sisa,
             'last_date' => $lastOut?->tgl_keluar,
         ]);
     }

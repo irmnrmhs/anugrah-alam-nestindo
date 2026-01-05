@@ -1,32 +1,30 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Kontainer';
-    $singular = 'Kontainer';
-    $deleteMultipleUrl = '/containers/delete-multiple';
+    $title = 'Kelola Hasil Uji Produk Jadi';
+    $singular = 'Hasil Uji Produk Jadi';
+    $deleteMultipleUrl = '/fp-results/delete-multiple';
     $hideImportButton = true;
 @endphp
 
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode</th>
-    <th>Biji</th>
-    <th>Berat</th>
-    <th>Keterangan</th>
-    <th>Petugas</th>
+    <th>Rumah Burung/No. Registrasi</th>
+    <th>Kadar Air</th>
+    <th>Kadar Nitrit</th>
+    <th>Kadar Aluminium</th>
 @stop
 
 @section('table-body')
-    @foreach($containers as $index => $container)
-        <tr data-id="{{ $container->id }}">
-            <td><input type="checkbox" class="row-check" value="{{ $container->id }}"></td>
+    @foreach($results as $index => $result)
+        <tr data-id="{{ $result->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $result->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $container->arrival->kode }}</td>
-            <td>{{ $container->biji }}</td>
-            <td>{{ $container->berat }}</td>
-            <td>{{ empty($container->keterangan) ? '-' : $container->keterangan }}</td>
-            <td>{{ $container->employee->nama }}</td>
+            <td>{{ $result->product->kode }}</td>
+            <td>{{ $result->kadar_air }}</td>
+            <td>{{ $result->kadar_nitrit }}</td>
+            <td>{{ $result->kadar_aluminium }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -37,28 +35,28 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Kode Bahan Baku</label>
-        <select id="arrivals_id" class="form-control" required>
-            <option value="">-- Pilih Kode Bahan Baku --</option>
-            @foreach($arrivals as $arrival)
-                <option value="{{ $arrival->id }}">{{ $arrival->kode }}</option>
+        <label>Kode Produk Jadi</label>
+        <select id="products_id" class="form-control" required>
+            <option value="">-- Pilih Kode Produk Jadi --</option>
+            @foreach($products as $product)
+                <option value="{{ $product->id }}">{{ $product->kode }}</option>
             @endforeach
         </select>
     </div>
 
     <div class="mb-3">
-        <label>Jumlah Kontainer</label>
-        <input type="number" min="1" id="jumlah_kontainer" class="form-control" required>
+        <label>Jumlah Sampel</label>
+        <input type="number" min="1" id="jumlah_sampel" class="form-control" required>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const arrivals_id = $('#arrivals_id').val();
-    const jumlah = parseInt($('#jumlah_kontainer').val());
+    const products_id = $('#products_id').val();
+    const jumlah = parseInt($('#jumlah_sampel').val());
 
-    if (!arrivals_id || jumlah < 1) {
-        Swal.fire('Error', 'Lengkapi Kode & Jumlah Kontainer!', 'error');
+    if (!products_id || jumlah < 1) {
+        Swal.fire('Error', 'Lengkapi Kode & Jumlah Sampel.', 'error');
         return;
     }
 
@@ -68,24 +66,16 @@
     for (let i = 1; i <= jumlah; i++) {
         html += `
             <div class="border rounded p-3 mb-3">
-                <h6>Kontainer ${i}</h6>
+                <h6>Sampel ${i}</h6>
 
-                <label>Biji</label>
-                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0" required>
+                <label>Kadar Air</label>
+                <input type="number" class="form-control mb-2 kadar-air" data-index="${i}" step="0.01" min="0" max="999.99">
 
-                <label>Berat</label>
-                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01" required>
+                <label>Kadar Nitrit</label>
+                <input type="number" class="form-control mb-2 kadar-nitrit" data-index="${i}" step="0.01" min="0" max="999.99">
 
-                <label>Keterangan</label>
-                <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}" placeholder="Optional (tidak wajib diisi)">
-
-                <label>Petugas</label>
-                <select class="form-control kont-petugas" data-index="${i}" required>
-                    <option value="">-- Pilih Petugas --</option>
-                    @foreach($employees as $employee)
-                        <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
-                    @endforeach
-                </select>
+                <label>Kadar Aluminium</label>
+                <input type="number" class="form-control mb-2 kadar-aluminium" data-index="${i}" step="0.01" min="0" max="999.99">
             </div>
         `;
     }
@@ -98,15 +88,14 @@
 
         for (let i = 1; i <= jumlah; i++) {
             list.push({
-                arrivals_id,
-                biji: $(`.kont-biji[data-index="${i}"]`).val(),
-                berat: $(`.kont-berat[data-index="${i}"]`).val(),
-                keterangan: $(`.kont-keterangan[data-index="${i}"]`).val(),
-                employees_id: $(`.kont-petugas[data-index="${i}"]`).val(),
+                products_id,
+                kadar_air: $(`.kadar-air[data-index="${i}"]`).val(),
+                kadar_nitrit: $(`.kadar-nitrit[data-index="${i}"]`).val(),
+                kadar_aluminium: $(`.kadar-aluminium[data-index="${i}"]`).val()
             });
         }
 
-        fetch('/containers/bulk', {
+        fetch('/fp-results/bulk', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -129,35 +118,24 @@
     $(document).on('click', '.btnEdit', function () {
         const id = $(this).closest('tr').data('id');
 
-        fetch(`/containers/${id}`)
+        fetch(`/fp-results/${id}`)
             .then(r => r.json())
-            .then(container => {
+            .then(result => {
 
-                $('#item_id').val(container.id);
+                $('#item_id').val(result.id);
 
                 let html = `
-                    <label>Biji</label>
-                    <input type="number" class="form-control mb-2" id="edit_biji"
-                        value="${container.biji}" min="0">
+                    <label>Kadar Air</label>
+                    <input type="number" class="form-control mb-2" id="edit_air"
+                        value="${result.kadar_air}" step="0.01" min="0" max="999.99">
 
-                    <label>Berat</label>
-                    <input type="number" class="form-control mb-2" id="edit_berat"
-                        value="${container.berat}" min="0" step="0.01">
+                    <label>Kadar Nitrit</label>
+                    <input type="number" class="form-control mb-2" id="edit_nitrit"
+                        value="${result.kadar_nitrit}" step="0.01" min="0" max="999.99">
 
-                    <label>Keterangan</label>
-                    <input type="text" class="form-control mb-2" id="edit_keterangan"
-                        value="${container.keterangan ?? ''}">
-
-                    <label>Petugas</label>
-                    <select class="form-control" id="edit_petugas">
-                        <option value="">-- Pilih Petugas --</option>
-                        @foreach($employees as $employee)
-                            <option value="{{ $employee->id }}"
-                                ${container.employees_id == "{{ $employee->id }}" ? 'selected' : ''}>
-                                {{ $employee->nama }} ({{ $employee->nip }})
-                            </option>
-                        @endforeach
-                    </select>
+                    <label>Kadar Aluminium</label>
+                    <input type="number" class="form-control mb-2" id="edit_aluminium"
+                        value="${result.kadar_aluminium}" step="0.01" min="0" max="999.99">
                 `;
 
                 $('#secondModalBody').html(html);
@@ -166,14 +144,13 @@
                 $('#btnSubmitAll').off().on('click', function () {
 
                     let payload = {
-                        arrivals_id: container.arrivals_id, // arrival tidak bisa diubah lewat modal ini
-                        biji: parseInt($('#edit_biji').val()),
-                        berat: parseFloat($('#edit_berat').val()),
-                        keterangan: $('#edit_keterangan').val() || null,
-                        employees_id: parseInt($('#edit_petugas').val())
+                        products_id: result.products_id,
+                        kadar_air: parseFloat($('#edit_air').val()),
+                        kadar_nitrit: parseFloat($('#edit_nitrit').val()),
+                        kadar_aluminium: parseFloat($('#edit_aluminium').val())
                     };
 
-                    fetch(`/containers/${container.id}`, {
+                    fetch(`/fp-results/${result.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -204,7 +181,7 @@
             showCancelButton: true
         }).then(res => {
             if (res.isConfirmed) {
-                fetch(`/containers/${id}`, {
+                fetch(`/fp-results/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })
@@ -231,7 +208,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5>Input Detail Kontainer</h5>
+                <h5>Input Detail Sampel</h5>
             </div>
 
             <div class="modal-body overflow-auto" id="secondModalBody" style="max-height: 70vh;">

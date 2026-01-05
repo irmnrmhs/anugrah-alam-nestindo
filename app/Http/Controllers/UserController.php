@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         $users = User::with('role', 'employee')->latest()->get();
         $roles = Role::all();
-        $employees = Employee::all();
+        $employees = Employee::where('status', 1)->get();
 
         return view('masters.user', compact('users', 'roles', 'employees'));
     }
