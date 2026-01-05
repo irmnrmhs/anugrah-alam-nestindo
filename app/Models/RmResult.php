@@ -11,7 +11,8 @@ class RmResult extends Model
         'rms_id',
         'kadar_air',
         'kadar_nitrit',
-        'kadar_aluminium'
+        'kadar_aluminium',
+        'ccp1'
     ];
 
     // public function type()

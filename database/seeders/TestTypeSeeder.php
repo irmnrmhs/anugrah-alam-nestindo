@@ -38,19 +38,19 @@ class TestTypeSeeder extends Seeder
         ]);
 
         TestType::create([
+            'categories_id' => 1,
+            'nama_uji'  => 'CCP 1',
+            'satuan'    => 'mg/kg',
+            'standar_minimal' => 0.000,
+            'standar_maksimal' => 30.00,
+        ]);
+
+        TestType::create([
             'categories_id' => 2,
             'nama_uji'  => 'Kadar Air',
             'satuan'    => '%',
             'standar_minimal' => 0.00,
             'standar_maksimal' => 15.00,
-        ]);
-
-        TestType::create([
-            'categories_id' => 2,
-            'nama_uji'  => 'CCP 1',
-            'satuan'    => 'mg/kg',
-            'standar_minimal' => 0.000,
-            'standar_maksimal' => 30.00,
         ]);
 
         TestType::create([

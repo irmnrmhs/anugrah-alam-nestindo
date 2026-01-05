@@ -9,7 +9,6 @@ use App\Http\Controllers\PickController;
 use App\Http\Controllers\PullController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SoakController;
-use App\Http\Controllers\NestTypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WashController;
 use App\Http\Controllers\BlendController;
@@ -18,6 +17,7 @@ use App\Http\Controllers\EntryController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\RinseController;
 use App\Http\Controllers\ShapeController;
+use App\Http\Controllers\SteamController;
 use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FeatherController;
@@ -32,6 +32,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FinishedController;
+use App\Http\Controllers\FpResultController;
+use App\Http\Controllers\NestTypeController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RmResultController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
@@ -42,10 +45,8 @@ use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
-use App\Http\Controllers\PositionController;
-use App\Http\Controllers\ProductIdentifierController;
-use App\Http\Controllers\SteamController;
 use App\Http\Controllers\SteamOfficerController;
+use App\Http\Controllers\ProductIdentifierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -259,7 +260,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/testTypes/{id}', [TestTypeController::class, 'update'])->name('testTypes.update');
     Route::delete('/testTypes/{id}', [TestTypeController::class, 'destroy'])->name('testTypes.destroy');
 
-    // Hasil Uji
+    // Hasil Uji BB
     Route::get('/rm-results', [RmResultController::class, 'index'])->name('rm-results.index');
     Route::post('/rm-results', [RmResultController::class, 'store'])->name('rm-results.store');
     Route::get('/rm-results/{id}', [RmResultController::class, 'show'])->name('rm-results.show');
@@ -267,6 +268,15 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/rm-results/{id}', [RmResultController::class, 'destroy'])->name('rm-results.destroy');
     Route::post('/rm-results/delete-multiple', [RmResultController::class, 'deleteMultiple']);
     Route::post('/rm-results/bulk', [RmResultController::class, 'bulk'])->name('rm-results.bulk');
+
+    // Hasil Uji PJ
+    Route::get('/fp-results', [FpResultController::class, 'index'])->name('fp-results.index');
+    Route::post('/fp-results', [FpResultController::class, 'store'])->name('fp-results.store');
+    Route::get('/fp-results/{id}', [FpResultController::class, 'show'])->name('fp-results.show');
+    Route::put('/fp-results/{id}', [FpResultController::class, 'update'])->name('fp-results.update');
+    Route::delete('/fp-results/{id}', [FpResultController::class, 'destroy'])->name('fp-results.destroy');
+    Route::post('/fp-results/delete-multiple', [FpResultController::class, 'deleteMultiple']);
+    Route::post('/fp-results/bulk', [FpResultController::class, 'bulk'])->name('fp-results.bulk');
 
     // History
     Route::get('/histories', [HistoryController::class, 'index'])->name('histories.index');
@@ -372,6 +382,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/fp-stocks/{id}', [FpStockController::class, 'update'])->name('fp-stocks.update');
     Route::delete('/fp-stocks/{id}', [FpStockController::class, 'destroy'])->name('fp-stocks.destroy');
     Route::post('/fp-stocks/delete-multiple', [FpStockController::class, 'deleteMultiple']);
+    Route::get('/product-info/{id}', [FpStockController::class, 'productInfo']);
 
     // Tipe Sarang
     Route::get('/nests', [NestTypeController::class, 'index'])->name('nests.index');

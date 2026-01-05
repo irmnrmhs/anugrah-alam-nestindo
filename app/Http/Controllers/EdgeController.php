@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class EdgeController extends Controller
 {
@@ -112,6 +113,16 @@ class EdgeController extends Controller
                 'message' => 'Melebihi biji masuk atau berat masuk',
             ], 422);
         }
+
+        // if(
+        //     $validated['biji_keluar'] < $tracker->total_biji_cuci ||
+        //     $validated['berat_keluar'] < $tracker->total_berat_cuci
+        // ){
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'biji atau berat keluar melebihi biji atau berat yang masuk di proses lain',
+        //     ], 422);
+        // }
         
         $edge->update($validated);
 
