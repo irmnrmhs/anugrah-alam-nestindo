@@ -10,6 +10,7 @@
     @section('table-headers')
         <th><input type="checkbox" id="checkAll"></th>
         <th>No</th>
+        <th>Kode</th>
         <th>Tipe Sarang</th>
         <th>Tipe Penambahan Air</th>
         <th>Tipe Sumber Panas</th>
@@ -33,6 +34,8 @@
             <tr data-id="{{ $steam->id }}">
                 <td><input type="checkbox" class="row-check" value="{{ $steam->id }}"></td>
                 <td>{{ $index + 1 }}</td>
+                <td>{{ $steam->kode }}</td>
+                <td>{{ $steam->officer->nama }}</td>
                 <td>{{ $steam->nest->type }}</td>
                 <td>{{ $steam->penambahan }}</td>
                 <td>{{ $steam->sumber_panas }}</td>
@@ -86,7 +89,7 @@
             <label>Tanggal Pemanasan</label>
             <input type="date" id="tgl_pemanasan" class="form-control" required>
         </div>
-        <div class="mb-3">
+        {{-- <div class="mb-3">
             <label>Petugas Pemanas</label>
             <select id="officers_id" class="form-control" required>
                 <option value="">-- Pilih Petugas Pemanas --</option>
@@ -95,6 +98,20 @@
                 @endforeach
                 <option value="Semua">Semua</option>
             </select>
+        </div> --}}
+        <div class="mb-3">
+            <label>Petugas</label>
+            <div>
+                <label>
+                    <input type="checkbox" id="all"> Semua Petugas
+                </label>
+                <hr>
+            </div>
+            <div>
+                @foreach ( $officers as $officer)
+                    <label><input type="checkbox" class="officer-item" value={{ $officer->employee->nama }}> {{ $officer->employee->nama }} </label><br>
+                @endforeach
+            </div>
         </div>
         <div class="mb-3">
             <label>Level Air</label>
@@ -131,6 +148,15 @@
     @stop
 
     @section('form-submit-script')
+        function getOfficerValue() {
+            let list = [];
+            $('.officer-item:checked').each(function() {
+                list.push($(this).val());
+            });
+
+            return list.length > 0 ? list.join(', ') : '';
+        }
+
         const id = $('#item_id').val();
         const nests_id = $('#nests_id').val();
         const penambahan = $('#penambahan').val();
@@ -220,6 +246,24 @@
     @stop
 
     @section('custom-js')
+        function syncOfficerAll() {
+            const total = $('.officer-item').length;
+            const checked = $('.officer-item:checked').length;
+
+            $('#all').prop('checked', total > 0 && total === checked);
+        }
+
+        $(document).on('change', '#all', function() {
+            const checked = $(this).is(':checked');
+            $('.officer-item').prop('checked', checked);
+        });
+
+        $(document).on('change', '.officer-item', function() {
+            syncOfficerAll();
+            const allChecked = $('.officer-item:checked').length === $('.officer-item').length;
+            $('#all').prop('checked', allChecked);
+        });
+
         $(document).on('click', '.btnEdit', function () {
             const id = $(this).closest('tr').data('id');
 

@@ -14,7 +14,7 @@ class ProductIdentifierController extends Controller
     public string $obj = 'Pengidentifikasi Produk';
     public function index(): View
     {
-        $identifiers = ProductIdentifier::with('rawMaterial', 'grade')->oldest()->get();
+        $identifiers = ProductIdentifier::with('rawMaterial', 'grade')->latest()->get();
         $rms = RawMaterial::all();
         $grades = Grade::all();
 

@@ -17,7 +17,7 @@ class DryController extends Controller
     {
         $dries = Dry::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR10PK')->get();
-        $employees = Employee::with('position')->whereHas('position', function ($query) {
+        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
@@ -44,12 +44,12 @@ class DryController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_kering ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_kering
+            $validated['biji_masuk'] > $tracker->sisa_biji_sesek ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_sesek
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa',
+                'message' => 'Melebihi stok sisa pada tahapan lainnya',
             ], 422);
         }
 
@@ -59,7 +59,7 @@ class DryController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi biji masuk atau berat masuk',
+                'message' => 'Biji atau berat keluar melebihi biji atau berat masuk',
             ], 422);
         }
 
@@ -109,7 +109,7 @@ class DryController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa',
+                'message' => 'Melebihi stok sisa pada tahapan lainnya',
             ], 422);
         }
 
@@ -119,7 +119,17 @@ class DryController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi biji masuk atau berat masuk',
+                'message' => 'Biji atau berat keluar melebihi biji atau berat masuk',
+            ], 422);
+        }
+
+        if(
+            $validated['biji_keluar'] < $tracker->total_biji_produk ||
+            $validated['berat_keluar'] < $tracker->total_berat_produk
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan lain.',
             ], 422);
         }
 
