@@ -15,7 +15,13 @@ class ProductIdentifierController extends Controller
     public function index(): View
     {
         $identifiers = ProductIdentifier::with('rawMaterial', 'grade')->latest()->get();
-        $rms = RawMaterial::all();
+        
+        // $rms = RawMaterial::all();
+        $rms = RawMaterial::whereHas('stocks', function ($q) {
+            $q->where('biji_keluar', '>', 0)
+            ->orWhere('berat_keluar', '>', 0);
+        })->get();
+
         $grades = Grade::all();
 
         return view('raw-material.productIdentifier', compact('identifiers', 'rms', 'grades'));

@@ -42,8 +42,8 @@ class PullController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_sesek ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_sesek
+            $validated['biji_masuk'] > $tracker->sisa_biji_keluar ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_keluar
         ){
             return response()->json([
                 'status' => 'error',

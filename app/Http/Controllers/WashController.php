@@ -40,8 +40,8 @@ class WashController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_sesek ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_sesek
+            $validated['biji_masuk'] > $tracker->sisa_biji_koreksi ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_koreksi
         ){
             return response()->json([
                 'status' => 'error',
@@ -91,7 +91,7 @@ class WashController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         $biji_sisa = $tracker->sisa_biji_cuci + $wash->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_cuci + $wash->berat_keluar;
+        $berat_sisa = $tracker->sisa_berat_cuci + $wash->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||
