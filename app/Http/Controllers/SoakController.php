@@ -17,7 +17,7 @@ class SoakController extends Controller
     {
         $soaks = Soak::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR06PR')->get();
-        $employees = Employee::with('position')->whereHas('position', function ($query) {
+        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
@@ -47,7 +47,7 @@ class SoakController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa',
+                'message' => 'Melebihi stok sisa pada tahapan lainnya',
             ], 422);
         }
 
@@ -57,7 +57,7 @@ class SoakController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi biji masuk atau berat masuk',
+                'message' => 'Biji atau berat keluar melebihi biji atau berat masuk',
             ], 422);
         }
 
@@ -103,7 +103,7 @@ class SoakController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa',
+                'message' => 'Melebihi stok sisa pada tahapan lainnya',
             ], 422);
         }
 
@@ -113,7 +113,17 @@ class SoakController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi biji masuk atau berat masuk',
+                'message' => 'Biji atau berat keluar melebihi biji atau berat masuk',
+            ], 422);
+        }
+
+        if(
+            $validated['biji_keluar'] < $tracker->total_biji_bilas ||
+            $validated['berat_keluar'] < $tracker->total_berat_bilas
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan lain.',
             ], 422);
         }
 

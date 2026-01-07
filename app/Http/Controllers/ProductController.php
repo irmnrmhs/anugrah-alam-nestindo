@@ -60,21 +60,21 @@ class ProductController extends Controller
         ]);
     }
 
-    public function materialInfo($rms_id)
-    {
-        $last = ProductIdentifier::where('rms_id', $rms_id)
-            ->latest('tanggal')
-            ->first();
+    // public function materialInfo($rms_id)
+    // {
+    //     $last = ProductIdentifier::where('rms_id', $rms_id)
+    //         ->latest('tanggal')
+    //         ->first();
 
-        $total_biji = ProductIdentifier::where('rms_id', $rms_id)->sum('biji');
-        $total_berat = ProductIdentifier::where('rms_id', $rms_id)->sum('berat');
+    //     $total_biji = ProductIdentifier::where('rms_id', $rms_id)->sum('biji');
+    //     $total_berat = ProductIdentifier::where('rms_id', $rms_id)->sum('berat');
 
-        return response()->json([
-            'last_date' => optional($last)->tanggal,
-            'biji_sisa' => $this->getStokBiji($rms_id) - $total_biji,
-            'berat_sisa' => $this->getStokBerat($rms_id) - $total_berat,
-        ]);
-    }
+    //     return response()->json([
+    //         'last_date' => optional($last)->tanggal,
+    //         'biji_sisa' => $this->getStokBiji($rms_id) - $total_biji,
+    //         'berat_sisa' => $this->getStokBerat($rms_id) - $total_berat,
+    //     ]);
+    // }
 
     public function show(int $id): JsonResponse
     {
@@ -102,15 +102,15 @@ class ProductController extends Controller
         $validated['kode'] = $grade->kode . "-" . $pi;
 
         $biji_sisa = $tracker->sisa_biji_produk + $product->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_produk + $product->berat_keluar;
+        $berat_sisa = $tracker->sisa_berat_produk + $product->berat_masuk;
 
         if(
             $validated['biji'] > $biji_sisa ||
-            $validated['berat'] > $berat_sisa
+            $validated['berat'] > $berat_sisa   
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa',
+                'message' => 'Melebihi stok sisa pada tahapan lainnya',
             ], 422);
         }
 

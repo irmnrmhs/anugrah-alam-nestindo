@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Dry extends Model
 {
@@ -21,6 +22,20 @@ class Dry extends Model
         'shift',
         'status'
     ];
+
+    public function getWaktuMasukAttribute($value)
+    {
+        return $value
+            ? Carbon::createFromFormat('H:i:s', $value)->format('H:i')
+            : null;
+    }
+
+    public function getWaktuKeluarAttribute($value)
+    {
+        return $value
+            ? Carbon::createFromFormat('H:i:s', $value)->format('H:i')
+            : null;
+    }
 
     public function history()
     {
