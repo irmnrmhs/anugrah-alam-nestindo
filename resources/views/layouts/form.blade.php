@@ -81,7 +81,7 @@
                             <input type="file" name="file" id="importFile" class="form-control" required>
                             <small class="text-muted">
                                 Format: xls / xlsx |
-                                <a href="{{ route('employees.template') }}">
+                                <a href="{{ route('users.template') }}">
                                     Download Template
                                 </a>
                             </small>
@@ -89,11 +89,11 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Batal
-                        </button>
                         <button type="submit" class="btn btn-primary">
                             Import
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Batal
                         </button>
                     </div>
                 </form>
@@ -201,7 +201,7 @@
 
             let formData = new FormData(this);
 
-            fetch("{{ route('employees.import') }}", {
+            fetch("{{ route('users.import') }}", {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'

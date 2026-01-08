@@ -31,10 +31,10 @@ class RmResultController extends Controller
         ]);
 
         $ujiMap = [
-            'kadar_air'        => 'kadar_air',
-            'kadar_nitrit'     => 'kadar_nitrit',
-            'kadar_aluminium'  => 'kadar_aluminium',
-            'ccp1'             => 'ccp1',
+            'kadar_air'        => 'Kadar Air',
+            'kadar_nitrit'     => 'Kadar Nitrit',
+            'kadar_aluminium'  => 'Kadar Aluminium',
+            'ccp1'             => 'CCP 1',
         ];
 
         $standars = TestType::where('categories_id', 1)
