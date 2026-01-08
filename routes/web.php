@@ -81,6 +81,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::post('/users/delete-multiple', [UserController::class, 'deleteMultiple']);
+    Route::get('/users/template', [UserController::class, 'downloadTemplate'])->name('users.template');
+    Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
 
     // Company
     Route::get('/company', [CompanyController::class, 'index'])->name('company.index');

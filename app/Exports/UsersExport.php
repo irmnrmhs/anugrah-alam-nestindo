@@ -5,24 +5,22 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class EmployeesTemplateExport implements FromArray, WithHeadings
+class UsersExport implements FromArray, WithHeadings
 {
     /**
-     * Header kolom (baris pertama Excel)
-     */
+    * @return \Illuminate\Support\Collection
+    */
     public function headings(): array
     {
         return [
-            'NIP',
-            'Nama',
-            'Posisi',
-            'Departemen',
+            'Username',
+            'Email',
+            'password',
+            'Role',
+            'Karyawan',
         ];
     }
 
-    /**
-     * Isi data (kosong karena ini template)
-     */
     public function array(): array
     {
         return [];

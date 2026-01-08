@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsersImport;
+use App\Exports\UsersExport;
 
 class UserController extends Controller
 {
@@ -111,5 +114,27 @@ class UserController extends Controller
             'status' => 'success',
             'message' => 'Data terpilih berhasil dihapus'
         ]);
+    }
+
+    public function import(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        Excel::import(new UsersImport, $request->file('file'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $this->obj . ' berhasil diimport'
+        ]);
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(
+            new UsersExport,
+            'template_import_user.xlsx'
+        );
     }
 }
