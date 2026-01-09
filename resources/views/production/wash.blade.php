@@ -170,7 +170,7 @@
             .then(r => r.json())
             .then(wash => {
                 $('#item_id').val(wash.id);
-                $('#histories_id').val(wash.histories_id);
+                $('#histories_id').val(wash.histories_id).trigger('change');
                 $('#employees_id').val(wash.employees_id);
                 $('#tgl_mulai').val(wash.tgl_mulai);
                 $('#biji_masuk').val(wash.biji_masuk);

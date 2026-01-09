@@ -188,7 +188,7 @@
             .then(r => r.json())
             .then(entry => {
                 $('#item_id').val(entry.id);
-                $('#histories_id').val(entry.histories_id);
+                $('#histories_id').val(entry.histories_id).trigger('change');
                 $('#employees_id').val(entry.employees_id);
                 $('#tgl_mulai').val(entry.tgl_mulai);
                 $('#biji_masuk').val(entry.biji_masuk);

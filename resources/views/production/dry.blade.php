@@ -158,12 +158,12 @@
         berat_keluar: $('#berat_keluar').val(),
         waktu_keluar: $('#waktu_keluar').val(),
         shift: $('#shift').val(),
-        keterangan: $('#keterangan').val()
+        keterangan: $('#keterangan').val(),
     };
 
     fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         body: JSON.stringify(data)
     })
     .then(res => res.json())
@@ -202,7 +202,7 @@
             .then(r => r.json())
             .then(dry => {
                 $('#item_id').val(dry.id);
-                $('#histories_id').val(dry.histories_id);
+                $('#histories_id').val(dry.histories_id).trigger('change');
                 $('#employees_id').val(dry.employees_id);
                 $('#tgl_mulai').val(dry.tgl_mulai);
                 $('#biji_masuk').val(dry.biji_masuk);

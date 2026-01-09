@@ -188,7 +188,7 @@
             .then(r => r.json())
             .then(soak => {
                 $('#item_id').val(soak.id);
-                $('#histories_id').val(soak.histories_id);
+                $('#histories_id').val(soak.histories_id).trigger('change');
                 $('#employees_id').val(soak.employees_id);
                 $('#tgl_mulai').val(soak.tgl_mulai);
                 $('#biji_masuk').val(soak.biji_masuk);
