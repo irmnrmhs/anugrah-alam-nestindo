@@ -51,6 +51,22 @@
             @endforeach
         </select>
     </div>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
+            <input type="text" id="last" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Biji Sisa</label>
+            <input type="number" id="biji_sisa" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Berat Sisa</label>
+            <input type="number" id="berat_sisa" class="form-control" readonly>
+        </div>
+    </div>
     <div class="mb-3">
         <label>Karyawan</label>
         <select id="employees_id" class="form-control" required>
@@ -120,13 +136,31 @@
 @stop
 
 @section('custom-js')
+    $('#histories_id').on('change', function () {
+        const id = $(this).val();
+        if (!id) return;
+
+        fetch(`/products-info/${id}`)
+            .then(r => r.json())
+            .then(info => {
+                $('#biji_sisa').val(info.biji_sisa);
+                $('#berat_sisa').val(info.berat_sisa);
+                $('#last').val(info.last ?? '-');
+            })
+            .catch(() => {
+                $('#biji_sisa').val('-');
+                $('#berat_sisa').val('-');
+                $('#last').val('-');
+            });
+    });
+    
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
         fetch(`/products/${id}`)
             .then(r => r.json())
             .then(product => {
                 $('#item_id').val(product.id);
-                $('#histories_id').val(product.histories_id);
+                $('#histories_id').val(product.histories_id).trigger('change');
                 $('#employees_id').val(product.employees_id);
                 $('#grades_id').val(product.grades_id);
                 $('#tgl_mulai').val(product.tgl_mulai);

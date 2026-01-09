@@ -177,7 +177,7 @@
             .then(r => r.json())
             .then(correction => {
                 $('#item_id').val(correction.id);
-                $('#histories_id').val(correction.histories_id);
+                $('#histories_id').val(correction.histories_id).trigger('change');
                 $('#employees_id').val(correction.employees_id);
                 $('#tgl_mulai').val(correction.tgl_mulai);
                 $('#biji_masuk').val(correction.biji_masuk);

@@ -380,6 +380,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::post('/products/delete-multiple', [ProductController::class, 'deleteMultiple']);
+    Route::get('/products-info/{id}', [ProductController::class, 'info']);
 
     // Produk Jadi
     Route::get('/fp-products', [FinishedController::class, 'index'])->name('fp-products.index');

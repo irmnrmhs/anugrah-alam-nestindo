@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Product;
 use App\Models\FinishedProduct;
+use App\Models\History;
 
 class ProductObserver
 {

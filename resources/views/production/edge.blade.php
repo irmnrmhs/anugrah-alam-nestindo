@@ -170,7 +170,8 @@
             .then(r => r.json())
             .then(edge => {
                 $('#item_id').val(edge.id);
-                $('#histories_id').val(edge.histories_id);
+                $('#histories_id').val(edge.histories_id).trigger('change');
+                {{-- $('#histories_id').val(edge.histories_id); --}}
                 $('#employees_id').val(edge.employees_id);
                 $('#tgl_mulai').val(edge.tgl_mulai);
                 $('#biji_masuk').val(edge.biji_masuk);

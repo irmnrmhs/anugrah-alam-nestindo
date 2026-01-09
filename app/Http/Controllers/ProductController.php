@@ -60,26 +60,22 @@ class ProductController extends Controller
         ]);
     }
 
-    // public function materialInfo($rms_id)
-    // {
-    //     $last = ProductIdentifier::where('rms_id', $rms_id)
-    //         ->latest('tanggal')
-    //         ->first();
-
-    //     $total_biji = ProductIdentifier::where('rms_id', $rms_id)->sum('biji');
-    //     $total_berat = ProductIdentifier::where('rms_id', $rms_id)->sum('berat');
-
-    //     return response()->json([
-    //         'last_date' => optional($last)->tanggal,
-    //         'biji_sisa' => $this->getStokBiji($rms_id) - $total_biji,
-    //         'berat_sisa' => $this->getStokBerat($rms_id) - $total_berat,
-    //     ]);
-    // }
-
     public function show(int $id): JsonResponse
     {
         $product = Product::findOrFail($id);
         return response()->json($product);
+    }
+
+    public function info($id)
+    {
+        $tracker = History::findOrFail($id);
+        $last = Product::where('histories_id', $id)->latest()->first();
+
+        return response()->json([
+            'biji_sisa' => $tracker->sisa_biji_sesek,
+            'berat_sisa' => $tracker->sisa_berat_sesek,
+            'last' => $last?->tgl_mulai,
+        ]);
     }
 
     public function update(Request $request, int $id): JsonResponse
