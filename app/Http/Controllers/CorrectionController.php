@@ -46,7 +46,7 @@ class CorrectionController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa pada tahapan lainnya',
+                'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
             ], 422);
         }
 
@@ -56,7 +56,7 @@ class CorrectionController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Biji atau berat keluar melebihi biji atau berat masuk',
+                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
             ], 422);
         }
 
@@ -73,6 +73,18 @@ class CorrectionController extends Controller
     {
         $correction = Correction::findOrFail($id);
         return response()->json($correction);
+    }
+
+    public function info($id)
+    {
+        $tracker = History::findOrFail($id);
+        $last = Correction::where('histories_id', $id)->latest()->first();
+
+        return response()->json([
+            'biji_sisa' => $tracker->sisa_biji_koreksi,
+            'berat_sisa' => $tracker->sisa_berat_koreksi,
+            'last' => $last?->tgl_mulai,
+        ]);
     }
 
     public function update(Request $request, int $id): JsonResponse
@@ -101,7 +113,7 @@ class CorrectionController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa pada tahapan lainnya',
+                'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
             ], 422);
         }
 
@@ -111,7 +123,7 @@ class CorrectionController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Biji atau berat keluar melebihi biji atau berat masuk',
+                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
             ], 422);
         }
 
@@ -121,7 +133,7 @@ class CorrectionController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan lain.',
+                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya',
             ], 422);
         }
 

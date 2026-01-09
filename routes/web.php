@@ -291,6 +291,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/edges/{id}', [EdgeController::class, 'update'])->name('edges.update');
     Route::delete('/edges/{id}', [EdgeController::class, 'destroy'])->name('edges.destroy');
     Route::post('/edges/delete-multiple', [EdgeController::class, 'deleteMultiple']);
+    Route::get('/edges-info/{id}', [EdgeController::class, 'info']);
     
     // Pencucian
     Route::get('/washes', [WashController::class, 'index'])->name('washes.index');
@@ -299,7 +300,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/washes/{id}', [WashController::class, 'update'])->name('washes.update');
     Route::delete('/washes/{id}', [WashController::class, 'destroy'])->name('washes.destroy');
     Route::post('/washes/delete-multiple', [WashController::class, 'deleteMultiple']);
-    
+    Route::get('/washes-info/{id}', [WashController::class, 'info']);
+
     // Inspeksi dan Koreksi
     Route::get('/corrections', [CorrectionController::class, 'index'])->name('corrections.index');
     Route::post('/corrections', [CorrectionController::class, 'store'])->name('corrections.store');
@@ -307,6 +309,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/corrections/{id}', [CorrectionController::class, 'update'])->name('corrections.update');
     Route::delete('/corrections/{id}', [CorrectionController::class, 'destroy'])->name('corrections.destroy');
     Route::post('/corrections/delete-multiple', [CorrectionController::class, 'deleteMultiple']);
+    Route::get('/corrections-info/{id}', [CorrectionController::class, 'info']);
     
     // Pencabutan Bulu
     Route::get('/picks', [PickController::class, 'index'])->name('picks.index');
@@ -315,6 +318,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/picks/{id}', [PickController::class, 'update'])->name('picks.update');
     Route::delete('/picks/{id}', [PickController::class, 'destroy'])->name('picks.destroy');
     Route::post('/picks/delete-multiple', [PickController::class, 'deleteMultiple']);
+    Route::get('/picks-info/{id}', [PickController::class, 'info']);
     
     // Perendaman
     Route::get('/soaks', [SoakController::class, 'index'])->name('soaks.index');
@@ -323,6 +327,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/soaks/{id}', [SoakController::class, 'update'])->name('soaks.update');
     Route::delete('/soaks/{id}', [SoakController::class, 'destroy'])->name('soaks.destroy');
     Route::post('/soaks/delete-multiple', [SoakController::class, 'deleteMultiple']);
+    Route::get('/soaks-info/{id}', [SoakController::class, 'info']);
     
     // Cabut Bilas
     Route::get('/rinses', [RinseController::class, 'index'])->name('rinses.index');
@@ -331,7 +336,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/rinses/{id}', [RinseController::class, 'update'])->name('rinses.update');
     Route::delete('/rinses/{id}', [RinseController::class, 'destroy'])->name('rinses.destroy');
     Route::post('/rinses/delete-multiple', [RinseController::class, 'deleteMultiple']);
-    
+    Route::get('/rinses-info/{id}', [RinseController::class, 'info']);
+
     // Masuk Cetak
     Route::get('/entries', [EntryController::class, 'index'])->name('entries.index');
     Route::post('/entries', [EntryController::class, 'store'])->name('entries.store');
@@ -339,6 +345,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/entries/{id}', [EntryController::class, 'update'])->name('entries.update');
     Route::delete('/entries/{id}', [EntryController::class, 'destroy'])->name('entries.destroy');
     Route::post('/entries/delete-multiple', [EntryController::class, 'deleteMultiple']);
+    Route::get('/entries-info/{id}', [EntryController::class, 'info']);
 
     // Keluar Cetak
     Route::get('/pulls', [PullController::class, 'index'])->name('pulls.index');
@@ -347,6 +354,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/pulls/{id}', [PullController::class, 'update'])->name('pulls.update');
     Route::delete('/pulls/{id}', [PullController::class, 'destroy'])->name('pulls.destroy');
     Route::post('/pulls/delete-multiple', [PullController::class, 'deleteMultiple']);
+    Route::get('/pulls-info/{id}', [PullController::class, 'info']);
 
     // Pengeringan
     Route::get('/dries', [DryController::class, 'index'])->name('dries.index');
@@ -355,6 +363,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/dries/{id}', [DryController::class, 'update'])->name('dries.update');
     Route::delete('/dries/{id}', [DryController::class, 'destroy'])->name('dries.destroy');
     Route::post('/dries/delete-multiple', [DryController::class, 'deleteMultiple']);
+    Route::get('/dries-info/{id}', [DryController::class, 'info']);
 
     // Grade Bahan Baku
     Route::get('/fp-grades', [FpGradeController::class, 'index'])->name('fp-grades.index');

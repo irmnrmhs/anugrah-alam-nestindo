@@ -46,7 +46,7 @@ class EdgeController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa pada tahapan lainnya',
+                'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
             ], 422);
         }
 
@@ -56,7 +56,7 @@ class EdgeController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Biji atau berat keluar melebihi biji atau berat masuk',
+                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
             ], 422);
         }
 
@@ -73,6 +73,18 @@ class EdgeController extends Controller
     {
         $edge = Edge::findOrFail($id);
         return response()->json($edge);
+    }
+
+    public function info($id)
+    {
+        $tracker = History::findOrFail($id);
+        $last = Edge::where('histories_id', $id)->latest()->first();
+
+        return response()->json([
+            'biji_sisa' => $tracker->sisa_biji_sesek,
+            'berat_sisa' => $tracker->sisa_berat_sesek,
+            'last' => $last?->tgl_mulai,
+        ]);
     }
 
     public function update(Request $request, int $id): JsonResponse
@@ -100,7 +112,7 @@ class EdgeController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa pada tahapan lainnya',
+                'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
             ], 422);
         }
 
@@ -110,7 +122,7 @@ class EdgeController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Biji atau berat keluar melebihi biji atau berat masuk',
+                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
             ], 422);
         }
 
@@ -120,7 +132,7 @@ class EdgeController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan lain.',
+                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya.',
             ], 422);
         }
         
