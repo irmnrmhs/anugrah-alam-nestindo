@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Models\Dry;
 use App\Models\History;
-use Illuminate\Validation\ValidationException;
 
 class DryObserver
 {
@@ -17,8 +16,7 @@ class DryObserver
             empty($dry->biji_keluar) &&
             empty($dry->berat_keluar)
         ) {
-            $dry->biji_keluar = 0;
-            $dry->berat_keluar = 0;
+            return;
         }
 
         $history = History::where('identifiers_id', $dry->history->identifiers_id)
@@ -69,17 +67,11 @@ class DryObserver
      */
     public function deleted(Dry $dry): void
     {
-        // 
-    }
-
-    public function deleting(Dry $dry): void
-    {
         if (
             empty($dry->biji_keluar) &&
             empty($dry->berat_keluar)
         ) {
-            $dry->biji_keluar = 0;
-            $dry->berat_keluar = 0;
+            return;
         }
 
         $history = History::where('identifiers_id', $dry->history->identifiers_id)
@@ -88,15 +80,6 @@ class DryObserver
             ->first();
 
         if (!$history) return;
-
-        if (
-            ($dry->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
-            ($dry->berat_keluar ?? 0) > $history->sisa_berat_cuci
-        ) {
-            throw ValidationException::withMessages([
-                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
-            ]);
-        }
 
         $history->decrement('biji', $dry->biji_keluar ?? 0);
         $history->decrement('berat', $dry->berat_keluar ?? 0);

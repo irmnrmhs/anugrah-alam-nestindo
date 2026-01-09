@@ -23,19 +23,26 @@ class Dry extends Model
         'status'
     ];
 
-    public function getWaktuMasukAttribute($value)
-    {
-        return $value
-            ? Carbon::createFromFormat('H:i:s', $value)->format('H:i')
-            : null;
-    }
+    protected $casts = [
+        'waktu_masuk'  => 'datetime:H:i',
+        'waktu_keluar' => 'datetime:H:i',
+        'tgl_mulai'    => 'date:Y-m-d',
+        'tgl_selesai'  => 'date:Y-m-d',
+    ];
 
-    public function getWaktuKeluarAttribute($value)
-    {
-        return $value
-            ? Carbon::createFromFormat('H:i:s', $value)->format('H:i')
-            : null;
-    }
+    // public function getWaktuMasukAttribute($value)
+    // {
+    //     return $value
+    //         ? Carbon::createFromFormat('H:i:s', $value)->format('H:i')
+    //         : null;
+    // }
+
+    // public function getWaktuKeluarAttribute($value)
+    // {
+    //     return $value
+    //         ? Carbon::createFromFormat('H:i:s', $value)->format('H:i')
+    //         : null;
+    // }
 
     public function history()
     {

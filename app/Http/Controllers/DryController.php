@@ -63,7 +63,11 @@ class DryController extends Controller
             ], 422);
         }
 
-        $validated['waktu_keluar'] = $validated['waktu_keluar'] ?: null;
+        // $validated['waktu_keluar'] = $validated['waktu_keluar'] ?: null;
+        $validated['waktu_masuk'] = $validated['waktu_masuk'] . ':00';
+        $validated['waktu_keluar'] = $validated['waktu_keluar']
+            ? $validated['waktu_keluar'] . ':00'
+            : null;
 
         $dry = Dry::create($validated);
 
