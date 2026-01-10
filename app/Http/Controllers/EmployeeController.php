@@ -100,11 +100,13 @@ class EmployeeController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new EmployeesImport, $request->file('file'));
+        $import = new EmployeesImport();
+        Excel::import($import, $request->file('file'));
 
         return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil diimport'
+            'status'  => 'success',
+            'message' => 'Import selesai',
+            'errors'  => $import->getErrors(), // ← PENTING
         ]);
     }
 

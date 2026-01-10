@@ -32,7 +32,7 @@ class ProductController extends Controller
             'tgl_mulai' => 'required|date',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date'
+            'tgl_selesai' => 'nullable|date'
         ]);
 
         $tracker = History::with('identifier')->find($validated['histories_id']);
@@ -72,8 +72,8 @@ class ProductController extends Controller
         $last = Product::where('histories_id', $id)->latest()->first();
 
         return response()->json([
-            'biji_sisa' => $tracker->sisa_biji_sesek,
-            'berat_sisa' => $tracker->sisa_berat_sesek,
+            'biji_sisa' => $tracker->sisa_biji_produk,
+            'berat_sisa' => $tracker->sisa_berat_produk,
             'last' => $last?->tgl_mulai,
         ]);
     }
@@ -87,7 +87,7 @@ class ProductController extends Controller
             'tgl_mulai' => 'required|date',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'required|date'
+            'tgl_selesai' => 'nullable|date'
         ]);
 
         $product = Product::findOrFail($id);
@@ -97,8 +97,8 @@ class ProductController extends Controller
         $pi = preg_replace('/[^A-Za-z0-9]/', '', $tracker->identifier->kode);
         $validated['kode'] = $grade->kode . "-" . $pi;
 
-        $biji_sisa = $tracker->sisa_biji_produk + $product->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_produk + $product->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_produk + $product->biji;
+        $berat_sisa = $tracker->sisa_berat_produk + $product->berat;
 
         if(
             $validated['biji'] > $biji_sisa ||

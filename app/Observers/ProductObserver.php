@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Models\Product;
 use App\Models\FinishedProduct;
-use App\Models\History;
+use Illuminate\Validation\ValidationException;
 
 class ProductObserver
 {
@@ -21,17 +21,46 @@ class ProductObserver
         ]);
     }
 
+    public function updating(Product $product): void
+    {
+        FinishedProduct::where('products_id', $product->id)
+            ->update([
+                'kode' => $product->kode,
+                'biji' => $product->biji ?? 0,
+                'berat' => $product->berat ?? 0,
+            ]);
+    }
+
     /**
      * Handle the Product "updated" event.
      */
     public function updated(Product $product): void
     {
-        if ($product->wasChanged('kode')) {
-            FinishedProduct::where('products_id', $product->id)
-                ->update([
-                    'kode' => $product->kode
-                ]);
+    //     if ($product->wasChanged('kode')) {
+    //         FinishedProduct::where('products_id', $product->id)
+    //             ->update([
+    //                 'kode' => $product->kode
+    //             ]);
+    //     }
+    }
+
+    public function deleting(Product $product): void
+    {
+        $fp = FinishedProduct::where('products_id', $product->id)->first();
+
+        if (!$fp) return;
+
+        if (
+            $fp->biji_sisa < $fp->biji ||
+            $fp->berat_sisa < $fp->berat
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
         }
+
+        // kalau aman → hapus FinishedProduct juga
+        $fp->delete();
     }
 
     /**
@@ -39,7 +68,20 @@ class ProductObserver
      */
     public function deleted(Product $product): void
     {
-        //
+        // $fp = FinishedProduct::where('products_id', $product->id)->first();
+
+        // if (!$fp) return;
+
+        // if (
+        //     $fp->biji_sisa < $fp->biji ||
+        //     $fp->berat_sisa < $fp->berat
+        // ) {
+        //     throw new \Exception(
+        //         'Data tidak dapat dihapus karena stok sudah digunakan'
+        //     );
+        // }
+
+        // $fp->delete();
     }
 
     /**

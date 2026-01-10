@@ -29,25 +29,22 @@ class FinishedProduct extends Model
         return $this->hasMany(Steam::class, 'fproducts_id');
     }
 
-    // total biji keluar
+    // Finished Product
     public function getTotalBijiKeluarAttribute()
     {
         return $this->fpstocks()->sum('biji_keluar');
     }
 
-    // total berat keluar
     public function getTotalBeratKeluarAttribute()
     {
         return $this->fpstocks()->sum('berat_keluar');
     }
 
-    // biji sisa
     public function getBijiSisaAttribute()
     {
         return $this->biji - $this->total_biji_keluar;
     }
 
-    // berat sisa
     public function getBeratSisaAttribute()
     {
         return $this->berat - $this->total_berat_keluar;

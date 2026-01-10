@@ -132,7 +132,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan grade tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')
