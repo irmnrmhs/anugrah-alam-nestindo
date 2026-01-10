@@ -131,6 +131,48 @@
 
     fetch(url, {
         method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(async response => {
+        const text = await response.text();
+
+        let res;
+        try {
+            res = JSON.parse(text);
+        } catch (e) {
+            console.error(text);
+            throw { message: 'Response bukan JSON' };
+        }
+
+        if (!response.ok) {
+            throw res;
+        }
+
+        return res;
+    })
+    .then(res => {
+        Swal.fire('Sukses', res.message, 'success')
+            .then(() => location.reload());
+    })
+    .catch(err => {
+        let message = 'Terjadi kesalahan';
+
+        if (err.message) {
+            message = err.message;
+        } else if (err.errors) {
+            message = Object.values(err.errors).flat().join('<br>');
+        }
+
+        Swal.fire('Gagal', message, 'error');
+    });
+
+    {{-- fetch(url, {
+        method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
@@ -142,7 +184,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap.', 'error')); --}}
 @stop
 
 @section('custom-js')

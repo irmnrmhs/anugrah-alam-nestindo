@@ -52,38 +52,55 @@ class EdgeObserver
 
     /**
      * Handle the Edge "updated" event.
-     */
-    public function updated(Edge $edge): void
-    {
-        if (!$edge->wasChanged(['biji_keluar', 'berat_keluar'])) {
-            return;
+    //  */
+    // public function updated(Edge $edge): void
+    // {
+    //     if (!$edge->wasChanged(['biji_keluar', 'berat_keluar'])) {
+    //         return;
+    //     }
+
+    //     $history = History::where('identifiers_id', $edge->history->identifiers_id)
+    //         ->where('asal', 'PR02SK')
+    //         ->where('tujuan', 'PR03PC')
+    //         ->first();
+
+    //     if (!$history) return;
+
+    //     $history->decrement('biji', $edge->getOriginal('biji_keluar') ?? 0);
+    //     $history->decrement('berat', $edge->getOriginal('berat_keluar') ?? 0);
+
+    //     $history->increment('biji', $edge->biji_keluar ?? 0);
+    //     $history->increment('berat', $edge->berat_keluar ?? 0);
+    // }
+
+        public function updating(Edge $edge)
+        {
+            if (!$edge->isDirty(['biji_keluar', 'berat_keluar'])) {
+                return;
+            }
+
+            $history = History::where('identifiers_id', $edge->history->identifiers_id)
+                ->where('asal', 'PR02SK')
+                ->where('tujuan', 'PR03PC')
+                ->first();
+
+            if (!$history) return;
+
+            $dipakaiBiji = $history->washes()->sum('biji_masuk');
+            $dipakaiBerat = $history->washes()->sum('berat_masuk');
+
+            if ($edge->biji_keluar < $dipakaiBiji) {
+                throw ValidationException::withMessages([
+                    'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+                ]);
+            }
+
+            if ($edge->berat_keluar < $dipakaiBerat) {
+                throw ValidationException::withMessages([
+                    'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+                ]);
+            }
         }
-
-        $history = History::where('identifiers_id', $edge->history->identifiers_id)
-            ->where('asal', 'PR02SK')
-            ->where('tujuan', 'PR03PC')
-            ->first();
-
-        if (!$history) return;
-
-        $history->decrement('biji', $edge->getOriginal('biji_keluar') ?? 0);
-        $history->decrement('berat', $edge->getOriginal('berat_keluar') ?? 0);
-
-        $history->increment('biji', $edge->biji_keluar ?? 0);
-        $history->increment('berat', $edge->berat_keluar ?? 0);
-    }
-
-        // $history = History::where('identifiers_id', $edge->history->identifiers_id)
-        //     ->where('asal', 'PR02SK')
-        //     ->where('tujuan', 'PR03PC')
-        //     ->first();
-
-        // if ($history) {
-        //     $history->update([
-        //         'biji'  => $edge->biji_masuk,
-        //         'berat' => $edge->berat_masuk,
-        //     ]);
-        // }
 
     /**
      * Handle the Edge "deleted" event.
