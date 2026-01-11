@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\History;
 use App\Models\ProductIdentifier;
+use App\Models\Product;
 
 class IdentifierObserver
 {
@@ -39,59 +40,49 @@ class IdentifierObserver
     /**
      * Handle the ProductIdentifier "updated" event.
      */
-
-    public function updated(ProductIdentifier $productIdentifier): void
+    public function updated(ProductIdentifier $pi): void
     {
-        /**
-         * ==============================
-         * 1. UPDATE BIJI / BERAT
-         * ==============================
-         */
-        if ($productIdentifier->wasChanged(['biji', 'berat'])) {
+        // 1. Sync stok ke history
+        if ($pi->wasChanged(['biji', 'berat'])) {
 
-            $history = History::where('identifiers_id', $productIdentifier->id)
+            $history = History::where('identifiers_id', $pi->id)
                 ->where('asal', 'PR01GB')
                 ->where('tujuan', 'PR02SK')
                 ->first();
 
             if ($history) {
-                $history->decrement('biji', $productIdentifier->getOriginal('biji') ?? 0);
-                $history->decrement('berat', $productIdentifier->getOriginal('berat') ?? 0);
+                $history->decrement('biji', $pi->getOriginal('biji') ?? 0);
+                $history->decrement('berat', $pi->getOriginal('berat') ?? 0);
 
-                $history->increment('biji', $productIdentifier->biji ?? 0);
-                $history->increment('berat', $productIdentifier->berat ?? 0);
+                $history->increment('biji', $pi->biji ?? 0);
+                $history->increment('berat', $pi->berat ?? 0);
             }
         }
 
-        /**
-         * ==============================
-         * 2. UPDATE KODE PRODUCT
-         * ==============================
-         */
-        if (!$productIdentifier->wasChanged('kode')) {
-            return;
-        }
+        // 2. Sync kode Product
+        if ($pi->wasChanged('kode')) {
 
-        DB::transaction(function () use ($productIdentifier) {
-
-            $products = $productIdentifier->histories()
-                ->with('products.grade', 'products.fproduct')
-                ->get()
-                ->pluck('products')
-                ->flatten();
+            $products = Product::whereHas('history', function ($q) use ($pi) {
+                $q->where('identifiers_id', $pi->id);
+            })->with(['history', 'grade'])->get();
 
             foreach ($products as $product) {
 
-                $newKode = $product->kode . '-' .
-                    preg_replace('/[^A-Za-z0-9]/', '', $productIdentifier->kode);
+                if ($product->history->isEmpty() || !$product->grade) {
+                    continue;
+                }
 
                 $product->updateQuietly([
-                    'kode' => $newKode
+                    'kode' => Product::generateCode(
+                        $product->grade->kode,
+                        $pi->kode
+                    )
                 ]);
             }
-        });
+        }
     }
 
+// before
     /**
      * Handle the ProductIdentifier "deleted" event.
      */
