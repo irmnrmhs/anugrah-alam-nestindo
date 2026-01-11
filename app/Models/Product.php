@@ -36,4 +36,11 @@ class Product extends Model
     {
         return $this->hasOne(FinishedProduct::class, 'products_id');
     }
+
+    public static function generateCode($grade, $pi)
+    {
+        return $grade
+            . '-' .
+            preg_replace('/[^A-Za-z0-9]/', '', $pi);
+    }
 }

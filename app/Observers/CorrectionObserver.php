@@ -90,8 +90,8 @@ class CorrectionObserver
         if (!$history) return;
 
         if (
-            ($correction->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
-            ($correction->berat_keluar ?? 0) > $history->sisa_berat_cuci
+            ($correction->biji_keluar ?? 0) > $history->sisa_biji_koreksi ||
+            ($correction->berat_keluar ?? 0) > $history->sisa_berat_koreksi
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'

@@ -52,7 +52,7 @@ class EdgeObserver
 
     /**
      * Handle the Edge "updated" event.
-    //  */
+    */
     // public function updated(Edge $edge): void
     // {
     //     if (!$edge->wasChanged(['biji_keluar', 'berat_keluar'])) {

@@ -39,24 +39,57 @@ class IdentifierObserver
     /**
      * Handle the ProductIdentifier "updated" event.
      */
+
     public function updated(ProductIdentifier $productIdentifier): void
     {
-        if (!$productIdentifier->wasChanged(['biji', 'berat'])) {
+        /**
+         * ==============================
+         * 1. UPDATE BIJI / BERAT
+         * ==============================
+         */
+        if ($productIdentifier->wasChanged(['biji', 'berat'])) {
+
+            $history = History::where('identifiers_id', $productIdentifier->id)
+                ->where('asal', 'PR01GB')
+                ->where('tujuan', 'PR02SK')
+                ->first();
+
+            if ($history) {
+                $history->decrement('biji', $productIdentifier->getOriginal('biji') ?? 0);
+                $history->decrement('berat', $productIdentifier->getOriginal('berat') ?? 0);
+
+                $history->increment('biji', $productIdentifier->biji ?? 0);
+                $history->increment('berat', $productIdentifier->berat ?? 0);
+            }
+        }
+
+        /**
+         * ==============================
+         * 2. UPDATE KODE PRODUCT
+         * ==============================
+         */
+        if (!$productIdentifier->wasChanged('kode')) {
             return;
         }
 
-        $history = History::where('identifiers_id', $productIdentifier->id)
-            ->where('asal', 'PR01GB')
-            ->where('tujuan', 'PR02SK')
-            ->first();
+        DB::transaction(function () use ($productIdentifier) {
 
-        if (!$history) return;
+            $products = $productIdentifier->histories()
+                ->with('products.grade', 'products.fproduct')
+                ->get()
+                ->pluck('products')
+                ->flatten();
 
-        $history->decrement('biji', $productIdentifier->getOriginal('biji') ?? 0);
-        $history->decrement('berat', $productIdentifier->getOriginal('berat') ?? 0);
+            foreach ($products as $product) {
 
-        $history->increment('biji', $productIdentifier->biji ?? 0);
-        $history->increment('berat', $productIdentifier->berat ?? 0);
+                $newKode = $product->kode . '-' .
+                    preg_replace('/[^A-Za-z0-9]/', '', $productIdentifier->kode);
+
+                $product->updateQuietly([
+                    'kode' => $newKode
+                ]);
+            }
+        });
     }
 
     /**
