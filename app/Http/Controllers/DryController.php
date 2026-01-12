@@ -139,16 +139,6 @@ class DryController extends Controller
             ], 422);
         }
 
-        if(
-            $validated['biji_keluar'] < $tracker->total_biji_produk ||
-            $validated['berat_keluar'] < $tracker->total_berat_produk
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya',
-            ], 422);
-        }
-
         $validated['waktu_keluar'] = $validated['waktu_keluar'] ?: null;
         
         $dry->update($validated);

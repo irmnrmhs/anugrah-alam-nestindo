@@ -127,16 +127,6 @@ class CorrectionController extends Controller
             ], 422);
         }
 
-        if(
-            $validated['biji_keluar'] < $tracker->total_biji_cabut ||
-            $validated['berat_keluar'] < $tracker->total_berat_cabut
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya',
-            ], 422);
-        }
-
         $correction->update($validated);
 
         return response()->json([

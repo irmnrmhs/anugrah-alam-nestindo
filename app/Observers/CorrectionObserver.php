@@ -64,6 +64,35 @@ class CorrectionObserver
         $history->increment('berat', $correction->berat_keluar ?? 0);
     }
 
+    public function updating(Correction $correction)
+    {
+        if (!$correction->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $correction->history->identifiers_id)
+            ->where('asal', 'PR04IK')
+            ->where('tujuan', 'PR05PB')
+            ->first();
+
+        if (!$history) return;
+
+        $dipakaiBiji = $history->picks()->sum('biji_masuk');
+        $dipakaiBerat = $history->picks()->sum('berat_masuk');
+
+        if ($correction->biji_keluar < $dipakaiBiji) {
+            throw ValidationException::withMessages([
+                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+
+        if ($correction->berat_keluar < $dipakaiBerat) {
+            throw ValidationException::withMessages([
+                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+    }
+
     /**
      * Handle the Correction "deleted" event.
      */
@@ -78,8 +107,7 @@ class CorrectionObserver
             empty($correction->biji_keluar) &&
             empty($correction->berat_keluar)
         ) {
-            $correction->biji_keluar = 0;
-            $correction->berat_keluar = 0;
+            return;
         }
 
         $history = History::where('identifiers_id', $correction->history->identifiers_id)
@@ -90,8 +118,8 @@ class CorrectionObserver
         if (!$history) return;
 
         if (
-            ($correction->biji_keluar ?? 0) > $history->sisa_biji_koreksi ||
-            ($correction->berat_keluar ?? 0) > $history->sisa_berat_koreksi
+            ($correction->biji_keluar ?? 0) > $history->sisa_biji_cabut ||
+            ($correction->berat_keluar ?? 0) > $history->sisa_berat_cabut
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'

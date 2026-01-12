@@ -106,7 +106,7 @@ class ProductController extends Controller
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa pada tahapan lainnya',
+                'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
             ], 422);
         }
 

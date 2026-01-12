@@ -106,8 +106,8 @@ class PullController extends Controller
         $pull = Pull::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_masuk + $pull->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_masuk + $pull->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_keluar + $pull->biji_masuk;
+        $berat_sisa = $tracker->sisa_berat_keluar + $pull->berat_masuk;
 
         if(
             $validated['biji_masuk'] > $biji_sisa ||
@@ -126,16 +126,6 @@ class PullController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
-            ], 422);
-        }
-
-        if(
-            $validated['biji_keluar'] < $tracker->total_biji_kering ||
-            $validated['berat_keluar'] < $tracker->total_berat_kering
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya',
             ], 422);
         }
 

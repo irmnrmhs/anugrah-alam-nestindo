@@ -40,8 +40,8 @@ class WashController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_koreksi ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_koreksi
+            $validated['biji_masuk'] > $tracker->sisa_biji_cuci ||
+            $validated['berat_masuk'] > $tracker->sisa_berat_cuci
         ){
             return response()->json([
                 'status' => 'error',
@@ -125,22 +125,21 @@ class WashController extends Controller
             ], 422);
         }
 
-        if(
-            $validated['biji_keluar'] < $tracker->total_biji_koreksi ||
-            $validated['berat_keluar'] < $tracker->total_berat_koreksi
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya.',
-            ], 422);
-        }
+        // if(
+        //     $validated['biji_keluar'] < $tracker->total_biji_koreksi ||
+        //     $validated['berat_keluar'] < $tracker->total_berat_koreksi
+        // ){
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya.',
+        //     ], 422);
+        // }
 
         $wash->update($validated);
 
         return response()->json([
             'status' => 'success',
-            'message' => $this->obj . ' berhasil diperbarui',
-            'data' => $wash,
+            'message' => $this->obj . ' berhasil diperbarui'
         ]);
     }
 
