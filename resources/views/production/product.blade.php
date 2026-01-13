@@ -121,18 +121,45 @@
 
     fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
         body: JSON.stringify(data)
     })
-    .then(res => res.json())
-    .then(res => {
-        if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-        } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
+    .then(async response => {
+        const text = await response.text();
+
+        let res;
+        try {
+            res = JSON.parse(text);
+        } catch (e) {
+            console.error(text);
+            throw { message: 'Response bukan JSON' };
         }
+
+        if (!response.ok) {
+            throw res;
+        }
+
+        return res;
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan grade tidak duplikat.', 'error'));
+    .then(res => {
+        Swal.fire('Sukses', res.message, 'success')
+            .then(() => location.reload());
+    })
+    .catch(err => {
+        let message = 'Terjadi kesalahan';
+
+        if (err.message) {
+            message = err.message;
+        } else if (err.errors) {
+            message = Object.values(err.errors).flat().join('<br>');
+        }
+
+        Swal.fire('Gagal', message, 'error');
+    });
 @stop
 
 @section('custom-js')

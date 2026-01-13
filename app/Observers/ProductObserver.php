@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Models\Product;
 use App\Models\FinishedProduct;
-use App\Models\ProductIdentifier;
 use Illuminate\Validation\ValidationException;
 
 class ProductObserver
@@ -56,20 +55,20 @@ class ProductObserver
             return;
         }
 
-        $fp = ProductIdentifier::where('products_id', $product->id)->get();
+        $fp = FinishedProduct::where('products_id', $product->id)->get();
 
         if (!$fp) return;
 
-        $dipakaiBiji = $fp->fpstocks()->sum('biji');
-        $dipakaiBerat = $fp->fpstocks()->sum('berat');
+        $bijiOut = $fp->fpstocks()->sum('biji_keluar');
+        $beratOut = $fp->fpstocks()->sum('berat_keluar');
 
-        if ($product->biji < $dipakaiBiji) {
+        if ($product->biji < $bijiOut) {
             throw ValidationException::withMessages([
                 'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
             ]);
         }
 
-        if ($product->berat < $dipakaiBerat) {
+        if ($product->berat < $beratOut) {
             throw ValidationException::withMessages([
                 'berat' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
             ]);

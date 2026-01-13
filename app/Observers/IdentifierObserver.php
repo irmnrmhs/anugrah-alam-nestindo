@@ -3,8 +3,9 @@
 namespace App\Observers;
 
 use App\Models\History;
-use App\Models\ProductIdentifier;
 use App\Models\Product;
+use App\Models\ProductIdentifier;
+use Illuminate\Validation\ValidationException;
 
 class IdentifierObserver
 {
@@ -79,6 +80,35 @@ class IdentifierObserver
                     )
                 ]);
             }
+        }
+    }
+
+    public function updating(ProductIdentifier $pi)
+    {
+        if(!$pi->isDirty(['biji', 'berat'])){
+            return;
+        }
+
+        $history = History::where('identifiers_id', $pi->id)
+                ->where('asal', 'PR01GB')
+                ->where('tujuan', 'PR02SK')
+                ->first();
+
+        if(!$history) return;
+
+        $bijiOut = $history->edges()->sum('biji_masuk');
+        $beratOut = $history->edges()->sum('berat_masuk');
+
+        if($pi->biji < $bijiOut){
+            throw ValidationException::withMessages([
+                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+
+        if($pi->berat < $beratOut){
+            throw ValidationException::withMessages([
+                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
         }
     }
 
