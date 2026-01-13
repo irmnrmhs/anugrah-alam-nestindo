@@ -64,6 +64,35 @@ class RinseObserver
         $history->increment('berat', $rinse->berat_keluar ?? 0);
     }
 
+    public function updating(Rinse $rinse)
+    {
+        if (!$rinse->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $rinse->history->identifiers_id)
+            ->where('asal', 'PR07CB')
+            ->where('tujuan', 'PR08MC')
+            ->first();
+
+        if (!$history) return;
+
+        $dipakaiBiji = $history->entries()->sum('biji_masuk');
+        $dipakaiBerat = $history->entries()->sum('berat_masuk');
+
+        if ($rinse->biji_keluar < $dipakaiBiji) {
+            throw ValidationException::withMessages([
+                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+
+        if ($rinse->berat_keluar < $dipakaiBerat) {
+            throw ValidationException::withMessages([
+                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+    }
+
     /**
      * Handle the Rinse "deleted" event.
      */
@@ -78,8 +107,7 @@ class RinseObserver
             empty($rinse->biji_keluar) &&
             empty($rinse->berat_keluar)
         ) {
-            $rinse->biji_keluar = 0;
-            $rinse->berat_keluar = 0;
+            return;
         }
 
         $history = History::where('identifiers_id', $rinse->history->identifiers_id)
@@ -90,8 +118,8 @@ class RinseObserver
         if (!$history) return;
 
         if (
-            ($rinse->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
-            ($rinse->berat_keluar ?? 0) > $history->sisa_berat_cuci
+            ($rinse->biji_keluar ?? 0) > $history->sisa_biji_entry ||
+            ($rinse->berat_keluar ?? 0) > $history->sisa_berat_entry
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'

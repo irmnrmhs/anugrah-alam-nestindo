@@ -127,16 +127,6 @@ class PickController extends Controller
             ], 422);
         }
 
-        if(
-            $validated['biji_keluar'] < $tracker->total_biji_rendam ||
-            $validated['berat_keluar'] < $tracker->total_berat_rendam
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya',
-            ], 422);
-        }
-
         $pick->update($validated);
 
         return response()->json([

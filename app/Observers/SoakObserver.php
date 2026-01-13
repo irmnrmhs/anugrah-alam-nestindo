@@ -64,6 +64,35 @@ class SoakObserver
         $history->increment('berat', $soak->berat_keluar ?? 0);
     }
 
+    public function updating(Soak $soak)
+    {
+        if (!$soak->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $soak->history->identifiers_id)
+            ->where('asal', 'PR06PR')
+            ->where('tujuan', 'PR07CB')
+            ->first();
+
+        if (!$history) return;
+
+        $dipakaiBiji = $history->rinses()->sum('biji_masuk');
+        $dipakaiBerat = $history->rinses()->sum('berat_masuk');
+
+        if ($soak->biji_keluar < $dipakaiBiji) {
+            throw ValidationException::withMessages([
+                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+
+        if ($soak->berat_keluar < $dipakaiBerat) {
+            throw ValidationException::withMessages([
+                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+    }
+
     /**
      * Handle the Soak "deleted" event.
      */
@@ -78,8 +107,7 @@ class SoakObserver
             empty($soak->biji_keluar) &&
             empty($soak->berat_keluar)
         ) {
-            $soak->biji_keluar = 0;
-            $soak->berat_keluar = 0;
+            return;
         }
 
         $history = History::where('identifiers_id', $soak->history->identifiers_id)
@@ -90,8 +118,8 @@ class SoakObserver
         if (!$history) return;
 
         if (
-            ($soak->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
-            ($soak->berat_keluar ?? 0) > $history->sisa_berat_cuci
+            ($soak->biji_keluar ?? 0) > $history->sisa_biji_bilas ||
+            ($soak->berat_keluar ?? 0) > $history->sisa_berat_bilas
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'

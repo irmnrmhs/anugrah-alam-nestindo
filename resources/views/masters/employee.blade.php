@@ -4,6 +4,8 @@
     $title = 'Kelola Data Karyawan';
     $singular = 'Karyawan';
     $deleteMultipleUrl = '/employees/delete-multiple';
+    $importUrl = route('employees.import');
+    $templateUrl = route('employees.template');
 @endphp
 
 @section('table-headers')

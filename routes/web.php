@@ -47,6 +47,7 @@ use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductIdentifierController;
+use App\Http\Controllers\ProductReportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -419,6 +420,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/steams/{id}', [SteamController::class, 'update'])->name('steams.update');
     Route::delete('/steams/{id}', [SteamController::class, 'destroy'])->name('steams.destroy');
     Route::post('/steams/delete-multiple', [SteamController::class, 'deleteMultiple']);
+
+    
 });
+
+Route::get('/scan-camera', function () {
+        return view('scan.product-report');
+    });
+Route::get('/scan/{kode}', [ProductReportController::class, 'scan'])->name('barcode.scan.result');
 
 require __DIR__.'/auth.php';

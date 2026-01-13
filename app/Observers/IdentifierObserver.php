@@ -3,7 +3,9 @@
 namespace App\Observers;
 
 use App\Models\History;
+use App\Models\Product;
 use App\Models\ProductIdentifier;
+use Illuminate\Validation\ValidationException;
 
 class IdentifierObserver
 {
@@ -39,26 +41,78 @@ class IdentifierObserver
     /**
      * Handle the ProductIdentifier "updated" event.
      */
-    public function updated(ProductIdentifier $productIdentifier): void
+    public function updated(ProductIdentifier $pi): void
     {
-        if (!$productIdentifier->wasChanged(['biji', 'berat'])) {
+        // 1. Sync stok ke history
+        if ($pi->wasChanged(['biji', 'berat'])) {
+
+            $history = History::where('identifiers_id', $pi->id)
+                ->where('asal', 'PR01GB')
+                ->where('tujuan', 'PR02SK')
+                ->first();
+
+            if ($history) {
+                $history->decrement('biji', $pi->getOriginal('biji') ?? 0);
+                $history->decrement('berat', $pi->getOriginal('berat') ?? 0);
+
+                $history->increment('biji', $pi->biji ?? 0);
+                $history->increment('berat', $pi->berat ?? 0);
+            }
+        }
+
+        // 2. Sync kode Product
+        if ($pi->wasChanged('kode')) {
+
+            $products = Product::whereHas('history', function ($q) use ($pi) {
+                $q->where('identifiers_id', $pi->id);
+            })->with(['history', 'grade'])->get();
+
+            foreach ($products as $product) {
+
+                if ($product->history->isEmpty() || !$product->grade) {
+                    continue;
+                }
+
+                $product->updateQuietly([
+                    'kode' => Product::generateCode(
+                        $product->grade->kode,
+                        $pi->kode
+                    )
+                ]);
+            }
+        }
+    }
+
+    public function updating(ProductIdentifier $pi)
+    {
+        if(!$pi->isDirty(['biji', 'berat'])){
             return;
         }
 
-        $history = History::where('identifiers_id', $productIdentifier->id)
-            ->where('asal', 'PR01GB')
-            ->where('tujuan', 'PR02SK')
-            ->first();
+        $history = History::where('identifiers_id', $pi->id)
+                ->where('asal', 'PR01GB')
+                ->where('tujuan', 'PR02SK')
+                ->first();
 
-        if (!$history) return;
+        if(!$history) return;
 
-        $history->decrement('biji', $productIdentifier->getOriginal('biji') ?? 0);
-        $history->decrement('berat', $productIdentifier->getOriginal('berat') ?? 0);
+        $bijiOut = $history->edges()->sum('biji_masuk');
+        $beratOut = $history->edges()->sum('berat_masuk');
 
-        $history->increment('biji', $productIdentifier->biji ?? 0);
-        $history->increment('berat', $productIdentifier->berat ?? 0);
+        if($pi->biji < $bijiOut){
+            throw ValidationException::withMessages([
+                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+
+        if($pi->berat < $beratOut){
+            throw ValidationException::withMessages([
+                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
     }
 
+// before
     /**
      * Handle the ProductIdentifier "deleted" event.
      */

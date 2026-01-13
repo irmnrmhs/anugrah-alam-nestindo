@@ -63,7 +63,11 @@ class DryController extends Controller
             ], 422);
         }
 
-        $validated['waktu_keluar'] = $validated['waktu_keluar'] ?: null;
+        // $validated['waktu_keluar'] = $validated['waktu_keluar'] ?: null;
+        $validated['waktu_masuk'] = $validated['waktu_masuk'] . ':00';
+        $validated['waktu_keluar'] = $validated['waktu_keluar']
+            ? $validated['waktu_keluar'] . ':00'
+            : null;
 
         $dry = Dry::create($validated);
 
@@ -132,16 +136,6 @@ class DryController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
-            ], 422);
-        }
-
-        if(
-            $validated['biji_keluar'] < $tracker->total_biji_produk ||
-            $validated['berat_keluar'] < $tracker->total_berat_produk
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya',
             ], 422);
         }
 

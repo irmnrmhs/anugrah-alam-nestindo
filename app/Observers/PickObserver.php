@@ -64,6 +64,35 @@ class PickObserver
         $history->increment('berat', $pick->berat_keluar ?? 0);
     }
 
+    public function updating(Pick $pick)
+    {
+        if (!$pick->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $pick->history->identifiers_id)
+            ->where('asal', 'PR05PB')
+            ->where('tujuan', 'PR06PR')
+            ->first();
+
+        if (!$history) return;
+
+        $dipakaiBiji = $history->soaks()->sum('biji_masuk');
+        $dipakaiBerat = $history->soaks()->sum('berat_masuk');
+
+        if ($pick->biji_keluar < $dipakaiBiji) {
+            throw ValidationException::withMessages([
+                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+
+        if ($pick->berat_keluar < $dipakaiBerat) {
+            throw ValidationException::withMessages([
+                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+    }
+
     /**
      * Handle the Pick "deleted" event.
      */
@@ -78,8 +107,7 @@ class PickObserver
             empty($pick->biji_keluar) &&
             empty($pick->berat_keluar)
         ) {
-            $pick->biji_keluar = 0;
-            $pick->berat_keluar = 0;
+            return;
         }
 
         $history = History::where('identifiers_id', $pick->history->identifiers_id)
@@ -90,8 +118,8 @@ class PickObserver
         if (!$history) return;
 
         if (
-            ($pick->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
-            ($pick->berat_keluar ?? 0) > $history->sisa_berat_cuci
+            ($pick->biji_keluar ?? 0) > $history->sisa_biji_rendam ||
+            ($pick->berat_keluar ?? 0) > $history->sisa_berat_rendam
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'

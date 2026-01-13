@@ -126,15 +126,15 @@ class EdgeController extends Controller
             ], 422);
         }
 
-        if(
-            $validated['biji_keluar'] < $tracker->total_biji_cuci ||
-            $validated['berat_keluar'] < $tracker->total_berat_cuci
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya.',
-            ], 422);
-        }
+        // if(
+        //     $validated['biji_keluar'] < $tracker->total_biji_cuci ||
+        //     $validated['berat_keluar'] < $tracker->total_berat_cuci
+        // ){
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya.',
+        //     ], 422);
+        // }
         
         $edge->update($validated);
 

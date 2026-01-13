@@ -64,6 +64,35 @@ class WashObserver
         $history->increment('berat', $wash->berat_keluar ?? 0);
     }
 
+    public function updating(Wash $wash)
+    {
+        if (!$wash->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $wash->history->identifiers_id)
+            ->where('asal', 'PR03PC')
+            ->where('tujuan', 'PR04IK')
+            ->first();
+
+        if (!$history) return;
+
+        $dipakaiBiji = $history->corrections()->sum('biji_masuk');
+        $dipakaiBerat = $history->corrections()->sum('berat_masuk');
+
+        if ($wash->biji_keluar < $dipakaiBiji) {
+            throw ValidationException::withMessages([
+                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+
+        if ($wash->berat_keluar < $dipakaiBerat) {
+            throw ValidationException::withMessages([
+                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+    }
+
     /**
      * Handle the Wash "deleted" event.
      */
@@ -78,8 +107,7 @@ class WashObserver
             empty($wash->biji_keluar) &&
             empty($wash->berat_keluar)
         ) {
-            $wash->biji_keluar = 0;
-            $wash->berat_keluar = 0;
+            return;
         }
 
         $history = History::where('identifiers_id', $wash->history->identifiers_id)
@@ -90,8 +118,8 @@ class WashObserver
         if (!$history) return;
 
         if (
-            ($wash->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
-            ($wash->berat_keluar ?? 0) > $history->sisa_berat_cuci
+            ($wash->biji_keluar ?? 0) > $history->sisa_biji_koreksi ||
+            ($wash->berat_keluar ?? 0) > $history->sisa_berat_koreksi
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'

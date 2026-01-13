@@ -81,7 +81,7 @@
                             <input type="file" name="file" id="importFile" class="form-control" required>
                             <small class="text-muted">
                                 Format: xls / xlsx |
-                                <a href="{{ route('users.template') }}">
+                                <a href="{{ $templateUrl ?? '#' }}">
                                     Download Template
                                 </a>
                             </small>
@@ -201,7 +201,7 @@
 
             let formData = new FormData(this);
 
-            fetch("{{ route('users.import') }}", {
+            fetch("{{ $importUrl ?? '' }}", {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -211,8 +211,27 @@
             .then(res => res.json())
             .then(res => {
                 if (res.status === 'success') {
-                    Swal.fire('Sukses', res.message, 'success')
-                        .then(() => location.reload());
+
+                    if (res.errors && res.errors.length > 0) {
+                        Swal.fire({
+                            title: 'Import Selesai (Dengan Kesalahan)',
+                            icon: 'warning',
+                            html: `
+                                <pre style="
+                                    text-align:left;
+                                    max-height:300px;
+                                    overflow:auto;
+                                    white-space:pre-wrap;
+                                ">${res.errors.join('\n')}</pre>
+                            `
+                        }).then(() => location.reload());
+
+                    }
+                    else {
+                        Swal.fire('Sukses', res.message, 'success')
+                            .then(() => location.reload());
+                    }
+
                 } else {
                     Swal.fire('Gagal', res.message || 'Import gagal', 'error');
                 }

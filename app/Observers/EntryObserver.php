@@ -64,6 +64,35 @@ class EntryObserver
         $history->increment('berat', $entry->berat_keluar ?? 0);
     }
 
+    public function updating(Entry $entry)
+    {
+        if (!$entry->isDirty(['biji_keluar', 'berat_keluar'])) {
+            return;
+        }
+
+        $history = History::where('identifiers_id', $entry->history->identifiers_id)
+            ->where('asal', 'PR08MC')
+            ->where('tujuan', 'PR09KC')
+            ->first();
+
+        if (!$history) return;
+
+        $dipakaiBiji = $history->pulls()->sum('biji_masuk');
+        $dipakaiBerat = $history->pulls()->sum('berat_masuk');
+
+        if ($entry->biji_keluar < $dipakaiBiji) {
+            throw ValidationException::withMessages([
+                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+
+        if ($entry->berat_keluar < $dipakaiBerat) {
+            throw ValidationException::withMessages([
+                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+            ]);
+        }
+    }
+
     /**
      * Handle the Entry "deleted" event.
      */
@@ -78,20 +107,19 @@ class EntryObserver
             empty($entry->biji_keluar) &&
             empty($entry->berat_keluar)
         ) {
-            $entry->biji_keluar = 0;
-            $entry->berat_keluar = 0;
+            return;
         }
 
         $history = History::where('identifiers_id', $entry->history->identifiers_id)
-            ->where('asal', 'PR03PC')
-            ->where('tujuan', 'PR04IK')
+            ->where('asal', 'PR08MC')
+            ->where('tujuan', 'PR09KC')
             ->first();
 
         if (!$history) return;
 
         if (
-            ($entry->biji_keluar ?? 0) > $history->sisa_biji_cuci ||
-            ($entry->berat_keluar ?? 0) > $history->sisa_berat_cuci
+            ($entry->biji_keluar ?? 0) > $history->sisa_biji_keluar ||
+            ($entry->berat_keluar ?? 0) > $history->sisa_berat_keluar
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'

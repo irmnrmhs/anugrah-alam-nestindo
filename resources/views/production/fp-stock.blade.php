@@ -146,7 +146,7 @@
             .then(r => r.json())
             .then(stock => {
                 $('#item_id').val(stock.id);
-                $('#fproducts_id').val(stock.fproducts_id);
+                $('#fproducts_id').val(stock.fproducts_id).trigger('change');
                 $('#employees_id').val(stock.employees_id);
                 $('#tgl_keluar').val(stock.tgl_keluar);
                 $('#biji_keluar').val(stock.biji_keluar);
