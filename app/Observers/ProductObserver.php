@@ -55,7 +55,7 @@ class ProductObserver
             return;
         }
 
-        $fp = FinishedProduct::where('products_id', $product->id)->get();
+        $fp = FinishedProduct::where('products_id', $product->id)->first();
 
         if (!$fp) return;
 
