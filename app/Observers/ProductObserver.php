@@ -100,7 +100,6 @@ class ProductObserver
             ]);
         }
 
-        // kalau aman → hapus FinishedProduct juga
         $fp->delete();
     }
 

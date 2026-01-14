@@ -50,6 +50,24 @@ class StockObserver
         }
     }
 
+    public function deleting(RmStock $rmStock): void
+    {
+        $rm = RawMaterial::where('id', $rmStock->rms_id)->first();
+
+        if(!$rm) return;
+
+        if (
+            $rm->biji_sisa < $rm->biji ||
+            $rm->berat_sisa < $rm->berat
+        ) {
+            throw ValidationException::withMessages([
+                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+            ]);
+        }
+
+        $rm->delete();
+    }
+
     /**
      * Handle the RmStock "deleted" event.
      */
