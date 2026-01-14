@@ -15,24 +15,24 @@ class ContainerObserver
     {
         $rm = RawMaterial::where('kode', $container->arrival->kode)->first();
 
-        if(!$rm) return;
+        // if(!$rm) return;
 
-        $bijiOut = $rm->stocks()->sum('biji');
-        $beratOut = $rm->stocks()->sum('berat');
+        // $bijiOut = $rm->stocks()->sum('biji');
+        // $beratOut = $rm->stocks()->sum('berat');
 
-        if($container->biji < $bijiOut){
-            throw ValidationException::withMessages([
-                'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
+        // if($container->biji < $bijiOut){
+        //     throw ValidationException::withMessages([
+        //         'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+        //     ]);
+        // }
 
-        if($container->berat < $beratOut){
-            throw ValidationException::withMessages([
-                'berat' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
+        // if($container->berat < $beratOut){
+        //     throw ValidationException::withMessages([
+        //         'berat' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+        //     ]);
+        // }
 
-        RawMaterial::update([
+        $rm::update([
             'biji' => $container->biji ?? 0,
             'berat' => $container->berat ?? 0,
         ]);
