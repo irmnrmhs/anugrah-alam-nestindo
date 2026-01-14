@@ -45,6 +45,7 @@ use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\ProductReportController;
@@ -95,6 +96,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/departments/{id}', [DepartmentController::class, 'show'])->name('departments.show');
     Route::put('/departments/{id}', [DepartmentController::class, 'update'])->name('departments.update');
     Route::delete('/departments/{id}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+    
+    // Dokumen
+    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
+    Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
+    Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
+    Route::delete('/documents/{id}', [DocumentController::class, 'destroy'])->name('documents.destroy');
     
     // Jabatan
     Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
