@@ -11,6 +11,16 @@ class ProductObserver
     /**
      * Handle the Product "created" event.
      */
+    // public function created(Product $product): void
+    // {
+    //     FinishedProduct::create([
+    //         'kode' => $product->kode,
+    //         'products_id' => $product->id,
+    //         'biji' => $product->biji ?? 0,
+    //         'berat' => $product->berat ?? 0,
+    //     ]);
+    // }
+
     public function created(Product $product): void
     {
         FinishedProduct::create([
