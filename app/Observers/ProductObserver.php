@@ -11,6 +11,16 @@ class ProductObserver
     /**
      * Handle the Product "created" event.
      */
+    // public function created(Product $product): void
+    // {
+    //     FinishedProduct::create([
+    //         'kode' => $product->kode,
+    //         'products_id' => $product->id,
+    //         'biji' => $product->biji ?? 0,
+    //         'berat' => $product->berat ?? 0,
+    //     ]);
+    // }
+
     public function created(Product $product): void
     {
         FinishedProduct::create([
@@ -55,7 +65,7 @@ class ProductObserver
             return;
         }
 
-        $fp = FinishedProduct::where('products_id', $product->id)->get();
+        $fp = FinishedProduct::where('products_id', $product->id)->first();
 
         if (!$fp) return;
 
@@ -90,7 +100,6 @@ class ProductObserver
             ]);
         }
 
-        // kalau aman → hapus FinishedProduct juga
         $fp->delete();
     }
 
