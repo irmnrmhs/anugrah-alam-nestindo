@@ -4,7 +4,8 @@
     $title = 'Kelola Stok Bahan Baku';
     $singular = 'Stok Bahan Baku';
     $deleteMultipleUrl = '/rmstocks/delete-multiple';
-    $hideImportButton = true;
+    // $importUrl = route('rmstocks.import');
+    // $templateUrl = route('rmstocks.template');
 @endphp
 
 @section('table-headers')
@@ -86,7 +87,7 @@
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
-        <input type="text" id="keterangan" class="form-control">
+        <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
 @stop
 

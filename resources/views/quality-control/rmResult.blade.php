@@ -4,7 +4,8 @@
     $title = 'Kelola Hasil Uji Bahan Baku';
     $singular = 'Hasil Uji Bahan Baku';
     $deleteMultipleUrl = '/rm-results/delete-multiple';
-    $hideImportButton = true;
+    // $importUrl = route('rm-results.import');
+    // $templateUrl = route('rm-results.template');
 @endphp
 
 @section('table-headers')

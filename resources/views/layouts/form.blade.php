@@ -51,7 +51,7 @@
                     <input type="hidden" id="item_id">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalTitle">Tambah {{ $singular ?? 'Data' }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        {{-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> --}}
                     </div>
                     <div class="modal-body">
                         @yield('form-fields')
@@ -72,7 +72,7 @@
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Import {{ $singular ?? 'Data' }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        {{-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> --}}
                     </div>
 
                     <div class="modal-body">

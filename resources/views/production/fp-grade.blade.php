@@ -3,7 +3,8 @@
 @php
     $title = 'Kelola Data Grade Produk Jadi';
     $singular = 'Grade Produk Jadi';
-    $hideImportButton = true;
+    // $importUrl = route('fp-grades.import');
+    // $templateUrl = route('fp-grades.template');
 @endphp
 
 @section('table-headers')
@@ -47,7 +48,7 @@
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
-        <input type="text" id="keterangan" class="form-control">
+        <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
     <div class="mb-3">
         <label>Status</label>

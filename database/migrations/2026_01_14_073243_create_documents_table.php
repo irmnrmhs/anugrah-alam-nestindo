@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('depts_id')->constrained('departments');
             $table->string('no');
             $table->string('name');
-            $table->string('rev');
+            $table->integer('rev');
             $table->timestamps();
         });
     }
