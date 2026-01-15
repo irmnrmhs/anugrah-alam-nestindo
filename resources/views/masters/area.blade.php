@@ -55,7 +55,7 @@
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
-        <input type="text" id="keterangan" class="form-control">
+        <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
 @stop
 

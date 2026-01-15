@@ -50,7 +50,7 @@
     </div>
     <div class="mb-3">
         <label>Nomor Revisi</label>
-        <input type="text" id="rev" class="form-control">
+        <input type="number" id="rev" step="0" min="0" class="form-control">
     </div>
 @stop
 

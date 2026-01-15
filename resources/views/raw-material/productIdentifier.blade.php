@@ -4,7 +4,8 @@
     $title = 'Kelola Pengidentifikasi Produk';
     $singular = 'Pengidentifikasi Produk';
     $deleteMultipleUrl = '/identifiers/delete-multiple';
-    $hideImportButton = true;
+    // $importUrl = route('identifiers.import');
+    // $templateUrl = route('identifiers.template');
 @endphp
 
 @section('table-headers')

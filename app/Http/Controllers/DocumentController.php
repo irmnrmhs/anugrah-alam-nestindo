@@ -25,7 +25,7 @@ class DocumentController extends Controller
             'depts_id' => 'required|exists:departments,id',
             'no'      => 'required|unique:documents,no',
             'name'      => 'required|unique:documents,name',
-            'rev'    => 'required'
+            'rev'    => 'integer',
         ]);
 
         $doc = Document::create($validated);
@@ -49,7 +49,7 @@ class DocumentController extends Controller
             'depts_id' => 'required|exists:departments,id',
             'no'      => 'required|unique:documents,no,' . $id,
             'name'      => 'required|unique:documents,name,' . $id,
-            'rev'    => 'required'
+            'rev'    => 'integer'
         ]);
 
         $doc = Document::findOrFail($id);

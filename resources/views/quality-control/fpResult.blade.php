@@ -4,7 +4,8 @@
     $title = 'Kelola Hasil Uji Produk Jadi';
     $singular = 'Hasil Uji Produk Jadi';
     $deleteMultipleUrl = '/fp-results/delete-multiple';
-    $hideImportButton = true;
+    // $importUrl = route('fp-results.import');
+    // $templateUrl = route('fp-results.template');
 @endphp
 
 @section('table-headers')

@@ -41,7 +41,7 @@
 
     <div class="mb-3">
         <label>Deskripsi</label>
-        <input type="text" id="deskripsi" class="form-control">
+        <input type="text" id="deskripsi" placeholder="Optional" class="form-control">
     </div>
 @stop
 
