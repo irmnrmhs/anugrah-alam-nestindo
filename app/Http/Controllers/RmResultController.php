@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class RmResultController extends Controller
 {
-    public string $obj = 'Hasil Uji';
+    public string $obj = 'Hasil Uji Air dan Nitrit Bahan Baku';
     public function index(): View
     {
         $results = RmResult::with('rawMaterial')->latest()->get();
@@ -25,9 +25,7 @@ class RmResultController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
-            'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
-            'kadar_aluminium' => 'required|numeric|min:0|max:999.9',
-            'ccp1' => 'required|numeric|min:0|max:999.9',
+            'kadar_nitrit' => 'required|numeric|min:0|max:999.9'
         ]);
 
         $ujiMap = [
@@ -87,46 +85,9 @@ class RmResultController extends Controller
             'rms_id' => 'required|exists:raw_materials,id',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
-            'kadar_aluminium' => 'required|numeric|min:0|max:999.9',
-            'ccp1' => 'required|numeric|min:0|max:999.9'
         ]);
 
         $result = RmResult::findOrFail($id);
-
-        // $ujiMap = [
-        //     'kadar_air'        => 'kadar_air',
-        //     'kadar_nitrit'     => 'kadar_nitrit',
-        //     'kadar_aluminium'  => 'kadar_aluminium',
-        //     'ccp1'             => 'ccp1',
-        // ];
-
-        // $standars = TestType::where('categories_id', 1)
-        //     ->whereIn('nama_uji', array_values($ujiMap))
-        //     ->get()
-        //     ->keyBy('nama_uji');
-
-        // foreach ($ujiMap as $field => $namaUji) {
-
-        //     if (!isset($validated[$field])) continue;
-
-        //     if (!isset($standars[$namaUji])) {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => "Standar uji {$namaUji} belum tersedia"
-        //         ], 422);
-        //     }
-
-        //     $nilai = $validated[$field];
-        //     $min   = $standars[$namaUji]->standar_minimal;
-        //     $max   = $standars[$namaUji]->standar_maksimal;
-
-        //     if ($nilai < $min || $nilai > $max) {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => "Nilai {$namaUji} harus antara {$min} dan {$max}"
-        //         ], 422);
-        //     }
-        // }
 
         $result->update($validated);
 
@@ -154,9 +115,7 @@ class RmResultController extends Controller
             'items' => 'required|array|min:1',
             'items.*.rms_id'   => 'required|exists:raw_materials,id',
             'items.*.kadar_air' => 'nullable|numeric|min:0|max:999.99',
-            'items.*.kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',
-            'items.*.kadar_aluminium' => 'nullable|numeric|min:0|max:999.9',
-            'items.*.ccp1' => 'nullable|numeric|min:0|max:999.9'
+            'items.*.kadar_nitrit' => 'nullable|numeric|min:0|max:999.9'
         ]);
 
         $items = $validated['items'];
@@ -164,38 +123,6 @@ class RmResultController extends Controller
         foreach ($items as $item) {
             RmResult::create($item);
         }
-
-        // $ujiMap = [
-        //     'kadar_air'        => 'kadar_air',
-        //     'kadar_nitrit'     => 'kadar_nitrit',
-        //     'kadar_aluminium'  => 'kadar_aluminium',
-        //     'ccp1'             => 'ccp1',
-        // ];
-
-        // $standars = TestType::where('categories_id', 1)
-        //     ->whereIn('nama_uji', array_values($ujiMap))
-        //     ->get()
-        //     ->keyBy('nama_uji');
-
-        // foreach ($items as $item) {
-        //     foreach ($ujiMap as $field => $namaUji) {
-
-        //         if (!isset($item[$field])) continue;
-
-        //         $nilai = $item[$field];
-        //         $min   = $standars[$namaUji]->standar_minimal;
-        //         $max   = $standars[$namaUji]->standar_maksimal;
-
-        //         if ($nilai < $min || $nilai > $max) {
-        //             return response()->json([
-        //                 'status' => 'error',
-        //                 'message' => "Nilai {$namaUji} harus antara {$min} dan {$max}"
-        //             ], 422);
-        //         }
-        //     }
-
-        //     RmResult::create($item);
-        // }
 
         return response()->json([
             'status' => 'success',

@@ -29,6 +29,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RmStockController;
 use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Ccp1Controller;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FinishedController;
@@ -46,9 +47,11 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\FpAlumController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\ProductReportController;
+use App\Http\Controllers\RmAlumController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -280,7 +283,25 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/rm-results/delete-multiple', [RmResultController::class, 'deleteMultiple']);
     Route::post('/rm-results/bulk', [RmResultController::class, 'bulk'])->name('rm-results.bulk');
 
-    // Hasil Uji PJ
+    // Hasil Uji Al BB
+    Route::get('/rm-alums', [RmAlumController::class, 'index'])->name('rm-alums.index');
+    Route::post('/rm-alums', [RmAlumController::class, 'store'])->name('rm-alums.store');
+    Route::get('/rm-alums/{id}', [RmAlumController::class, 'show'])->name('rm-alums.show');
+    Route::put('/rm-alums/{id}', [RmAlumController::class, 'update'])->name('rm-alums.update');
+    Route::delete('/rm-alums/{id}', [RmAlumController::class, 'destroy'])->name('rm-alums.destroy');
+    Route::post('/rm-alums/delete-multiple', [RmAlumController::class, 'deleteMultiple']);
+    Route::post('/rm-alums/bulk', [RmAlumController::class, 'bulk'])->name('rm-alums.bulk');
+
+    // Hasil Uji CCP1
+    Route::get('/ccp1', [Ccp1Controller::class, 'index'])->name('ccp1.index');
+    Route::post('/ccp1', [Ccp1Controller::class, 'store'])->name('ccp1.store');
+    Route::get('/ccp1/{id}', [Ccp1Controller::class, 'show'])->name('ccp1.show');
+    Route::put('/ccp1/{id}', [Ccp1Controller::class, 'update'])->name('ccp1.update');
+    Route::delete('/ccp1/{id}', [Ccp1Controller::class, 'destroy'])->name('ccp1.destroy');
+    Route::post('/ccp1/delete-multiple', [Ccp1Controller::class, 'deleteMultiple']);
+    Route::post('/ccp1/bulk', [Ccp1Controller::class, 'bulk'])->name('ccp1.bulk');
+
+    // Hasil Uji Air dan Nitrit PJ
     Route::get('/fp-results', [FpResultController::class, 'index'])->name('fp-results.index');
     Route::post('/fp-results', [FpResultController::class, 'store'])->name('fp-results.store');
     Route::get('/fp-results/{id}', [FpResultController::class, 'show'])->name('fp-results.show');
@@ -288,6 +309,15 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/fp-results/{id}', [FpResultController::class, 'destroy'])->name('fp-results.destroy');
     Route::post('/fp-results/delete-multiple', [FpResultController::class, 'deleteMultiple']);
     Route::post('/fp-results/bulk', [FpResultController::class, 'bulk'])->name('fp-results.bulk');
+
+    // Hasil Uji Aluminium PJ
+    Route::get('/fp-alums', [FpAlumController::class, 'index'])->name('fp-alums.index');
+    Route::post('/fp-alums', [FpAlumController::class, 'store'])->name('fp-alums.store');
+    Route::get('/fp-alums/{id}', [FpAlumController::class, 'show'])->name('fp-alums.show');
+    Route::put('/fp-alums/{id}', [FpAlumController::class, 'update'])->name('fp-alums.update');
+    Route::delete('/fp-alums/{id}', [FpAlumController::class, 'destroy'])->name('fp-alums.destroy');
+    Route::post('/fp-alums/delete-multiple', [FpAlumController::class, 'deleteMultiple']);
+    Route::post('/fp-alums/bulk', [FpAlumController::class, 'bulk'])->name('fp-alums.bulk');
 
     // History
     Route::get('/histories', [HistoryController::class, 'index'])->name('histories.index');

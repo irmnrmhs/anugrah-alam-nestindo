@@ -38,7 +38,7 @@ class ProductIdentifierController extends Controller
             'berat' => 'required|numeric|min:0|max:99999.99'
         ]);
 
-        $supplier = Supplier::find($validated['suppliers_id']);
+        // $supplier = Supplier::find($validated['suppliers_id']);
         
         $rm = RawMaterial::find($validated['rms_id']);
         $grade = Grade::find($validated['grades_id']);
@@ -46,8 +46,8 @@ class ProductIdentifierController extends Controller
         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
         $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
 
-        $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier->kode;
-        // $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
+        // $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier->kode;
+        $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
 
         if (
             $validated['biji'] > $rm->biji_sisa_identifier ||

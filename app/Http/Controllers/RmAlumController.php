@@ -2,46 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FinishedProduct;
-use App\Models\FpResult;
+use App\Models\RmAlum;
 use Illuminate\View\View;
+use App\Models\RawMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class FpResultController extends Controller
+class RmAlumController extends Controller
 {
-    public string $obj = 'Hasil Uji Air dan Nitrit Produk Jadi';
+    public string $obj = 'Hasil Uji Aluminium Bahan Baku';
     public function index(): View
     {
-        $results = FpResult::latest()->get();
-        $products = FinishedProduct::all();
+        $results = RmAlum::with('rawMaterial')->latest()->get();
+        $rms = RawMaterial::all();
 
-        return view('quality-control.fpResult', compact('results', 'products'));
+        return view('quality-control.rm-alum', compact('results', 'rms'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:finished_products,id',
-            'kadar_air' => 'required|numeric|min:0|max:999.99',
-            'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
+            'rms_id' => 'required|exists:raw_materials,id',
+            'kadar_aluminium' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        if($validated['kadar_air']>15)
-        {
+        if($validated['kadar_aluminium'] > 100){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Air'
-            ], 422);
-        }elseif($validated['kadar_nitrit'] > 30)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Nitrit'
+                'message' => 'Tidak memenuhi standar Kadar Aluminium'
             ]);
         }
 
-        $result = FpResult::create($validated);
+        $result = RmAlum::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -52,35 +44,26 @@ class FpResultController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $result = FpResult::findOrFail($id);
-        // $result = FpResult::with('rawMaterial')->findOrFail($id);
+        $result = RmAlum::findOrFail($id);
         return response()->json($result);
     }
-
 
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:finished_products,id',
-            'kadar_air' => 'required|numeric|min:0|max:999.99',
-            'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
+            'products_id' => 'required|exists:raw_materials,id',
+            'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
-        if($validated['kadar_air']>15)
+        if($validated['kadar_aluminium'] > 100)
         {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Air'
-            ], 422);
-        }elseif($validated['kadar_nitrit'] > 30)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Nitrit'
+                'message' => 'Tidak memenuhi standar Kadar Aluminium'
             ]);
         }
-
-        $result = FpResult::findOrFail($id);
+        
+        $result = RmAlum::findOrFail($id);
         
         $result->update($validated);
 
@@ -93,7 +76,7 @@ class FpResultController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $result = FpResult::findOrFail($id);
+        $result = RmAlum::findOrFail($id);
         $result->delete();
 
         return response()->json([
@@ -106,15 +89,14 @@ class FpResultController extends Controller
     {
         $validated = $request->validate([
             'items' => 'required|array|min:1',
-            'items.*.products_id'   => 'required|exists:finished_products,id',
-            'items.*.kadar_air' => 'nullable|numeric|min:0|max:999.99',
-            'items.*.kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',
+            'items.*.products_id'   => 'required|exists:raw_materials,id',
+            'items.*.kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
         ]);
 
         $items = $validated['items'];
 
         foreach ($items as $item) {
-            FpResult::create($item);
+            RmAlum::create($item);
         }
 
         return response()->json([
@@ -127,7 +109,7 @@ class FpResultController extends Controller
     {
         $ids = $request->ids;
 
-        FpResult::whereIn('id', $ids)->delete();
+        RmAlum::whereIn('id', $ids)->delete();
 
         return response()->json([
             'status' => 'success',

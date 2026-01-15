@@ -4,13 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class fpResult extends Model
+class FpAlum extends Model
 {
     protected $fillable = [
         'products_id',
-        'kadar_air',
-        'kadar_nitrit',
-        // 'kadar_aluminium'
+        'kadar_aluminium',
     ];
 
     public function product()

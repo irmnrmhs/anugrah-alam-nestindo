@@ -28,6 +28,16 @@ class RawMaterial extends Model
     {
         return $this->hasMany(RmResult::class, 'rms_id');
     }
+    
+    public function rmAlums()
+    {
+        return $this->hasMany(RmAlum::class, 'rms_id');
+    }
+    
+    public function ccp1()
+    {
+        return $this->hasMany(Ccp1::class, 'rms_id');
+    }
 
     public function stocks()
     {
