@@ -5,112 +5,76 @@ namespace App\Http\Controllers;
 use App\Models\Arrival;
 use App\Models\Employee;
 use App\Models\Container;
-use Illuminate\View\View;
-use App\Models\RawMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class ContainerController extends Controller
 {
     public string $obj = 'Kontainer';
+
     public function index(): View
     {
-        $containers = Container::with('arrival', 'employee')->oldest()->get();
-        $arrivals = Arrival::orderBy('kode')->get()->unique('kode')->values();
+        $containers = Container::with(['arrival', 'employee'])
+            ->oldest()
+            ->get();
+
+        $arrivals  = Arrival::orderBy('kode')->get()->unique('kode')->values();
         $employees = Employee::where('status', 1)->get();
 
-        return view('raw-material.container', compact('containers', 'arrivals', 'employees'));
+        return view('raw-material.container', compact(
+            'containers',
+            'arrivals',
+            'employees'
+        ));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'arrivals_id' => 'required|exists:arrivals,id',
+            'arrivals_id'  => 'required|exists:arrivals,id',
             'employees_id' => 'required|exists:employees,id',
-            'biji' => 'required|integer|min:0',
-            'berat' => 'required|numeric|min:0|max:99999.99',
-            'keterangan' => 'nullable|string',
+            'biji'         => 'required|integer|min:0',
+            'berat'        => 'required|numeric|min:0|max:99999.99',
+            'keterangan'   => 'nullable|string',
         ]);
 
         $container = Container::create($validated);
 
-        $arrival = Arrival::find($validated['arrivals_id']);
-        $kode = $arrival->kode;
-
-        $raw = RawMaterial::firstOrCreate(
-            ['kode' => $kode],
-            ['biji' => 0, 'berat' => 0]
-        );
-
-        $raw->biji += $validated['biji'];
-        $raw->berat += $validated['berat'];
-        $raw->save();
-
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Kontainer berhasil ditambahkan',
-            'data' => $container
+            'data'    => $container
         ]);
-    }   
+    }
 
     public function show(int $id): JsonResponse
     {
-        $container = Container::with('arrival', 'employee')->findOrFail($id);
+        $container = Container::with(['arrival', 'employee'])
+            ->findOrFail($id);
+
         return response()->json($container);
     }
 
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'arrivals_id' => 'required|exists:arrivals,id',
+            'arrivals_id'  => 'required|exists:arrivals,id',
             'employees_id' => 'required|exists:employees,id',
-            'biji' => 'required|integer|min:0',
-            'berat' => 'required|numeric|min:0|max:99999.99',
-            'keterangan' => 'nullable|string'
+            'biji'         => 'required|integer|min:0',
+            'berat'        => 'required|numeric|min:0|max:99999.99',
+            'keterangan'   => 'nullable|string',
         ]);
 
         $container = Container::findOrFail($id);
 
-        $arrivalOld = Arrival::find($container->arrivals_id);
-        $arrivalNew = Arrival::find($validated['arrivals_id']);
-
-        $kodeOld = $arrivalOld->kode;
-        $kodeNew = $arrivalNew->kode;
-
-        $selisihBiji = $validated['biji'] - $container->biji;
-        $selisihBerat = $validated['berat'] - $container->berat;
-
-        if ($kodeOld === $kodeNew) {
-            $raw = RawMaterial::where('kode', $kodeOld)->first();
-            if ($raw) {
-                $raw->biji += $selisihBiji;
-                $raw->berat += $selisihBerat;
-                $raw->save();
-            }
-        } else {
-            $rawOld = RawMaterial::where('kode', $kodeOld)->first();
-            if ($rawOld) {
-                $rawOld->biji -= $container->biji;
-                $rawOld->berat -= $container->berat;
-                $rawOld->save();
-            }
-
-            $rawNew = RawMaterial::firstOrCreate(
-                ['kode' => $kodeNew],
-                ['biji' => 0, 'berat' => 0]
-            );
-
-            $rawNew->biji += $validated['biji'];
-            $rawNew->berat += $validated['berat'];
-            $rawNew->save();
-        }
-
         $container->update($validated);
 
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Kontainer berhasil diperbarui',
-            'data' => $container,
+            'data'    => $container,
         ]);
     }
 
@@ -118,32 +82,10 @@ class ContainerController extends Controller
     {
         $container = Container::findOrFail($id);
 
-        $raw = RawMaterial::where('kode', $container->arrival->kode)->first();
-
-        if ($raw) {
-
-            $bijiBaru  = $raw->biji  - $container->biji;
-            $beratBaru = $raw->berat - $container->berat;
-
-            $bijiSisaBaru  = $bijiBaru  - $raw->total_biji_keluar;
-            $beratSisaBaru = $beratBaru - $raw->total_berat_keluar;
-
-            if ($bijiSisaBaru < 0 || $beratSisaBaru < 0) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Kontainer tidak bisa dihapus karena stok bahan baku tidak mencukupi'
-                ], 422);
-            }
-
-            $raw->biji  = $bijiBaru;
-            $raw->berat = $beratBaru;
-            $raw->save();
-        }
-
         $container->delete();
 
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Kontainer berhasil dihapus',
         ]);
     }
@@ -151,47 +93,41 @@ class ContainerController extends Controller
     public function bulk(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'items' => 'required|array|min:1',
-            'items.*.arrivals_id'   => 'required|exists:arrivals,id',
-            'items.*.employees_id'  => 'required|exists:employees,id',
-            'items.*.biji'          => 'required|integer|min:0',
-            'items.*.berat'         => 'required|numeric|min:0|max:99999.99',
-            'items.*.keterangan'    => 'nullable|string',
+            'items'                   => 'required|array|min:1',
+            'items.*.arrivals_id'     => 'required|exists:arrivals,id',
+            'items.*.employees_id'    => 'required|exists:employees,id',
+            'items.*.biji'            => 'required|integer|min:0',
+            'items.*.berat'           => 'required|numeric|min:0|max:99999.99',
+            'items.*.keterangan'      => 'nullable|string',
         ]);
 
-        $items = $validated['items'];
-
-        foreach ($items as $item) {
-
-            $container = Container::create($item);
-
-            $arrival = Arrival::find($item['arrivals_id']);
-            $kode = $arrival->kode;
-
-            $raw = RawMaterial::firstOrCreate(
-                ['kode' => $kode],
-                ['biji' => 0, 'berat' => 0]
-            );
-
-            $raw->biji += $item['biji'];
-            $raw->berat += $item['berat'];
-            $raw->save();
-        }
+        DB::transaction(function () use ($validated) {
+            foreach ($validated['items'] as $item) {
+                Container::create($item);
+            }
+        });
 
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Semua kontainer berhasil ditambahkan.',
         ]);
     }
 
     public function deleteMultiple(Request $request): JsonResponse
     {
-        $ids = $request->ids;
+        $ids = $request->validate([
+            'ids'   => 'required|array|min:1',
+            'ids.*' => 'exists:containers,id'
+        ])['ids'];
 
-        Container::whereIn('id', $ids)->delete();
+        DB::transaction(function () use ($ids) {
+            Container::whereIn('id', $ids)->each(function ($container) {
+                $container->delete();
+            });
+        });
 
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Data terpilih berhasil dihapus'
         ]);
     }

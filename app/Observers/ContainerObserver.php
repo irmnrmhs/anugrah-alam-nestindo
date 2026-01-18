@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Container;
 use App\Models\RawMaterial;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ContainerObserver
 {
@@ -15,27 +16,11 @@ class ContainerObserver
     {
         $rm = RawMaterial::where('kode', $container->arrival->kode)->first();
 
-        // if(!$rm) return;
+        if (!$rm) return;
 
-        // $bijiOut = $rm->stocks()->sum('biji');
-        // $beratOut = $rm->stocks()->sum('berat');
-
-        // if($container->biji < $bijiOut){
-        //     throw ValidationException::withMessages([
-        //         'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-        //     ]);
-        // }
-
-        // if($container->berat < $beratOut){
-        //     throw ValidationException::withMessages([
-        //         'berat' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-        //     ]);
-        // }
-
-        $rm::update([
-            'biji' => $container->biji ?? 0,
-            'berat' => $container->berat ?? 0,
-        ]);
+        $rm->biji  += $container->biji;
+        $rm->berat += $container->berat;
+        $rm->save();
     }
 
     /**
@@ -46,49 +31,59 @@ class ContainerObserver
         //
     }
 
-    public function updating(Container $container)
+    public function updating(Container $container): void
     {
-        if(!$container->isDirty(['biji', 'berat'])) {
+        if (! $container->isDirty(['biji', 'berat'])) {
             return;
         }
 
-        $rm = RawMaterial::where('arrivals_id', $container->arrivals_id)->first();
-
-        if(!$rm) return;
-
-        $bijiOut = $rm->stocks()->sum('biji_keluar');
-        $beratOut = $rm->stocks()->sum('berat_keluar');
-        
-
-        if($container->biji < $bijiOut){
-            throw ValidationException::withMessages([
-                'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
-
-        if($container->berat < $beratOut){
-            throw ValidationException::withMessages([
-                'berat' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
-    }
-
-    public function deleting(Container $container)
-    {
-        $rm = RawMaterial::where('arrivals_id', $container->arrival->id)->first();
-
+        $rm = RawMaterial::where('kode', $container->arrival->kode)->first();
         if (!$rm) return;
 
+        $oldBiji  = $container->getOriginal('biji');
+        $oldBerat = $container->getOriginal('berat');
+
+        $deltaBiji  = $container->biji  - $oldBiji;
+        $deltaBerat = $container->berat - $oldBerat;
+
+        // validasi stok keluar
         if (
-            $rm->biji_sisa < $rm->biji ||
-            $rm->berat_sisa < $rm->berat
+            ($rm->biji + $deltaBiji) < $rm->total_biji_keluar ||
+            ($rm->berat + $deltaBerat) < $rm->total_berat_keluar
+        ) {
+            throw new HttpResponseException(
+                response()->json([
+                    'status'  => 'error',
+                    'message' => 'Perubahan tidak valid, stok sudah digunakan proses lanjutan'
+                ], 422)
+            );
+        }
+
+        $rm->biji  += $deltaBiji;
+        $rm->berat += $deltaBerat;
+        $rm->save();
+    }
+
+    public function deleting(Container $container): void
+    {
+        $rm = RawMaterial::where('kode', $container->arrival->kode)->first();
+        if (!$rm) return;
+
+        $bijiBaru  = $rm->biji  - $container->biji;
+        $beratBaru = $rm->berat - $container->berat;
+
+        if (
+            $bijiBaru  < $rm->total_biji_keluar ||
+            $beratBaru < $rm->total_berat_keluar
         ) {
             throw ValidationException::withMessages([
-                'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
+                'delete' => 'Kontainer tidak dapat dihapus karena stok sudah digunakan'
             ]);
         }
 
-        $rm->delete();
+        $rm->biji  = $bijiBaru;
+        $rm->berat = $beratBaru;
+        $rm->save();
     }
 
     /**
