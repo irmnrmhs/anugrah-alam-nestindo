@@ -4,20 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RmResult extends Model
+class Ccp1 extends Model
 {
     protected $fillable = [
-        // 'types_id',
         'rms_id',
-        'kadar_air',
-        'kadar_nitrit',
         'ccp1'
     ];
-
-    // public function type()
-    // {
-    //     return $this->belongsTo(TestType::class, 'types_id');
-    // }
 
     public function rawMaterial()
     {

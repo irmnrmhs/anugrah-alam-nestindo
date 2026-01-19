@@ -17,8 +17,6 @@ return new class extends Migration
             $table->foreignId('rms_id')->constrained('raw_materials');
             $table->decimal('kadar_air', 5, 2)->default(0);
             $table->decimal('kadar_nitrit', 4, 1)->default(0);
-            $table->decimal('kadar_aluminium', 4, 1)->default(0);
-            $table->decimal('ccp1', 4, 1)->default(0);
             $table->timestamps();
         });
     }

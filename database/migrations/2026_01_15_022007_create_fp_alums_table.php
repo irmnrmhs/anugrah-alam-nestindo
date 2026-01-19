@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fp_results', function (Blueprint $table) {
+        Schema::create('fp_alums', function (Blueprint $table) {
             $table->id();
             $table->foreignId('products_id')->constrained('finished_products');
-            $table->decimal('kadar_air', 5, 2)->default(0);
-            $table->decimal('kadar_nitrit', 4, 1)->default(0);
-            // $table->decimal('kadar_aluminium', 4, 1)->default(0);
+            $table->decimal('kadar_aluminium', 4, 1)->default(0);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fp_results');
+        Schema::dropIfExists('fp_alums');
     }
 };

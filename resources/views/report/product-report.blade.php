@@ -5,7 +5,9 @@
     <title>Product Report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {{-- optional styling --}}
+    <!-- QRCode JS -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,10 +17,20 @@
         .card {
             background: #fff;
             border-radius: 8px;
-            padding: 16px;
-            max-width: 480px;
+            padding: 20px;
+            max-width: 430px;
             margin: auto;
             box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        #qrcode {
+            margin: 12px auto 16px;
+            width: 140px;
+            height: 140px;
+            padding: 25px;
         }
         .row {
             margin-bottom: 8px;
@@ -31,12 +43,15 @@
             font-size: 16px;
             font-weight: bold;
         }
+        
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>📦 PRODUCT REPORT</h2>
+    <h2>PRODUCT IDENTIFIER</h2>
+
+    <div id="qrcode"></div>
 
     <div class="row">
         <div class="label">Kode Identifier</div>
@@ -68,6 +83,19 @@
         <div class="value">{{ $identifier->berat }} gr</div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        new QRCode(document.getElementById("qrcode"), {
+            text: "{{ $identifier->kode }}",
+            width: 140,
+            height: 140,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    });
+</script>
 
 </body>
 </html>

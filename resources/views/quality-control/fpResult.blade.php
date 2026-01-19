@@ -1,8 +1,8 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Hasil Uji Produk Jadi';
-    $singular = 'Hasil Uji Produk Jadi';
+    $title = 'Kelola Hasil Uji Air dan Nitrit Produk Jadi';
+    $singular = 'Hasil Uji Air dan Nitrit Produk Jadi';
     $deleteMultipleUrl = '/fp-results/delete-multiple';
     // $importUrl = route('fp-results.import');
     // $templateUrl = route('fp-results.template');
@@ -14,7 +14,6 @@
     <th>Rumah Burung/No. Registrasi</th>
     <th>Kadar Air</th>
     <th>Kadar Nitrit</th>
-    <th>Kadar Aluminium</th>
 @stop
 
 @section('table-body')
@@ -73,10 +72,7 @@
                 <input type="number" class="form-control mb-2 kadar-air" data-index="${i}" step="0.01" min="0" max="999.99">
 
                 <label>Kadar Nitrit</label>
-                <input type="number" class="form-control mb-2 kadar-nitrit" data-index="${i}" step="0.01" min="0" max="999.99">
-
-                <label>Kadar Aluminium</label>
-                <input type="number" class="form-control mb-2 kadar-aluminium" data-index="${i}" step="0.01" min="0" max="999.99">
+                <input type="number" class="form-control mb-2 kadar-nitrit" data-index="${i}" step="0.1" min="0" max="999.9">
             </div>
         `;
     }
@@ -92,7 +88,6 @@
                 products_id,
                 kadar_air: $(`.kadar-air[data-index="${i}"]`).val(),
                 kadar_nitrit: $(`.kadar-nitrit[data-index="${i}"]`).val(),
-                kadar_aluminium: $(`.kadar-aluminium[data-index="${i}"]`).val()
             });
         }
 
@@ -133,10 +128,6 @@
                     <label>Kadar Nitrit</label>
                     <input type="number" class="form-control mb-2" id="edit_nitrit"
                         value="${result.kadar_nitrit}" step="0.01" min="0" max="999.99">
-
-                    <label>Kadar Aluminium</label>
-                    <input type="number" class="form-control mb-2" id="edit_aluminium"
-                        value="${result.kadar_aluminium}" step="0.01" min="0" max="999.99">
                 `;
 
                 $('#secondModalBody').html(html);
@@ -148,7 +139,6 @@
                         products_id: result.products_id,
                         kadar_air: parseFloat($('#edit_air').val()),
                         kadar_nitrit: parseFloat($('#edit_nitrit').val()),
-                        kadar_aluminium: parseFloat($('#edit_aluminium').val())
                     };
 
                     fetch(`/fp-results/${result.id}`, {

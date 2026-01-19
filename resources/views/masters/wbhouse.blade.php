@@ -5,7 +5,7 @@
     $singular = 'Rumah Burung';
     $deleteMultipleUrl = '/wbhouses/delete-multiple';
     // $importUrl = route('wbhouses.import');
-    // $templateUrl = route('wbhouses.template');
+    $templateUrl = route('wbhouses.template');
 @endphp
 
 @section('table-headers')

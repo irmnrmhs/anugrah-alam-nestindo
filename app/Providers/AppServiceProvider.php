@@ -26,6 +26,8 @@ use App\Models\Pull;
 use App\Models\Dry;
 use App\Models\Product;
 use App\Models\Area;
+use App\Models\Container;
+use App\Models\RmStock;
 
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
@@ -47,6 +49,8 @@ use App\Observers\PullObserver;
 use App\Observers\DryObserver;
 use App\Observers\ProductObserver;
 use App\Observers\AreaObserver;
+use App\Observers\ContainerObserver;
+use App\Observers\RmStockObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -111,6 +115,8 @@ class AppServiceProvider extends ServiceProvider
         Pull::observe(PullObserver::class);
         Dry::observe(DryObserver::class);
         Product::observe(ProductObserver::class);
+        Container::observe(ContainerObserver::class);
+        RmStock::observe(RmStockObserver::class);
     }
 
     // 1. Grading BB (PR01GB)
