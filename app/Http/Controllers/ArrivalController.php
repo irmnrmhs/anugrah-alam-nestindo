@@ -9,6 +9,7 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ArrivalController extends Controller
 {
@@ -144,6 +145,19 @@ class ArrivalController extends Controller
         //     'status' => 'success',
         //     'message' => 'Data kedatangan berhasil dihapus.'
         // ]);
+    }
+
+    public function export($id)
+    {
+        // $dcertificate = Dcertificate::with(['company', 'supplier', 'wbhouse'])->findOrFail($id);
+        $arrival = Arrival::findOrFail($id);
+
+        $pdf = Pdf::loadView('exports.arrival-form', compact('arrival'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Sesek Kaki.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

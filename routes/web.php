@@ -82,12 +82,12 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     // User
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::post('/users/delete-multiple', [UserController::class, 'deleteMultiple']);
     Route::get('/users/template', [UserController::class, 'downloadTemplate'])->name('users.template');
     Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 
     // Company
     Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
@@ -233,6 +233,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/arrivals/{id}', [ArrivalController::class, 'show'])->name('arrivals.show');
     Route::put('/arrivals/{id}', [ArrivalController::class, 'update'])->name('arrivals.update');
     Route::delete('/arrivals/{id}', [ArrivalController::class, 'destroy'])->name('arrivals.destroy');
+    Route::get('/arrivals/{id}/export', [ArrivalController::class, 'export'])->name('arrivals.export');
     Route::post('/arrivals/delete-multiple', [ArrivalController::class, 'deleteMultiple']);
 
     // Container

@@ -106,7 +106,7 @@ class EmployeeController extends Controller
         return response()->json([
             'status'  => 'success',
             'message' => 'Import selesai',
-            'errors'  => $import->getErrors(), // ← PENTING
+            'errors'  => $import->getErrors(),
         ]);
     }
 

@@ -5,7 +5,7 @@
     $singular = 'User';
     $deleteMultipleUrl = '/users/delete-multiple';
     // $importUrl = route('users.import');
-    // $templateUrl = route('users.template');
+    $templateUrl = route('users.template');
 @endphp
 
 @section('table-headers')

@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\RmStock;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RmStockObserver
 {
@@ -17,32 +17,32 @@ class RmStockObserver
 
     public function creating(RmStock $stock): void
     {
-        $raw = $stock->rawMaterial;
+        // $raw = $stock->rawMaterial;
 
-        $totalBijiKeluar = $raw->stocks()->sum('biji_keluar');
-        $totalBeratKeluar = $raw->stocks()->sum('berat_keluar');
+        // $totalBijiKeluar = $raw->stocks()->sum('biji_keluar');
+        // $totalBeratKeluar = $raw->stocks()->sum('berat_keluar');
 
-        $totalBijiIdentifier = $raw->identifiers()->sum('biji');
-        $totalBeratIdentifier = $raw->identifiers()->sum('berat');
+        // $totalBijiIdentifier = $raw->identifiers()->sum('biji');
+        // $totalBeratIdentifier = $raw->identifiers()->sum('berat');
 
-        $bijiTersedia =
-            $raw->biji
-            - $totalBijiKeluar
-            - $totalBijiIdentifier;
+        // $bijiTersedia =
+        //     $raw->biji
+        //     - $totalBijiKeluar
+        //     - $totalBijiIdentifier;
 
-        $beratTersedia =
-            $raw->berat
-            - $totalBeratKeluar
-            - $totalBeratIdentifier;
+        // $beratTersedia =
+        //     $raw->berat
+        //     - $totalBeratKeluar
+        //     - $totalBeratIdentifier;
 
-        if (
-            $stock->biji_keluar > $bijiTersedia ||
-            $stock->berat_keluar > $beratTersedia
-        ) {
-            throw ValidationException::withMessages([
-                'stok' => 'Melebihi stok bahan baku yang tersedia'
-            ]);
-        }
+        // if (
+        //     $stock->biji_keluar > $bijiTersedia ||
+        //     $stock->berat_keluar > $beratTersedia
+        // ) {
+        //     throw ValidationException::withMessages([
+        //         'stok' => 'Melebihi stok bahan baku yang tersedia'
+        //     ]);
+        // }
     }
 
     /**
@@ -77,9 +77,12 @@ class RmStockObserver
             $stock->biji_keluar > $bijiTersedia ||
             $stock->berat_keluar > $beratTersedia
         ) {
-            throw ValidationException::withMessages([
-                'stok' => 'Perubahan tidak valid, stok sudah digunakan proses lanjutan'
-            ]);
+            throw new HttpResponseException(
+                response()->json([
+                    'status'  => 'error',
+                    'message' => 'Perubahan tidak valid, stok sudah digunakan proses lanjutan'
+                ], 422)
+            );
         }
     }
 

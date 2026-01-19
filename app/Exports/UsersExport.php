@@ -14,7 +14,7 @@ class UsersExport implements FromArray, WithHeadings
     {
         return [
             'Username',
-            'Email',
+            // 'Email',
             'password',
             'Role',
             'Karyawan',

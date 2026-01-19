@@ -122,11 +122,12 @@ class UserController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new UsersImport, $request->file('file'));
+        $import = new UsersImport();
+        Excel::import($import, $request->file('file'));
 
         return response()->json([
             'status' => 'success',
-            'message' => $this->obj . ' berhasil diimport'
+            'message' => $this->obj . ' berhasil diimport',
         ]);
     }
 
