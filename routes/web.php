@@ -137,7 +137,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/wbhouses/{id}', [WbhouseController::class, 'update'])->name('wbhouses.update');
     Route::delete('/wbhouses/{id}', [WbhouseController::class, 'destroy'])->name('wbhouses.destroy');
     Route::post('/wbhouses/delete-multiple', [WbhouseController::class, 'deleteMultiple']);
-    Route::post('/wbhouses/import', [WbhouseController::class, 'import'])->name('wbhouses.import');
+    Route::get('/wbhouses/template', [WbhouseController::class, 'downloadTemplate'])->name('wbhouses.template');
     Route::get('/wbhouses/{id}', [WbhouseController::class, 'show'])->name('wbhouses.show');
     Route::get('/wbhouses/{id}', function($id){
         return App\Models\WBHouse::with('area')->findOrFail($id);
