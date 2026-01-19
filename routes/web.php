@@ -236,6 +236,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/arrivals/{id}', [ArrivalController::class, 'destroy'])->name('arrivals.destroy');
     Route::get('/arrivals/{id}/export', [ArrivalController::class, 'export'])->name('arrivals.export');
     Route::post('/arrivals/delete-multiple', [ArrivalController::class, 'deleteMultiple']);
+    Route::get('/arrivals/{id}/preview', [ArrivalController::class, 'preview'])->name('arrivals.preview');
 
     // Container
     Route::get('/containers', [ContainerController::class, 'index'])->name('containers.index');
