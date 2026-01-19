@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\WbhouseExport;
 use Illuminate\Http\Request;
 use App\Models\WBHouse;
 use App\Models\Area;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WBHouseController extends Controller
 {
@@ -94,5 +96,13 @@ class WBHouseController extends Controller
         })->get(['id','nama']);
 
         return response()->json($wbhouses);
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(
+            new WbhouseExport,
+            'template_import_rbw.xlsx'
+        );
     }
 }
