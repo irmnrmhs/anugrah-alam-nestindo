@@ -4,14 +4,30 @@ namespace App\Exports;
 
 use App\Models\Wbhouse;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class WbhouseTemplateExport implements FromCollection
+class WbhouseTemplateExport implements FromArray, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+     * Header kolom (baris pertama Excel)
+     */
+    public function headings(): array
     {
-        return Wbhouse::all();
+        return [
+            'kode',
+            'nama',
+            'alamat',
+            'area',
+            'kapasitas'
+        ];
+    }
+
+    /**
+     * Isi data (kosong karena ini template)
+     */
+    public function array(): array
+    {
+        return [];
     }
 }

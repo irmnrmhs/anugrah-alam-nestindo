@@ -19,69 +19,87 @@ class SupplierObserver
     /**
      * Handle the Supplier "updated" event.
      */
+    // public function updated(Supplier $supplier)
+    // {
+    //     if (! $supplier->wasChanged('kode')) {
+    //         return;
+    //     }
+
+    //     $identifiers = ProductIdentifier::whereHas('rawMaterial.arrival.dcertificate.supplier', function ($q) use ($supplier) {
+    //         $q->where('id', $supplier->id);
+    //     })
+    //     ->with(['rawMaterial.arrival.dcertificate.supplier', 'grade'])
+    //     ->get();
+
+    //     foreach ($identifiers as $identifier) {
+
+    //         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $identifier->grade->grade);
+    //         $cleanKode  = preg_replace('/[^A-Za-z0-9]/', '', $identifier->rawMaterial->kode);
+
+    //         // SESUAI controller
+    //         $newKode = $cleanGrade . '-' . $cleanKode . $supplier->kode;
+
+    //         if ($identifier->kode !== $newKode) {
+    //             $identifier->update([
+    //                 'kode' => $newKode
+    //             ]);
+    //         }
+    //     }
+// before
+        // if (! $supplier->wasChanged('kode')) {
+        //     return;
+        // }
+
+        // $identifiers = ProductIdentifier::whereHas(
+        //     'rawMaterial.arrival.dcertificate.supplier',
+        //     fn ($q) => $q->where('id', $supplier->id)
+        // )
+        // ->with(['rawMaterial', 'grade'])
+        // ->get();
+
+        // foreach ($identifiers as $identifier) {
+
+        //     $newKode = ProductIdentifier::generateKodeFromSupplier(
+        //         $identifier->grade->grade,
+        //         $identifier->rawMaterial->kode,
+        //         $supplier->kode
+        //     );
+
+        //     if ($identifier->kode !== $newKode) {
+        //         $identifier->forceFill([
+        //             'kode' => $newKode
+        //         ])->saveQuietly();
+        //     }
+        // }
+    // }
+
     public function updated(Supplier $supplier)
     {
-        // if ($supplier->wasChanged('kode')) {
-
-        //     $identifiers = $supplier->identifiers()->with('rawMaterial', 'grade')->get();
-
-        //     foreach ($identifiers as $identifier) {
-
-        //         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $identifier->grade->grade);
-        //         $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $identifier->rawMaterial->kode);
-
-        //         $newKode = $supplier->kode . $cleanGrade . '-' . $cleanKode;
-
-        //         if ($identifier->kode !== $newKode) {
-        //             $identifier->update([
-        //                 'kode' => $newKode
-        //             ]);
-        //         }
-        //     }
-        // }
-
-        // if ($supplier->wasChanged('kode')) {
-        //     $identifiers = $supplier->dcertificates()->arrival()->rawMaterial()->identifiers()->with('rawMaterial', 'grade')->get();
-
-        //     foreach ($identifiers as $identifier) {
-
-        //         $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $identifier->grade->grade);
-        //         $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $identifier->rawMaterial->kode);
-
-        //         $newKode = $supplier->kode . $cleanGrade . '-' . $cleanKode;
-
-        //         if ($identifier->kode !== $newKode) {
-        //             $identifier->update([
-        //                 'kode' => $newKode
-        //             ]);
-        //         }
-        //     }
-        // }
-
         if (! $supplier->wasChanged('kode')) {
             return;
         }
 
-        $identifiers = ProductIdentifier::whereHas('rawMaterial.arrival.dcertificate.supplier', function ($q) use ($supplier) {
-            $q->where('id', $supplier->id);
-        })
-        ->with(['rawMaterial.arrival.dcertificate.supplier', 'grade'])
-        ->get();
+        ProductIdentifier::whereHas(
+            'rawMaterial.arrivals.dcertificate',
+            fn ($q) => $q->where('suppliers_id', $supplier->id)
+        )
+        ->with(['rawMaterial.arrivals.dcertificate.supplier', 'grade'])
+        ->chunkById(100, function ($identifiers) {
 
-        foreach ($identifiers as $identifier) {
+            foreach ($identifiers as $identifier) {
 
-            $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $identifier->grade->grade);
-            $cleanKode  = preg_replace('/[^A-Za-z0-9]/', '', $identifier->rawMaterial->kode);
+                $newKode = ProductIdentifier::generateKodeFromRawMaterial(
+                    $identifier->rawMaterial,
+                    $identifier->grade
+                );
 
-            // SESUAI controller
-            $newKode = $cleanGrade . '-' . $cleanKode . $supplier->kode;
-
-            if ($identifier->kode !== $newKode) {
-                $identifier->update([
-                    'kode' => $newKode
-                ]);
+                if ($identifier->kode !== $newKode) {
+                    $identifier->forceFill([
+                        'kode' => $newKode
+                    ])->saveQuietly();
+                }
             }
-        }
+        });
     }
 
     /**

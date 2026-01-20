@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\WbhouseExport;
+use App\Exports\WbhouseTemplateExport;
 use Illuminate\Http\Request;
 use App\Models\WBHouse;
 use App\Models\Area;
@@ -101,7 +101,7 @@ class WBHouseController extends Controller
     public function downloadTemplate()
     {
         return Excel::download(
-            new WbhouseExport,
+            new WbhouseTemplateExport,
             'template_import_rbw.xlsx'
         );
     }

@@ -187,14 +187,19 @@ class DcertificateController extends Controller
 
     public function export($id)
     {
-        $dcertificate = Dcertificate::with(['company', 'supplier', 'wbhouse'])->findOrFail($id);
+        $dcertificate = Dcertificate::with([
+            'company',
+            'supplier',
+            'wbhouse',
+            'details'
+        ])->findOrFail($id);
 
         $pdf = Pdf::loadView('exports.skp', compact('dcertificate'))
-                ->setPaper('A4', 'portrait');
+            ->setPaper('A4', 'portrait');
 
         $filename = 'SKP-' . str_replace(['/', '\\'], '-', $dcertificate->no_skp) . '.pdf';
 
-        return $pdf->download($filename);
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

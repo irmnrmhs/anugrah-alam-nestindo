@@ -36,4 +36,23 @@ class ProductIdentifier extends Model
             . '-' .
             preg_replace('/[^A-Za-z0-9]/', '', $gradeKode);
     }
+
+    public static function generateKodeFromRawMaterial(
+        RawMaterial $rm,
+        Grade $grade
+    ): string {
+        $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
+        $cleanRm    = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
+
+        $arrival = $rm->arrivals()
+            ->with('dcertificate.supplier')
+            ->latest('tgl_kedatangan')
+            ->first();
+
+        $supplierKode = $arrival?->dcertificate?->supplier?->kode ?? '';
+
+        return $supplierKode
+            ? "{$cleanGrade}-{$cleanRm}{$supplierKode}"
+            : "{$cleanGrade}-{$cleanRm}";
+    }
 }

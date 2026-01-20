@@ -171,4 +171,15 @@ class ArrivalController extends Controller
             'message' => 'Data terpilih berhasil dihapus'
         ]);
     }
+
+    public function preview($id)
+    {
+        $arrival = Arrival::with([
+            'employee',
+            'dcertificate.wbhouse'
+        ])->findOrFail($id);
+
+        return view('exports.arrival-form', compact('arrival'));
+    }
+
 }
