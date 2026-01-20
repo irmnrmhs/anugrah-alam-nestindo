@@ -40,14 +40,23 @@ class ProductIdentifierController extends Controller
 
         // $supplier = Supplier::find($validated['suppliers_id']);
         
-        $rm = RawMaterial::find($validated['rms_id']);
-        $grade = Grade::find($validated['grades_id']);
+        // $rm = RawMaterial::find($validated['rms_id']);
+        // $grade = Grade::find($validated['grades_id']);
 
-        $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
-        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
+        $rm    = RawMaterial::with('arrivals.dcertificate.supplier')
+            ->findOrFail($validated['rms_id']);
+        $grade = Grade::findOrFail($validated['grades_id']);
+
+        $validated['kode'] = ProductIdentifier::generateKodeFromRawMaterial(
+            $rm,
+            $grade
+        );
+
+        // $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
+        // $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
 
         // $validated['kode'] =  $cleanGrade . '-' . $cleanKode . $supplier->kode;
-        $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
+        // $validated['kode'] =  $cleanGrade . '-' . $cleanKode;
 
         if (
             $validated['biji'] > $rm->biji_sisa_identifier ||
@@ -97,14 +106,23 @@ class ProductIdentifierController extends Controller
         ]);
 
         // $supplier = Supplier::find($validated['suppliers_id']);
-        $rm = RawMaterial::find($validated['rms_id']);
-        $grade = Grade::find($validated['grades_id']);
+        // $rm = RawMaterial::find($validated['rms_id']);
+        // $grade = Grade::find($validated['grades_id']);
 
-        $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
-        $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
+        // $cleanGrade = preg_replace('/[^A-Za-z0-9]/', '', $grade->grade);
+        // $cleanKode = preg_replace('/[^A-Za-z0-9]/', '', $rm->kode);
 
-        $validated['kode'] = $cleanGrade . '-' . $cleanKode;
+        // $validated['kode'] = $cleanGrade . '-' . $cleanKode;
         // $validated['kode'] = $cleanGrade . '-' . $cleanKode . $supplier->kode;
+
+        $rm    = RawMaterial::with('arrivals.dcertificate.supplier')
+                    ->findOrFail($validated['rms_id']);
+        $grade = Grade::findOrFail($validated['grades_id']);
+
+        $validated['kode'] = ProductIdentifier::generateKodeFromRawMaterial(
+            $rm,
+            $grade
+        );
 
         $identifier = ProductIdentifier::findOrFail($id);
 
