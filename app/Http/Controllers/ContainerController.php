@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ContainerController extends Controller
 {
@@ -113,6 +114,21 @@ class ContainerController extends Controller
         ]);
     }
 
+    public function export($id)
+    {
+        $container = Container::with([
+            'arrival',
+            'employee',
+        ])->findOrFail($id);
+
+        $pdf = Pdf::loadView('exports.container-form', compact('container'))
+            ->setPaper('A4', 'portrait');
+
+        $filename = 'Form Kontainer-' . str_replace(['/', '\\'], '-', $container->no_skp) . '.pdf';
+
+        return $pdf->stream($filename);
+    }
+
     public function deleteMultiple(Request $request): JsonResponse
     {
         $ids = $request->validate([
@@ -130,5 +146,14 @@ class ContainerController extends Controller
             'status'  => 'success',
             'message' => 'Data terpilih berhasil dihapus'
         ]);
+    }
+
+    public function preview($id)
+    {
+        $container = Container::with([
+            'arrival.dcertificate.wbhouse',
+        ])->findOrFail($id);
+
+        return view('exports.container-form', compact('container'));
     }
 }
