@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\RmStock;
-use App\Models\RawMaterial;
 use App\Models\Employee;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use App\Models\RawMaterial;
+use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
 
 class RmStockController extends Controller
 {
@@ -114,6 +115,20 @@ class RmStockController extends Controller
             'status' => 'success',
             'message' => $this->obj . ' berhasil dihapus',
         ]);
+    }
+
+    public function export($id)
+    {
+        $stocks = RmStock::with([
+            'rawMaterial', 'employee'
+        ])->get();
+
+        $pdf = Pdf::loadView('exports.rm-stock-form', compact('stocks'))
+            ->setPaper('A4', 'portrait');
+
+        $filename = 'Form Stok Bahan Baku';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

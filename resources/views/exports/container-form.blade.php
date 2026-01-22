@@ -107,7 +107,7 @@
 <table class="header-table">
     <tr>
         <td width="15%" class="logo">
-            <img src="{{ asset('img/logo_whitebc.jpg') }}" width="80">
+            <img src="{{ asset('img/Logo.png') }}" width="80">
         </td>
 
         <td width="55%">

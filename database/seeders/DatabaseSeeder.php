@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             PositionSeeder::class,
             EmployeeSeeder::class,
             UserSeeder::class,
+            StepSeeder::class,
 
             AreaSeeder::class,
             CarSeeder::class,

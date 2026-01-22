@@ -110,4 +110,9 @@ class Employee extends Model
     {
         return $this->belongsTo(Position::class, 'positions_id');
     }
+
+    public function steps()
+    {
+        return $this->hasMany(Step::class, 'steps_id');
+    }
 }
