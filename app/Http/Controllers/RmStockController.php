@@ -119,14 +119,13 @@ class RmStockController extends Controller
 
     public function export($id)
     {
-        $stocks = RmStock::with([
-            'rawMaterial', 'employee'
-        ])->get();
+        $stocks = RmStock::with(['rawMaterial', 'employee'])
+            ->findOrFail($id);
 
         $pdf = Pdf::loadView('exports.rm-stock-form', compact('stocks'))
             ->setPaper('A4', 'portrait');
 
-        $filename = 'Form Stok Bahan Baku';
+        $filename = 'Form_Stok_Bahan_Baku_' . $stock->id . '.pdf';
 
         return $pdf->stream($filename);
     }
