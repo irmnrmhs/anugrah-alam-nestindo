@@ -15,6 +15,8 @@ class DocumentSeeder extends Seeder
     {
         Document::create([
             'depts_id'  => 1,
+            'steps_id'  => 1,
+            'kode'      => 'SKP058',
             'no'        => 'AAN/FRM/RW/01/04',
             'name'      => 'Surat Keterangan Pengiriman',
             'rev'       => 1,

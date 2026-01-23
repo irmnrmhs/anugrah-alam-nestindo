@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Company;
 use App\Models\WBHouse;
+use App\Models\Document;
 use App\Models\Supplier;
 use Illuminate\View\View;
 use App\Models\Dcertificate;
@@ -185,16 +186,26 @@ class DcertificateController extends Controller
         ]);
     }
 
+    public function preview($id)
+    {
+        $dcertificate = Dcertificate::with([
+            'company','supplier','wbhouse','details'
+        ])->findOrFail($id);
+
+        $document = Document::where('kode', 'SKP058')->firstOrFail();
+
+        return view('exports.skp', compact('dcertificate', 'document'));
+    }
+
     public function export($id)
     {
         $dcertificate = Dcertificate::with([
-            'company',
-            'supplier',
-            'wbhouse',
-            'details'
+            'company','supplier','wbhouse','details'
         ])->findOrFail($id);
 
-        $pdf = Pdf::loadView('exports.skp', compact('dcertificate'))
+        $document = Document::where('kode', 'SKP058')->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.skp', compact('dcertificate', 'document'))
             ->setPaper('A4', 'portrait');
 
         $filename = 'SKP-' . str_replace(['/', '\\'], '-', $dcertificate->no_skp) . '.pdf';

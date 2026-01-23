@@ -9,6 +9,8 @@
 @section('table-headers')
     <th>No</th>
     <th>Departemen</th>
+    <th>Proses</th>
+    <th>Kode</th>
     <th>Nomor Dokumen</th>
     <th>Nama Dokumen</th>
     <th>Nomor Revisi</th>
@@ -19,6 +21,8 @@
         <tr data-id="{{ $document->id }}">
             <td>{{ $index + 1 }}</td>
             <td>{{ $document->department->nama_dept }}</td>
+            <td>{{ $document->step->proses }}</td>
+            <td>{{ $document->kode }}</td>
             <td>{{ $document->no }}</td>
             <td>{{ $document->name }}</td>
             <td>{{ $document->rev }}</td>
@@ -39,6 +43,19 @@
                 <option value="{{ $department->id }}">{{ $department->nama_dept }}</option>
             @endforeach
         </select>
+    </div>
+    <div class="mb-3">
+        <label>Proses</label>
+        <select id="depts_id" class="form-control" required>
+            <option value="">-- Pilih Proses --</option>
+            @foreach($steps as $step)
+                <option value="{{ $step->id }}">{{ $step->nama_dept }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Kode Dokumen</label>
+        <input type="text" id="kode" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Nomor Dokumen</label>
@@ -62,6 +79,8 @@
     const data = {
         _token: '{{ csrf_token() }}',
         depts_id: $('#depts_id').val(),
+        steps_id: $('#steps_id').val(),
+        kode: $('#kode').val(),
         no: $('#no').val(),
         name: $('#name').val(),
         rev: $('#rev').val(),
@@ -91,6 +110,8 @@
             .then(document => {
                 $('#item_id').val(document.id);
                 $('#depts_id').val(document.depts_id);
+                $('#steps_id').val(document.steps_id);
+                $('#kode').val(document.kode);
                 $('#no').val(document.no);
                 $('#name').val(document.name);
                 $('#rev').val(document.rev);

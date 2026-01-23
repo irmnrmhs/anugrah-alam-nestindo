@@ -226,6 +226,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/dcertificates/{id}', [DcertificateController::class, 'update'])->name('dcertificates.update');
     Route::delete('/dcertificates/{id}', [DcertificateController::class, 'destroy'])->name('dcertificates.destroy');
     Route::get('/dcertificates/{id}/export', [DcertificateController::class, 'export'])->name('dcertificates.export');
+    Route::get('/dcertificates/{id}/preview', [DcertificateController::class, 'preview'])->name('dcertificates.preview');
     Route::post('/dcertificates/delete-multiple', [DcertificateController::class, 'deleteMultiple']);
 
     // Detail SKP

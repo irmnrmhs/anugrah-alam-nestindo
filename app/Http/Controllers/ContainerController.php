@@ -114,6 +114,18 @@ class ContainerController extends Controller
         ]);
     }
 
+    public function preview($id)
+    {
+        $containers = Container::with([
+            'arrival.employee',
+            'arrival.dcertificate.wbhouse'
+        ])
+        ->where('arrivals_id', $id)
+        ->get();
+
+        return view('exports.container-form', compact('containers'));
+    }
+    
     public function export($id)
     {
         $containers = Container::with([
@@ -148,17 +160,5 @@ class ContainerController extends Controller
             'status'  => 'success',
             'message' => 'Data terpilih berhasil dihapus'
         ]);
-    }
-
-    public function preview($id)
-    {
-        $containers = Container::with([
-            'arrival.employee',
-            'arrival.dcertificate.wbhouse'
-        ])
-        ->where('arrivals_id', $id)
-        ->get();
-
-        return view('exports.container-form', compact('containers'));
     }
 }

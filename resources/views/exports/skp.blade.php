@@ -93,8 +93,8 @@
 <body>
 
     <div class="box-right">
-        No. AAN/FRM/RW/01/04 <br>
-        Rev-01
+        {{ $document->no }} <br>
+        Rev-{{ $document->rev_formatted }}
     </div>
 
     <p class="company">{{ $dcertificate->company->nama }}</p>

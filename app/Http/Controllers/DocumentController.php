@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\Document;
+use App\Models\Step;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,13 +17,16 @@ class DocumentController extends Controller
     {
         $docs = Document::with('department')->latest()->get();
         $departments = Department::all();
-        return view('mgmt.document', compact('docs', 'departments'));
+        $steps = Step::all();
+        return view('mgmt.document', compact('docs', 'departments', 'steps'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'depts_id' => 'required|exists:departments,id',
+            'steps_id' => 'required|exists:steps,id',
+            'kode' => 'required|unique:documents,kode',
             'no'      => 'required|unique:documents,no',
             'name'      => 'required|unique:documents,name',
             'rev'    => 'integer',
@@ -47,6 +51,8 @@ class DocumentController extends Controller
     {
         $validated = $request->validate([
             'depts_id' => 'required|exists:departments,id',
+            'steps_id' => 'required|exists:steps,id',
+            'kode' => 'required|unique:documents,kode,' . $id,
             'no'      => 'required|unique:documents,no,' . $id,
             'name'      => 'required|unique:documents,name,' . $id,
             'rev'    => 'integer'

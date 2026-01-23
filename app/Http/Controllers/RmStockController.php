@@ -125,7 +125,7 @@ class RmStockController extends Controller
         $pdf = Pdf::loadView('exports.rm-stock-form', compact('stocks'))
             ->setPaper('A4', 'portrait');
 
-        $filename = 'Form_Stok_Bahan_Baku_' . $stock->id . '.pdf';
+        $filename = 'Form_Stok_Bahan_Baku_' . $stocks->id . '.pdf';
 
         return $pdf->stream($filename);
     }

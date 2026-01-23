@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('depts_id')->constrained('departments');
+            $table->foreignId('steps_id')->constrained('steps');
+            $table->string('kode')->unique();
             $table->string('no');
             $table->string('name');
             $table->integer('rev');

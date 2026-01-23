@@ -14,6 +14,12 @@ class StepSeeder extends Seeder
     public function run(): void
     {
         Step::create([
+            'kode' => 'KP',
+            'proses' => 'Keterangan Pengiriman',
+            'employees_id' => 5,
+        ]);
+
+        Step::create([
             'kode' => 'PR01GB',
             'proses' => 'Grading Bahan Baku',
             'employees_id' => 5,
