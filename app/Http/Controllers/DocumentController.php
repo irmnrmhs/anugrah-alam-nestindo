@@ -20,15 +20,15 @@ class DocumentController extends Controller
                 $query->where('posisi', 'karyawan');
             })->get();
         
-        $steps = Step::all();
-        return view('mgmt.document', compact('docs', 'employees', 'steps'));
+        $depts = Department::all();
+        return view('mgmt.document', compact('docs', 'employees', 'depts'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'employees_id' => 'required|exists:employees,id',
-            'steps_id' => 'required|exists:steps,id',
+            'depts_id' => 'required|exists:departments,id',
             'kode' => 'required|unique:documents,kode',
             'no'      => 'required|unique:documents,no',
             'name'      => 'required|unique:documents,name',
@@ -54,7 +54,7 @@ class DocumentController extends Controller
     {
         $validated = $request->validate([
             'employees_id' => 'required|exists:employees,id',
-            'steps_id' => 'required|exists:steps,id',
+            'depts_id' => 'required|exists:departments,id',
             'kode' => 'required|unique:documents,kode,' . $id,
             'no'      => 'required|unique:documents,no,' . $id,
             'name'      => 'required|unique:documents,name,' . $id,
