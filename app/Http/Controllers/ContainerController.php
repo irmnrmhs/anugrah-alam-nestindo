@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Arrival;
+use App\Models\Document;
 use App\Models\Employee;
 use App\Models\Container;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class ContainerController extends Controller
 {
@@ -122,6 +123,13 @@ class ContainerController extends Controller
         ])
         ->where('arrivals_id', $id)
         ->get();
+        
+        $document = Document::with([
+            'step.employee',
+            'department'
+        ])
+        ->where('kode', 'KBB058')
+        ->firstOrFail();
 
         return view('exports.container-form', compact('containers'));
     }
@@ -134,6 +142,15 @@ class ContainerController extends Controller
         ])
         ->where('arrivals_id', $id)
         ->get();
+
+        $document = Document::with([
+            'step.employee',
+            'department'
+        ])
+        ->where('kode', 'KBB058')
+        ->firstOrFail();
+
+        $document = Document::where('kode', 'KBB058')->firstOrFail();
 
         $pdf = Pdf::loadView('exports.container-form', compact('containers'))
             ->setPaper('A4', 'portrait');

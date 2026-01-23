@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Dom\Document;
 
 class ArrivalController extends Controller
 {
@@ -91,13 +92,6 @@ class ArrivalController extends Controller
         $validated['kode'] = $kode_wbhouse . '-' . $format_tgl;
 
         $arrival = Arrival::findOrFail($id);
-        
-        // if (Arrival::where('kode', $validated['kode'])->where('id', '!=', $id)->exists()) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Gagal: Kode Kedatangan otomatis yang diperbarui (' . $validated['kode'] . ') sudah ada.',
-        //     ], 409);
-        // }
 
         $arrival->update($validated);
 
@@ -125,39 +119,28 @@ class ArrivalController extends Controller
                 'message' => $e->getMessage()
             ], 409);
         }
-        
-        // $arrival = Arrival::findOrFail($id);
+    }
 
-        // $kode = $arrival->kode;
+    public function preview($id)
+    {
+        $arrival = Arrival::with([
+            'employee',
+            'dcertificate.wbhouse'
+        ])->findOrFail($id);
 
-        // $count = Arrival::where('kode', $kode)->count();
-
-        // if ($count <= 1) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Gagal hapus, pastikan data tidak terintegrasi dengan data lainnya.'
-        //     ], 409);
-        // }
-
-        // $arrival->delete();
-
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Data kedatangan berhasil dihapus.'
-        // ]);
+        return view('exports.arrival-form', compact('arrival'));
     }
 
     public function export($id)
     {
-        // $dcertificate = Dcertificate::with(['company', 'supplier', 'wbhouse'])->findOrFail($id);
         $arrival = Arrival::findOrFail($id);
 
         $pdf = Pdf::loadView('exports.arrival-form', compact('arrival'))
                 ->setPaper('A4', 'portrait');
 
-        $filename = 'Sesek Kaki.pdf';
+        $filename = 'Kedatangan.pdf';
 
-        return $pdf->download($filename);
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse
@@ -171,15 +154,4 @@ class ArrivalController extends Controller
             'message' => 'Data terpilih berhasil dihapus'
         ]);
     }
-
-    public function preview($id)
-    {
-        $arrival = Arrival::with([
-            'employee',
-            'dcertificate.wbhouse'
-        ])->findOrFail($id);
-
-        return view('exports.arrival-form', compact('arrival'));
-    }
-
 }

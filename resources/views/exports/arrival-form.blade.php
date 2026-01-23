@@ -2,187 +2,177 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Form Kedatangan Bahan Baku</title>
+    <title>Form Pemeriksaan Kendaraan dan Bahan Baku</title>
     <style>
-        @page {
-            size: A4;
-            margin: 20px;
-        }
-
         body {
             font-family: "Times New Roman", serif;
-            font-size: 11px;
+            font-size: 12px;
         }
-
         table {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
         }
-
-        /* HEADER */
-        .header-table {
+        .border td, .border th {
             border: 1px solid #000;
+            padding: 4px;
+            vertical-align: top;
         }
-
-        .header-table td {
-            border: 1px solid #000;
-            vertical-align: middle;
-            padding: 6px;
+        .no-border td {
+            border: none;
+            padding: 2px;
         }
-
-        .logo {
-            text-align: center;
-        }
-
         .title {
             text-align: center;
             font-weight: bold;
             font-size: 14px;
         }
-
-        .subtitle {
-            text-align: center;
-            font-style: italic;
-            font-size: 12px;
-        }
-
-        .doc-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .doc-table tr {
-            border-bottom: 1px solid #000;
-        }
-
-        .doc-table tr:last-child {
-            border-bottom: none; /* baris terakhir tidak double */
-        }
-
-        .doc-table td {
-            padding: 3px;
+        .small {
             font-size: 11px;
-            vertical-align: top;
         }
-
-        /* CONTENT */
-        .info-table td {
-            padding: 4px;
-        }
-
-        .main-table th,
-        .main-table td {
+        .checkbox {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
             border: 1px solid #000;
-            padding: 5px;
             text-align: center;
+            line-height: 14px;
+            font-weight: bold;
         }
-
-        .text-left {
-            text-align: left;
+        .mt {
+            margin-top: 10px;
+        }
+        .signature {
+            height: 60px;
         }
     </style>
 </head>
 <body>
 
-{{-- ================= HEADER ================= --}}
-<table class="header-table">
+{{-- HEADER --}}
+<table class="border">
     <tr>
-        <!-- LOGO -->
-        <td width="15%" class="logo">
-            {{-- <img src="{{ public_path('logo.png') }}" width="80"> --}}
+        <td rowspan="3" width="20%" align="center">
+            <strong>PT. AAN</strong>
         </td>
-
-        <!-- TITLE -->
-        <td width="55%">
-            <div class="title">FORM KEDATANGAN BAHAN BAKU</div>
-            <div class="subtitle">(RAW MATERIALS ARRIVAL FORM)</div>
+        <td rowspan="3" width="50%" class="title">
+            FORM PEMERIKSAAN<br>
+            KENDARAAN DAN BAHAN BAKU<br>
+            <span class="small">(Checklist of Receiving Raw Material’s Vehicle)</span>
         </td>
-
-        <!-- DOCUMENT INFO -->
         <td width="30%">
-            <table class="doc-table">
-                <tr>
-                    <td><strong>No. Dokumen</strong><br><i>(Document No.)</i></td>
-                    <td>: AAN/FRM/RM/01/02</td>
-                </tr>
-                <tr>
-                    <td><strong>Rev</strong><br><i>(Revision No.)</i></td>
-                    <td>: 01</td>
-                </tr>
-                <tr>
-                    <td><strong>Tanggal</strong><br><i>(Date)</i></td>
-                    <td>: {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->format('d F Y') }}</td>
-                </tr>
-            </table>
+            No Dokumen : {{ $arrival->dcertificate->document->no ?? '-' }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Revisi : Rev-{{ str_pad($arrival->dcertificate->document->rev ?? 0, 2, '0', STR_PAD_LEFT) }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Tanggal : {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->translatedFormat('d F Y') }}
         </td>
     </tr>
 </table>
 
-<br>
+{{-- 1. PEMERIKSAAN KENDARAAN --}}
+<table class="no-border mt">
+    <tr><td><strong>1. Pemeriksaan Kendaraan</strong></td></tr>
+</table>
 
-{{-- ================= INFO ================= --}}
-<table class="info-table">
+<table class="no-border">
     <tr>
-        <td width="10%">Bulan</td>
-        <td width="30%">
-            : {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->translatedFormat('F') }}
-        </td>
-        <td width="10%">PIC</td>
-        <td width="50%">: {{ $arrival->employee->nama }}</td>
+        <td width="30%">Tanggal</td>
+        <td>: {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->translatedFormat('d F Y') }}</td>
+    </tr>
+    <tr>
+        <td>Nama Supir</td>
+        <td>: {{ $arrival->employee->nama }}</td>
+    </tr>
+    <tr>
+        <td>Merk Mobil</td>
+        <td>: {{ $arrival->car->merk }}</td>
+    </tr>
+    <tr>
+        <td>No. Mobil</td>
+        <td>: {{ $arrival->car->plat }}</td>
     </tr>
 </table>
 
-<br>
+<table class="no-border mt">
+    <tr>
+        <td width="40%">Kebersihan Mobil Sudah Bebas Dari :</td>
+        <td>
+            @php
+                $kondisi = strtolower($arrival->kondisi);
+            @endphp
 
-{{-- ================= TABEL UTAMA ================= --}}
-<table class="main-table">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Tanggal Kedatangan</th>
-            <th>Nama RBW / No. Reg</th>
-            <th>Kode Bahan Baku</th>
-            <th colspan="2">Jumlah</th>
-            <th>Keterangan</th>
-            <th>Paraf PIC</th>
-        </tr>
-        <tr>
-            <th colspan="4"></th>
-            <th>Biji</th>
-            <th>Gram</th>
-            <th colspan="2"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1</td>
-            <td>{{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->format('d-m-Y') }}</td>
-            <td class="text-left">
-                {{ $arrival->dcertificate->wbhouse->nama ?? '-' }}
-            </td>
-            <td>{{ $arrival->kode }}</td>
-            <td>-</td>
-            <td>-</td>
-            <td class="text-left">
-                {{ $arrival->kondisi }}<br>
-                {{ $arrival->keterangan }}
-            </td>
-            <td></td>
-        </tr>
+            <span class="checkbox">{{ str_contains($kondisi, 'sampah') ? '✓' : '' }}</span> Sampah
+            &nbsp;&nbsp;
+            <span class="checkbox">{{ str_contains($kondisi, 'oli') ? '✓' : '' }}</span> Ceceran Oli
+            &nbsp;&nbsp;
+            <span class="checkbox">{{ str_contains($kondisi, 'benda tajam') ? '✓' : '' }}</span> Benda Tajam
+        </td>
+    </tr>
+</table>
 
-        @for($i = 0; $i < 5; $i++)
-        <tr>
-            <td>&nbsp;</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        @endfor
-    </tbody>
+{{-- 2. PEMERIKSAAN BAHAN BAKU --}}
+<table class="no-border mt">
+    <tr><td><strong>2. Pemeriksaan Bahan Baku</strong></td></tr>
+</table>
+
+<table class="no-border">
+    <tr>
+        <td width="30%">Kode Bahan Baku</td>
+        <td>: {{ $arrival->kode }}</td>
+    </tr>
+    <tr>
+        <td>Berat (Gram)</td>
+        <td>: {{ $arrival->rawMaterial->berat ?? '-' }}</td>
+    </tr>
+    <tr>
+        <td>Nama RBW / No. Reg</td>
+        <td>: {{ $arrival->dcertificate->wbhouse->nama ?? '-' }}</td>
+    </tr>
+    <tr>
+        <td>Kadar Air (%)</td>
+        <td>: {{ $arrival->rawMaterial->kadar_air ?? '-' }}</td>
+    </tr>
+</table>
+
+<table class="no-border mt">
+    <tr>
+        <td width="40%">Surat Keterangan Pengiriman</td>
+        <td>
+            <span class="checkbox">✓</span> Yes
+            &nbsp;&nbsp;
+            <span class="checkbox"></span> No
+        </td>
+    </tr>
+</table>
+
+{{-- KETERANGAN --}}
+<table class="no-border mt">
+    <tr>
+        <td>Keterangan :</td>
+    </tr>
+    <tr>
+        <td>{{ $arrival->keterangan ?? '-' }}</td>
+    </tr>
+</table>
+
+{{-- TANDA TANGAN --}}
+<table class="no-border mt">
+    <tr>
+        <td width="50%" align="center">
+            Supir<br><br><br>
+            ( {{ $arrival->employee->nama }} )
+        </td>
+        <td width="50%" align="center">
+            Kepala Gudang<br><br><br>
+            {{-- ( {{ $arrival->dcertificate->wbhouse->kepala_gudang ?? '................' }} ) --}}
+        </td>
+    </tr>
 </table>
 
 </body>

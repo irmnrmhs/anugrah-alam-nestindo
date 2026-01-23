@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
+use App\Models\Department;
 use App\Models\Step;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -14,17 +14,15 @@ class StepController extends Controller
     public function index(): View
     {
         $steps = Step::latest()->get();
-        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'karyawan');
-            })->get();
+        $departments = Department::all();
 
-        return view('masters.step', compact('steps', 'employees'));
+        return view('masters.step', compact('steps', 'departments'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'employees_id' => 'required|exists:employees,id',
+            'depts_id' => 'required|exists:departments,id',
             'kode' => 'required|unique:steps,kode',
             'proses' => 'required|unique:steps,proses',
             'ket' => 'nullable',
@@ -47,7 +45,7 @@ class StepController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'employees_id' => 'required|exists:employees,id',
+            'depts_id' => 'required|exists:departments,id',
             'kode' => 'required|unique:steps,kode,' . $id,
             'proses' => 'required|unique:steps,proses,' . $id,
             'ket' => 'nullable',

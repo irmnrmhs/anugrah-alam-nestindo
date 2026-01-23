@@ -8,9 +8,9 @@
 
 @section('table-headers')
     <th>No</th>
+    <th>Departemen</th>
     <th>Kode</th>
     <th>Proses</th>
-    <th>PIC</th>
     <th>Keterangan</th>
 @stop
 
@@ -18,9 +18,9 @@
     @foreach($steps as $index => $step)
         <tr data-id="{{ $step->id }}">
             <td>{{ $index + 1 }}</td>
+            <td>{{ $step->department->nama_dept }}</td>
             <td>{{ $step->kode }}</td>
             <td>{{ $step->proses }}</td>
-            <td>{{ $step->employee->nama }}</td>
             <td>{{ empty($step->ket) ? '-' : $step->ket }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -32,22 +32,21 @@
 
 @section('form-fields')
     <div class="mb-3">
+        <label>Departemen</label>
+        <select id="depts_id" class="form-control" required>
+            <option value="">-- Pilih Departemen --</option>
+            @foreach($departments as $department)
+                <option value="{{ $department->id }}">{{ $department->nama_dept }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
         <label>Kode</label>
         <input type="text" id="kode" class="form-control" required>
     </div>
-
     <div class="mb-3">
         <label>Proses</label>
         <input type="text" id="proses" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>PIC</label>
-        <select id="employees_id" class="form-control" required>
-            <option value="">-- Pilih Karyawan --</option>
-            @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
-            @endforeach
-        </select>
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
@@ -64,7 +63,7 @@
         _token: '{{ csrf_token() }}',
         kode: $('#kode').val(),
         proses: $('#proses').val(),
-        employees_id: $('#employees_id').val(),
+        depts_id: $('#depts_id').val(),
         ket: $('#ket').val()
     };
 
@@ -92,7 +91,7 @@
             .then(step => {
                 $('#item_id').val(step.id);
                 $('#kode').val(step.kode);
-                $('#employees_id').val(step.employees_id);
+                $('#depts_id').val(step.depts_id);
                 $('#proses').val(step.proses);
                 $('#ket').val(step.ket);
                 $('#modalTitle').text('Edit Proses Kerja');

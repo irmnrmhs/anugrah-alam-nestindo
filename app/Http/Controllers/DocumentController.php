@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
+use App\Models\Employee;
 use App\Models\Document;
 use App\Models\Step;
 use Illuminate\Http\JsonResponse;
@@ -16,15 +16,18 @@ class DocumentController extends Controller
     public function index(): View
     {
         $docs = Document::with('department')->latest()->get();
-        $departments = Department::all();
+        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
+                $query->where('posisi', 'karyawan');
+            })->get();
+        
         $steps = Step::all();
-        return view('mgmt.document', compact('docs', 'departments', 'steps'));
+        return view('mgmt.document', compact('docs', 'employees', 'steps'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'depts_id' => 'required|exists:departments,id',
+            'employees_id' => 'required|exists:employees,id',
             'steps_id' => 'required|exists:steps,id',
             'kode' => 'required|unique:documents,kode',
             'no'      => 'required|unique:documents,no',
@@ -50,7 +53,7 @@ class DocumentController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'depts_id' => 'required|exists:departments,id',
+            'employees_id' => 'required|exists:employees,id',
             'steps_id' => 'required|exists:steps,id',
             'kode' => 'required|unique:documents,kode,' . $id,
             'no'      => 'required|unique:documents,no,' . $id,

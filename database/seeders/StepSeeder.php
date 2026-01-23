@@ -14,87 +14,93 @@ class StepSeeder extends Seeder
     public function run(): void
     {
         Step::create([
+            'depts_id' => 5,
             'kode' => 'KP',
             'proses' => 'Keterangan Pengiriman',
-            'employees_id' => 5,
         ]);
 
         Step::create([
+            'depts_id' => 5,
+            'kode' => 'KBB',
+            'proses' => 'Kedatangan Bahan Baku',
+        ]);
+
+        Step::create([
+            'depts_id' => 5,
             'kode' => 'PR01GB',
             'proses' => 'Grading Bahan Baku',
-            'employees_id' => 5,
         ]);
 
         Step::create([
+            'depts_id' => 6,
             'kode' => 'PR02SK',
             'proses' => 'Sesek Kaki',
-            'employees_id' => 6,
         ]);
 
         Step::create([
+            'depts_id' => 7,
             'kode' => 'PR03PC',
             'proses' => 'Pencucian',
-            'employees_id' => 7,
         ]);
 
         Step::create([
+            'depts_id' => 8,
             'kode' => 'PR04IK',
             'proses' => 'Inspeksi dan Koreksi',
-            'employees_id' => 8,
         ]);
 
         Step::create([
+            'depts_id' => 9,
             'kode' => 'PR05PB',
             'proses' => 'Pencabutan Bulu',
-            'employees_id' => 9,
         ]);
 
         Step::create([
+            'depts_id' => 10,
             'kode' => 'PR06PR',
             'proses' => 'Perendaman',
-            'employees_id' => 10,
         ]);
 
         Step::create([
+            'depts_id' => 11,
             'kode' => 'PR07CB',
             'proses' => 'Cabut Bilas',
-            'employees_id' => 11,
         ]);
 
         Step::create([
+            'depts_id' => 8,
             'kode' => 'PR08MC',
             'proses' => 'Masuk Cetak',
-            'employees_id' => 8,
         ]);
 
         Step::create([
+            'depts_id' => 9,
             'kode' => 'PR09KC',
             'proses' => 'Keluar Cetak',
-            'employees_id' => 9,
         ]);
 
         Step::create([
+            'depts_id' => 10,
             'kode' => 'PR10PK',
             'proses' => 'Pengeringan',
-            'employees_id' => 10,
         ]);
 
         Step::create([
+            'depts_id' => 11,
             'kode' => 'PR11GP',
             'proses' => 'Grading Produk Jadi',
-            'employees_id' => 11,
         ]);
 
         Step::create([
+            'depts_id' => 12,
             'kode' => 'PR12SP',
             'proses' => 'Stok Produk Jadi',
-            'employees_id' => 12,
         ]);
 
         Step::create([
+            'depts_id' => 13,
             'kode' => 'PR13ST',
             'proses' => 'Steaming',
-            'employees_id' => 13,
         ]);
     }
 }

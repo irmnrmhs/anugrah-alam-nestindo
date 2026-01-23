@@ -16,6 +16,7 @@
     <th>Alamat</th>
     <th>Area</th>
     <th>Kapasitas</th>
+    <th>Pemilik</th>
 @stop
 
 @section('table-body')
@@ -28,6 +29,7 @@
             <td>{{ empty($wbhouse->alamat) ? '-' : $wbhouse->alamat }}</td>
             <td>{{ $wbhouse->area->area }}</td>
             <td>{{ empty($wbhouse->kapasitas) ? 0 : $wbhouse->kapasitas }}</td>
+            <td>{{ $wbhouse->owner }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -62,6 +64,10 @@
         <label>Kapasitas</label>
         <input type="number" id="kapasitas" step="0.01" min="0" max="99999.99" class="form-control" required>
     </div>
+    <div class="mb-3">
+        <label>Owner</label>
+        <input type="number" id="owner" step="0.01" min="0" max="99999.99" class="form-control" required>
+    </div>
 @stop
 
 @section('form-submit-script')
@@ -75,7 +81,8 @@
         nama: $('#nama').val(),
         alamat: $('#alamat').val(),
         areas_id: $('#areas_id').val(),
-        kapasitas: $('#kapasitas').val()
+        kapasitas: $('#kapasitas').val(),
+        owner: $('#owner').val(),
     };
 
     fetch(url, {
@@ -106,6 +113,7 @@
                 $('#alamat').val(wbhouse.alamat);
                 $('#areas_id').val(wbhouse.areas_id);
                 $('#kapasitas').val(wbhouse.kapasitas);
+                $('#owner').val(wbhouse.owner);
                 $('#modalTitle').text('Edit Rumah Burung');
                 new bootstrap.Modal('#crudModal').show();
             });

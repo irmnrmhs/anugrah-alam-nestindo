@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Step extends Model
 {
     protected $fillable = [
-        'employees_id',
+        'depts_id',
         'kode',
         'proses',
         'ket',
     ];
 
-    public function employee()
+    public function department()
     {
-        return $this->belongsTo(Employee::class, 'employees_id');
+        return $this->belongsTo(Department::class, 'depts_id');
     }
 
     public function documents()

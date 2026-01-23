@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     protected $fillable = [
-        'depts_id',
+        'employees_id',
         'steps_id',
         'kode',
         'no',
@@ -15,9 +15,9 @@ class Document extends Model
         'rev'
     ];
 
-    public function department()
+    public function employee()
     {
-        return $this->belongsTo(Department::class, 'depts_id');
+        return $this->belongsTo(Employee::class, 'employees_id');
     }
 
     public function step()

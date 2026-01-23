@@ -169,7 +169,8 @@
             : {{ \Carbon\Carbon::parse($first->arrival->tgl_kedatangan)->translatedFormat('F') }}
         </td>
         <td width="10%">PIC</td>
-        <td width="50%">: {{ $first->arrival->employee->nama }}</td>
+        <td width="50%">:{{ $document->step->employee->nama ?? '-' }}</td>
+        {{-- <td width="50%">: {{ $first->arrival->employee->nama }}</td> --}}
     </tr>
 </table>
 
