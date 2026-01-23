@@ -28,6 +28,7 @@ class WBHouseController extends Controller
             'alamat'    => 'nullable',
             'areas_id'  => 'required|required|exists:areas,id',
             'kapasitas' => 'numeric|min:0|max:99999.99',
+            'owner'   => 'required',
         ]);
 
         $wbhouse = WBHouse::create($validated);
@@ -53,7 +54,7 @@ class WBHouseController extends Controller
             'alamat'    => 'nullable',
             'areas_id'  => 'required|exists:areas,id',
             'kapasitas' => 'required|numeric|min:0|max:99999.99',
-
+            'owner'   => 'required',
         ]);
 
         $wbhouse = WBHouse::findOrFail($id);

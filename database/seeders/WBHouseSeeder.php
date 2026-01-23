@@ -19,6 +19,7 @@ class WBHouseSeeder extends Seeder
             'alamat'    => '...',
             'areas_id'      => 1,
             'kapasitas' => 209.00,
+            'owner'     => 'abc',
         ]);
 
         WBHouse::create([
@@ -27,6 +28,7 @@ class WBHouseSeeder extends Seeder
             'alamat'    => '...',
             'areas_id'      => 2,
             'kapasitas' => 700.00,
+            'owner'     => 'def',
         ]);
 
         WBHouse::create([
@@ -35,6 +37,7 @@ class WBHouseSeeder extends Seeder
             'alamat'    => '...',
             'areas_id'      => 5,
             'kapasitas' => 2500.00,
+            'owner'     => 'ghi',
         ]);
     }
 }

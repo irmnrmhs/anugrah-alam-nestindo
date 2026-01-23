@@ -52,6 +52,7 @@ use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\RmAlumController;
+use App\Http\Controllers\StepController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -176,6 +177,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/grades/{id}', [GradeController::class, 'update'])->name('grades.update');
     Route::delete('/grades/{id}', [GradeController::class, 'destroy'])->name('grades.destroy');
 
+    // Proses
+    Route::get('/steps', [StepController::class, 'index'])->name('steps.index');
+    Route::post('/steps', [StepController::class, 'store'])->name('steps.store');
+    Route::get('/steps/{id}', [StepController::class, 'show'])->name('steps.show');
+    Route::put('/steps/{id}', [StepController::class, 'update'])->name('steps.update');
+    Route::delete('/steps/{id}', [StepController::class, 'destroy'])->name('steps.destroy');
+    
     // Mobil
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
     Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
@@ -218,6 +226,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/dcertificates/{id}', [DcertificateController::class, 'update'])->name('dcertificates.update');
     Route::delete('/dcertificates/{id}', [DcertificateController::class, 'destroy'])->name('dcertificates.destroy');
     Route::get('/dcertificates/{id}/export', [DcertificateController::class, 'export'])->name('dcertificates.export');
+    Route::get('/dcertificates/{id}/preview', [DcertificateController::class, 'preview'])->name('dcertificates.preview');
     Route::post('/dcertificates/delete-multiple', [DcertificateController::class, 'deleteMultiple']);
 
     // Detail SKP
@@ -261,7 +270,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/rmstocks/{id}', [RmStockController::class, 'destroy'])->name('rmstocks.destroy');
     Route::post('/rmstocks/delete-multiple', [RmStockController::class, 'deleteMultiple']);
     Route::get('/raw-material-info/{id}', [RmStockController::class, 'materialInfo']);
-    // $stocks = RmStock::with('rawMaterial', 'employee')->oldest()->get();
+    Route::get('/rmstocks/{id}/preview', [RmStockController::class, 'preview'])->name('rmstocks.preview');
+    Route::get('/rmstocks/{id}/export', [RmStockController::class, 'export'])->name('rmstocks.export');
 
     // Pengidentifikasi Produk
     Route::get('/identifiers', [ProductIdentifierController::class, 'index'])->name('identifiers.index');

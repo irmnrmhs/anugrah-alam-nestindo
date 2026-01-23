@@ -8,17 +8,15 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     */
+    */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('steps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employees_id')->constrained('employees');
-            $table->foreignId('steps_id')->constrained('steps');
+            $table->foreignId('depts_id')->constrained('departments');
             $table->string('kode')->unique();
-            $table->string('no');
-            $table->string('name');
-            $table->integer('rev');
+            $table->string('proses')->unique();
+            $table->string('ket')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('steps');
     }
 };

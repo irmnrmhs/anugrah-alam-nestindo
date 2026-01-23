@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Arrival;
+use App\Models\Document;
 use App\Models\Employee;
 use App\Models\Container;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class ContainerController extends Controller
 {
@@ -114,17 +115,47 @@ class ContainerController extends Controller
         ]);
     }
 
+    public function preview($id)
+    {
+        $containers = Container::with([
+            'arrival.employee',
+            'arrival.dcertificate.wbhouse'
+        ])
+        ->where('arrivals_id', $id)
+        ->get();
+        
+        $document = Document::with([
+            'step.employee',
+            'department'
+        ])
+        ->where('kode', 'KBB058')
+        ->firstOrFail();
+
+        return view('exports.container-form', compact('containers'));
+    }
+    
     public function export($id)
     {
-        $container = Container::with([
-            'arrival',
-            'employee',
-        ])->findOrFail($id);
+        $containers = Container::with([
+            'arrival.employee',
+            'arrival.dcertificate.wbhouse'
+        ])
+        ->where('arrivals_id', $id)
+        ->get();
 
-        $pdf = Pdf::loadView('exports.container-form', compact('container'))
+        $document = Document::with([
+            'step.employee',
+            'department'
+        ])
+        ->where('kode', 'KBB058')
+        ->firstOrFail();
+
+        $document = Document::where('kode', 'KBB058')->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.container-form', compact('containers'))
             ->setPaper('A4', 'portrait');
 
-        $filename = 'Form Kontainer-' . str_replace(['/', '\\'], '-', $container->no_skp) . '.pdf';
+        $filename = 'Form Kontainer.pdf';
 
         return $pdf->stream($filename);
     }
@@ -146,14 +177,5 @@ class ContainerController extends Controller
             'status'  => 'success',
             'message' => 'Data terpilih berhasil dihapus'
         ]);
-    }
-
-    public function preview($id)
-    {
-        $container = Container::with([
-            'arrival.dcertificate.wbhouse',
-        ])->findOrFail($id);
-
-        return view('exports.container-form', compact('container'));
     }
 }

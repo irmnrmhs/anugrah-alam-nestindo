@@ -8,20 +8,24 @@
 
 @section('table-headers')
     <th>No</th>
-    <th>Departemen</th>
+    <th>Proses</th>
+    <th>Kode</th>
     <th>Nomor Dokumen</th>
     <th>Nama Dokumen</th>
     <th>Nomor Revisi</th>
+    <th>PIC</th>
 @stop
 
 @section('table-body')
-    @foreach($docs as $index => $document)
-        <tr data-id="{{ $document->id }}">
+    @foreach($docs as $index => $doc)
+        <tr data-id="{{ $doc->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $document->department->nama_dept }}</td>
-            <td>{{ $document->no }}</td>
-            <td>{{ $document->name }}</td>
-            <td>{{ $document->rev }}</td>
+            <td>{{ $doc->step->proses }}</td>
+            <td>{{ $doc->kode }}</td>
+            <td>{{ $doc->no }}</td>
+            <td>{{ $doc->name }}</td>
+            <td>{{ $doc->rev }}</td>
+            <td>{{ $doc->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -32,13 +36,17 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Departemen</label>
-        <select id="depts_id" class="form-control" required>
-            <option value="">-- Pilih Departemen --</option>
-            @foreach($departments as $department)
-                <option value="{{ $department->id }}">{{ $department->nama_dept }}</option>
+        <label>Proses</label>
+        <select id="steps_id" class="form-control" required>
+            <option value="">-- Pilih Proses --</option>
+            @foreach($steps as $step)
+                <option value="{{ $step->id }}">{{ $step->proses }}</option>
             @endforeach
         </select>
+    </div>
+    <div class="mb-3">
+        <label>Kode Dokumen</label>
+        <input type="text" id="kode" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Nomor Dokumen</label>
@@ -52,6 +60,15 @@
         <label>Nomor Revisi</label>
         <input type="number" id="rev" step="0" min="0" class="form-control">
     </div>
+    <div class="mb-3">
+        <label>PIC</label>
+        <select id="employees_id" class="form-control" required>
+            <option value="">-- Pilih Karyawan --</option>
+            @foreach($employees as $employee)
+                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+            @endforeach
+        </select>
+    </div>
 @stop
 
 @section('form-submit-script')
@@ -61,7 +78,9 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
-        depts_id: $('#depts_id').val(),
+        employees_id: $('#employees_id').val(),
+        steps_id: $('#steps_id').val(),
+        kode: $('#kode').val(),
         no: $('#no').val(),
         name: $('#name').val(),
         rev: $('#rev').val(),
@@ -90,7 +109,9 @@
             .then(r => r.json())
             .then(document => {
                 $('#item_id').val(document.id);
-                $('#depts_id').val(document.depts_id);
+                $('#employees_id').val(document.employees_id);
+                $('#steps_id').val(document.steps_id);
+                $('#kode').val(document.kode);
                 $('#no').val(document.no);
                 $('#name').val(document.name);
                 $('#rev').val(document.rev);

@@ -13,6 +13,7 @@ class WBHouse extends Model
         'alamat',
         'areas_id',
         'kapasitas',
+        'owner',
     ];
 
     public function area()

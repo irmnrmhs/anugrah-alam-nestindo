@@ -47,6 +47,7 @@
         .doc-table {
             width: 100%;
             border-collapse: collapse;
+            border: none;
         }
 
         .doc-table tr {
@@ -58,9 +59,26 @@
         }
 
         .doc-table td {
+            border: none;
+            vertical-align: top;
             padding: 3px;
             font-size: 11px;
-            vertical-align: top;
+        }
+
+        .doc-label {
+            /* border-right: 1px solid #000; */
+            border-right: none;
+        }
+
+        .doc-colon {
+            width: 10px;
+            text-align: center;
+            border-left: 1px solid #000;
+        }
+
+        /* garis horizontal */
+        .doc-table tr:not(:last-child) td {
+            border-bottom: 1px solid #000;
         }
 
         .info-table td {
@@ -81,10 +99,15 @@
 </head>
 <body>
 
+@php
+    $first = $containers->first();
+    \Carbon\Carbon::setLocale('id');
+@endphp
+
 <table class="header-table">
     <tr>
         <td width="15%" class="logo">
-            {{-- <img src="{{ public_path('logo.png') }}" width="80"> --}}
+            <img src="{{ asset('img/Logo.png') }}" width="80">
         </td>
 
         <td width="55%">
@@ -95,20 +118,42 @@
         <td width="30%">
             <table class="doc-table">
                 <tr>
-                    <td><strong>No. Dokumen</strong><br><i>(Document No.)</i></td>
-                    <td>: AAN/FRM/RM/01/02</td>
+                    <td class="doc-label">
+                        <strong>No. Dokumen</strong><br>
+                        <i>(Document No.)</i>
+                    </td>
+                    <td class="doc-colon">:</td>
+                    <td>AAN/FRM/RM/01/02</td>
                 </tr>
+
                 <tr>
-                    <td><strong>Rev</strong><br><i>(Revision No.)</i></td>
-                    <td>: 01</td>
+                    <td class="doc-label">
+                        <strong>Rev</strong><br>
+                        <i>(Revision No.)</i>
+                    </td>
+                    <td class="doc-colon">:</td>
+                    <td>01</td>
                 </tr>
+
                 <tr>
-                    <td><strong>Tanggal</strong><br><i>(Date)</i></td>
-                    <td>: {{ \Carbon\Carbon::parse($container->arrival->tgl_kedatangan)->format('d F Y') }}</td>
+                    <td class="doc-label">
+                        <strong>Tanggal</strong><br>
+                        <i>(Date)</i>
+                    </td>
+                    <td class="doc-colon">:</td>
+                    <td>19 January 2026</td>
                 </tr>
+
                 <tr>
-                    <td><strong>Bagian</strong><br><i>(Department)</i></td>
-                    <td><strong>: Bahan Baku</strong><br><i>(Raw Material)</i></td>
+                    <td class="doc-label">
+                        <strong>Bagian</strong><br>
+                        <i>(Department)</i>
+                    </td>
+                    <td class="doc-colon">:</td>
+                    <td>
+                        <strong>Bahan Baku</strong><br>
+                        <i>(Raw Material)</i>
+                    </td>
                 </tr>
             </table>
         </td>
@@ -121,10 +166,11 @@
     <tr>
         <td width="10%">Bulan</td>
         <td width="30%">
-            : {{ \Carbon\Carbon::parse($container->arrival->tgl_kedatangan)->translatedFormat('F') }}
+            : {{ \Carbon\Carbon::parse($first->arrival->tgl_kedatangan)->translatedFormat('F') }}
         </td>
         <td width="10%">PIC</td>
-        <td width="50%">: {{ $container->arrival->employee->nama }}</td>
+        <td width="50%">:{{ $document->step->employee->nama ?? '-' }}</td>
+        {{-- <td width="50%">: {{ $first->arrival->employee->nama }}</td> --}}
     </tr>
 </table>
 
@@ -147,49 +193,22 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($container as $i => $row)
-            <tr>
-                <td>1</td>
-                <td>{{ \Carbon\Carbon::parse($container->arrival->tgl_kedatangan)->format('d-m-Y') }}</td>
-                <td class="text-left">
-                    {{ $container->arrival->dcertificate->wbhouse->nama ?? '-' }}
-                </td>
-                <td>{{ $container->arrival->kode }}</td>
-                <td>{{ empty($container->biji) ? 0 : $container->biji }}</td>
-                <td>{{ empty($container->berat) ? 0 : $container->berat}}</td>
-                <td>{{ empty($container->keterangan) ? '-' : $container->keterangan }}</td>
-                <td>{{ $container->arrival->employee->nama }}</td>
-            </tr>
-        @endforeach
-
-        {{-- @foreach ($container as $i => $row)
-            <tr>
-                <td>{{ $i + 1 }}</td>
-                <td>1</td>
-                <td>{{ \Carbon\Carbon::parse($row->arrival->tgl_kedatangan)->format('d-m-Y') }}</td>
-                <td class="text-left">
-                    {{ $row->arrival->dcertificate->wbhouse->nama ?? '-' }}
-                </td>
-                <td>{{ $row->arrival->kode }}</td>
-                <td>{{ $row->biji }}</td>
-                <td>{{ $row->berat }}</td>
-                <td>{{ $row->keterangan }}</td>
-                <td>{{ $row->arrival->employee->nama }}</td>
-            </tr>
-        @endforeach --}}
-
-        {{-- @for($i = 0; $i < 5; $i++)
+        @foreach ($containers as $i => $row)
         <tr>
-            <td>&nbsp;</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ $i + 1 }}</td>
+            <td>
+                {{ \Carbon\Carbon::parse($row->arrival->tgl_kedatangan)->format('d-m-Y') }}
+            </td>
+            <td class="text-left">
+                {{ $row->arrival->dcertificate->wbhouse->nama ?? '-' }}
+            </td>
+            <td>{{ $row->arrival->kode }}</td>
+            <td>{{ $row->biji ?? 0 }}</td>
+            <td>{{ $row->berat ?? 0 }}</td>
+            <td>{{ $row->keterangan ?? '-' }}</td>
+            <td>{{ $row->employee->nama }}</td>
         </tr>
-        @endfor --}}
+        @endforeach
     </tbody>
 </table>
 

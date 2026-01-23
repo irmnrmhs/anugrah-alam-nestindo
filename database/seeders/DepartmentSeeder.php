@@ -18,30 +18,6 @@ class DepartmentSeeder extends Seeder
             'nama_dept' => 'Administrasi',
             'deskripsi' => 'Departemen Administrasi adalah ...'
         ]);
-
-        Department::create([
-            'kd_dept' => 'RM',
-            'nama_dept' => 'Bahan Baku',
-            'deskripsi' => 'Departemen Bahan Baku adalah ...'
-        ]);
-
-        Department::create([
-            'kd_dept' => 'PR',
-            'nama_dept' => 'Produksi',
-            'deskripsi' => 'Departemen Produksi adalah ...'
-        ]);
-        
-        Department::create([
-            'kd_dept' => 'QC',
-            'nama_dept' => 'Kontrol Kualitas',
-            'deskripsi' => 'Departemen Kontrol Kualitas adalah ...'
-        ]);
-        
-        Department::create([
-            'kd_dept' => 'FS',
-            'nama_dept' => 'Keamanan Pangan',
-            'deskripsi' => 'Departemen Keamanan Pangan adalah ...'
-        ]);
         
         Department::create([
             'kd_dept' => 'EX',
@@ -72,5 +48,66 @@ class DepartmentSeeder extends Seeder
             'nama_dept' => 'Support',
             'deskripsi' => 'Support adalah ...'
         ]);
+
+        Department::create([
+            'kd_dept' => 'RM',
+            'nama_dept' => 'Bahan Baku',
+            'deskripsi' => 'Departemen Bahan Baku adalah ...'
+        ]);
+
+        Department::create([
+            'kd_dept' => 'RM',
+            'nama_dept' => 'Pencucian',
+            'deskripsi' => 'Departemen Pencucian adalah ...'
+        ]);
+
+        Department::create([
+            'kd_dept' => 'RM',
+            'nama_dept' => 'Pencabutan',
+            'deskripsi' => 'Departemen Pencabutan adalah ...'
+        ]);
+
+        Department::create([
+            'kd_dept' => 'RM',
+            'nama_dept' => 'CCP1',
+            'deskripsi' => 'Departemen CCP1 adalah ...'
+        ]);
+
+        Department::create([
+            'kd_dept' => 'RM',
+            'nama_dept' => 'Cetak',
+            'deskripsi' => 'Departemen Cetak adalah ...'
+        ]);
+
+        Department::create([
+            'kd_dept' => 'RM',
+            'nama_dept' => 'Pengeringan',
+            'deskripsi' => 'Departemen Pengeringan adalah ...'
+        ]);
+
+        Department::create([
+            'kd_dept' => 'RM',
+            'nama_dept' => 'Grading',
+            'deskripsi' => 'Departemen Grading adalah ...'
+        ]);
+
+        Department::create([
+            'kd_dept' => 'PR',
+            'nama_dept' => 'Produksi',
+            'deskripsi' => 'Departemen Produksi adalah ...'
+        ]);
+
+        Department::create([
+            'kd_dept' => 'QC',
+            'nama_dept' => 'Kontrol Kualitas',
+            'deskripsi' => 'Departemen Kontrol Kualitas adalah ...'
+        ]);
+        
+        Department::create([
+            'kd_dept' => 'FS',
+            'nama_dept' => 'Keamanan Pangan',
+            'deskripsi' => 'Departemen Keamanan Pangan adalah ...'
+        ]);
+        
     }
 }

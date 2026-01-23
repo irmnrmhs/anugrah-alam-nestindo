@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('alamat')->nullable();
             $table->foreignId('areas_id')->constrained('areas');
             $table->decimal('kapasitas', 7, 2);
+            $table->string('owner');
             $table->timestamps();
         });
     }

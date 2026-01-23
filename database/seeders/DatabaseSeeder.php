@@ -18,9 +18,10 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             CompanySeeder::class,
             DepartmentSeeder::class,
-            DocumentSeeder::class,
             PositionSeeder::class,
             EmployeeSeeder::class,
+            StepSeeder::class,
+            DocumentSeeder::class,
             UserSeeder::class,
 
             AreaSeeder::class,
