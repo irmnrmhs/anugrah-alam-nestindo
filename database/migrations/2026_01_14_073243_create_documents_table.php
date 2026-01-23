@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employees_id')->constrained('employees');
-            $table->foreignId('steps_id')->constrained('steps');
+            $table->foreignId('depts_id')->constrained('departments');
             $table->string('kode')->unique();
             $table->string('no');
             $table->string('name');
             $table->integer('rev');
+            $table->date('tgl')->nullable();
             $table->timestamps();
         });
     }

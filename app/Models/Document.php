@@ -8,7 +8,7 @@ class Document extends Model
 {
     protected $fillable = [
         'employees_id',
-        'steps_id',
+        'depts_id',
         'kode',
         'no',
         'name',
@@ -20,9 +20,9 @@ class Document extends Model
         return $this->belongsTo(Employee::class, 'employees_id');
     }
 
-    public function step()
+    public function department()
     {
-        return $this->belongsTo(Step::class, 'steps_id');
+        return $this->belongsTo(Department::class, 'depts_id');
     }
 
     public function getRevFormattedAttribute()

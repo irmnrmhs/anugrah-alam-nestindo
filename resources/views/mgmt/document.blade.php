@@ -8,7 +8,7 @@
 
 @section('table-headers')
     <th>No</th>
-    <th>Proses</th>
+    <th>Departemen</th>
     <th>Kode</th>
     <th>Nomor Dokumen</th>
     <th>Nama Dokumen</th>
@@ -20,7 +20,7 @@
     @foreach($docs as $index => $doc)
         <tr data-id="{{ $doc->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $doc->step->proses }}</td>
+            <td>{{ $doc->department->nama_dept }}</td>
             <td>{{ $doc->kode }}</td>
             <td>{{ $doc->no }}</td>
             <td>{{ $doc->name }}</td>
@@ -37,10 +37,10 @@
 @section('form-fields')
     <div class="mb-3">
         <label>Proses</label>
-        <select id="steps_id" class="form-control" required>
-            <option value="">-- Pilih Proses --</option>
-            @foreach($steps as $step)
-                <option value="{{ $step->id }}">{{ $step->proses }}</option>
+        <select id="depts_id" class="form-control" required>
+            <option value="">-- Pilih Departemen --</option>
+            @foreach($depts as $dept)
+                <option value="{{ $dept->id }}">{{ $dept->nama_dept }}</option>
             @endforeach
         </select>
     </div>
@@ -79,7 +79,7 @@
     const data = {
         _token: '{{ csrf_token() }}',
         employees_id: $('#employees_id').val(),
-        steps_id: $('#steps_id').val(),
+        depts_id: $('#depts_id').val(),
         kode: $('#kode').val(),
         no: $('#no').val(),
         name: $('#name').val(),
@@ -110,7 +110,7 @@
             .then(document => {
                 $('#item_id').val(document.id);
                 $('#employees_id').val(document.employees_id);
-                $('#steps_id').val(document.steps_id);
+                $('#depts_id').val(document.depts_id);
                 $('#kode').val(document.kode);
                 $('#no').val(document.no);
                 $('#name').val(document.name);

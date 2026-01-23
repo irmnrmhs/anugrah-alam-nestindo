@@ -13,11 +13,17 @@ class StepSeeder extends Seeder
      */
     public function run(): void
     {
-        Step::create([
-            'depts_id' => 5,
-            'kode' => 'KP',
-            'proses' => 'Keterangan Pengiriman',
-        ]);
+        // Step::create([
+        //     'depts_id' => 1,
+        //     'kode' => 'KP',
+        //     'proses' => 'Keterangan Pengiriman',
+        // ]);
+
+        // Step::create([
+        //     'depts_id' => 5,
+        //     'kode' => 'KBB',
+        //     'proses' => 'Kendaraan Bahan Baku',
+        // ]);
 
         Step::create([
             'depts_id' => 5,

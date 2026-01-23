@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             PositionSeeder::class,
             EmployeeSeeder::class,
-            StepSeeder::class,
+            // StepSeeder::class,
             DocumentSeeder::class,
             UserSeeder::class,
 
