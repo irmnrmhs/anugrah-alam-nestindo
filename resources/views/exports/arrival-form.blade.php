@@ -8,9 +8,15 @@
             font-family: "Times New Roman", serif;
             font-size: 12px;
         }
+
+        .container {
+            border: 1px solid #000;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            padding: 10px;
         }
         .border td, .border th {
             border: 1px solid #000;
@@ -47,13 +53,13 @@
     </style>
 </head>
 <body>
-
-<table class="border">
+<div class="container">
+    <table class="border">
     <tr>
-        <td rowspan="3" width="15%" align="center">
+        <td rowspan="3" width="20%" align="center">
             <img src="{{ asset('img/Logo.png') }}" width="80">
         </td>
-        <td rowspan="3" width="55%" class="title">
+        <td rowspan="3" width="45%" class="title">
             FORM PEMERIKSAAN<br>
             KENDARAAN DAN BAHAN BAKU<br>
             <span class="small">(Checklist of Receiving Raw Material’s Vehicle)</span>
@@ -184,4 +190,5 @@
 </table>
 
 </body>
+</div>
 </html>
