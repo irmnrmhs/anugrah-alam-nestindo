@@ -125,10 +125,10 @@ class ContainerController extends Controller
         ->get();
         
         $document = Document::with([
-            'step.employee',
+            'employee',
             'department'
         ])
-        ->where('kode', 'KBB058')
+        ->where('kode', 'DBB058')
         ->firstOrFail();
 
         return view('exports.container-form', compact('containers'));
@@ -144,13 +144,11 @@ class ContainerController extends Controller
         ->get();
 
         $document = Document::with([
-            'step.employee',
+            'employee',
             'department'
         ])
-        ->where('kode', 'KBB058')
+        ->where('kode', 'DBB058')
         ->firstOrFail();
-
-        $document = Document::where('kode', 'KBB058')->firstOrFail();
 
         $pdf = Pdf::loadView('exports.container-form', compact('containers'))
             ->setPaper('A4', 'portrait');

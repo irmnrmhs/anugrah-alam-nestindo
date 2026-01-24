@@ -41,7 +41,7 @@
             text-align: center;
             font-weight: bold;
             font-size: 13px;
-            margin-top: 60px;
+            margin-top: 8px;
             text-decoration: underline;
         }
 
@@ -57,7 +57,6 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 10px;
-            margin-top: 25px;
         }
 
         table.info td {
@@ -118,24 +117,26 @@
 </head>
 
 <body>
+
+    <!-- NO & REV -->
     <tr>
-        <td width="15%">
-            <img src="{{ asset('img/Logo.png') }}" width="80">
-        </td>
-        <td width="55%">
+        <td></td>
+        <td>
             <div class="company">PT. {{ $dcertificate->company->nama }}</div>
             <div class="company-desc">{{ $dcertificate->company->alamat }}</div>
         </td>
-        <td width="30%">
+        <td>
             <div class="box-right">
                 {{ $document->no }}<br>
                 Rev-{{ $document->rev_formatted }}
             </div>
         </td>
     </tr>
+    <!-- TITLE -->
     <div class="title">SURAT KETERANGAN PENGIRIMAN</div>
     <div class="subtitle">Delivery Certificate</div>
 
+    <!-- INFO -->
     <table class="info">
         <tr>
             <td class="label">Nama / No Registrasi Rumah Walet<br><span class="en">Name / Bird's House Registration Number</span></td>

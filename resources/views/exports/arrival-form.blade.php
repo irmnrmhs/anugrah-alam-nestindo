@@ -48,29 +48,37 @@
 </head>
 <body>
 
-{{-- HEADER --}}
 <table class="border">
     <tr>
-        <td rowspan="3" width="20%" align="center">
-            <strong>PT. AAN</strong>
+        <td rowspan="3" width="15%" align="center">
+            <img src="{{ asset('img/Logo.png') }}" width="80">
         </td>
-        <td rowspan="3" width="50%" class="title">
+        <td rowspan="3" width="55%" class="title">
             FORM PEMERIKSAAN<br>
             KENDARAAN DAN BAHAN BAKU<br>
             <span class="small">(Checklist of Receiving Raw Material’s Vehicle)</span>
         </td>
-        <td width="30%">
-            No Dokumen : {{ $arrival->dcertificate->document->no ?? '-' }}
+        <td>
+            No Dokumen
+        </td>
+        <td>
+            : {{ $arrival->dcertificate->document->no ?? '-' }}
         </td>
     </tr>
     <tr>
         <td>
-            Revisi : Rev-{{ str_pad($arrival->dcertificate->document->rev ?? 0, 2, '0', STR_PAD_LEFT) }}
+            Revisi
+        </td>
+        <td>
+            : Rev-{{ str_pad($arrival->dcertificate->document->rev ?? 0, 2, '0', STR_PAD_LEFT) }}
         </td>
     </tr>
     <tr>
         <td>
-            Tanggal : {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->translatedFormat('d F Y') }}
+            Tanggal
+        </td>
+        <td>
+            : {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->translatedFormat('d F Y') }}
         </td>
     </tr>
 </table>
