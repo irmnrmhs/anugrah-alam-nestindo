@@ -6,3 +6,9 @@ div.dt-buttons {
 .content-wrapper {
     overflow-x: hidden;
 }
+
+body {
+    font-family: "Times New Roman", serif;
+    font-size: 12px;
+}
+
