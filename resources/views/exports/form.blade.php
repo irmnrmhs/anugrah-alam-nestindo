@@ -10,19 +10,18 @@
 
     @stack('styles')
 </head>
-<body>
-    <table class="header">
+    <body>
         @yield('header')
-    </table>
 
-    <table class="info">
         @yield('info')
-    </table>
 
-    <table class="data">
         @yield('data')
-    </table>
 
-    @stack('scripts')
+        @yield('other')
+
+        @stack('scripts')
+    </body>
+</html>
+    </div>
 </body>
 </html>
