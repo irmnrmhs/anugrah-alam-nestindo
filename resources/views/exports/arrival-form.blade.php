@@ -8,11 +8,9 @@
             font-family: "Times New Roman", serif;
             font-size: 12px;
         }
-
         .container {
             border: 1px solid #000;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -55,39 +53,39 @@
 <body>
 <div class="container">
     <table class="border">
-    <tr>
-        <td rowspan="3" width="20%" align="center">
-            <img src="{{ asset('img/Logo.png') }}" width="80">
-        </td>
-        <td rowspan="3" width="45%" class="title">
-            FORM PEMERIKSAAN<br>
-            KENDARAAN DAN BAHAN BAKU<br>
-            <span class="small">(Checklist of Receiving Raw Material’s Vehicle)</span>
-        </td>
-        <td>
-            No Dokumen
-        </td>
-        <td>
-            : {{ $arrival->dcertificate->document->no ?? '-' }}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Revisi
-        </td>
-        <td>
-            : Rev-{{ str_pad($arrival->dcertificate->document->rev ?? 0, 2, '0', STR_PAD_LEFT) }}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Tanggal
-        </td>
-        <td>
-            : {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->translatedFormat('d F Y') }}
-        </td>
-    </tr>
-</table>
+        <tr>
+            <td rowspan="3" width="20%" align="center">
+                <img src="{{ asset('img/Logo.png') }}" width="80">
+            </td>
+            <td rowspan="3" width="45%" class="title">
+                FORM PEMERIKSAAN<br>
+                KENDARAAN DAN BAHAN BAKU<br>
+                <span class="small">(Checklist of Receiving Raw Material’s Vehicle)</span>
+            </td>
+            <td>
+                No Dokumen
+            </td>
+            <td>
+                : {{ $arrival->dcertificate->document->no ?? '-' }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Revisi
+            </td>
+            <td>
+                : Rev-{{ str_pad($arrival->dcertificate->document->rev ?? 0, 2, '0', STR_PAD_LEFT) }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Tanggal
+            </td>
+            <td>
+                : {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->translatedFormat('d F Y') }}
+            </td>
+        </tr>
+    </table>
 
 {{-- 1. PEMERIKSAAN KENDARAAN --}}
 <table class="no-border mt">

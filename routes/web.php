@@ -281,6 +281,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/identifiers/{id}', [ProductIdentifierController::class, 'destroy'])->name('identifiers.destroy');
     Route::post('/identifiers/delete-multiple', [ProductIdentifierController::class, 'deleteMultiple']);
     Route::get('/raw-material-info-pi/{id}', [ProductIdentifierController::class, 'materialInfo']);
+    Route::get('/identifiers/{id}/preview', [ProductIdentifierController::class, 'preview'])->name('identifiers.preview');
+    Route::get('/identifiers/{id}/export', [ProductIdentifierController::class, 'export'])->name('identifiers.export');
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
