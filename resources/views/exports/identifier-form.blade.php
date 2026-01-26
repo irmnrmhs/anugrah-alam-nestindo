@@ -1,18 +1,27 @@
 @extends('exports.form')
 
-@section('title', 'GRADING BAHAN BAKU')
+@section('title', 'Grading Bahan Baku')
+
+@push('styles')
+<style>
+    
+</style>
+@endpush
 
 @section('content')
+
 <table class="header">
     <tr>
         <td rowspan="3" width="20%" align="center">
-            <img src="{{ asset('img/Logo.png') }}" width="80">
+            <img src="{{ asset('img/Logo.png') }}" width="80" alt="Logo">
         </td>
+
         <td rowspan="3" width="50%" class="title">
             FORM GRADING<br>
             BAHAN BAKU<br>
             <span class="small">(Grading Form Raw Material)</span>
         </td>
+
         <td width="15%">
             No. Dokumen
             <i>(Document No.)</i>
@@ -21,6 +30,7 @@
             : {{ $document->no ?? '-' }}
         </td>
     </tr>
+
     <tr>
         <td>
             Revisi
@@ -30,6 +40,7 @@
             : Rev-{{ str_pad($document->rev ?? 0, 2, '0', STR_PAD_LEFT) }}
         </td>
     </tr>
+
     <tr>
         <td>
             Tanggal
@@ -59,7 +70,7 @@
 </table>
 
 <table class="data">
-    
+    {{-- isi data --}}
 </table>
 
 @endsection

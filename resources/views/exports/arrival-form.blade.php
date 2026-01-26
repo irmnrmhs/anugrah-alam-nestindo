@@ -1,55 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Form Pemeriksaan Kendaraan dan Bahan Baku</title>
-    <style>
-        body {
-            font-family: "Times New Roman", serif;
-            font-size: 12px;
-        }
-        .container {
-            border: 1px solid #000;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            padding: 10px;
-        }
-        .border td, .border th {
-            border: 1px solid #000;
-            padding: 4px;
-            vertical-align: top;
-        }
-        .no-border td {
-            border: none;
-            padding: 2px;
-        }
-        .title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .small {
-            font-size: 11px;
-        }
-        .checkbox {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 1px solid #000;
-            text-align: center;
-            line-height: 14px;
-            font-weight: bold;
-        }
-        .mt {
-            margin-top: 10px;
-        }
-        .signature {
-            height: 60px;
-        }
-    </style>
-</head>
+@extends()
+
+@section('style')
 <body>
 <div class="container">
     <table class="border">
