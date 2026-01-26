@@ -1,244 +1,183 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <meta charset="utf-8" />
-
+    <meta charset="UTF-8">
+    <title>Form Stock Bahan Baku</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             font-size: 11px;
-            margin: 20px 35px;
         }
 
-        /* HEADER */
-        .company {
-            text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-
-        .company-desc {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 2px;
-            margin-bottom: 8px;
-        }
-
-        .box-right {
-            position: absolute;
-            right: 35px;
-            top: 20px;
-            border: 1px solid #000;
-            padding: 4px 8px;
-            font-size: 9px;
-            line-height: 1.4;
-            text-align: left;
-        }
-
-        /* TITLE */
         .title {
             text-align: center;
             font-weight: bold;
-            font-size: 13px;
-            margin-top: 8px;
-            text-decoration: underline;
         }
 
         .subtitle {
             text-align: center;
             font-size: 10px;
-            font-style: italic;
-            margin-bottom: 12px;
-        }
-
-        /* INFO TABLE */
-        table.info {
-            width: 100%;
-            border-collapse: collapse;
             margin-bottom: 10px;
         }
 
-        table.info td {
-            padding: 3px 0;
-            vertical-align: top;
-        }
-
-        .label {
-            width: 200px;
-            font-weight: bold;
-        }
-
-        .colon {
-            width: 10px;
-        }
-
-        .en {
-            font-size: 9px;
-            font-style: italic;
-            color: #555;
-        }
-
-        /* DATA TABLE */
-        table.data-table {
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
         }
 
-        table.data-table th,
-        table.data-table td {
+        th, td {
             border: 1px solid #000;
             padding: 4px;
-            text-align: center;
-            font-size: 10px;
+            vertical-align: middle;
         }
 
-        table.data-table th {
+        th {
+            text-align: center;
             font-weight: bold;
         }
 
-        table.data-table tbody td {
-            height: 18px;
+        .no-border td {
+            border: none;
+            padding: 2px 4px;
         }
 
-        /* FOOTER */
-        .footer-sign {
-            margin-top: 35px;
-            width: 100%;
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
             text-align: right;
+        }
+
+        .small {
             font-size: 10px;
         }
 
         .signature {
-            margin-top: 45px;
+            height: 60px;
         }
     </style>
 </head>
-
 <body>
 
-    <!-- NO & REV -->
-    <tr>
-        <td></td>
-        <td>
-            <div class="company">PT. {{ $dcertificate->company->nama }}</div>
-            <div class="company-desc">{{ $dcertificate->company->alamat }}</div>
-        </td>
-        <td>
-            <div class="box-right">
-                {{ $document->no }}<br>
-                Rev-{{ $document->rev_formatted }}
-            </div>
-        </td>
-    </tr>
-    <!-- TITLE -->
-    <div class="title">SURAT KETERANGAN PENGIRIMAN</div>
-    <div class="subtitle">Delivery Certificate</div>
-
-    <!-- INFO -->
-    <table class="info">
+    {{-- HEADER --}}
+    <table class="no-border">
         <tr>
-            <td class="label">Nama / No Registrasi Rumah Walet<br><span class="en">Name / Bird's House Registration Number</span></td>
-            <td class="colon">:</td>
-            <td>{{ $dcertificate->wbhouse->nama }} / {{ $dcertificate->wbhouse->kode }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Alamat Rumah Walet<br><span class="en">Bird’s House Address</span></td>
-            <td class="colon">:</td>
-            <td>{{ $dcertificate->wbhouse->alamat }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Tujuan IKH<br><span class="en">IKH Destination</span></td>
-            <td class="colon">:</td>
-            <td>{{ $dcertificate->company->nama }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Nomor Registrasi IKH<br><span class="en">IKH Registration Number</span></td>
-            <td class="colon">:</td>
-            <td>{{ $dcertificate->company->ikh }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Alamat IKH<br><span class="en">IKH Address</span></td>
-            <td class="colon">:</td>
-            <td>{{ $dcertificate->company->alamat }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Tanggal, Bulan, Tahun<br><span class="en">Date, Month, Year</span></td>
-            <td class="colon">:</td>
-            <td>{{ \Carbon\Carbon::parse($dcertificate->tgl_skp)->translatedFormat('d F Y') }}</td>
-        </tr>
-
-        <tr>
-            <td class="label">Nomor SKP / KH-14<br><span class="en">Delivery Certificate / KH-14</span></td>
-            <td class="colon">:</td>
-            <td>{{ $dcertificate->no_skp }}</td>
+            <td width="70%">
+                <div class="title">FORM STOCK BAHAN BAKU</div>
+                <div class="subtitle">(RAW MATERIALS STOCK FORM)</div>
+            </td>
+            <td width="30%">
+                <table>
+                    <tr>
+                        <td>No. Dokumen</td>
+                        <td>: AAN/FRM/RM/01/03</td>
+                    </tr>
+                    <tr>
+                        <td>Rev</td>
+                        <td>: 01</td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal</td>
+                        <td>: {{ \Carbon\Carbon::parse($stocks->tgl_keluar)->format('d F Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Bagian</td>
+                        <td>: Bahan Baku</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </table>
 
-    <!-- DATA TABLE -->
-    <table class="data-table">
+    <br>
+
+    {{-- INFO --}}
+    <table class="no-border">
+        <tr>
+            <td width="50%">Bulan : {{ \Carbon\Carbon::parse($stocks->tgl_keluar)->translatedFormat('F') }}</td>
+            <td width="50%">PIC : {{ $stocks->employee->nama }}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    {{-- TABLE MAIN --}}
+    <table>
         <thead>
             <tr>
                 <th rowspan="2">No</th>
-                <th rowspan="2">Tanggal Panen<br><span class="en">Date of Harvesting</span></th>
-                <th rowspan="2">Berat Panen (kg)<br><span class="en">Weight of Harvesting</span></th>
-                <th colspan="2">Pengiriman ke IKH<br><span class="en">Delivery to IKH</span></th>
+                <th rowspan="2">Tanggal Kedatangan</th>
+                <th rowspan="2">Nama BRW / No. Reg</th>
+                <th rowspan="2">Kode Bahan Baku</th>
+                <th rowspan="2">Kadar Air (%)</th>
+                <th colspan="2">Jumlah Barang Masuk</th>
+                <th rowspan="2">Tanggal Keluar</th>
+                <th colspan="2">Jumlah Barang Keluar</th>
+                <th rowspan="2">Keterangan</th>
+                <th rowspan="2">Paraf PIC</th>
             </tr>
             <tr>
-                <th>Tanggal Kirim<br><span class="en">Date of Delivery</span></th>
-                <th>Berat Kirim (kg)<br><span class="en">Weight of Delivery</span></th>
+                <th>Biji</th>
+                <th>Gram</th>
+                <th>Biji</th>
+                <th>Gram</th>
             </tr>
         </thead>
         <tbody>
-            @php
-                $maxRows = 10;
-                $dataCount = $dcertificate->details->count();
-                $emptyRows = max(0, $maxRows - $dataCount);
-            @endphp
-            @foreach($dcertificate->details as $i => $row)
             <tr>
-                <td>{{ $i + 1 }}</td>
-                <td>{{ $row->tgl_panen }}</td>
-                <td>{{ number_format($row->berat_panen, 2) }}</td>
-                <td>{{ $row->tgl_kirim }}</td>
-                <td>{{ number_format($row->berat_kirim, 2) }}</td>
-            </tr>
-            @endforeach
-
-            @for ($i = 0; $i < $emptyRows; $i++)
-            <tr>
-                <td>&nbsp;</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            @endfor
-
-            <tr>
-                <td colspan="2" style="text-align:right;font-weight:bold;">TOTAL</td>
-                <td>{{ number_format($dcertificate->details->sum('berat_panen'), 2) }}</td>
-                <td style="text-align:right;font-weight:bold;">TOTAL</td>
-                <td>{{ number_format($dcertificate->details->sum('berat_kirim'), 2) }}</td>
+                <td class="text-center">1</td>
+                <td class="text-center">
+                    {{ $stocks->rawMaterial->tgl_masuk ?? '-' }}
+                </td>
+                <td>
+                    {{ $stocks->rawMaterial->nama ?? '-' }} /
+                    {{ $stocks->rawMaterial->no_reg ?? '-' }}
+                </td>
+                <td class="text-center">
+                    {{ $stocks->rawMaterial->kode }}
+                </td>
+                <td class="text-center">
+                    {{ $stocks->rawMaterial->kadar_air ?? '-' }}%
+                </td>
+                <td class="text-right">
+                    {{ $stocks->rawMaterial->biji_masuk ?? '-' }}
+                </td>
+                <td class="text-right">
+                    {{ $stocks->rawMaterial->berat_masuk ?? '-' }}
+                </td>
+                <td class="text-center">
+                    {{ $stocks->tgl_keluar }}
+                </td>
+                <td class="text-right">
+                    {{ $stocks->biji_keluar }}
+                </td>
+                <td class="text-right">
+                    {{ $stocks->berat_keluar }}
+                </td>
+                <td>
+                    {{ $stocks->keterangan ?? '-' }}
+                </td>
+                <td class="text-center">-</td>
             </tr>
         </tbody>
     </table>
 
-    <!-- SIGN -->
-    <div class="footer-sign">
-        Pemilik / Penanggungjawab Rumah Walet<br>
-        <span class="en">Owner / Person in Charge of Bird’s House</span>
+    <br><br>
 
-        <div class="signature"></div>
-
-        ({{ $dcertificate->wbhouse->owner ?? '.........................' }})
-    </div>
+    {{-- SIGNATURE --}}
+    <table class="no-border">
+        <tr>
+            <td width="50%" class="text-center">
+                Dibuat oleh,<br><br><br>
+                ( {{ $stocks->employee->nama }} )
+            </td>
+            <td width="50%" class="text-center">
+                Disetujui oleh,<br><br><br>
+                ( ....................... )
+            </td>
+        </tr>
+    </table>
 
 </body>
 </html>

@@ -6,12 +6,22 @@
 
     <title>@yield('title', 'Document')</title>
 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ public_path('css/style.css') }}">
 
     @stack('styles')
 </head>
 <body>
-    @yield('content')
+    <table class="header">
+        @yield('header')
+    </table>
+
+    <table class="info">
+        @yield('info')
+    </table>
+
+    <table class="data">
+        @yield('data')
+    </table>
 
     @stack('scripts')
 </body>

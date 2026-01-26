@@ -1,182 +1,79 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Form Kedatangan Bahan Baku</title>
-    <style>
-        @page {
-            size: A4;
-            margin: 20px;
-        }
+@extends('exports.form')
 
-        body {
-            font-family: "Times New Roman", serif;
-            font-size: 11px;
-        }
+@section('title', 'Grading Bahan Baku')
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+@push('styles')
+<style>
+    
+</style>
+@endpush
 
-        .header-table {
-            border: 1px solid #000;
-        }
+@section('content')
 
-        .header-table td {
-            border: 1px solid #000;
-            vertical-align: middle;
-        }
-
-        .logo {
-            text-align: center;
-        }
-
-        .title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-style: italic;
-            font-size: 12px;
-        }
-
-        .doc-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: none;
-        }
-
-        .doc-table tr {
-            border-bottom: 1px solid #000;
-        }
-
-        .doc-table tr:last-child {
-            border-bottom: none;
-        }
-
-        .doc-table td {
-            border: none;
-            vertical-align: top;
-            padding: 3px;
-            font-size: 11px;
-        }
-
-        .doc-label {
-            /* border-right: 1px solid #000; */
-            border-right: none;
-        }
-
-        .doc-colon {
-            width: 10px;
-            text-align: center;
-            border-left: 1px solid #000;
-        }
-
-        /* garis horizontal */
-        .doc-table tr:not(:last-child) td {
-            border-bottom: 1px solid #000;
-        }
-
-        .info-table td {
-            padding: 4px;
-        }
-
-        .main-table th,
-        .main-table td {
-            border: 1px solid #000;
-            padding: 5px;
-            text-align: center;
-        }
-
-        .text-left {
-            text-align: left;
-        }
-    </style>
-</head>
-<body>
-
-@php
-    $first = $containers->first();
-    \Carbon\Carbon::setLocale('id');
-@endphp
-
-<table class="header-table">
+<table class="header">
     <tr>
-        <td width="15%" class="logo">
-            <img src="{{ asset('img/Logo.png') }}" width="80">
+        <td rowspan="3" width="20%" align="center">
+            <img src="{{ public_path('img/Logo.png') }}" width="80" alt="Logo">
         </td>
 
-        <td width="55%">
-            <div class="title">FORM KEDATANGAN BAHAN BAKU</div>
-            <div class="subtitle">(RAW MATERIALS ARRIVAL FORM)</div>
+        <td rowspan="3" width="50%" class="title">
+            FORM GRADING<br>
+            BAHAN BAKU<br>
+            <span class="small">(Grading Form Raw Material)</span>
         </td>
 
-        <td width="30%">
-            <table class="doc-table">
-                <tr>
-                    <td class="doc-label">
-                        <strong>No. Dokumen</strong><br>
-                        <i>(Document No.)</i>
-                    </td>
-                    <td class="doc-colon">:</td>
-                    <td>AAN/FRM/RM/01/02</td>
-                </tr>
+        <td width="15%">
+            No. Dokumen
+            <i>(Document No.)</i>
+        </td>
+        <td width="15%">
+            : {{ $document->no ?? '-' }}
+        </td>
+    </tr>
 
-                <tr>
-                    <td class="doc-label">
-                        <strong>Rev</strong><br>
-                        <i>(Revision No.)</i>
-                    </td>
-                    <td class="doc-colon">:</td>
-                    <td>01</td>
-                </tr>
+    <tr>
+        <td>
+            Revisi
+            <i>(Revision)</i>
+        </td>
+        <td>
+            : Rev-{{ $document->getRevFormattedAttribute() }}
+        </td>
+    </tr>
 
-                <tr>
-                    <td class="doc-label">
-                        <strong>Tanggal</strong><br>
-                        <i>(Date)</i>
-                    </td>
-                    <td class="doc-colon">:</td>
-                    <td>19 January 2026</td>
-                </tr>
-
-                <tr>
-                    <td class="doc-label">
-                        <strong>Bagian</strong><br>
-                        <i>(Department)</i>
-                    </td>
-                    <td class="doc-colon">:</td>
-                    <td>
-                        <strong>Bahan Baku</strong><br>
-                        <i>(Raw Material)</i>
-                    </td>
-                </tr>
-            </table>
+    <tr>
+        <td>
+            Tanggal
+            <i>(Date)</i>
+        </td>
+        <td>
+            : {{ \Carbon\Carbon::parse($document->tgl)->translatedFormat('d F Y') }}
         </td>
     </tr>
 </table>
 
 <br>
 
-<table class="info-table">
+<table class="info">
+    @php
+        $first = $containers->first();
+    @endphp
+    
     <tr>
         <td width="10%">Bulan</td>
-        <td width="30%">
-            : {{ \Carbon\Carbon::parse($first->arrival->tgl_kedatangan)->translatedFormat('F') }}
+        <td width="60%">
+            : {{ \Carbon\Carbon::parse($first->tanggal)->translatedFormat('F') }}
         </td>
+        <td width="15%">Departemen</td>
+        <td width="15%">: {{ $document->department->nama_dept }}</td>
+    </tr>
+    <tr>
         <td width="10%">PIC</td>
-        <td width="50%">:{{ $document->step->employee->nama ?? '-' }}</td>
-        {{-- <td width="50%">: {{ $first->arrival->employee->nama }}</td> --}}
+        <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
     </tr>
 </table>
 
-<br>
-
-<table class="main-table">
+<table class="data">
     <thead>
         <tr>
             <th rowspan="2">No</th>
@@ -212,5 +109,4 @@
     </tbody>
 </table>
 
-</body>
-</html>
+@endsection

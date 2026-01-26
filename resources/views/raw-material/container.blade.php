@@ -12,6 +12,7 @@
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Kode</th>
+    <th>Tanggal</th>
     <th>Biji</th>
     <th>Berat</th>
     <th>Keterangan</th>
@@ -24,6 +25,7 @@
             <td><input type="checkbox" class="row-check" value="{{ $container->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $container->arrival->kode }}</td>
+            <td>{{ $container->tanggal }}</td>
             <td>{{ $container->biji }}</td>
             <td>{{ $container->berat }}</td>
             <td>{{ empty($container->keterangan) ? '-' : $container->keterangan }}</td>
@@ -72,17 +74,20 @@
             <div class="border rounded p-3 mb-3">
                 <h6>Kontainer ${i}</h6>
 
+                <label>Tanggal</label>
+                <input type="date" class="form-control mb-2 c-tanggal" data-index="${i}" min="0" required>
+
                 <label>Biji</label>
-                <input type="number" class="form-control mb-2 kont-biji" data-index="${i}" min="0" required>
+                <input type="number" class="form-control mb-2 c-biji" data-index="${i}" min="0" required>
 
                 <label>Berat</label>
-                <input type="number" class="form-control mb-2 kont-berat" data-index="${i}" min="0" step="0.01" required>
+                <input type="number" class="form-control mb-2 c-berat" data-index="${i}" min="0" step="0.01" required>
 
                 <label>Keterangan</label>
-                <input type="text" class="form-control mb-2 kont-keterangan" data-index="${i}" placeholder="Optional (tidak wajib diisi)">
+                <input type="text" class="form-control mb-2 c-keterangan" data-index="${i}" placeholder="Optional (tidak wajib diisi)">
 
                 <label>Petugas</label>
-                <select class="form-control kont-petugas" data-index="${i}" required>
+                <select class="form-control c-petugas" data-index="${i}" required>
                     <option value="">-- Pilih Petugas --</option>
                     @foreach($employees as $employee)
                         <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
@@ -101,10 +106,11 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 arrivals_id,
-                biji: $(`.kont-biji[data-index="${i}"]`).val(),
-                berat: $(`.kont-berat[data-index="${i}"]`).val(),
-                keterangan: $(`.kont-keterangan[data-index="${i}"]`).val(),
-                employees_id: $(`.kont-petugas[data-index="${i}"]`).val(),
+                tanggal: $(`.c-tanggal[data-index="${i}"]`).val(),
+                biji: $(`.c-biji[data-index="${i}"]`).val(),
+                berat: $(`.c-berat[data-index="${i}"]`).val(),
+                keterangan: $(`.c-keterangan[data-index="${i}"]`).val(),
+                employees_id: $(`.c-petugas[data-index="${i}"]`).val(),
             });
         }
 
@@ -138,6 +144,10 @@
                 $('#item_id').val(container.id);
 
                 let html = `
+                    <label>Tanggal</label>
+                    <input type="date" class="form-control mb-2" id="edit_tanggal"
+                        value="${container.biji}" min="0">
+
                     <label>Biji</label>
                     <input type="number" class="form-control mb-2" id="edit_biji"
                         value="${container.biji}" min="0">
@@ -168,7 +178,9 @@
                 $('#btnSubmitAll').off().on('click', function () {
 
                     let payload = {
-                        arrivals_id: container.arrivals_id, // arrival tidak bisa diubah lewat modal ini
+                        arrivals_id: container.arrivals_id,
+                        tanggal: parseInt($('#edit_tanggal').val()),
+                        biji: parseInt($('#edit_biji').val()),
                         biji: parseInt($('#edit_biji').val()),
                         berat: parseFloat($('#edit_berat').val()),
                         keterangan: $('#edit_keterangan').val() || null,

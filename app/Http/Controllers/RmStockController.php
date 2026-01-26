@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RmStock;
+use App\Models\Document;
 use App\Models\Employee;
 use Illuminate\View\View;
 use App\Models\RawMaterial;
@@ -117,12 +118,36 @@ class RmStockController extends Controller
         ]);
     }
 
+    public function preview($id)
+    {
+        $stocks = RmStock::with([
+            'employee',
+            'dcertificate.wbhouse'
+        ])->findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'SBB058')
+        ->firstOrFail();
+
+        return view('exports.rm-stock-form', compact('stocks', 'document'));
+    }
+
     public function export($id)
     {
         $stocks = RmStock::with(['rawMaterial', 'employee'])
             ->findOrFail($id);
 
-        $pdf = Pdf::loadView('exports.rm-stock-form', compact('stocks'))
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'SBB058')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.rm-stock-form', compact('stocks', 'document'))
             ->setPaper('A4', 'portrait');
 
         $filename = 'Form_Stok_Bahan_Baku_' . $stocks->id . '.pdf';

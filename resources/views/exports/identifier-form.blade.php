@@ -13,7 +13,7 @@
 <table class="header">
     <tr>
         <td rowspan="3" width="20%" align="center">
-            <img src="{{ asset('img/Logo.png') }}" width="80" alt="Logo">
+            <img src="{{ public_path('img/Logo.png') }}" width="80" alt="Logo">
         </td>
 
         <td rowspan="3" width="50%" class="title">
@@ -37,7 +37,7 @@
             <i>(Revision)</i>
         </td>
         <td>
-            : Rev-{{ str_pad($document->rev ?? 0, 2, '0', STR_PAD_LEFT) }}
+            : Rev-{{ $document->getRevFormattedAttribute() }}
         </td>
     </tr>
 

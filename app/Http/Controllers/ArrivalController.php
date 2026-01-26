@@ -135,14 +135,21 @@ class ArrivalController extends Controller
         ->where('kode', 'KBB058')
         ->firstOrFail();
 
-        return view('exports.arrival-form', compact('arrival'));
+        return view('exports.arrival-form', compact('arrival', 'document'));
     }
 
     public function export($id)
     {
         $arrival = Arrival::findOrFail($id);
 
-        $pdf = Pdf::loadView('exports.arrival-form', compact('arrival'))
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'KBB058')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.arrival-form', compact('arrival', 'document'))
                 ->setPaper('A4', 'portrait');
 
         $filename = 'Kedatangan.pdf';
