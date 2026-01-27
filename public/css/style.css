@@ -20,7 +20,7 @@ table {
 .header td, .border th {
     border: 1px solid #000;
     padding: 4px;
-    vertical-align: top;
+    vertical-align: middle;
 }
 .no-border td {
     border: none;

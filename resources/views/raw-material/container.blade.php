@@ -179,7 +179,7 @@
 
                     let payload = {
                         arrivals_id: container.arrivals_id,
-                        tanggal: parseInt($('#edit_tanggal').val()),
+                        tanggal: $('#edit_tanggal').val(),
                         biji: parseInt($('#edit_biji').val()),
                         biji: parseInt($('#edit_biji').val()),
                         berat: parseFloat($('#edit_berat').val()),

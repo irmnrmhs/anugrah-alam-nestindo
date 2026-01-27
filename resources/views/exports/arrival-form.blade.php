@@ -35,7 +35,7 @@
         <i>(Revision)</i>
     </td>
     <td>
-        : Rev-{{ $document->getRevFormattedAttribute() }}
+        : {{ $document->getRevFormattedAttribute() }}
     </td>
 </tr>
 
@@ -52,31 +52,38 @@
 
 @section('data')
 <table class="no-border mt">
-    <tr><td><strong>1. Pemeriksaan Kendaraan</strong></td></tr>
+    <tr>
+        <td>
+            <strong>1. Pemeriksaan Kendaraan</strong> <br>
+            <i>(Vehicle's Inspection)</i>
+        </td>
+    </tr>
 </table>
 
 <table class="no-border">
     <tr>
-        <td width="30%">Tanggal</td>
+        <td width="30%">Tanggal <br> <i>(Date)</i></td>
         <td>: {{ \Carbon\Carbon::parse($arrival->tgl_kedatangan)->translatedFormat('d F Y') }}</td>
     </tr>
     <tr>
-        <td>Nama Supir</td>
+        <td>Nama Supir <br> <i>(Driver's Name)</i></td>
         <td>: {{ $arrival->employee->nama }}</td>
     </tr>
     <tr>
-        <td>Merk Mobil</td>
+        <td>Merk Mobil <br> <i>(Vehicle's Brand)</i></td>
         <td>: {{ $arrival->car->merk }}</td>
     </tr>
     <tr>
-        <td>No. Mobil</td>
+        <td>No. Mobil <br> <i>(Vehicle's Plate Number)</i></td>
         <td>: {{ $arrival->car->plat }}</td>
     </tr>
 </table>
 
 <table class="no-border mt">
     <tr>
-        <td width="40%">Kebersihan Mobil Sudah Bebas Dari :</td>
+        <td width="40%">Kebersihan Mobil Sudah Bebas Dari : <br>
+            <i>(Car Cleanliness is Free From)</i>
+        </td>
         <td>
             @php
                 $kondisi = strtolower($arrival->kondisi);
@@ -93,31 +100,53 @@
 
 {{-- 2. PEMERIKSAAN BAHAN BAKU --}}
 <table class="no-border mt">
-    <tr><td><strong>2. Pemeriksaan Bahan Baku</strong></td></tr>
+    <tr><td><strong>2. Pemeriksaan Bahan Baku</strong><br>
+        <i>(Raw Material Inspection)</i>
+    </td></tr>
 </table>
 
 <table class="no-border">
     <tr>
-        <td width="30%">Kode Bahan Baku</td>
+        <td width="30%">
+            Kode Bahan Baku
+            <i>(Raw Material Code)</i>
+        </td>
         <td>: {{ $arrival->kode }}</td>
     </tr>
     <tr>
-        <td>Berat (Gram)</td>
+        <td>Berat (Gram) <br>
+            <i>(Weight)</i>
+        </td>
         <td>: {{ $arrival->rawMaterial->berat ?? '-' }}</td>
     </tr>
     <tr>
-        <td>Nama RBW / No. Reg</td>
+        <td>Nama RBW / No. Reg <br>
+            <i>(Bird's House Name / Registration No.)</i>
+        </td>
         <td>: {{ $arrival->dcertificate->wbhouse->nama ?? '-' }}</td>
     </tr>
     <tr>
-        <td>Kadar Air (%)</td>
+        <td>
+            Kadar Air (%) <br>
+            <i>(Moisture Content)</i>
+        </td>
         <td>: {{ $arrival->rawMaterial->kadar_air ?? '-' }}</td>
+    </tr>
+    <tr>
+        <td>
+            Keutuhan Seal Carton <br>
+            <i>(Carton Seal Integrity)</i>
+        </td>
+        <td>: y/n</td>
     </tr>
 </table>
 
 <table class="no-border mt">
     <tr>
-        <td width="40%">Surat Keterangan Pengiriman</td>
+        <td width="40%">
+            Surat Keterangan Pengiriman <br>
+            <i>(Delivery Certificate)</i>
+        </td>
         <td>
             <span class="checkbox">v</span> Yes
             &nbsp;&nbsp;
@@ -128,7 +157,10 @@
 
 <table class="no-border mt">
     <tr>
-        <td>Keterangan :</td>
+        <td>
+            Keterangan : <br>
+            <i>(Description)</i>
+        </td>
     </tr>
     <tr>
         <td>{{ $arrival->keterangan ?? '-' }}</td>
@@ -138,11 +170,11 @@
 <table class="no-border mt">
     <tr>
         <td width="50%" align="center">
-            Supir<br><br><br>
+            Supir <br> <i>(Driver)</i><br><br><br>
             ( {{ $arrival->employee->nama }} )
         </td>
         <td width="50%" align="center">
-            Kepala Gudang<br><br><br>
+            Kepala Gudang <br> <i>(Head of Warehouse)</i><br><br><br>
         </td>
     </tr>
 </table>
