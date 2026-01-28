@@ -6,3 +6,37 @@ div.dt-buttons {
 .content-wrapper {
     overflow-x: hidden;
 }
+
+/* 2. Form Ekspor  */
+body {
+    font-family: "Times New Roman", serif;
+    font-size: 12px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 10px;
+}
+.header td, .border th {
+    border: 1px solid #000;
+    padding: 4px;
+    vertical-align: middle;
+}
+.no-border td {
+    border: none;
+    padding: 2px;
+}
+.title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    vertical-align: middle;
+}
+.small {
+    font-size: 11px;
+}
+
+table .data {
+    height: 70%;
+    border: 1px solid #000;
+}

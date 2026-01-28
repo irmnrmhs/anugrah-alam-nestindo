@@ -12,7 +12,8 @@ class Document extends Model
         'kode',
         'no',
         'name',
-        'rev'
+        'rev',
+        'tgl',
     ];
 
     public function employee()

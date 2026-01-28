@@ -281,6 +281,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/identifiers/{id}', [ProductIdentifierController::class, 'destroy'])->name('identifiers.destroy');
     Route::post('/identifiers/delete-multiple', [ProductIdentifierController::class, 'deleteMultiple']);
     Route::get('/raw-material-info-pi/{id}', [ProductIdentifierController::class, 'materialInfo']);
+    Route::get('/identifiers/{id}/preview', [ProductIdentifierController::class, 'preview'])->name('identifiers.preview');
+    Route::get('/identifiers/{id}/export', [ProductIdentifierController::class, 'export'])->name('identifiers.export');
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');
@@ -346,6 +348,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/edges/{id}', [EdgeController::class, 'destroy'])->name('edges.destroy');
     Route::post('/edges/delete-multiple', [EdgeController::class, 'deleteMultiple']);
     Route::get('/edges-info/{id}', [EdgeController::class, 'info']);
+    Route::get('/edges/{id}/export', [EdgeController::class, 'export'])->name('edges.export');
     
     // Pencucian
     Route::get('/washes', [WashController::class, 'index'])->name('washes.index');
@@ -355,6 +358,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/washes/{id}', [WashController::class, 'destroy'])->name('washes.destroy');
     Route::post('/washes/delete-multiple', [WashController::class, 'deleteMultiple']);
     Route::get('/washes-info/{id}', [WashController::class, 'info']);
+    Route::get('/washes/{id}/export', [WashController::class, 'export'])->name('washes.export');
 
     // Inspeksi dan Koreksi
     Route::get('/corrections', [CorrectionController::class, 'index'])->name('corrections.index');
@@ -364,6 +368,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/corrections/{id}', [CorrectionController::class, 'destroy'])->name('corrections.destroy');
     Route::post('/corrections/delete-multiple', [CorrectionController::class, 'deleteMultiple']);
     Route::get('/corrections-info/{id}', [CorrectionController::class, 'info']);
+    Route::get('/corrections/{id}/export', [CorrectionController::class, 'export'])->name('corrections.export');
     
     // Pencabutan Bulu
     Route::get('/picks', [PickController::class, 'index'])->name('picks.index');
@@ -373,6 +378,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/picks/{id}', [PickController::class, 'destroy'])->name('picks.destroy');
     Route::post('/picks/delete-multiple', [PickController::class, 'deleteMultiple']);
     Route::get('/picks-info/{id}', [PickController::class, 'info']);
+    Route::get('/picks/{id}/export', [PickController::class, 'export'])->name('picks.export');
     
     // Perendaman
     Route::get('/soaks', [SoakController::class, 'index'])->name('soaks.index');
@@ -382,6 +388,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/soaks/{id}', [SoakController::class, 'destroy'])->name('soaks.destroy');
     Route::post('/soaks/delete-multiple', [SoakController::class, 'deleteMultiple']);
     Route::get('/soaks-info/{id}', [SoakController::class, 'info']);
+    Route::get('/soaks/{id}/export', [SoakController::class, 'export'])->name('soaks.export');
     
     // Cabut Bilas
     Route::get('/rinses', [RinseController::class, 'index'])->name('rinses.index');
@@ -391,6 +398,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/rinses/{id}', [RinseController::class, 'destroy'])->name('rinses.destroy');
     Route::post('/rinses/delete-multiple', [RinseController::class, 'deleteMultiple']);
     Route::get('/rinses-info/{id}', [RinseController::class, 'info']);
+    Route::get('/rinses/{id}/export', [RinseController::class, 'export'])->name('rinses.export');
 
     // Masuk Cetak
     Route::get('/entries', [EntryController::class, 'index'])->name('entries.index');
@@ -400,6 +408,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/entries/{id}', [EntryController::class, 'destroy'])->name('entries.destroy');
     Route::post('/entries/delete-multiple', [EntryController::class, 'deleteMultiple']);
     Route::get('/entries-info/{id}', [EntryController::class, 'info']);
+    Route::get('/entries/{id}/export', [EntryController::class, 'export'])->name('entries.export');
 
     // Keluar Cetak
     Route::get('/pulls', [PullController::class, 'index'])->name('pulls.index');
@@ -409,6 +418,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/pulls/{id}', [PullController::class, 'destroy'])->name('pulls.destroy');
     Route::post('/pulls/delete-multiple', [PullController::class, 'deleteMultiple']);
     Route::get('/pulls-info/{id}', [PullController::class, 'info']);
+    Route::get('/pulls/{id}/export', [PullController::class, 'export'])->name('pulls.export');
 
     // Pengeringan
     Route::get('/dries', [DryController::class, 'index'])->name('dries.index');
@@ -418,6 +428,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/dries/{id}', [DryController::class, 'destroy'])->name('dries.destroy');
     Route::post('/dries/delete-multiple', [DryController::class, 'deleteMultiple']);
     Route::get('/dries-info/{id}', [DryController::class, 'info']);
+    Route::get('/dries/{id}/export', [DryController::class, 'export'])->name('dries.export');
 
     // Grade Bahan Baku
     Route::get('/fp-grades', [FpGradeController::class, 'index'])->name('fp-grades.index');
@@ -426,6 +437,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/fp-grades/{id}', [FpGradeController::class, 'update'])->name('fp-grades.update');
     Route::delete('/fp-grades/{id}', [FpGradeController::class, 'destroy'])->name('fp-grades.destroy');
     Route::post('/fp-grades/delete-multiple', [FpGradeController::class, 'deleteMultiple']);
+    Route::get('/fp-grades/{id}/export', [FpGradeController::class, 'export'])->name('fp-grades.export');
 
     // Produk
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -435,6 +447,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::post('/products/delete-multiple', [ProductController::class, 'deleteMultiple']);
     Route::get('/products-info/{id}', [ProductController::class, 'info']);
+    Route::get('/product/{id}/export', [ProductController::class, 'export'])->name('products.export');
 
     // Produk Jadi
     Route::get('/fp-products', [FinishedController::class, 'index'])->name('fp-products.index');
@@ -473,7 +486,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/steams/{id}', [SteamController::class, 'update'])->name('steams.update');
     Route::delete('/steams/{id}', [SteamController::class, 'destroy'])->name('steams.destroy');
     Route::post('/steams/delete-multiple', [SteamController::class, 'deleteMultiple']);
-
+    Route::get('/steams/{id}/export', [SteamController::class, 'export'])->name('steams.export');
     
 });
 

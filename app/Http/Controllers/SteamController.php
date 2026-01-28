@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FinishedProduct;
-use App\Models\NestType;
 use App\Models\Steam;
+use App\Models\Document;
+use App\Models\NestType;
+use Illuminate\View\View;
 use App\Models\SteamOfficer;
 use Illuminate\Http\Request;
+use App\Models\FinishedProduct;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 
 class SteamController extends Controller
 {
@@ -190,6 +192,25 @@ class SteamController extends Controller
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan.',
         ]);
+    }
+
+    public function export($id)
+    {
+        $steams = Steam::findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'PR13ST')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.steam-form', compact('steams', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Steam.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

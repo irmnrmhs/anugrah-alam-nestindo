@@ -1,216 +1,130 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Form Kedatangan Bahan Baku</title>
-    <style>
-        @page {
-            size: A4;
-            margin: 20px;
-        }
+@extends('exports.form')
 
-        body {
-            font-family: "Times New Roman", serif;
-            font-size: 11px;
-        }
+@section('title', 'Kedatangan Bahan Baku')
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+@push('styles')
+<style>
+    
+</style>
+@endpush
 
-        .header-table {
-            border: 1px solid #000;
-        }
+@section('header')
+<tr>
+<td rowspan="3" width="20%" align="center">
+    <img src="{{ public_path('img/Logo.png') }}" width="80" alt="Logo">
+</td>
 
-        .header-table td {
-            border: 1px solid #000;
-            vertical-align: middle;
-        }
+<td rowspan="3" width="40%" class="title">
+    FORM KEDATANGAN BAHAN BAKU <br>
+    <span class="small"><i>(RAW MATERIALS ARRIVAL FORM)</i></span>
+</td>
 
-        .logo {
-            text-align: center;
-        }
+<td width="20%">
+    No. Dokumen
+    <i>(Document No.)</i>
+</td>
+<td width="20%">
+    : {{ $document->no ?? '-' }}
+</td>
+</tr>
 
-        .title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
+<tr>
+<td>
+    Revisi
+    <i>(Revision)</i>
+</td>
+<td>
+    : {{ $document->getRevFormattedAttribute() }}
+</td>
+</tr>
 
-        .subtitle {
-            text-align: center;
-            font-style: italic;
-            font-size: 12px;
-        }
+<tr>
+<td>
+    Tanggal
+    <i>(Date)</i>
+</td>
+<td>
+    : {{ \Carbon\Carbon::parse($document->tgl)->translatedFormat('d F Y') }}
+</td>
+</tr>
+@endsection
 
-        .doc-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: none;
-        }
+<br>
 
-        .doc-table tr {
-            border-bottom: 1px solid #000;
-        }
-
-        .doc-table tr:last-child {
-            border-bottom: none;
-        }
-
-        .doc-table td {
-            border: none;
-            vertical-align: top;
-            padding: 3px;
-            font-size: 11px;
-        }
-
-        .doc-label {
-            /* border-right: 1px solid #000; */
-            border-right: none;
-        }
-
-        .doc-colon {
-            width: 10px;
-            text-align: center;
-            border-left: 1px solid #000;
-        }
-
-        /* garis horizontal */
-        .doc-table tr:not(:last-child) td {
-            border-bottom: 1px solid #000;
-        }
-
-        .info-table td {
-            padding: 4px;
-        }
-
-        .main-table th,
-        .main-table td {
-            border: 1px solid #000;
-            padding: 5px;
-            text-align: center;
-        }
-
-        .text-left {
-            text-align: left;
-        }
-    </style>
-</head>
-<body>
-
+@section('info')
 @php
     $first = $containers->first();
-    \Carbon\Carbon::setLocale('id');
 @endphp
 
-<table class="header-table">
+<tr>
+    <td width="15%">
+        Bulan <i>(Month)</i>
+    </td>
+    <td width="35%">
+        : {{ \Carbon\Carbon::parse($first->tanggal)->translatedFormat('F') }}
+    </td>
+    <td width="25%">
+        Departemen <i>(Department)</i>
+    </td>
+    <td width="25%">: {{ $document->department->nama_dept }}</td>
+</tr>
+<tr>
+    <td width="10%">PIC</td>
+    <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
+</tr>
+@endsection
+
+@section('data')
+<thead>
     <tr>
-        <td width="15%" class="logo">
-            <img src="{{ asset('img/Logo.png') }}" width="80">
-        </td>
-
-        <td width="55%">
-            <div class="title">FORM KEDATANGAN BAHAN BAKU</div>
-            <div class="subtitle">(RAW MATERIALS ARRIVAL FORM)</div>
-        </td>
-
-        <td width="30%">
-            <table class="doc-table">
-                <tr>
-                    <td class="doc-label">
-                        <strong>No. Dokumen</strong><br>
-                        <i>(Document No.)</i>
-                    </td>
-                    <td class="doc-colon">:</td>
-                    <td>AAN/FRM/RM/01/02</td>
-                </tr>
-
-                <tr>
-                    <td class="doc-label">
-                        <strong>Rev</strong><br>
-                        <i>(Revision No.)</i>
-                    </td>
-                    <td class="doc-colon">:</td>
-                    <td>01</td>
-                </tr>
-
-                <tr>
-                    <td class="doc-label">
-                        <strong>Tanggal</strong><br>
-                        <i>(Date)</i>
-                    </td>
-                    <td class="doc-colon">:</td>
-                    <td>19 January 2026</td>
-                </tr>
-
-                <tr>
-                    <td class="doc-label">
-                        <strong>Bagian</strong><br>
-                        <i>(Department)</i>
-                    </td>
-                    <td class="doc-colon">:</td>
-                    <td>
-                        <strong>Bahan Baku</strong><br>
-                        <i>(Raw Material)</i>
-                    </td>
-                </tr>
-            </table>
-        </td>
+        <th rowspan="2">
+            No <br> <i>(No)</i>
+        </th>
+        <th rowspan="2">
+            Tanggal Kedatangan <br> <i>(Arrival Date)</i>
+        </th>
+        <th rowspan="2">
+            Nama RBW / No. Reg <br> <i>(Bird's House Name /Registration No.)</i>
+        </th>
+        <th rowspan="2">
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th colspan="2">
+            Jumlah <br> <i>(Amount)</i>
+        </th>
+        <th rowspan="2">
+            Keterangan <br> <i>(Description)</i>
+        </th>
+        <th rowspan="2">
+            Petugas <br> <i>(Officer)</i>
+        </th>
     </tr>
-</table>
-
-<br>
-
-<table class="info-table">
     <tr>
-        <td width="10%">Bulan</td>
-        <td width="30%">
-            : {{ \Carbon\Carbon::parse($first->arrival->tgl_kedatangan)->translatedFormat('F') }}
-        </td>
-        <td width="10%">PIC</td>
-        <td width="50%">:{{ $document->step->employee->nama ?? '-' }}</td>
-        {{-- <td width="50%">: {{ $first->arrival->employee->nama }}</td> --}}
+        <th>
+            Biji <br> <i>(Piece)</i>
+        </th>
+        <th>
+            Gram <br> <i>(Gram)</i>
+        </th>
     </tr>
-</table>
-
-<br>
-
-<table class="main-table">
-    <thead>
-        <tr>
-            <th rowspan="2">No</th>
-            <th rowspan="2">Tanggal Kedatangan</th>
-            <th rowspan="2">Nama RBW / No. Reg</th>
-            <th rowspan="2">Kode Bahan Baku</th>
-            <th colspan="2">Jumlah</th>
-            <th rowspan="2">Keterangan</th>
-            <th rowspan="2">Petugas</th>
-        </tr>
-        <tr>
-            <th>Biji</th>
-            <th>Gram</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($containers as $i => $row)
-        <tr>
-            <td>{{ $i + 1 }}</td>
-            <td>
-                {{ \Carbon\Carbon::parse($row->arrival->tgl_kedatangan)->format('d-m-Y') }}
-            </td>
-            <td class="text-left">
-                {{ $row->arrival->dcertificate->wbhouse->nama ?? '-' }}
-            </td>
-            <td>{{ $row->arrival->kode }}</td>
-            <td>{{ $row->biji ?? 0 }}</td>
-            <td>{{ $row->berat ?? 0 }}</td>
-            <td>{{ $row->keterangan ?? '-' }}</td>
-            <td>{{ $row->employee->nama }}</td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-
-</body>
-</html>
+</thead>
+<tbody>
+    @foreach ($containers as $i => $row)
+    <tr>
+        <td>{{ $i + 1 }}</td>
+        <td>
+            {{ \Carbon\Carbon::parse($row->arrival->tgl_kedatangan)->format('d-m-Y') }}
+        </td>
+        <td class="text-left">
+            {{ $row->arrival->dcertificate->wbhouse->nama ?? '-' }} / 
+            {{ $row->arrival->dcertificate->wbhouse->kode }}
+        </td>
+        <td>{{ $row->arrival->kode }}</td>
+        <td>{{ $row->biji ?? 0 }}</td>
+        <td>{{ $row->berat ?? 0 }}</td>
+        <td>{{ $row->keterangan ?? '-' }}</td>
+        <td>{{ $row->employee->nama }}</td>
+    </tr>
+    @endforeach
+</tbody>
+@endsection

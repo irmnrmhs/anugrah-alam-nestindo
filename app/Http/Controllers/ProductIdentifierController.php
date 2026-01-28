@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grade;
+use App\Models\Document;
 use App\Models\Supplier;
 use Illuminate\View\View;
 use App\Models\RawMaterial;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\ProductIdentifier;
 use Illuminate\Http\JsonResponse;
 
@@ -157,5 +159,42 @@ class ProductIdentifierController extends Controller
             'status' => 'success',
             'message' => $this->obj . ' berhasil dihapus',
         ]);
+    }
+
+    public function preview($id)
+    {
+        $identifiers = ProductIdentifier::with([
+            'rawMaterial', 'grade'
+        ])->findOrFail($id);
+        
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'PR01GB')
+        ->firstOrFail();
+
+        return view('exports.identifier-form', compact('identifiers', 'document'));
+    }
+
+    public function export($id)
+    {
+        $identifiers = ProductIdentifier::with([
+            'rawMaterial', 'grade'
+        ])->findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'PR01GB')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.identifier-form', compact('identifiers', 'document'))
+            ->setPaper('A4', 'portrait');
+
+        $filename = 'Form Grading ' . $identifiers->id . '.pdf';
+
+        return $pdf->stream($filename);
     }
 }

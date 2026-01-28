@@ -37,6 +37,7 @@ class ContainerController extends Controller
         $validated = $request->validate([
             'arrivals_id'  => 'required|exists:arrivals,id',
             'employees_id' => 'required|exists:employees,id',
+            'tanggal'      => 'required|date',
             'biji'         => 'required|integer|min:0',
             'berat'        => 'required|numeric|min:0|max:99999.99',
             'keterangan'   => 'nullable|string',
@@ -64,6 +65,7 @@ class ContainerController extends Controller
         $validated = $request->validate([
             'arrivals_id'  => 'required|exists:arrivals,id',
             'employees_id' => 'required|exists:employees,id',
+            'tanggal'      => 'required|date',
             'biji'         => 'required|integer|min:0',
             'berat'        => 'required|numeric|min:0|max:99999.99',
             'keterangan'   => 'nullable|string',
@@ -98,6 +100,7 @@ class ContainerController extends Controller
             'items'                   => 'required|array|min:1',
             'items.*.arrivals_id'     => 'required|exists:arrivals,id',
             'items.*.employees_id'    => 'required|exists:employees,id',
+            'items.*.tanggal'         => 'required|date',
             'items.*.biji'            => 'required|integer|min:0',
             'items.*.berat'           => 'required|numeric|min:0|max:99999.99',
             'items.*.keterangan'      => 'nullable|string',
@@ -125,13 +128,13 @@ class ContainerController extends Controller
         ->get();
         
         $document = Document::with([
-            'step.employee',
+            'employee',
             'department'
         ])
-        ->where('kode', 'KBB058')
+        ->where('kode', 'DBB058')
         ->firstOrFail();
 
-        return view('exports.container-form', compact('containers'));
+        return view('exports.container-form', compact('containers', 'document'));
     }
     
     public function export($id)
@@ -144,15 +147,13 @@ class ContainerController extends Controller
         ->get();
 
         $document = Document::with([
-            'step.employee',
+            'employee',
             'department'
         ])
-        ->where('kode', 'KBB058')
+        ->where('kode', 'DBB058')
         ->firstOrFail();
 
-        $document = Document::where('kode', 'KBB058')->firstOrFail();
-
-        $pdf = Pdf::loadView('exports.container-form', compact('containers'))
+        $pdf = Pdf::loadView('exports.container-form', compact('containers', 'document'))
             ->setPaper('A4', 'portrait');
 
         $filename = 'Form Kontainer.pdf';

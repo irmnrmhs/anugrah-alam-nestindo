@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
 use App\Models\Document;
-use App\Models\Step;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Models\Employee;
 use Illuminate\View\View;
+use App\Models\Department;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class DocumentController extends Controller
 {

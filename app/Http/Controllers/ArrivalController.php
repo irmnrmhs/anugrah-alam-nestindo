@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Arrival;
 use App\Models\Car;
-use App\Models\Dcertificate;
+use App\Models\Arrival;
+use App\Models\Document;
 use App\Models\Employee;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use App\Models\Dcertificate;
+use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Dom\Document;
+use Illuminate\Http\JsonResponse;
 
 class ArrivalController extends Controller
 {
@@ -128,14 +128,28 @@ class ArrivalController extends Controller
             'dcertificate.wbhouse'
         ])->findOrFail($id);
 
-        return view('exports.arrival-form', compact('arrival'));
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'KBB058')
+        ->firstOrFail();
+
+        return view('exports.arrival-form', compact('arrival', 'document'));
     }
 
     public function export($id)
     {
         $arrival = Arrival::findOrFail($id);
 
-        $pdf = Pdf::loadView('exports.arrival-form', compact('arrival'))
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'KBB058')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.arrival-form', compact('arrival', 'document'))
                 ->setPaper('A4', 'portrait');
 
         $filename = 'Kedatangan.pdf';

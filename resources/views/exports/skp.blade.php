@@ -5,7 +5,7 @@
 
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: "Bahnschrift SemiBold", sans-serif;
             font-size: 11px;
             margin: 20px 35px;
         }
@@ -41,7 +41,7 @@
             text-align: center;
             font-weight: bold;
             font-size: 13px;
-            margin-top: 8px;
+            margin-top: 60px;
             text-decoration: underline;
         }
 
@@ -57,6 +57,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 10px;
+            margin-top: 25px;
         }
 
         table.info td {
@@ -89,7 +90,7 @@
         table.data-table th,
         table.data-table td {
             border: 1px solid #000;
-            padding: 4px;
+            padding: 2px;
             text-align: center;
             font-size: 10px;
         }
@@ -117,25 +118,29 @@
 </head>
 
 <body>
-
-    <!-- NO & REV -->
-    <div class="box-right">
-        {{ $document->no }}<br>
-        Rev-{{ $document->rev_formatted }}
-    </div>
-
-    <!-- COMPANY -->
-    <div class="company">{{ $dcertificate->company->nama }}</div>
-    <div class="company-desc">{{ $dcertificate->company->alamat }}</div>
-
-    <!-- TITLE -->
+    <table>
+        <tr>
+            <td width="15%">
+                <img src="{{ public_path('img/Logo.png') }}" width="80">
+            </td>
+            <td width="55%">
+                <div class="company">{{ $dcertificate->company->nama }}</div>
+                <div class="company-desc">{{ $dcertificate->company->alamat }}</div>
+            </td>
+            <td width="30%">
+                <div class="box-right">
+                    No. {{ $document->no }}<br>
+                    Rev-{{ $document->rev_formatted }}
+                </div>
+            </td>
+        </tr>
+    </table>
     <div class="title">SURAT KETERANGAN PENGIRIMAN</div>
     <div class="subtitle">Delivery Certificate</div>
 
-    <!-- INFO -->
     <table class="info">
         <tr>
-            <td class="label">Nama / No Registrasi Rumah Walet<br><span class="en">Name / Bird's House Registration Number</span></td>
+            <td class="label">Nama/ No Registrasi Rumah Walet<br><span class="en">Name/ Bird's House Registration Number</span></td>
             <td class="colon">:</td>
             <td>{{ $dcertificate->wbhouse->nama }} / {{ $dcertificate->wbhouse->kode }}</td>
         </tr>
@@ -147,7 +152,7 @@
         </tr>
 
         <tr>
-            <td class="label">Tujuan IKH<br><span class="en">IKH Destination</span></td>
+            <td class="label">Tujuan IKH<br><span class="en">IKH Destination Number</span></td>
             <td class="colon">:</td>
             <td>{{ $dcertificate->company->nama }}</td>
         </tr>
@@ -181,14 +186,14 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th rowspan="2">No</th>
+                <th rowspan="2">No.</th>
                 <th rowspan="2">Tanggal Panen<br><span class="en">Date of Harvesting</span></th>
-                <th rowspan="2">Berat Panen (kg)<br><span class="en">Weight of Harvesting</span></th>
+                <th rowspan="2">Berat Panen (kg)<br><span class="en">Weight of Harvesting (kg)</span></th>
                 <th colspan="2">Pengiriman ke IKH<br><span class="en">Delivery to IKH</span></th>
             </tr>
             <tr>
                 <th>Tanggal Kirim<br><span class="en">Date of Delivery</span></th>
-                <th>Berat Kirim (kg)<br><span class="en">Weight of Delivery</span></th>
+                <th>Berat Kirim (kg)<br><span class="en">Weight of Delivery (kg)</span></th>
             </tr>
         </thead>
         <tbody>
@@ -228,8 +233,8 @@
 
     <!-- SIGN -->
     <div class="footer-sign">
-        Pemilik / Penanggungjawab Rumah Walet<br>
-        <span class="en">Owner / Person in Charge of Bird’s House</span>
+        Pemilik/ Penanggungjawab Rumah Walet<br>
+        <span class="en">Owner/ Person in Charge of Bird’s House</span>
 
         <div class="signature"></div>
 

@@ -15,7 +15,7 @@ class CompanySeeder extends Seeder
     {
         Company::create([
             'ikh'       => '058',
-            'nama'      => 'Anugrah Alam Nestindo',
+            'nama'      => 'PT Anugrah Alam Nestindo',
             'alamat'    => 'Kp Bolenglang RT 002 RW 013, Sukasari, Cilaku, Kab. Cianjur, Jawa Barat',
             'telp'      => '+62 81318124220',
             'fax'       => '-',

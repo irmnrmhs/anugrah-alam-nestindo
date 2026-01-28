@@ -1,183 +1,178 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Form Stock Bahan Baku</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 11px;
-        }
+@extends('exports.form')
 
-        .title {
-            text-align: center;
-            font-weight: bold;
-        }
+@section('title', 'Kedatangan Bahan Baku')
 
-        .subtitle {
-            text-align: center;
-            font-size: 10px;
-            margin-bottom: 10px;
-        }
+@push('styles')
+<style>
+    
+</style>
+@endpush
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+@section('header')
+<tr>
+    <td rowspan="3" width="20%" align="center">
+        <img src="{{ public_path('img/Logo.png') }}" width="80" alt="Logo">
+    </td>
 
-        th, td {
-            border: 1px solid #000;
-            padding: 4px;
-            vertical-align: middle;
-        }
+    <td rowspan="3" width="40%" class="title">
+        FORM STOK BAHAN BAKU <br>
+        <span class="small">(RAW MATERIALS STOCK FORM)</span>
+    </td>
 
-        th {
-            text-align: center;
-            font-weight: bold;
-        }
+    <td width="20%">
+        No. Dokumen
+        <i>(Document No.)</i>
+    </td>
+    <td width="20%">
+        : {{ $document->no ?? '-' }}
+    </td>
+</tr>
 
-        .no-border td {
-            border: none;
-            padding: 2px 4px;
-        }
+<tr>
+    <td>
+        Revisi
+        <i>(Revision)</i>
+    </td>
+    <td>
+        : Rev-{{ $document->getRevFormattedAttribute() }}
+    </td>
+</tr>
 
-        .text-center {
-            text-align: center;
-        }
+<tr>
+    <td>
+        Tanggal
+        <i>(Date)</i>
+    </td>
+    <td>
+        : {{ \Carbon\Carbon::parse($document->tgl)->translatedFormat('d F Y') }}
+    </td>
+</tr>
+@endsection
 
-        .text-right {
-            text-align: right;
-        }
+<br>
 
-        .small {
-            font-size: 10px;
-        }
+@section('info')
+<tr>
+    <td width="15%">
+        Bulan <i>(Month)</i>
+    </td>
+    <td width="35%">
+        : {{ \Carbon\Carbon::parse($stocks->tanggal)->translatedFormat('F') }}
+    </td>
+    <td width="25%">
+        Departemen <i>(Department)</i>
+    </td>
+    <td width="25%">: {{ $document->department->nama_dept }}</td>
+</tr>
+<tr>
+    <td width="10%">PIC</td>
+    <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
+</tr>
+@endsection
 
-        .signature {
-            height: 60px;
-        }
-    </style>
-</head>
-<body>
+@section('data')
+<thead>
+    <tr>
+        <th rowspan="2">
+            No <br> <i>(No)</i>
+        </th>
+        <th rowspan="2">
+            Tanggal Kedatangan <br> <i>(Arrival Date)</i>
+        </th>
+        <th rowspan="2">
+            Nama BRW / No. Reg <br> <i>(Bird's Houte Name (Bird's House Namе Registration No.))</i>
+        </th>
+        <th rowspan="2">
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th rowspan="2">
+            Kadar Air (%) <br> <i>(Moisture Content)</i>
+        </th>
+        <th colspan="2">
+            Jumlah Barang Masuk <br> <i>(Quantity of Incoming)</i>
+        </th>
+        <th rowspan="2">
+            Tanggal Keluar <br> <i>Exit Date</i>
+        </th>
+        <th colspan="2">
+            Jumlah Barang Keluar <br> <i>(Quantity of Outgoing)</i>
+        </th>
+        <th rowspan="2">
+            Keterangan <br> <i>(Description)</i>
+        </th>
+        <th rowspan="2">
+            Petugas <br> <i>(Officer)</i>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            Biji <br> <i>(Piece)</i>
+        </th>
+        <th>
+            Gram <br> <i>(Gram)</i>
+        </th>
+        <th>
+            Biji <br> <i>(Piece)</i>
+        </th>
+        <th>
+            Gram <br> <i>(Gram)</i>
+        </th>
+    </tr>
+</thead>
+<tbody>
+    @php
+        $arrival = $stocks->rawMaterial->arrivals->first();
+    @endphp
+    <tr>
+        <td class="text-center">1</td>
+        <td class="text-center">
+            {{ $arrival->tgl_kedatangan ?? '-' }}
+        </td>
+        <td>
+            {{ $arrival->dcertificate->wbhouse->nama ?? '-' }} /
+            {{ $arrival->dcertificate->wbhouse->kode ?? '-' }}
+        </td>
+        <td class="text-center">
+            {{ $stocks->rawMaterial->kode }}
+        </td>
+        <td class="text-center">
+            {{ $stocks->rawMaterial->kadar_air ?? '-' }}%
+        </td>
+        <td class="text-right">
+            {{ $stocks->rawMaterial->biji ?? '-' }}
+        </td>
+        <td class="text-right">
+            {{ $stocks->rawMaterial->berat ?? '-' }}
+        </td>
+        {{-- terpisah looping --}}
+        <td class="text-center">
+            {{ $stocks->tgl_keluar }}
+        </td>
+        <td class="text-right">
+            {{ $stocks->biji_keluar }}
+        </td>
+        <td class="text-right">
+            {{ $stocks->berat_keluar }}
+        </td>
+        <td>
+            {{ $stocks->keterangan ?? '-' }}
+        </td>
+        <td class="text-center">-</td>
+    </tr>
+</tbody>
+@endsection
 
-    {{-- HEADER --}}
-    <table class="no-border">
-        <tr>
-            <td width="70%">
-                <div class="title">FORM STOCK BAHAN BAKU</div>
-                <div class="subtitle">(RAW MATERIALS STOCK FORM)</div>
-            </td>
-            <td width="30%">
-                <table>
-                    <tr>
-                        <td>No. Dokumen</td>
-                        <td>: AAN/FRM/RM/01/03</td>
-                    </tr>
-                    <tr>
-                        <td>Rev</td>
-                        <td>: 01</td>
-                    </tr>
-                    <tr>
-                        <td>Tanggal</td>
-                        <td>: {{ \Carbon\Carbon::parse($stocks->tgl_keluar)->format('d F Y') }}</td>
-                    </tr>
-                    <tr>
-                        <td>Bagian</td>
-                        <td>: Bahan Baku</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+<br><br>
 
-    <br>
-
-    {{-- INFO --}}
-    <table class="no-border">
-        <tr>
-            <td width="50%">Bulan : {{ \Carbon\Carbon::parse($stocks->tgl_keluar)->translatedFormat('F') }}</td>
-            <td width="50%">PIC : {{ $stocks->employee->nama }}</td>
-        </tr>
-    </table>
-
-    <br>
-
-    {{-- TABLE MAIN --}}
-    <table>
-        <thead>
-            <tr>
-                <th rowspan="2">No</th>
-                <th rowspan="2">Tanggal Kedatangan</th>
-                <th rowspan="2">Nama BRW / No. Reg</th>
-                <th rowspan="2">Kode Bahan Baku</th>
-                <th rowspan="2">Kadar Air (%)</th>
-                <th colspan="2">Jumlah Barang Masuk</th>
-                <th rowspan="2">Tanggal Keluar</th>
-                <th colspan="2">Jumlah Barang Keluar</th>
-                <th rowspan="2">Keterangan</th>
-                <th rowspan="2">Paraf PIC</th>
-            </tr>
-            <tr>
-                <th>Biji</th>
-                <th>Gram</th>
-                <th>Biji</th>
-                <th>Gram</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="text-center">1</td>
-                <td class="text-center">
-                    {{ $stocks->rawMaterial->tgl_masuk ?? '-' }}
-                </td>
-                <td>
-                    {{ $stocks->rawMaterial->nama ?? '-' }} /
-                    {{ $stocks->rawMaterial->no_reg ?? '-' }}
-                </td>
-                <td class="text-center">
-                    {{ $stocks->rawMaterial->kode }}
-                </td>
-                <td class="text-center">
-                    {{ $stocks->rawMaterial->kadar_air ?? '-' }}%
-                </td>
-                <td class="text-right">
-                    {{ $stocks->rawMaterial->biji_masuk ?? '-' }}
-                </td>
-                <td class="text-right">
-                    {{ $stocks->rawMaterial->berat_masuk ?? '-' }}
-                </td>
-                <td class="text-center">
-                    {{ $stocks->tgl_keluar }}
-                </td>
-                <td class="text-right">
-                    {{ $stocks->biji_keluar }}
-                </td>
-                <td class="text-right">
-                    {{ $stocks->berat_keluar }}
-                </td>
-                <td>
-                    {{ $stocks->keterangan ?? '-' }}
-                </td>
-                <td class="text-center">-</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <br><br>
-
-    {{-- SIGNATURE --}}
-    <table class="no-border">
-        <tr>
-            <td width="50%" class="text-center">
-                Dibuat oleh,<br><br><br>
-                ( {{ $stocks->employee->nama }} )
-            </td>
-            <td width="50%" class="text-center">
-                Disetujui oleh,<br><br><br>
-                ( ....................... )
-            </td>
-        </tr>
-    </table>
-
-</body>
-</html>
+@section('other')
+<tr>
+    <td width="50%" class="text-center">
+        Dibuat oleh,<br><br><br>
+        ( {{ $stocks->employee->nama }} )
+    </td>
+    <td width="50%" class="text-center">
+        Disetujui oleh,<br><br><br>
+        ( ....................... )
+    </td>
+</tr>
+@endsection
