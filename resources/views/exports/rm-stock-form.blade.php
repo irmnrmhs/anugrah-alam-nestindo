@@ -120,14 +120,17 @@
     </tr>
 </thead>
 <tbody>
+    @php
+        $arrival = $stocks->rawMaterial->arrivals->first();
+    @endphp
     <tr>
         <td class="text-center">1</td>
         <td class="text-center">
-            {{ $stocks->rawMaterial->arrivals->tgl_kedatangan ?? '-' }}
+            {{ $arrival->tgl_kedatangan ?? '-' }}
         </td>
         <td>
-            {{ $stocks->rawMaterial->arrivals->dcertificate->wbhouse->nama ?? '-' }} /
-            {{ $stocks->rawMaterial->arrivals->dcertificate->wbhouse->kode ?? '-' }}
+            {{ $arrival->dcertificate->wbhouse->nama ?? '-' }} /
+            {{ $arrival->dcertificate->wbhouse->kode ?? '-' }}
         </td>
         <td class="text-center">
             {{ $stocks->rawMaterial->kode }}
