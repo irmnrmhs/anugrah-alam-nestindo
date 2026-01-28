@@ -4,7 +4,26 @@
 
 @push('styles')
 <style>
-    
+    .checkbox {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #000;
+    position: relative;
+    vertical-align: middle;
+}
+
+.checkbox.checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 1px;
+    width: 5px;
+    height: 9px;
+    border: solid #000;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
 </style>
 @endpush
 
@@ -89,14 +108,14 @@
                 $kondisi = strtolower($arrival->kondisi);
             @endphp
 
-                <span class="checkbox">{{ str_contains($kondisi, 'sampah') ? 'v' : '' }}</span> Sampah
-                &nbsp;&nbsp;
-                <span class="checkbox">{{ str_contains($kondisi, 'oli') ? 'v' : '' }}</span> Ceceran Oli
-                &nbsp;&nbsp;
-                <span class="checkbox">{{ str_contains($kondisi, 'benda tajam') ? 'v' : '' }}</span> Benda Tajam
-            </td>
-        </tr>
-    </table>
+            <span class="checkbox {{ str_contains($kondisi, 'sampah') ? 'checked' : '' }}"></span> Sampah
+            &nbsp;&nbsp;
+            <span class="checkbox {{ str_contains($kondisi, 'oli') ? 'checked' : '' }}"></span> Ceceran Oli
+            &nbsp;&nbsp;
+            <span class="checkbox {{ str_contains($kondisi, 'benda tajam') ? 'checked' : '' }}"></span> Benda Tajam
+        </td>
+    </tr>
+</table>
 
 {{-- 2. PEMERIKSAAN BAHAN BAKU --}}
 <table class="no-border mt">
@@ -138,19 +157,21 @@
             <i>(Carton Seal Integrity)</i>
         </td>
         <td>
-            {{-- @if (str_contains($kondisi, 'Seal') == true)
-                <span class="checkbox">v</span> Yes
-                <span class="checkbox"></span> No
-            @else
-                <span class="checkbox"></span> Yes
-                <span class="checkbox">v</span> No
-            @endif --}}
-            <span class="checkbox">{{ str_contains($kondisi, 'seal') ? 'v' : '' }}</span> Yes
+            @php
+                $hasSeal = str_contains($kondisi, 'seal');
+            @endphp
+
+            <span class="checkbox {{ $hasSeal ? 'checked' : '' }}"></span> Yes
             &nbsp;&nbsp;
-            <span class="checkbox">{{ !(str_contains($kondisi, 'seal')) ? '' : 'v' }}</span> No
+            <span class="checkbox {{ !$hasSeal ? 'checked' : '' }}"></span> No
+
         </td>
     </tr>
 </table>
+
+@php
+    $hasCertificate = !is_null($arrival->dcertificates_id);
+@endphp
 
 <table class="no-border mt">
     <tr>
@@ -159,9 +180,9 @@
             <i>(Delivery Certificate)</i>
         </td>
         <td>
-            <span class="checkbox">v</span> Yes
+            <span class="checkbox {{ $hasCertificate ? 'checked' : '' }}"></span> Yes
             &nbsp;&nbsp;
-            <span class="checkbox"></span> No
+            <span class="checkbox {{ !$hasCertificate ? 'checked' : '' }}"></span> No
         </td>
     </tr>
 </table>
