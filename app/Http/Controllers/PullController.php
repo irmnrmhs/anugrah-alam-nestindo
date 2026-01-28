@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Pull;
 use App\Models\History;
+use App\Models\Document;
 use App\Models\Employee;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
@@ -158,6 +160,25 @@ class PullController extends Controller
                 'message' => 'Gagal menghapus data',
             ], 500);
         }
+    }
+
+    public function export($id)
+    {
+        $pulls = Pull::findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'PR09KC')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.pull-form', compact('pulls', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Keluar Cetak.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

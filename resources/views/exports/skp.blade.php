@@ -124,12 +124,12 @@
                 <img src="{{ public_path('img/Logo.png') }}" width="80">
             </td>
             <td width="55%">
-                <div class="company">PT. {{ $dcertificate->company->nama }}</div>
+                <div class="company">{{ $dcertificate->company->nama }}</div>
                 <div class="company-desc">{{ $dcertificate->company->alamat }}</div>
             </td>
             <td width="30%">
                 <div class="box-right">
-                    {{ $document->no }}<br>
+                    No. {{ $document->no }}<br>
                     Rev-{{ $document->rev_formatted }}
                 </div>
             </td>
@@ -233,8 +233,8 @@
 
     <!-- SIGN -->
     <div class="footer-sign">
-        Pemilik / Penanggungjawab Rumah Walet<br>
-        <span class="en">Owner / Person in Charge of Bird’s House</span>
+        Pemilik/ Penanggungjawab Rumah Walet<br>
+        <span class="en">Owner/ Person in Charge of Bird’s House</span>
 
         <div class="signature"></div>
 

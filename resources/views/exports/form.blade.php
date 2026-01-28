@@ -16,8 +16,11 @@
         @yield('info')
 
         @yield('data')
+    </table>
 
+    <table class="other">
         @yield('other')
+    </table>
 
         @stack('scripts')
     </body>
