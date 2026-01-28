@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Entry;
 use App\Models\History;
+use App\Models\Document;
 use App\Models\Employee;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
@@ -158,6 +160,25 @@ class EntryController extends Controller
                 'message' => 'Gagal menghapus data',
             ], 500);
         }
+    }
+
+    public function export($id)
+    {
+        $entries = Entry::findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'PR08MC')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.enty-form', compact('entries', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Masuk Cetak.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

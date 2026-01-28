@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\History;
-use App\Models\Employee;
 use App\Models\FpGrade;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use App\Models\History;
+use App\Models\Product;
+use App\Models\Document;
+use App\Models\Employee;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
@@ -127,6 +129,25 @@ class ProductController extends Controller
             'status' => 'success',
             'message' => $this->obj . ' berhasil dihapus.',
         ]);
+    }
+
+    public function export($id)
+    {
+        $products = Product::findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'PR11GP')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.product-form', compact('products', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Grading Produk Jadi.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

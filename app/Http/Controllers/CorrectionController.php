@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\History;
+use App\Models\Document;
 use App\Models\Employee;
 use Illuminate\View\View;
 use App\Models\Correction;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
@@ -156,6 +158,25 @@ class CorrectionController extends Controller
                 'message' => 'Gagal menghapus data',
             ], 500);
         }
+    }
+
+    public function export($id)
+    {
+        $corrections = Correction::findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'PR04IK')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.correction-form', compact('corrections', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Inspeksi dan koreksi.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

@@ -23,6 +23,10 @@
         @yield('data')
     </table>
 
+    <table class="other">
+        @yield('other')
+    </table>
+
     @stack('scripts')
 </body>
 </html>

@@ -1,6 +1,6 @@
 @extends('exports.form')
 
-@section('title', 'Grading Bahan Baku')
+@section('title', 'Kedatangan Bahan Baku')
 
 @push('styles')
 <style>
@@ -14,17 +14,16 @@
     <img src="{{ public_path('img/Logo.png') }}" width="80" alt="Logo">
 </td>
 
-<td rowspan="3" width="50%" class="title">
-    FORM GRADING<br>
-    BAHAN BAKU<br>
-    <span class="small">(Grading Form Raw Material)</span>
+<td rowspan="3" width="40%" class="title">
+    FORM KEDATANGAN BAHAN BAKU <br>
+    <span class="small"><i>(RAW MATERIALS ARRIVAL FORM)</i></span>
 </td>
 
-<td width="15%">
+<td width="20%">
     No. Dokumen
     <i>(Document No.)</i>
 </td>
-<td width="15%">
+<td width="20%">
     : {{ $document->no ?? '-' }}
 </td>
 </tr>
@@ -35,7 +34,7 @@
     <i>(Revision)</i>
 </td>
 <td>
-    : Rev-{{ $document->getRevFormattedAttribute() }}
+    : {{ $document->getRevFormattedAttribute() }}
 </td>
 </tr>
 
@@ -58,12 +57,16 @@
 @endphp
 
 <tr>
-    <td width="10%">Bulan</td>
-    <td width="60%">
+    <td width="15%">
+        Bulan <i>(Month)</i>
+    </td>
+    <td width="35%">
         : {{ \Carbon\Carbon::parse($first->tanggal)->translatedFormat('F') }}
     </td>
-    <td width="15%">Departemen</td>
-    <td width="15%">: {{ $document->department->nama_dept }}</td>
+    <td width="25%">
+        Departemen <i>(Department)</i>
+    </td>
+    <td width="25%">: {{ $document->department->nama_dept }}</td>
 </tr>
 <tr>
     <td width="10%">PIC</td>
@@ -74,17 +77,35 @@
 @section('data')
 <thead>
     <tr>
-        <th rowspan="2">No</th>
-        <th rowspan="2">Tanggal Kedatangan</th>
-        <th rowspan="2">Nama RBW / No. Reg</th>
-        <th rowspan="2">Kode Bahan Baku</th>
-        <th colspan="2">Jumlah</th>
-        <th rowspan="2">Keterangan</th>
-        <th rowspan="2">Petugas</th>
+        <th rowspan="2">
+            No <br> <i>(No)</i>
+        </th>
+        <th rowspan="2">
+            Tanggal Kedatangan <br> <i>(Arrival Date)</i>
+        </th>
+        <th rowspan="2">
+            Nama RBW / No. Reg <br> <i>(Bird's House Name /Registration No.)</i>
+        </th>
+        <th rowspan="2">
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th colspan="2">
+            Jumlah <br> <i>(Amount)</i>
+        </th>
+        <th rowspan="2">
+            Keterangan <br> <i>(Description)</i>
+        </th>
+        <th rowspan="2">
+            Petugas <br> <i>(Officer)</i>
+        </th>
     </tr>
     <tr>
-        <th>Biji</th>
-        <th>Gram</th>
+        <th>
+            Biji <br> <i>(Piece)</i>
+        </th>
+        <th>
+            Gram <br> <i>(Gram)</i>
+        </th>
     </tr>
 </thead>
 <tbody>
@@ -95,7 +116,8 @@
             {{ \Carbon\Carbon::parse($row->arrival->tgl_kedatangan)->format('d-m-Y') }}
         </td>
         <td class="text-left">
-            {{ $row->arrival->dcertificate->wbhouse->nama ?? '-' }}
+            {{ $row->arrival->dcertificate->wbhouse->nama ?? '-' }} / 
+            {{ $row->arrival->dcertificate->wbhouse->kode }}
         </td>
         <td>{{ $row->arrival->kode }}</td>
         <td>{{ $row->biji ?? 0 }}</td>

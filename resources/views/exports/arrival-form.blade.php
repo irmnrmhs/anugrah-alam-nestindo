@@ -10,18 +10,18 @@
 
 @section('header')
 <tr>
-    <td rowspan="3" width="15%" align="center">
+    <td rowspan="3" width="20%" align="center">
         <img src="{{ public_path('img/Logo.png') }}" width="80" alt="Logo">
     </td>
 
-    <td rowspan="3" width="50%" class="title">
+    <td rowspan="3" width="40%" class="title">
         FORM PEMERIKSAAN<br>
         KENDARAAN DAN BAHAN BAKU<br>
-        <span class="small">(Checklist of Receiving Raw Material’s Vehicle)</span>
+        <span class="small"><i>(Checklist of Receiving Raw Material’s Vehicle)</i></span>
     </td>
 
-    <td width="15%">
-        No. Dokumen <br>
+    <td width="20%">
+        No. Dokumen
         <i>(Document No.)</i>
     </td>
     <td width="20%">
@@ -31,7 +31,7 @@
 
 <tr>
     <td>
-        Revisi <br>
+        Revisi
         <i>(Revision)</i>
     </td>
     <td>
@@ -41,7 +41,7 @@
 
 <tr>
     <td>
-        Tanggal <br>
+        Tanggal
         <i>(Date)</i>
     </td>
     <td>
@@ -108,7 +108,7 @@
 <table class="no-border">
     <tr>
         <td width="30%">
-            Kode Bahan Baku
+            Kode Bahan Baku <br>
             <i>(Raw Material Code)</i>
         </td>
         <td>: {{ $arrival->kode }}</td>
@@ -117,13 +117,13 @@
         <td>Berat (Gram) <br>
             <i>(Weight)</i>
         </td>
-        <td>: {{ $arrival->rawMaterial->berat ?? '-' }}</td>
+        <td>: {{ $arrival->rawMaterial->berat ?? '-' }} gram</td>
     </tr>
     <tr>
         <td>Nama RBW / No. Reg <br>
             <i>(Bird's House Name / Registration No.)</i>
         </td>
-        <td>: {{ $arrival->dcertificate->wbhouse->nama ?? '-' }}</td>
+        <td>: {{ $arrival->dcertificate->wbhouse->nama ?? '-' }} / {{ $arrival->dcertificate->wbhouse->kode }}</td>
     </tr>
     <tr>
         <td>
@@ -137,7 +137,18 @@
             Keutuhan Seal Carton <br>
             <i>(Carton Seal Integrity)</i>
         </td>
-        <td>: y/n</td>
+        <td>
+            {{-- @if (str_contains($kondisi, 'Seal') == true)
+                <span class="checkbox">v</span> Yes
+                <span class="checkbox"></span> No
+            @else
+                <span class="checkbox"></span> Yes
+                <span class="checkbox">v</span> No
+            @endif --}}
+            <span class="checkbox">{{ str_contains($kondisi, 'seal') ? 'v' : '' }}</span> Yes
+            &nbsp;&nbsp;
+            <span class="checkbox">{{ !(str_contains($kondisi, 'seal')) ? '' : 'v' }}</span> No
+        </td>
     </tr>
 </table>
 
@@ -161,8 +172,6 @@
             Keterangan : <br>
             <i>(Description)</i>
         </td>
-    </tr>
-    <tr>
         <td>{{ $arrival->keterangan ?? '-' }}</td>
     </tr>
 </table>
@@ -170,11 +179,12 @@
 <table class="no-border mt">
     <tr>
         <td width="50%" align="center">
-            Supir <br> <i>(Driver)</i><br><br><br>
+            Supir <br> <i>(Driver)</i><br><br><br><br>
             ( {{ $arrival->employee->nama }} )
         </td>
         <td width="50%" align="center">
-            Kepala Gudang <br> <i>(Head of Warehouse)</i><br><br><br>
+            Kepala Gudang <br> <i>(Head of Warehouse)</i><br><br><br><br>
+            ( {{ $document->employee->nama }} )
         </td>
     </tr>
 </table>

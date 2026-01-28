@@ -46,6 +46,7 @@
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
+                <a href="{{ route('washes.export', $wash->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak Form</a>
             </td>
         </tr>
     @endforeach

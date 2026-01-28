@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Pick;
 use App\Models\History;
+use App\Models\Document;
 use App\Models\Employee;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
@@ -156,6 +158,25 @@ class PickController extends Controller
                 'message' => 'Gagal menghapus data',
             ], 500);
         }
+    }
+
+    public function export($id)
+    {
+        $picks = Pick::findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'PR05PB')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.pick-form', compact('picks', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Pencabutan Bulu.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse
