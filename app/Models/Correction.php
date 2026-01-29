@@ -16,7 +16,8 @@ class Correction extends Model
         'biji_keluar',
         'berat_keluar',
         'keterangan',
-        'status'
+        'status',
+        'cek',
     ];
 
     public function history()

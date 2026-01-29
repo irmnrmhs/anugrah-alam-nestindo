@@ -37,7 +37,8 @@ class CorrectionController extends Controller
             'tgl_selesai' => 'nullable|date',
             'biji_keluar' => 'nullable|integer|min:0',
             'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
-            'keterangan' => 'nullable'
+            'cek' => 'required',
+            'keterangan' => 'nullable',
         ]);
 
         $tracker = History::find($validated['histories_id']);
@@ -100,7 +101,8 @@ class CorrectionController extends Controller
             'tgl_selesai' => 'nullable|date',
             'biji_keluar' => 'nullable|integer|min:0',
             'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
-            'keterangan' => 'nullable'
+            'cek' => 'required',
+            'keterangan' => 'nullable',
         ]);
 
         $correction = Correction::findOrFail($id);
@@ -162,7 +164,8 @@ class CorrectionController extends Controller
 
     public function export($id)
     {
-        $corrections = Correction::findOrFail($id);
+        $corrections = Correction::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',

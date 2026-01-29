@@ -182,7 +182,7 @@ class EdgeController extends Controller
         ->firstOrFail();
 
         $pdf = Pdf::loadView('exports.edge-form', compact('edges', 'document'))
-                ->setPaper('A4', 'landscape');
+                ->setPaper('A4', 'portrait');
 
         $filename = 'Sesek Kaki.pdf';
 

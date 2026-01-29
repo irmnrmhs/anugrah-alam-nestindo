@@ -17,7 +17,7 @@
 <td rowspan="3" width="40%" class="title">
     CATATAN INSPEKSI DAN KOREKSI <br>
     SARANG BURUNG WALET <br>
-    <span class="small"><i>(INSPECTION AND CORRECTION RECORDS BIRD'S NEST)</i></span>
+    <span class="small"><i>(INSPECTION AND CORRECTION RECORDS <br> BIRD'S NEST)</i></span>
 </td>
 
 <td width="20%">
@@ -54,19 +54,95 @@
 
 @section('info')
 <tr>
-    <td width="15%">
+    <td width="10%">
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        {{-- : {{ \Carbon\Carbon::parse($var->tanggal)->translatedFormat('F') }} --}}
+        : {{ \Carbon\Carbon::parse($corrections->tgl_mulai)->translatedFormat('F') }}
     </td>
-    <td width="25%">
-        Departemen <i>(Department)</i>
+</tr>
+<tr>
+    <td width="10%">
+        Bagian <i>(Department)</i>
     </td>
     <td width="25%">: {{ $document->department->nama_dept }}</td>
 </tr>
-<tr>
-    <td width="10%">PIC</td>
-    <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
-</tr>
+@endsection
+
+@section('data')
+<thead>
+    <tr>
+        <th >
+            Tanggal <br> <i>(Date)</i>
+        </th>
+        <th >
+            Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
+        </th>
+        <th >
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th >
+            Grade <br> <i>(Grade)</i>
+        </th>
+        <th>
+            Total <i> <br> (Amount) <br> (pcs)</i>
+        </th>
+        <th>
+            Hasil Cek <i>(Check <br> Result)</i>
+        </th>
+        <th>
+            Keterangan <br> <i>(Desc.)</i>
+        </th>
+        <th >
+            Petugas <br> <i>(Officer)</i>
+        </th>
+    </tr>
+</thead>
+<tbody>
+    @php
+        $arrival = $corrections->history->identifier->rawMaterial->arrivals->first();
+        $rm = $corrections->history->identifier->rawMaterial;
+    @endphp
+    <tr>
+        <td class="text-center">
+            {{ $corrections->tgl_mulai }}
+        </td>
+        <td>
+            {{ $arrival->dcertificate->wbhouse->nama }} /
+            {{ $arrival->dcertificate->wbhouse->kode }}
+        </td>
+        <td>
+            {{ $rm->kode}}
+        </td>
+        <td>
+            {{ $corrections->history->identifier->grade->grade }}
+        </td>
+        <td>
+            {{ $corrections->biji_masuk }}
+        </td>
+        <td>
+            {{ (($corrections->status) === 1 ? 'Tidak Lulus Cek' : 'Lulus Cek') }}
+        </td>
+        <td>
+            {{ empty($corrections->keterangan) ? '-' : $corrections->keterangan }}
+        </td>
+        <td>
+            {{ $corrections->employee->nama }}
+        </td>
+    </tr>
+</tbody>
+<table>
+    <tr>
+        <td>Standar Lulus Cek</td>
+        <td>: Bersih dari cemaran fisik dengan jarak 20 -30 cm secara visual.</td>
+    </tr>
+    <tr>
+        <td>
+            <i>Standard Passed Check</i>
+        </td>
+        <td>
+            <i>: Clean from physical contaminants with a visual distance of 20-30 ст.</i>
+        </td>
+    </tr>
+</table>
 @endsection

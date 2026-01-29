@@ -19,6 +19,7 @@
     <th>Biji Keluar</th>
     <th>Berat Keluar</th>
     <th>Keterangan</th>
+    <th>Hasil Cek</th>
     <th>Status</th>
 @stop
 
@@ -37,12 +38,19 @@
             <td>{{ empty($correction->berat_keluar) ? 0 : $correction->berat_keluar }}</td>
             <td>{{ empty($correction->keterangan) ? '-' : $correction->keterangan }}</td>
             <td>
-                @if($correction->status == 0)
-                <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($correction->status == 1)
-                <span class="badge bg-success">Disetujui</span>
+                @if($correction->cek == 1)
+                    <span class="badge bg-success">Lulus Cek</span>
                 @else
-                <span class="badge bg-danger">Ditolak</span>
+                    <span class="badge bg-danger">Tidak Lulus Cek</span>
+                @endif
+            </td>
+            <td>
+                @if($correction->status == 0)
+                    <span class="badge bg-warning">Menunggu Persetujuan</span>
+                @elseif ($correction->status == 1)
+                    <span class="badge bg-success">Disetujui</span>
+                @else
+                    <span class="badge bg-danger">Ditolak</span>
                 @endif
             </td>
             <td>
@@ -117,6 +125,14 @@
         <label>Keterangan</label>
         <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
+    <div class="mb-3">
+        <label>Hasil Cek</label>
+        <select id="cek" class="form-control" required>
+            <option value="">-- Lulus/Tidak --</option>
+            <option value=1>Lulus</option>
+            <option value=0>Tidak Lulus</option>
+        </select>
+    </div>
 @stop
 
 @section('form-submit-script')
@@ -135,6 +151,7 @@
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
         keterangan: $('#keterangan').val(),
+        cek: $('#cek').val(),
     };
 
     fetch(url, {
@@ -214,6 +231,7 @@
                 $('#biji_keluar').val(correction.biji_keluar);
                 $('#berat_keluar').val(correction.berat_keluar);
                 $('#keterangan').val(correction.keterangan);
+                $('#cek').val(correction.cek);
                 $('#modalTitle').text('Edit Inspeksi dan Koreksi');
                 new bootstrap.Modal('#crudModal').show();
             });

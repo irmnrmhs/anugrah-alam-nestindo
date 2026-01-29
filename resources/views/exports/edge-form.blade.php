@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        {{-- : {{ \Carbon\Carbon::parse($var->tanggal)->translatedFormat('F') }} --}}
+        : {{ \Carbon\Carbon::parse($edges->tgl_mulai)->translatedFormat('F') }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
