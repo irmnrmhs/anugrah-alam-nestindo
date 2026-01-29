@@ -64,9 +64,12 @@
         : {{ \Carbon\Carbon::parse($first->tanggal)->translatedFormat('F') }}
     </td>
     <td width="25%">
-        Departemen <i>(Department)</i>
+        Bagian <i>(Department)</i>
     </td>
-    <td width="25%">: {{ $document->department->nama_dept }}</td>
+    <td width="25%">
+        : {{ $document->department->nama_dept }}
+        <i>({{ $document->department->nama_eng }})</i>
+    </td>
 </tr>
 <tr>
     <td width="10%">PIC</td>

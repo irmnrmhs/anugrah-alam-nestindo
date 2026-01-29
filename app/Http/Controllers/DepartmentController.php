@@ -22,6 +22,7 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'kd_dept' => 'required|string|max:25|unique:departments,kd_dept',
             'nama_dept' => 'required|string|max:255|unique:departments,nama_dept',
+            'nama_eng'  => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string|max:500',
         ]);
 
@@ -44,6 +45,7 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'kd_dept' => 'required|string|max:25|unique:departments,kd_dept,' . $id,
             'nama_dept' => 'required|string|max:255|unique:departments,nama_dept,' . $id,
+            'nama_eng'  => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string|max:500',
         ]);
 

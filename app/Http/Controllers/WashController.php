@@ -170,7 +170,8 @@ class WashController extends Controller
 
     public function export($id)
     {
-        $washes = Wash::findOrFail($id);
+        $washes = Wash::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',
@@ -180,7 +181,7 @@ class WashController extends Controller
         ->firstOrFail();
 
         $pdf = Pdf::loadView('exports.wash-form', compact('washes', 'document'))
-                ->setPaper('A4', 'portrait');
+                ->setPaper('A4', 'landscape');
 
         $filename = 'Pencucian.pdf';
 

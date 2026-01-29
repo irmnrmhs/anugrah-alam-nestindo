@@ -171,7 +171,8 @@ class EdgeController extends Controller
 
     public function export($id)
     {
-        $edges = Edge::findOrFail($id);
+        $edges = Edge::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',

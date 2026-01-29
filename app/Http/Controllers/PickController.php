@@ -162,7 +162,8 @@ class PickController extends Controller
 
     public function export($id)
     {
-        $picks = Pick::findOrFail($id);
+        $picks = Pick::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',
@@ -172,7 +173,7 @@ class PickController extends Controller
         ->firstOrFail();
 
         $pdf = Pdf::loadView('exports.pick-form', compact('picks', 'document'))
-                ->setPaper('A4', 'portrait');
+                ->setPaper('A4', 'landscape');
 
         $filename = 'Pencabutan Bulu.pdf';
 
