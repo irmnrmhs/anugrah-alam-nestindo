@@ -59,10 +59,13 @@
     <td width="35%">
         : {{ \Carbon\Carbon::parse($stocks->tanggal)->translatedFormat('F') }}
     </td>
-    <td width="25%">
-        Departemen <i>(Department)</i>
+    <td width="25%">    
+        Bagian <i>(Department)</i>
     </td>
-    <td width="25%">: {{ $document->department->nama_dept }}</td>
+    <td width="25%">
+        : {{ $document->department->nama_dept }} 
+        <i>({{ $document->department->nama_eng }})</i>
+    </td>
 </tr>
 <tr>
     <td width="10%">PIC</td>
@@ -80,13 +83,13 @@
             Tanggal Kedatangan <br> <i>(Arrival Date)</i>
         </th>
         <th rowspan="2">
-            Nama BRW / No. Reg <br> <i>(Bird's Houte Name (Bird's House Namе Registration No.))</i>
+            Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
         </th>
         <th rowspan="2">
             Kode Bahan Baku <br> <i>(Raw Material Code)</i>
         </th>
         <th rowspan="2">
-            Kadar Air (%) <br> <i>(Moisture Content)</i>
+            Kadar Air (%) <br> <i>(Moisture <br> Content)</i>
         </th>
         <th colspan="2">
             Jumlah Barang Masuk <br> <i>(Quantity of Incoming)</i>

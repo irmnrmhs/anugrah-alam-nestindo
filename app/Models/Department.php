@@ -10,6 +10,7 @@ class Department extends Model
     protected $fillable = [
         'kd_dept',
         'nama_dept',
+        'nama_eng',
         'deskripsi',
     ];
 

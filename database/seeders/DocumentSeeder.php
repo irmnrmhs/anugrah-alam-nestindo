@@ -63,9 +63,9 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 8,
             'kode'      => 'PR02SK',
-            'no'        => 'AAN/FRM/RW/01/09',
+            'no'        => 'AAN/FRM/RM/01/09',
             'name'      => 'Sesek Kaki',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
@@ -73,7 +73,7 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 9,
             'kode'      => 'PR03PC',
             'no'        => 'AAN/FRM/PR/01/01',
             'name'      => 'Pencucian',
@@ -83,7 +83,7 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 10,
             'kode'      => 'PR04IK',
             'no'        => 'AAN/FRM/PR/01/08',
             'name'      => 'Inspeksi dan Koreksi',
@@ -93,7 +93,7 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 11,
             'kode'      => 'PR05PB',
             'no'        => 'AAN/FRM/PR/01/02',
             'name'      => 'Pencabutan Bulu',
@@ -103,7 +103,7 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 12,
             'kode'      => 'PR06PR',
             'no'        => 'AAN/FRM/PR/01/03',
             'name'      => 'Perendaman',
@@ -113,7 +113,7 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 13,
             'kode'      => 'PR07CB',
             'no'        => 'AAN/FRM/PR/01/07',
             'name'      => 'Cabut Bilas',
@@ -123,7 +123,7 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 14,
             'kode'      => 'PR08MC',
             'no'        => 'AAN/FRM/PR/01/04-a',
             'name'      => 'Masuk Cetak',
@@ -133,7 +133,7 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 14,
             'kode'      => 'PR09KC',
             'no'        => 'AAN/FRM/PR/01/04-b',
             'name'      => 'Keluar Cetak',
@@ -153,7 +153,7 @@ class DocumentSeeder extends Seeder
         ]);
 
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 16,
             'kode'      => 'PR11GP',
             'no'        => 'AAN/FRM/PR/01/06a',
             'name'      => 'Grading Produk Jadi',

@@ -51,16 +51,24 @@ class DepartmentSeeder extends Seeder
         Department::create([
             'kd_dept' => 'RM',
             'nama_dept' => 'Bahan Baku',
+            'nama_eng'  => 'Raw Material',
         ]);
 
         Department::create([
             'kd_dept' => 'PC',
             'nama_dept' => 'Pencucian',
+            'nama_eng'  => 'Washing',
+        ]);
+
+        Department::create([
+            'kd_dept' => 'IK',
+            'nama_dept' => 'Koreksi',
         ]);
 
         Department::create([
             'kd_dept' => 'PB',
             'nama_dept' => 'Pencabutan',
+            'nama_eng'  => "Feather's Plucking",
         ]);
 
         Department::create([
@@ -69,8 +77,14 @@ class DepartmentSeeder extends Seeder
         ]);
 
         Department::create([
-            'kd_dept' => 'CT',
+            'kd_dept' => 'CB',
+            'nama_dept' => 'Cabut Bilas',
+        ]);
+
+        Department::create([
+            'kd_dept' => 'MC',
             'nama_dept' => 'Cetak',
+            'nama_eng' => 'Molding'
         ]);
 
         Department::create([

@@ -171,7 +171,8 @@ class EdgeController extends Controller
 
     public function export($id)
     {
-        $edges = Edge::findOrFail($id);
+        $edges = Edge::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',
@@ -181,7 +182,7 @@ class EdgeController extends Controller
         ->firstOrFail();
 
         $pdf = Pdf::loadView('exports.edge-form', compact('edges', 'document'))
-                ->setPaper('A4', 'portrait');
+                ->setPaper('A4', 'landscape');
 
         $filename = 'Sesek Kaki.pdf';
 

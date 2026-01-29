@@ -10,6 +10,7 @@
     <th>No</th>
     <th>Kode Departemen</th>
     <th>Nama Departemen</th>
+    <th>Departemen (dalam bahasa inggris)</th>
     <th>Deskripsi</th>
 @stop
 
@@ -19,6 +20,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $department->kd_dept }}</td>
             <td>{{ $department->nama_dept }}</td>
+            <td>{{ $department->nama_eng }}</td>
             <td>{{ empty($department->deskripsi) ? '-' : $department->deskripsi }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -40,6 +42,11 @@
     </div>
 
     <div class="mb-3">
+        <label>Departemen (dalam bahasa inggris)</label>
+        <input type="text" id="nama_eng" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
         <label>Deskripsi</label>
         <input type="text" id="deskripsi" placeholder="Optional" class="form-control">
     </div>
@@ -54,6 +61,7 @@
         _token: '{{ csrf_token() }}',
         kd_dept: $('#kd_dept').val(),
         nama_dept: $('#nama_dept').val(),
+        nama_eng: $('#nama_eng').val(),
         deskripsi: $('#deskripsi').val()
     };
 
@@ -82,6 +90,7 @@
                 $('#item_id').val(department.id);
                 $('#kd_dept').val(department.kd_dept);
                 $('#nama_dept').val(department.nama_dept);
+                $('#nama_eng').val(department.nama_eng);
                 $('#deskripsi').val(department.deskripsi);
                 $('#modalTitle').text('Edit Departemen');
                 new bootstrap.Modal('#crudModal').show();

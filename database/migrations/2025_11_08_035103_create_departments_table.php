@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kd_dept')->unique();
             $table->string('nama_dept')->unique();
+            $table->string('nama_eng')->nullable();
             $table->string('deskripsi')->nullable();
             $table->timestamps();
         });
