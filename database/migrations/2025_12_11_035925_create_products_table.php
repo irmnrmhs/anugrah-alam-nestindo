@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('employees_id')->constrained('employees');
             $table->foreignId('grades_id')->constrained('fp_grades');
             $table->string('kode')->unique();
+            $table->string('kd_proses')->unique();
             $table->date('tgl_mulai');
             $table->integer('biji');
             $table->decimal('berat', 7, 2);

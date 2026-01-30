@@ -18,6 +18,7 @@
     <th>Tanggal Selesai</th>
     <th>Biji Keluar</th>
     <th>Berat Keluar</th>
+    <th>Durasi</th>
     <th>Shift</th>
     <th>Keterangan</th>
     <th>Status</th>
@@ -36,6 +37,7 @@
             <td>{{ empty($soak->tgl_selesai) ? '-' : $soak->tgl_selesai }}</td>
             <td>{{ empty($soak->biji_keluar) ? 0 : $soak->biji_keluar }}</td>
             <td>{{ empty($soak->berat_keluar) ? 0 : $soak->berat_keluar }}</td>
+            <td>{{ $soak->durasi }}</td>
             <td>{{ $soak->shift }}</td>
             <td>{{ empty($soak->keterangan) ? '-' : $soak->keterangan }}</td>
             <td>
@@ -116,6 +118,10 @@
         <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
     </div>
     <div class="mb-3">
+        <label>Durasi (Menit)</label>
+        <input type="number" id="durasi" step="1" min="0" max="999" class="form-control">
+    </div>
+    <div class="mb-3">
         <label>Shift</label>
         <select id="shift" class="form-control" required>
             <option value="">-- Pilih Shift --</option>
@@ -144,6 +150,7 @@
         tgl_selesai: $('#tgl_selesai').val(),
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
+        durasi: $('#durasi').val(),
         shift: $('#shift').val(),
         keterangan: $('#keterangan').val()
     };
@@ -224,6 +231,7 @@
                 $('#tgl_selesai').val(soak.tgl_selesai);
                 $('#biji_keluar').val(soak.biji_keluar);
                 $('#berat_keluar').val(soak.berat_keluar);
+                $('#durasi').val(soak.durasi);
                 $('#shift').val(soak.shift);
                 $('#keterangan').val(soak.keterangan);
                 $('#modalTitle').text('Edit Perendaman');

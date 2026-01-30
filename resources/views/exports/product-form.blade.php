@@ -57,15 +57,92 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        {{-- : {{ \Carbon\Carbon::parse($var->tanggal)->translatedFormat('F') }} --}}
+        : {{ \Carbon\Carbon::parse($products->tanggal)->translatedFormat('F') }}
     </td>
     <td width="25%">
-        Departemen <i>(Department)</i>
+        Bagian <i>(Department)</i>
     </td>
-    <td width="25%">: {{ $document->department->nama_dept }}</td>
+    <td width="25%">
+        : {{ $document->department->nama_dept }}
+        ({{ $document->department->nama_eng }})
+    </td>
 </tr>
 <tr>
     <td width="10%">PIC</td>
     <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
 </tr>
+@endsection
+
+@section('data')
+<thead>
+    <tr>
+        <th>
+            No <br> <i>(No)</i>
+        </th>
+        <th>
+            Tanggal <br> <i>(Date)</i>
+        </th>
+        <th>
+            Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
+        </th>
+        <th>
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th>
+            Kode Proses <br> <i>(Process Code)</i>
+        </th>
+        <th>
+            Grade <br> <i>(Grade)</i>
+        </th>
+        <th>
+            Biji <i>(Piece)</i>
+        </th>
+        <th>
+            Gram <i>(Gram)</i>
+        </th>
+        <th>
+            Keterangan <i>(Keterangan)</i>
+        </th>
+        <th>
+            Petugas <br> <i>(Officer)</i>
+        </th>
+    </tr>
+</thead>
+<tbody>
+    @php
+        $arrival = $products->history->identifier->rawMaterial->arrivals->first();
+        $rm = $products->history->identifier->rawMaterial;
+    @endphp
+    <tr>
+        <td class="text-center">1</td>
+        <td class="text-center">
+            {{ $products->tgl_mulai }}
+        </td>
+        <td>
+            {{ $arrival->dcertificate->wbhouse->nama }} /
+            {{ $arrival->dcertificate->wbhouse->kode }}
+        </td>
+        <td>
+            {{ $rm->kode}}
+        </td>
+        <td>
+            {{-- {{ $rm->kd_proses}} --}}
+        </td>
+        <td>
+            {{ $products->history->identifier->grade->grade }}
+        </td>
+        <td>
+            {{ $products->biji }}
+        </td>
+        <td>
+            {{ $products->berat }}
+        </td>
+        <td>
+            {{ empty($products->keterangan) ? '-' : $products->keterangan }}
+        </td>
+        <td>
+            {{ $products->employee->nama }}
+        </td>
+    </tr>
+</tbody>
 @endsection

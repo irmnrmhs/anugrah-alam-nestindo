@@ -447,7 +447,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::post('/products/delete-multiple', [ProductController::class, 'deleteMultiple']);
     Route::get('/products-info/{id}', [ProductController::class, 'info']);
-    Route::get('/product/{id}/export', [ProductController::class, 'export'])->name('products.export');
+    Route::get('/products/{id}/export', [ProductController::class, 'export'])->name('products.export');
 
     // Produk Jadi
     Route::get('/fp-products', [FinishedController::class, 'index'])->name('fp-products.index');

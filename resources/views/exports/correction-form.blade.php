@@ -121,7 +121,7 @@
             {{ $corrections->biji_masuk }}
         </td>
         <td>
-            {{ (($corrections->status) === 1 ? 'Tidak Lulus Cek' : 'Lulus Cek') }}
+            {{ (($corrections->cek) === 1 ? 'Lulus Cek' : 'Tidak Lulus Cek') }}
         </td>
         <td>
             {{ empty($corrections->keterangan) ? '-' : $corrections->keterangan }}

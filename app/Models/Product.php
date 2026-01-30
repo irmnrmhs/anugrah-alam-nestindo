@@ -11,6 +11,7 @@ class Product extends Model
         'employees_id',
         'grades_id',
         'kode',
+        'kd_proses',
         'tgl_mulai',
         'biji',
         'berat',

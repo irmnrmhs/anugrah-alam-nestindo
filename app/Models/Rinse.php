@@ -17,7 +17,8 @@ class Rinse extends Model
         'berat_keluar',
         'keterangan',
         'shift',
-        'status'
+        'status',
+        'cek'
     ];
 
     public function history()

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('biji_keluar')->default(0)->nullable();
             $table->decimal('berat_keluar', 7, 2)->default(0)->nullable();
             $table->integer('status')->default(0)->nullable();
+            $table->integer('cek')->default(0);
             $table->string('keterangan')->nullable();
             $table->integer('shift');
             $table->timestamps();

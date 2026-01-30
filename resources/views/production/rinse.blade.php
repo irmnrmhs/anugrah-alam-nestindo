@@ -20,6 +20,7 @@
     <th>Berat Keluar</th>
     <th>Shift</th>
     <th>Keterangan</th>
+    <th>Hasil Cek</th>
     <th>Status</th>
 @stop
 
@@ -38,6 +39,13 @@
             <td>{{ empty($rinse->berat_keluar) ? 0 : $rinse->berat_keluar }}</td>
             <td>{{ $rinse->shift }}</td>
             <td>{{ empty($rinse->keterangan) ? '-' : $rinse->keterangan }}</td>
+            <td>
+                @if($rinse->cek == 1)
+                    <span class="badge bg-success">Lulus Cek</span>
+                @else
+                    <span class="badge bg-danger">Tidak Lulus Cek</span>
+                @endif
+            </td>
             <td>
                 @if($rinse->status == 0)
                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -127,6 +135,14 @@
         <label>Keterangan</label>
         <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
+    <div class="mb-3">
+        <label>Hasil Cek</label>
+        <select id="cek" class="form-control" required>
+            <option value="">-- Lulus/Tidak --</option>
+            <option value=1>Lulus</option>
+            <option value=0>Tidak Lulus</option>
+        </select>
+    </div>
 @stop
 
 @section('form-submit-script')
@@ -145,7 +161,8 @@
         biji_keluar: $('#biji_keluar').val(),
         berat_keluar: $('#berat_keluar').val(),
         shift: $('#shift').val(),
-        keterangan: $('#keterangan').val()
+        keterangan: $('#keterangan').val(),
+        cek: $('#cek').val(),
     };
 
     fetch(url, {
@@ -226,6 +243,7 @@
                 $('#berat_keluar').val(rinse.berat_keluar);
                 $('#shift').val(rinse.shift);
                 $('#keterangan').val(rinse.keterangan);
+                $('#cek').val(rinse.cek);
                 $('#modalTitle').text('Edit Cabut Bilas');
                 new bootstrap.Modal('#crudModal').show();
             });

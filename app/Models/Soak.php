@@ -15,6 +15,7 @@ class Soak extends Model
         'tgl_selesai',
         'biji_keluar',
         'berat_keluar',
+        'durasi',
         'keterangan',
         'shift',
         'status'

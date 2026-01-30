@@ -31,6 +31,7 @@ class ProductController extends Controller
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
             'grades_id' => 'required|exists:fp_grades,id',
+            'kd_proses' => 'required',
             'tgl_mulai' => 'required|date',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
@@ -39,9 +40,17 @@ class ProductController extends Controller
 
         $tracker = History::with('identifier')->find($validated['histories_id']);
 
+        // Kode Grade
         $grade = FpGrade::find($validated['grades_id']);
         $pi = preg_replace('/[^A-Za-z0-9]/', '', $tracker->identifier->kode);
         $validated['kode'] = $grade->kode . "-" . $pi;
+
+        // Kode Proses
+        $kd_reg = History::with('identifier.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
+        $tgl = $validated['tgl_mulai'];
+        $format_tgl = date('dmy', strtotime($tgl));
+
+        $validated['kd_proses'] = $grade . $kd_reg->kode . '-' . $format_tgl;
 
         if(
             $validated['biji'] > $tracker->sisa_biji_produk ||
@@ -86,6 +95,7 @@ class ProductController extends Controller
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
             'grades_id' => 'required|exists:fp_grades,id',
+            'kd_proses' => 'required',
             'tgl_mulai' => 'required|date',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
@@ -95,12 +105,20 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $tracker = History::with('identifier')->find($validated['histories_id']);
 
+        // Kode Grade
         $grade = FpGrade::find($validated['grades_id']);
         $pi = preg_replace('/[^A-Za-z0-9]/', '', $tracker->identifier->kode);
         $validated['kode'] = $grade->kode . "-" . $pi;
 
         $biji_sisa = $tracker->sisa_biji_produk + $product->biji;
         $berat_sisa = $tracker->sisa_berat_produk + $product->berat;
+
+        // Kode Proses
+        $kd_reg = History::with('identifier.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
+        $tgl = $validated['tgl_mulai'];
+        $format_tgl = date('dmy', strtotime($tgl));
+
+        $validated['kd_proses'] = $grade . $kd_reg . '-' . $format_tgl;
 
         if(
             $validated['biji'] > $biji_sisa ||
@@ -133,7 +151,8 @@ class ProductController extends Controller
 
     public function export($id)
     {
-        $products = Product::findOrFail($id);
+        $products = Product::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',
@@ -143,7 +162,7 @@ class ProductController extends Controller
         ->firstOrFail();
 
         $pdf = Pdf::loadView('exports.product-form', compact('products', 'document'))
-                ->setPaper('A4', 'portrait');
+                ->setPaper('A4', 'landscape');
 
         $filename = 'Grading Produk Jadi.pdf';
 

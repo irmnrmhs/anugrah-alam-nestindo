@@ -37,6 +37,7 @@ class SoakController extends Controller
             'tgl_selesai' => 'nullable|date',
             'biji_keluar' => 'nullable|integer|min:0',
             'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
+            'durasi' => 'required',
             'shift' => 'required',
             'keterangan' => 'nullable'
         ]);
@@ -101,6 +102,7 @@ class SoakController extends Controller
             'tgl_selesai' => 'nullable|date',
             'biji_keluar' => 'nullable|integer|min:0',
             'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
+            'durasi' => 'require',
             'shift' => 'required',
             'keterangan' => 'nullable'
         ]);
@@ -164,7 +166,8 @@ class SoakController extends Controller
 
     public function export($id)
     {
-        $soaks = Soak::findOrFail($id);
+        $soaks = Soak::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',

@@ -38,6 +38,7 @@ class RinseController extends Controller
             'biji_keluar' => 'nullable|integer|min:0',
             'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
             'shift' => 'required',
+            'cek' => 'required',
             'keterangan' => 'nullable'
         ]);
 
@@ -102,6 +103,7 @@ class RinseController extends Controller
             'biji_keluar' => 'nullable|integer|min:0',
             'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
             'shift' => 'required',
+            'cek' => 'required',
             'keterangan' => 'nullable'
         ]);
 
@@ -164,7 +166,8 @@ class RinseController extends Controller
 
     public function export($id)
     {
-        $rinses = Rinse::findOrFail($id);
+        $rinses = Rinse::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',

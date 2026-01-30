@@ -176,7 +176,8 @@ class DryController extends Controller
 
     public function export($id)
     {
-        $dries = Dry::findOrFail($id);
+        $dries = Dry::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',

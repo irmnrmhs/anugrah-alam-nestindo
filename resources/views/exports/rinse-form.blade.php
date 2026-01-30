@@ -64,10 +64,10 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        {{-- : {{ \Carbon\Carbon::parse($var->tanggal)->translatedFormat('F') }} --}}
+        : {{ \Carbon\Carbon::parse($rinses->tanggal)->translatedFormat('F') }}
     </td>
     <td width="25%">
-        Departemen <i>(Department)</i>
+        Bagian <i>(Department)</i>
     </td>
     <td width="25%">: {{ $document->department->nama_dept }}</td>
 </tr>
@@ -75,4 +75,69 @@
     <td width="10%">PIC</td>
     <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
 </tr>
+@endsection
+
+@section('data')
+<thead>
+    <tr>
+        <th>
+            Tanggal <br> <i>(Date)</i>
+        </th>
+        <th>
+            Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
+        </th>
+        <th>
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th>
+            Grade <br> <i>(Grade)</i>
+        </th>
+        <th>
+            Total <i>(Amount) <br> (pcs)</i>
+        </th>
+        <th>
+            Hasil Cek <i>(Check Result)</i>
+        </th>
+        <th>
+            Ket <i>(Desc.)</i>
+        </th>
+        <th>
+            Petugas <br> <i>(Officer)</i>
+        </th>
+    </tr>
+</thead>
+<tbody>
+    @php
+        $arrival = $rinses->history->identifier->rawMaterial->arrivals->first();
+        $rm = $rinses->history->identifier->rawMaterial;
+    @endphp
+    <tr>
+        <td class="text-center">
+            {{ $rinses->tgl_mulai }}
+        </td>
+        <td>
+            {{ $arrival->dcertificate->wbhouse->nama }} /
+            {{ $arrival->dcertificate->wbhouse->kode }}
+        </td>
+        <td>
+            {{ $rm->kode}}
+        </td>
+        <td>
+            {{ $rinses->history->identifier->grade->grade }}
+        </td>
+        <td>
+            {{ $rinses->biji_masuk }}
+        </td>
+        <td>
+            {{ (($rinses->cek) === 1 ? 'Lulus Cek' : 'Tidak Lulus Cek') }}
+        </td>
+        </td>
+        <td>
+            {{ empty($rinses->keterangan) ? '-' : $rinses->keterangan }}
+        </td>
+        <td>
+            {{ $rinses->employee->nama }}
+        </td>
+    </tr>
+</tbody>
 @endsection
