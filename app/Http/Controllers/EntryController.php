@@ -164,7 +164,8 @@ class EntryController extends Controller
 
     public function export($id)
     {
-        $entries = Entry::findOrFail($id);
+        $entries = Entry::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',
@@ -173,8 +174,8 @@ class EntryController extends Controller
         ->where('kode', 'PR08MC')
         ->firstOrFail();
 
-        $pdf = Pdf::loadView('exports.enty-form', compact('entries', 'document'))
-                ->setPaper('A4', 'portrait');
+        $pdf = Pdf::loadView('exports.entry-form', compact('entries', 'document'))
+                ->setPaper('A4', 'landscape');
 
         $filename = 'Masuk Cetak.pdf';
 

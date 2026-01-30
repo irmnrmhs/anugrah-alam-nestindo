@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('tgl_selesai')->nullable();
             $table->integer('biji_keluar')->default(0)->nullable();
             $table->decimal('berat_keluar', 7, 2)->default(0)->nullable();
+            $table->integer('durasi');
             $table->integer('status')->default(0)->nullable();
             $table->string('keterangan')->nullable();
             $table->integer('shift');

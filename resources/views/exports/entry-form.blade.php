@@ -57,15 +57,79 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        {{-- : {{ \Carbon\Carbon::parse($var->tanggal)->translatedFormat('F') }} --}}
+        : {{ \Carbon\Carbon::parse($entries->tanggal)->translatedFormat('F') }}
     </td>
     <td width="25%">
-        Departemen <i>(Department)</i>
+        Bagian <i>(Department)</i>
     </td>
-    <td width="25%">: {{ $document->department->nama_dept }}</td>
+    <td width="25%">
+        : {{ $document->department->nama_dept }}
+        <i>({{ $document->department->nama_eng }})</i>
+    </td>
 </tr>
 <tr>
     <td width="10%">PIC</td>
     <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
 </tr>
+@endsection
+
+@section('data')
+<thead>
+    <tr>
+        <th rowspan="2">
+            No <br> <i>(No)</i>
+        </th>
+        <th rowspan="2">
+            Tanggal <br> <i>(Date)</i>
+        </th>
+        <th rowspan="2">
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th rowspan="2">
+            Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
+        </th>
+        <th rowspan="2">
+            Grade <br> <i>(Grade)</i>
+        </th>
+        <th>
+            Total <i>(Amount)</i>
+        </th>
+        <th rowspan="2">
+            Petugas <br> <i>(Officer)</i>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            Biji <i>(Piece)</i>
+        </th>
+    </tr>
+</thead>
+<tbody>
+    @php
+        $arrival = $entries->history->identifier->rawMaterial->arrivals->first();
+        $rm = $entries->history->identifier->rawMaterial;
+    @endphp
+    <tr>
+        <td class="text-center">1</td>
+        <td class="text-center">
+            {{ $entries->tgl_mulai }}
+        </td>
+        <td>
+            {{ $rm->kode}}
+        </td>
+        <td>
+            {{ $arrival->dcertificate->wbhouse->nama }} /
+            {{ $arrival->dcertificate->wbhouse->kode }}
+        </td>
+        <td>
+            {{ $entries->history->identifier->grade->grade }}
+        </td>
+        <td>
+            {{ $entries->biji_masuk }}
+        </td>
+        <td>
+            {{ $entries->employee->nama }}
+        </td>
+    </tr>
+</tbody>
 @endsection

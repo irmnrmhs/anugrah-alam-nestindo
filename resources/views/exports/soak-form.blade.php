@@ -16,7 +16,7 @@
 
 <td rowspan="3" width="40%" class="title">
     FORM PERENDAMAN (CCP 1) <br>
-    <span class="small"><i>(SOAKING FORM (ССР 1))</i></span>
+    <span class="small"><i>(SOAKING FORM (CCP1 1))</i></span>
 </td>
 
 <td width="20%">
@@ -57,10 +57,10 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        {{-- : {{ \Carbon\Carbon::parse($var->tanggal)->translatedFormat('F') }} --}}
+        : {{ \Carbon\Carbon::parse($soaks->tanggal)->translatedFormat('F') }}
     </td>
     <td width="25%">
-        Departemen <i>(Department)</i>
+        Bagian <i>(Department)</i>
     </td>
     <td width="25%">: {{ $document->department->nama_dept }}</td>
 </tr>
@@ -68,4 +68,80 @@
     <td width="10%">PIC</td>
     <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
 </tr>
+@endsection
+
+@section('data')
+<thead>
+    <tr>
+        <th rowspan="2">
+            No <br> <i>(No)</i>
+        </th>
+        <th rowspan="2">
+            Tanggal <br> <i>(Date)</i>
+        </th>
+        <th rowspan="2">
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th rowspan="2">
+            Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
+        </th>
+        <th rowspan="2">
+            Grade <br> <i>(Grade)</i>
+        </th>
+        <th>
+            Total <br> <i>(Amount)</i>
+        </th>
+        <th>
+            Waktu Rendam <br> <i>(Soaking Time)</i>
+        </th>
+        <th>
+            Keterangan <br> <i>(Description)</i>
+        </th>
+        <th rowspan="2">
+            Petugas <br> <i>(Officer)</i>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            Biji <i>(Piece)</i>
+        </th>
+        <th>
+            Menit <i>(Minute)</i>
+        </th>
+    </tr>
+</thead>
+<tbody>
+    @php
+        $arrival = $soaks->history->identifier->rawMaterial->arrivals->first();
+        $rm = $soaks->history->identifier->rawMaterial;
+    @endphp
+    <tr>
+        <td class="text-center">1</td>
+        <td class="text-center">
+            {{ $soaks->tgl_mulai }}
+        </td>
+        <td>
+            {{ $arrival->dcertificate->wbhouse->nama }} /
+            {{ $arrival->dcertificate->wbhouse->kode }}
+        </td>
+        <td>
+            {{ $rm->kode}}
+        </td>
+        <td>
+            {{ $soaks->history->identifier->grade->grade }}
+        </td>
+        <td>
+            {{ $soaks->biji_masuk }}
+        </td>
+        <td>
+            {{ $soaks->durasi }}
+        </td>
+        <td>
+            {{ empty($soaks->keterangan) ? '-' : $soaks->keterangan }}
+        </td>
+        <td>
+            {{ $soaks->employee->nama }}
+        </td>
+    </tr>
+</tbody>
 @endsection

@@ -128,7 +128,7 @@
             {{ $picks->biji_masuk }}
         </td>
         <td>
-            {{ $picks->keterangan }}
+            {{ empty($picks->keterangan) ? '-' : $picks->keterangan }}
         </td>
         <td>
             {{ $picks->employee->nama }}

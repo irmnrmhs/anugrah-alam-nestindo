@@ -164,7 +164,8 @@ class PullController extends Controller
 
     public function export($id)
     {
-        $pulls = Pull::findOrFail($id);
+        $pulls = Pull::with(['employee', 'history'])
+            ->findOrFail($id);
 
         $document = Document::with([
             'employee',
@@ -174,7 +175,7 @@ class PullController extends Controller
         ->firstOrFail();
 
         $pdf = Pdf::loadView('exports.pull-form', compact('pulls', 'document'))
-                ->setPaper('A4', 'portrait');
+                ->setPaper('A4', 'landscape');
 
         $filename = 'Keluar Cetak.pdf';
 
