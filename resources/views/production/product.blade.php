@@ -14,6 +14,7 @@
     <th>Karyawan</th>
     <th>Grade</th>
     <th>Kode Grade</th>
+    <th>Kode Proses</th>
     <th>Tanggal Mulai</th>
     <th>Jumlah Biji</th>
     <th>Berat</th>
@@ -29,6 +30,7 @@
             <td>{{ $product->employee->nama }}</td>
             <td>{{ $product->grade->grade }}</td>
             <td>{{ $product->kode }}</td>
+            <td>{{ $product->kd_proses }}</td>
             <td>{{ empty($product->tgl_mulai) ? '-' : $product->tgl_mulai }}</td>
             <td>{{ empty($product->biji) ? 0 : $product->biji }}</td>
             <td>{{ empty($product->berat) ? 0 : $product->berat }}</td>

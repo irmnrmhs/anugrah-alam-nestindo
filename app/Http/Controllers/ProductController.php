@@ -31,7 +31,6 @@ class ProductController extends Controller
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
             'grades_id' => 'required|exists:fp_grades,id',
-            'kd_proses' => 'required',
             'tgl_mulai' => 'required|date',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
@@ -50,7 +49,7 @@ class ProductController extends Controller
         $tgl = $validated['tgl_mulai'];
         $format_tgl = date('dmy', strtotime($tgl));
 
-        $validated['kd_proses'] = $grade . $kd_reg->kode . '-' . $format_tgl;
+        $validated['kd_proses'] = $grade->kode . $kd_reg->kode . '-' . $format_tgl;
 
         if(
             $validated['biji'] > $tracker->sisa_biji_produk ||
