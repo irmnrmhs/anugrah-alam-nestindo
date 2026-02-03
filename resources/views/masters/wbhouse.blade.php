@@ -66,7 +66,7 @@
     </div>
     <div class="mb-3">
         <label>Owner</label>
-        <input type="number" id="owner" step="0.01" min="0" max="99999.99" class="form-control" required>
+        <input type="text" id="owner" step="0.01" min="0" max="99999.99" class="form-control" required>
     </div>
 @stop
 
