@@ -12,6 +12,7 @@
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Rumah Burung/No. Registrasi</th>
+    <th>Tanggal</th>
     <th>Kadar Air</th>
     <th>Kadar Nitrit</th>
 @stop
@@ -22,11 +23,15 @@
             <td><input type="checkbox" class="row-check" value="{{ $result->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $result->rawMaterial->kode }}</td>
+            <td>{{ $result->tgl }}</td>
             <td>{{ $result->kadar_air }}</td>
             <td>{{ $result->kadar_nitrit }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
+                <a href="{{ route('rm-results.water', $result->id) }}" class="btn btn-sm btn-primary" target="_blank">Form Kadar Air</a>
+                <a href="{{ route('rm-results.nitrit', $result->id) }}" class="btn btn-sm btn-primary" target="_blank">Form Kadar NItrit</a>
+
             </td>
         </tr>
     @endforeach

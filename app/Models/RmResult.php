@@ -9,9 +9,9 @@ class RmResult extends Model
     protected $fillable = [
         // 'types_id',
         'rms_id',
+        'tgl',
         'kadar_air',
         'kadar_nitrit',
-        'ccp1'
     ];
 
     // public function type()

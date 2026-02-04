@@ -180,5 +180,85 @@ class DocumentSeeder extends Seeder
             'tgl'       => '2025-05-05',
             'employees_id'  => 19,
         ]);
+
+        Document::create([
+            'depts_id'  => 18,
+            'kode'      => 'QCBBA',
+            'no'        => 'AAN/FRM/QC/01/01',
+            'name'      => 'Kadar Air Bahan Baku',
+            'rev'       => 0,
+            'tgl'       => '2021-10-08',
+            'employees_id'  => 19,
+        ]);
+
+        Document::create([
+            'depts_id'  => 18,
+            'kode'      => 'QCBBN',
+            'no'        => 'AAN/FRM/QC/01/02',
+            'name'      => 'Kadar Nitrit Bahan Baku',
+            'rev'       => 0,
+            'tgl'       => '2021-10-08',
+            'employees_id'  => 19,
+        ]);
+
+        Document::create([
+            'depts_id'  => 18,
+            'kode'      => 'QCBBL',
+            'no'        => 'AAN/FRM/QC/18/01',
+            'name'      => 'Kadar Nitrit Bahan Baku',
+            'rev'       => 0,
+            'tgl'       => '2025-01-02',
+            'employees_id'  => 19,
+        ]);
+
+        Document::create([
+            'depts_id'  => 18,
+            'kode'      => 'QCCCPN',
+            'no'        => 'AAN/FRM/QC/01/03',
+            'name'      => 'Kadar Nitrit Selama Proses',
+            'rev'       => 0,
+            'tgl'       => '2021-10-08',
+            'employees_id'  => 19,
+        ]);
+
+        Document::create([
+            'depts_id'  => 18,
+            'kode'      => 'QCCCPL',
+            'no'        => 'AAN/FRM/QC/18/01',
+            'name'      => 'Kadar Aluminium Selama Proses',
+            'rev'       => 01,
+            'tgl'       => '2025-08-12',
+            'employees_id'  => 19,
+        ]);
+
+        Document::create([
+            'depts_id'  => 18,
+            'kode'      => 'QCPJA',
+            'no'        => 'AAN/FRM/QC/01/05',
+            'name'      => 'Kadar Aluminium Produk Jadi',
+            'rev'       => 0,
+            'tgl'       => '2021-10-08',
+            'employees_id'  => 19,
+        ]);
+
+        Document::create([
+            'depts_id'  => 18,
+            'kode'      => 'QCPJN',
+            'no'        => 'AAN/FRM/QC/01/04',
+            'name'      => 'Kadar Nitrit Produk Jadi',
+            'rev'       => 0,
+            'tgl'       => '2021-10-08',
+            'employees_id'  => 19,
+        ]);
+
+        Document::create([
+            'depts_id'  => 18,
+            'kode'      => 'QCPJL',
+            'no'        => 'AAN/FRM/QC/18/02',
+            'name'      => 'Kadar Aluminium Produk Jadi',
+            'rev'       => 0,
+            'tgl'       => '2025-01-02',
+            'employees_id'  => 19,
+        ]);
     }
 }

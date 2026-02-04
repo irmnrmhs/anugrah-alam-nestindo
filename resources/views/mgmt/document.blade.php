@@ -13,6 +13,7 @@
     <th>Nomor Dokumen</th>
     <th>Nama Dokumen</th>
     <th>Nomor Revisi</th>
+    <th>Tanggal</th>
     <th>PIC</th>
 @stop
 
@@ -25,6 +26,7 @@
             <td>{{ $doc->no }}</td>
             <td>{{ $doc->name }}</td>
             <td>{{ $doc->rev }}</td>
+            <td>{{ $doc->tgl }}</td>
             <td>{{ $doc->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -61,6 +63,10 @@
         <input type="number" id="rev" step="0" min="0" class="form-control">
     </div>
     <div class="mb-3">
+        <label>Tanggal</label>
+        <input type="date" id="tgl" class="form-control">
+    </div>
+    <div class="mb-3">
         <label>PIC</label>
         <select id="employees_id" class="form-control" required>
             <option value="">-- Pilih Karyawan --</option>
@@ -84,6 +90,7 @@
         no: $('#no').val(),
         name: $('#name').val(),
         rev: $('#rev').val(),
+        tgl: $('#tgl').val(),
     };
 
     fetch(url, {
@@ -115,6 +122,7 @@
                 $('#no').val(document.no);
                 $('#name').val(document.name);
                 $('#rev').val(document.rev);
+                $('#tgl').val(document.tgl);
                 $('#modalTitle').text('Edit Dokumen');
                 new bootstrap.Modal('#crudModal').show();
             });

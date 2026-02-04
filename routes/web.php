@@ -300,6 +300,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/rm-results/{id}', [RmResultController::class, 'destroy'])->name('rm-results.destroy');
     Route::post('/rm-results/delete-multiple', [RmResultController::class, 'deleteMultiple']);
     Route::post('/rm-results/bulk', [RmResultController::class, 'bulk'])->name('rm-results.bulk');
+    Route::get('/rm-results/{id}/water', [RmResultController::class, 'water'])->name('rm-results.water');
+    Route::get('/rm-results/{id}/nitrit', [RmResultController::class, 'nitrit'])->name('rm-results.nitrit');
 
     // Hasil Uji Al BB
     Route::get('/rm-alums', [RmAlumController::class, 'index'])->name('rm-alums.index');

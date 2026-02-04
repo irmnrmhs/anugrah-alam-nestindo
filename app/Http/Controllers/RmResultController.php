@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RawMaterial;
+use App\Models\Document;
 use App\Models\RmResult;
 use App\Models\TestType;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use App\Models\RawMaterial;
+use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
 
 class RmResultController extends Controller
 {
@@ -128,6 +130,44 @@ class RmResultController extends Controller
             'status' => 'success',
             'message' => 'Semua hasil uji berhasil ditambahkan.',
         ]);
+    }
+
+    public function water($id)
+    {
+        $bbs = RmResult::findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'QCBBA')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.rmw-form', compact('bbs', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Air Bahan Baku.pdf';
+
+        return $pdf->stream($filename);
+    }
+
+    public function nitrit($id)
+    {
+        $bbs = RmResult::findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'QCBBN')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.rmn-form', compact('bbs', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Nitrit Bahan Baku.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

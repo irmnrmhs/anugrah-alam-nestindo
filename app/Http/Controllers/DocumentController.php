@@ -30,9 +30,10 @@ class DocumentController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'depts_id' => 'required|exists:departments,id',
             'kode' => 'required|unique:documents,kode',
-            'no'      => 'required|unique:documents,no',
+            'no'      => 'required',
             'name'      => 'required|unique:documents,name',
             'rev'    => 'integer',
+            'tgl'   => 'nullable|date',
         ]);
 
         $doc = Document::create($validated);
@@ -56,9 +57,10 @@ class DocumentController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'depts_id' => 'required|exists:departments,id',
             'kode' => 'required|unique:documents,kode,' . $id,
-            'no'      => 'required|unique:documents,no,' . $id,
+            'no'      => 'required',
             'name'      => 'required|unique:documents,name,' . $id,
-            'rev'    => 'integer'
+            'rev'    => 'integer',
+            'tgl'   => 'nullable|date',
         ]);
 
         $doc = Document::findOrFail($id);
