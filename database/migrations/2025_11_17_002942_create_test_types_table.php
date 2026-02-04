@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('test_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('categories_id');
+            $table->string('kode')->unique();
             $table->string('nama_uji');
             $table->string('satuan');
             $table->decimal('standar_minimal',  6, 3);
