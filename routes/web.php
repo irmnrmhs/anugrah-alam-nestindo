@@ -4,11 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\DryController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\Ccp1Controller;
 use App\Http\Controllers\EdgeController;
 use App\Http\Controllers\PickController;
 use App\Http\Controllers\PullController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SoakController;
+use App\Http\Controllers\StepController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WashController;
 use App\Http\Controllers\BlendController;
@@ -18,7 +20,10 @@ use App\Http\Controllers\GradeController;
 use App\Http\Controllers\RinseController;
 use App\Http\Controllers\ShapeController;
 use App\Http\Controllers\SteamController;
+use App\Http\Controllers\FpAlumController;
+use App\Http\Controllers\RmAlumController;
 use App\Http\Controllers\ArrivalController;
+use App\Http\Controllers\CcpAlumController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\FeatherController;
 use App\Http\Controllers\FpGradeController;
@@ -29,8 +34,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RmStockController;
 use App\Http\Controllers\WBHouseController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Ccp1Controller;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FinishedController;
 use App\Http\Controllers\FpResultController;
@@ -46,13 +51,9 @@ use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
-use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\FpAlumController;
 use App\Http\Controllers\SteamOfficerController;
-use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\ProductReportController;
-use App\Http\Controllers\RmAlumController;
-use App\Http\Controllers\StepController;
+use App\Http\Controllers\ProductIdentifierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -309,7 +310,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/rm-alums/delete-multiple', [RmAlumController::class, 'deleteMultiple']);
     Route::post('/rm-alums/bulk', [RmAlumController::class, 'bulk'])->name('rm-alums.bulk');
 
-    // Hasil Uji CCP1
+    // Hasil Uji CCP1 Nitrit
     Route::get('/ccp1', [Ccp1Controller::class, 'index'])->name('ccp1.index');
     Route::post('/ccp1', [Ccp1Controller::class, 'store'])->name('ccp1.store');
     Route::get('/ccp1/{id}', [Ccp1Controller::class, 'show'])->name('ccp1.show');
@@ -317,6 +318,16 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/ccp1/{id}', [Ccp1Controller::class, 'destroy'])->name('ccp1.destroy');
     Route::post('/ccp1/delete-multiple', [Ccp1Controller::class, 'deleteMultiple']);
     Route::post('/ccp1/bulk', [Ccp1Controller::class, 'bulk'])->name('ccp1.bulk');
+
+
+    // Hasil Uji CCP1 Aluminium
+    Route::get('/ccp-al', [CcpAlumController::class, 'index'])->name('ccp-al.index');
+    Route::post('/ccp-al', [CcpAlumController::class, 'store'])->name('ccp-al.store');
+    Route::get('/ccp-al/{id}', [CcpAlumController::class, 'show'])->name('ccp-al.show');
+    Route::put('/ccp-al/{id}', [CcpAlumController::class, 'update'])->name('ccp-al.update');
+    Route::delete('/ccp-al/{id}', [CcpAlumController::class, 'destroy'])->name('ccp-al.destroy');
+    Route::post('/ccp-al/delete-multiple', [CcpAlumController::class, 'deleteMultiple']);
+    Route::post('/ccp-al/bulk', [CcpAlumController::class, 'bulk'])->name('ccp-al.bulk');
 
     // Hasil Uji Air dan Nitrit PJ
     Route::get('/fp-results', [FpResultController::class, 'index'])->name('fp-results.index');
