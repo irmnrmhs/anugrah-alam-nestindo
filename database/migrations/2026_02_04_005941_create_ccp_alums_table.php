@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ccp_alums', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');
+            $table->date('tgl');
             $table->decimal('ccp_al', 4, 1)->default(0);
             $table->timestamps();
         });

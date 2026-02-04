@@ -57,14 +57,22 @@
         Tanggal pemeriksaan <i>(Inspection Date)</i>
     </td>
     <td width="60%">
-        : {{ \Carbon\Carbon::parse($bbs->tgl_mulai)->translatedFormat('F') }}
+        {{-- : {{ \Carbon\Carbon::parse($bbs->tgl)->translatedFormat('F') }} --}}
+        {{ $bbs->tgl }}
     </td>
 </tr>
+@php
+    $arrival = $bbs->rawMaterial->arrivals->first();
+@endphp
 <tr>
     <td width="10%">Sampel</td>
-    <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
+    <td width="60%">:
+        {{ $arrival->dcertificate->wbhouse->nama }} /
+        {{ $arrival->dcertificate->wbhouse->kode }}
+    </td>
 </tr>
 @endsection
 
 @section('data')
+    
 @endsection

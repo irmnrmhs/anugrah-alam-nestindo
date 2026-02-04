@@ -49,6 +49,11 @@
     </div>
 
     <div class="mb-3">
+        <label>Tanggal Pemeriksaan</label>
+        <input id="tgl" type="date" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
         <label>Jumlah Sampel</label>
         <input type="number" min="1" id="jumlah_sampel" class="form-control" required>
     </div>
@@ -57,6 +62,7 @@
 @section('form-submit-script')
     const id = $('#item_id').val();
     const rms_id = $('#rms_id').val();
+    const tgl = $('#tgl').val();
     const jumlah = parseInt($('#jumlah_sampel').val());
 
     if (!rms_id || jumlah < 1) {
@@ -76,7 +82,7 @@
                 <input type="number" class="form-control mb-2 kadar-air" data-index="${i}" step="0.01" min="0" max="999.99">
 
                 <label>Kadar Nitrit</label>
-                <input type="number" class="form-control mb-2 kadar-nitrit" data-index="${i}" step="0.01" min="0" max="999.99">
+                <input type="number" class="form-control mb-2 kadar-nitrit" data-index="${i}" step="0.1" min="0" max="999.9">
             </div>
         `;
     }
@@ -90,6 +96,7 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 rms_id,
+                tgl,
                 kadar_air: $(`.kadar-air[data-index="${i}"]`).val(),
                 kadar_nitrit: $(`.kadar-nitrit[data-index="${i}"]`).val(),
             });
@@ -141,6 +148,7 @@
 
                     let payload = {
                         rms_id: result.rms_id,
+                        tgl: result.tgl,
                         kadar_air: parseFloat($('#edit_air').val()),
                         kadar_nitrit: parseFloat($('#edit_nitrit').val()),
                     };

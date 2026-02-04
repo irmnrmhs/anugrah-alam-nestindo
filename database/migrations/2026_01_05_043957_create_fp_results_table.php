@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('fp_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('products_id')->constrained('finished_products');
+            $table->date('tgl');
             $table->decimal('kadar_air', 5, 2)->default(0);
             $table->decimal('kadar_nitrit', 4, 1)->default(0);
             // $table->decimal('kadar_aluminium', 4, 1)->default(0);

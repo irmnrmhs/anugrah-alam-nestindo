@@ -26,44 +26,45 @@ class RmResultController extends Controller
     {
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
+            'tgl' => 'required|date',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9'
         ]);
 
-        $ujiMap = [
-            'kadar_air'        => 'Kadar Air',
-            'kadar_nitrit'     => 'Kadar Nitrit',
-            'kadar_aluminium'  => 'Kadar Aluminium',
-            'ccp1'             => 'CCP 1',
-        ];
+        // $ujiMap = [
+        //     'kadar_air'        => 'Kadar Air',
+        //     'kadar_nitrit'     => 'Kadar Nitrit',
+        //     'kadar_aluminium'  => 'Kadar Aluminium',
+        //     'ccp1'             => 'CCP 1',
+        // ];
 
-        $standars = TestType::where('categories_id', 1)
-            ->whereIn('nama_uji', array_values($ujiMap))
-            ->get()
-            ->keyBy('nama_uji');
+        // $standars = TestType::where('categories_id', 1)
+        //     ->whereIn('nama_uji', array_values($ujiMap))
+        //     ->get()
+        //     ->keyBy('nama_uji');
 
-        foreach ($ujiMap as $field => $namaUji) {
+        // foreach ($ujiMap as $field => $namaUji) {
 
-            if (!isset($validated[$field])) continue;
+        //     if (!isset($validated[$field])) continue;
 
-            if (!isset($standars[$namaUji])) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => "Standar uji {$namaUji} belum tersedia"
-                ], 422);
-            }
+        //     if (!isset($standars[$namaUji])) {
+        //         return response()->json([
+        //             'status' => 'error',
+        //             'message' => "Standar uji {$namaUji} belum tersedia"
+        //         ], 422);
+        //     }
 
-            $nilai = $validated[$field];
-            $min   = $standars[$namaUji]->standar_minimal;
-            $max   = $standars[$namaUji]->standar_maksimal;
+        //     $nilai = $validated[$field];
+        //     $min   = $standars[$namaUji]->standar_minimal;
+        //     $max   = $standars[$namaUji]->standar_maksimal;
 
-            if ($nilai < $min || $nilai > $max) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => "Nilai {$namaUji} harus antara {$min} dan {$max}"
-                ], 422);
-            }
-        }
+        //     if ($nilai < $min || $nilai > $max) {
+        //         return response()->json([
+        //             'status' => 'error',
+        //             'message' => "Nilai {$namaUji} harus antara {$min} dan {$max}"
+        //         ], 422);
+        //     }
+        // }
 
         $result = RmResult::create($validated);
 
@@ -85,6 +86,7 @@ class RmResultController extends Controller
     {
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
+            'tgl' => 'required|date',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
         ]);
@@ -116,6 +118,7 @@ class RmResultController extends Controller
         $validated = $request->validate([
             'items' => 'required|array|min:1',
             'items.*.rms_id'   => 'required|exists:raw_materials,id',
+            'items.*.tgl' => 'required|date',
             'items.*.kadar_air' => 'nullable|numeric|min:0|max:999.99',
             'items.*.kadar_nitrit' => 'nullable|numeric|min:0|max:999.9'
         ]);
@@ -134,7 +137,10 @@ class RmResultController extends Controller
 
     public function water($id)
     {
-        $bbs = RmResult::findOrFail($id);
+        $bbs = RmResult::with([
+            'rawMaterial'
+        ])
+        ->findOrFail($id);
 
         $document = Document::with([
             'employee',
