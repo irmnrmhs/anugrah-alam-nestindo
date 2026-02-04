@@ -15,7 +15,8 @@ class TestTypeSeeder extends Seeder
     {
         TestType::create([
             'categories_id' => 1,
-            'nama_uji'  => 'Kadar Air',
+            'kode'  => 'QCBBA',
+            'nama_uji'  => 'Kadar Air Bahan Baku',
             'satuan'    => '%',
             'standar_minimal' => 0.000,
             'standar_maksimal' => 15.00,
@@ -23,7 +24,8 @@ class TestTypeSeeder extends Seeder
 
         TestType::create([
             'categories_id' => 1,
-            'nama_uji'  => 'Kadar Nitrit',
+            'kode' => 'QCBBN',
+            'nama_uji'  => 'Kadar Nitrit Bahan Baku',
             'satuan'    => 'mg/kg',
             'standar_minimal' => 0.000,
             'standar_maksimal' => 100.00,
@@ -31,7 +33,8 @@ class TestTypeSeeder extends Seeder
         
         TestType::create([
             'categories_id' => 1,
-            'nama_uji'  => 'Kadar Aluminum',
+            'kode' => 'QCBBL',
+            'nama_uji'  => 'Kadar Aluminum Bahan Baku',
             'satuan'    => 'mg/kg',
             'standar_minimal' => 0.000,
             'standar_maksimal' => 100.00,
@@ -39,15 +42,26 @@ class TestTypeSeeder extends Seeder
 
         TestType::create([
             'categories_id' => 1,
-            'nama_uji'  => 'CCP 1',
+            'kode'  => 'QCCCPN',
+            'nama_uji'  => 'Kadar Nitrit Selama Proses',
             'satuan'    => 'mg/kg',
             'standar_minimal' => 0.000,
             'standar_maksimal' => 30.00,
         ]);
 
         TestType::create([
+            'categories_id' => 1,
+            'kode' => 'QCCCPL',
+            'nama_uji'  => 'Kadar Aluminium Selama Proses',
+            'satuan'    => 'mg/kg',
+            'standar_minimal' => 0.000,
+            'standar_maksimal' => 100.00,
+        ]);
+
+        TestType::create([
             'categories_id' => 2,
-            'nama_uji'  => 'Kadar Air',
+            'kode' => 'QCPJA',
+            'nama_uji'  => 'Kadar Air Produk Jadi',
             'satuan'    => '%',
             'standar_minimal' => 0.00,
             'standar_maksimal' => 15.00,
@@ -55,7 +69,8 @@ class TestTypeSeeder extends Seeder
 
         TestType::create([
             'categories_id' => 2,
-            'nama_uji'  => 'Kadar Nitrit',
+            'kode' => 'QCPJN',
+            'nama_uji'  => 'Kadar Nitrit Produk Jadi',
             'satuan'    => 'mg/kg',
             'standar_minimal' => 0.000,
             'standar_maksimal' => 30.00,
@@ -63,7 +78,8 @@ class TestTypeSeeder extends Seeder
         
         TestType::create([
             'categories_id' => 2,
-            'nama_uji'  => 'Kadar Aluminum',
+            'kode' => 'QCPJL',
+            'nama_uji'  => 'Kadar Aluminium Produk Jadi',
             'satuan'    => 'mg/kg',
             'standar_minimal' => 0.000,
             'standar_maksimal' => 100.00,

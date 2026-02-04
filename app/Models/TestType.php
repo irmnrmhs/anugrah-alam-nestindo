@@ -8,6 +8,7 @@ class TestType extends Model
 {
     protected $fillable = [
         'categories_id',
+        'kode',
         'nama_uji',
         'satuan',
         'standar_minimal',

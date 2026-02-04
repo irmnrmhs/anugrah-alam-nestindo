@@ -9,6 +9,7 @@
 @section('table-headers')
     <th>No</th>
     <th>Kategori</th>
+    <th>Kode</th>
     <th>Nama Uji</th>
     <th>Satuan</th>
     <th>Standar Minimal</th>
@@ -20,6 +21,7 @@
         <tr data-id="{{ $testType->id }}">
             <td>{{ $index + 1 }}</td>
             <td>{{ $testType->category->kategori }}</td>
+            <td>{{ $testType->kode }}</td>
             <td>{{ $testType->nama_uji }}</td>
             <td>{{ $testType->satuan }}</td>
             <td>{{ $testType->standar_minimal }}</td>
@@ -41,6 +43,10 @@
                 <option value="{{ $category->id }}">{{ $category->kategori }}</option>
             @endforeach
         </select>
+    </div>
+    <div class="mb-3">
+        <label>Kode</label>
+        <input type="text" id="kode" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Nama Uji</label>
@@ -72,6 +78,7 @@
     const data = {
         _token: '{{ csrf_token() }}',
         categories_id: $('#categories_id').val(),
+        kode: $('#kode').val(),
         nama_uji: $('#nama_uji').val(),
         satuan: $('#satuan').val(),
         standar_maksimal: $('#standar_maksimal').val(),
@@ -102,6 +109,7 @@
             .then(testType => {
                 $('#item_id').val(testType.id);
                 $('#categories_id').val(testType.categories_id);
+                $('#kode').val(testType.kode);
                 $('#nama_uji').val(testType.nama_uji);
                 $('#satuan').val(testType.satuan);
                 $('#standar_minimal').val(testType.standar_minimal);
