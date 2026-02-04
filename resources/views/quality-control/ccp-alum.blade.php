@@ -3,18 +3,16 @@
 @php
     $title = 'Kelola Hasil Uji Bahan Baku';
     $singular = 'Hasil Uji Bahan Baku';
-    $deleteMultipleUrl = '/rm-results/delete-multiple';
-    // $importUrl = route('rm-results.import');
-    // $templateUrl = route('rm-results.template');
+    $deleteMultipleUrl = '/ccp-al/delete-multiple';
+    // $importUrl = route('ccp-al.import');
+    // $templateUrl = route('ccp-al.template');
 @endphp
 
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Rumah Burung/No. Registrasi</th>
-    <th>Tanggal</th>
-    <th>Kadar Air</th>
-    <th>Kadar Nitrit</th>
+    <th>Kadar Aluminium Selama Proses</th>
 @stop
 
 @section('table-body')
@@ -23,15 +21,10 @@
             <td><input type="checkbox" class="row-check" value="{{ $result->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $result->rawMaterial->kode }}</td>
-            <td>{{ $result->tgl }}</td>
-            <td>{{ $result->kadar_air }}</td>
-            <td>{{ $result->kadar_nitrit }}</td>
+            <td>{{ $result->ccp_al }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('rm-results.water', $result->id) }}" class="btn btn-sm btn-primary" target="_blank">Form Kadar Air</a>
-                <a href="{{ route('rm-results.nitrit', $result->id) }}" class="btn btn-sm btn-primary" target="_blank">Form Kadar NItrit</a>
-
             </td>
         </tr>
     @endforeach
@@ -49,11 +42,6 @@
     </div>
 
     <div class="mb-3">
-        <label>Tanggal Pemeriksaan</label>
-        <input id="tgl" type="date" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
         <label>Jumlah Sampel</label>
         <input type="number" min="1" id="jumlah_sampel" class="form-control" required>
     </div>
@@ -62,7 +50,6 @@
 @section('form-submit-script')
     const id = $('#item_id').val();
     const rms_id = $('#rms_id').val();
-    const tgl = $('#tgl').val();
     const jumlah = parseInt($('#jumlah_sampel').val());
 
     if (!rms_id || jumlah < 1) {
@@ -77,12 +64,8 @@
         html += `
             <div class="border rounded p-3 mb-3">
                 <h6>Sampel ${i}</h6>
-
-                <label>Kadar Air</label>
-                <input type="number" class="form-control mb-2 kadar-air" data-index="${i}" step="0.01" min="0" max="999.99">
-
-                <label>Kadar Nitrit</label>
-                <input type="number" class="form-control mb-2 kadar-nitrit" data-index="${i}" step="0.1" min="0" max="999.9">
+                <label>Kadar Aluminium Selama Proses (CCP1)</label>
+                <input type="number" class="form-control mb-2 ccp1" data-index="${i}" step="0.1" min="0" max="999.9">
             </div>
         `;
     }
@@ -96,13 +79,11 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 rms_id,
-                tgl,
-                kadar_air: $(`.kadar-air[data-index="${i}"]`).val(),
-                kadar_nitrit: $(`.kadar-nitrit[data-index="${i}"]`).val(),
+                ccp_alum: $(`.ccp_alum[data-index="${i}"]`).val(),
             });
         }
 
-        fetch('/rm-results/bulk', {
+        fetch('/ccp-al/bulk', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -125,20 +106,16 @@
     $(document).on('click', '.btnEdit', function () {
         const id = $(this).closest('tr').data('id');
 
-        fetch(`/rm-results/${id}`)
+        fetch(`/ccp-al/${id}`)
             .then(r => r.json())
             .then(result => {
 
                 $('#item_id').val(result.id);
 
                 let html = `
-                    <label>Kadar Air</label>
-                    <input type="number" class="form-control mb-2" id="edit_air"
-                        value="${result.kadar_air}" step="0.01" min="0" max="999.99">
-
-                    <label>Kadar Nitrit</label>
-                    <input type="number" class="form-control mb-2" id="edit_nitrit"
-                        value="${result.kadar_nitrit}" step="0.1" min="0" max="999.9">
+                    <label>Kadar Aluminium Selama Proses</label>
+                    <input type="number" class="form-control mb-2" id="edit_ccp_alum"
+                        value="${result.ccp_alum}" step="0.1" min="0" max="999.9">
                 `;
 
                 $('#secondModalBody').html(html);
@@ -148,12 +125,10 @@
 
                     let payload = {
                         rms_id: result.rms_id,
-                        tgl: result.tgl,
-                        kadar_air: parseFloat($('#edit_air').val()),
-                        kadar_nitrit: parseFloat($('#edit_nitrit').val()),
+                        ccp_alum: parseFloat($('#edit_ccp_alum').val()),
                     };
 
-                    fetch(`/rm-results/${result.id}`, {
+                    fetch(`/ccp-al/${result.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -184,7 +159,7 @@
             showCancelButton: true
         }).then(res => {
             if (res.isConfirmed) {
-                fetch(`/rm-results/${id}`, {
+                fetch(`/ccp-al/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

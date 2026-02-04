@@ -555,8 +555,14 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Hasil Uji CCP1',
+                    'text' => 'Hasil Uji Nitrit Selama Proses',
                     'url'  => 'ccp1',
+                    'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Hasil Uji Aluminium Selama Proses',
+                    'url'  => 'ccp-al',
                     'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
                     'icon' => 'fas fa-users',
                 ],

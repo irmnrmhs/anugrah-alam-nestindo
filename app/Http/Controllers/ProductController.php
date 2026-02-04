@@ -46,10 +46,14 @@ class ProductController extends Controller
 
         // Kode Proses
         $kd_reg = History::with('identifier.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
+        $noreg = optional(
+            $kd_reg->identifier->rawMaterial->arrivals->first()?->dcertificate?->wbhouse
+        )->kode;
+
         $tgl = $validated['tgl_mulai'];
         $format_tgl = date('dmy', strtotime($tgl));
 
-        $validated['kd_proses'] = $grade->kode . $kd_reg->kode . '-' . $format_tgl;
+        $validated['kd_proses'] = $grade->kode . $noreg . '-' . $format_tgl;
 
         if(
             $validated['biji'] > $tracker->sisa_biji_produk ||
