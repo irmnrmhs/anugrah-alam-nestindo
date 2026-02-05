@@ -159,7 +159,10 @@ class RmResultController extends Controller
 
     public function nitrit($id)
     {
-        $bbs = RmResult::findOrFail($id);
+        $bbs = RmResult::with([
+            'rawMaterial'
+        ])
+        ->findOrFail($id);
 
         $document = Document::with([
             'employee',

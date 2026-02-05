@@ -15,8 +15,8 @@
 </td>
 
 <td rowspan="3" width="40%" class="title">
-    CATATAN PEMERIKSAAN <br> KADAR NITRIT BAHAN BAKU <br>
-    <span class="small"><i>(Inspection Record Nitrite Content of Raw Material)</i></span>
+    CATATAN PEMERIKSAAN <br> KADAR ALUMINIUM BAHAN BAKU <br>
+    <span class="small"><i>(Inspection Record Aluminum Content of Raw Material)</i></span>
 </td>
 
 <td width="20%">

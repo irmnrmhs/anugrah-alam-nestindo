@@ -12,6 +12,7 @@
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Rumah Burung/No. Registrasi</th>
+    <th>Tanggal Pemeriksaan</th>
     <th>Kadar Nitrit Selama Proses</th>
 @stop
 
@@ -21,6 +22,7 @@
             <td><input type="checkbox" class="row-check" value="{{ $result->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $result->rawMaterial->kode }}</td>
+            <td>{{ $result->tgl }}</td>
             <td>{{ $result->ccp1 }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -40,6 +42,11 @@
             @endforeach
         </select>
     </div>
+    
+    <div class="mb-3">
+        <label>Tanggal Pemeriksaan</label>
+        <input id="tgl" type="date" class="form-control" required>
+    </div>
 
     <div class="mb-3">
         <label>Jumlah Sampel</label>
@@ -50,6 +57,7 @@
 @section('form-submit-script')
     const id = $('#item_id').val();
     const rms_id = $('#rms_id').val();
+    const tgl = $('#tgl').val();
     const jumlah = parseInt($('#jumlah_sampel').val());
 
     if (!rms_id || jumlah < 1) {
@@ -79,6 +87,7 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 rms_id,
+                tgl,
                 ccp1: $(`.ccp1[data-index="${i}"]`).val(),
             });
         }
@@ -125,6 +134,7 @@
 
                     let payload = {
                         rms_id: result.rms_id,
+                        tgl: result.tgl,
                         ccp1: parseFloat($('#edit_ccp1').val()),
                     };
 

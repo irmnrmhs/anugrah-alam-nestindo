@@ -311,6 +311,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/rm-alums/{id}', [RmAlumController::class, 'destroy'])->name('rm-alums.destroy');
     Route::post('/rm-alums/delete-multiple', [RmAlumController::class, 'deleteMultiple']);
     Route::post('/rm-alums/bulk', [RmAlumController::class, 'bulk'])->name('rm-alums.bulk');
+    Route::get('/rm-alums/{id}/export', [RmAlumController::class, 'export'])->name('rm-alums.export');
 
     // Hasil Uji CCP1 Nitrit
     Route::get('/ccp1', [Ccp1Controller::class, 'index'])->name('ccp1.index');
@@ -320,7 +321,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/ccp1/{id}', [Ccp1Controller::class, 'destroy'])->name('ccp1.destroy');
     Route::post('/ccp1/delete-multiple', [Ccp1Controller::class, 'deleteMultiple']);
     Route::post('/ccp1/bulk', [Ccp1Controller::class, 'bulk'])->name('ccp1.bulk');
-
+    Route::get('/ccp1/{id}/export', [Ccp1Controller::class, 'export'])->name('ccp1.export');
 
     // Hasil Uji CCP1 Aluminium
     Route::get('/ccp-al', [CcpAlumController::class, 'index'])->name('ccp-al.index');

@@ -8,6 +8,7 @@ class Ccp1 extends Model
 {
     protected $fillable = [
         'rms_id',
+        'tgl',
         'ccp1'
     ];
 

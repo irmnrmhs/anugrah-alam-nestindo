@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ccp1;
+use App\Models\Document;
+use Illuminate\View\View;
 use App\Models\RawMaterial;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 
 class Ccp1Controller extends Controller
 {
@@ -23,6 +25,7 @@ class Ccp1Controller extends Controller
     {
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
+            'tgl' => 'required|date',
             'ccp1' => 'required|numeric|min:0|max:999.9',
         ]);
 
@@ -51,7 +54,8 @@ class Ccp1Controller extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:raw_materials,id',
+            'rms_id' => 'required|exists:raw_materials,id',
+            'tgl' => 'required|date',
             'ccp1' => 'required|numeric|min:0|max:999.9'
         ]);
 
@@ -89,7 +93,8 @@ class Ccp1Controller extends Controller
     {
         $validated = $request->validate([
             'items' => 'required|array|min:1',
-            'items.*.products_id'   => 'required|exists:raw_materials,id',
+            'items.*.rms_id'   => 'required|exists:raw_materials,id',
+            'items.*.tgl' => 'required|date',
             'items.*.ccp1' => 'nullable|numeric|min:0|max:999.9'
         ]);
 
@@ -103,6 +108,28 @@ class Ccp1Controller extends Controller
             'status' => 'success',
             'message' => 'Semua hasil uji berhasil ditambahkan.',
         ]);
+    }
+
+    public function export($id)
+    {
+        $ccpns = CCP1::with([
+            'rawMaterial'
+        ])
+        ->findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'QCCCPN')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.ccpn-form', compact('ccpns', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Nitri Selama Proses.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse
