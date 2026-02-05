@@ -93,7 +93,7 @@ class CcpAlumController extends Controller
     {
         $validated = $request->validate([
             'items' => 'required|array|min:1',
-            'items.*.products_id'   => 'required|exists:raw_materials,id',
+            'items.*.rms_id'   => 'required|exists:raw_materials,id',
             'items.*.tgl' => 'required|date',
             'items.*.ccp_al' => 'nullable|numeric|min:0|max:999.9'
         ]);

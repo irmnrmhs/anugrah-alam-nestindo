@@ -331,6 +331,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/ccp-al/{id}', [CcpAlumController::class, 'destroy'])->name('ccp-al.destroy');
     Route::post('/ccp-al/delete-multiple', [CcpAlumController::class, 'deleteMultiple']);
     Route::post('/ccp-al/bulk', [CcpAlumController::class, 'bulk'])->name('ccp-al.bulk');
+    Route::get('/ccp-al/{id}/export', [CcpAlumController::class, 'export'])->name('ccp-al.export');
 
     // Hasil Uji Air dan Nitrit PJ
     Route::get('/fp-results', [FpResultController::class, 'index'])->name('fp-results.index');
