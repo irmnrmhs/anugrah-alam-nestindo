@@ -33,12 +33,13 @@ class GradeController extends Controller
             'status' => 'required|boolean',
         ]);
 
-        $shapes = Shape::find($validated['shapes_id']);
-        $feather = Feather::find($validated['feathers_id']);
-        $color = Color::find($validated['colors_id']);
-        $validated['grade'] = strtoupper($shapes->kode . "-" . $feather->kode . "-" . $color->kode);
+        // $shapes = Shape::find($validated['shapes_id']);
+        // $feather = Feather::find($validated['feathers_id']);
+        // $color = Color::find($validated['colors_id']);
+        // $validated['grade'] = strtoupper($shapes->kode . "-" . $feather->kode . "-" . $color->kode);
 
         $grade = Grade::create($validated);
+        $grade->load('shape', 'feather', 'color');
 
         $message = $this->obj . " berhasil ditambahkan dengan kode {$grade->grade}.";
 

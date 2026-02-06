@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('arrivals', function (Blueprint $table) {
             $table->id();
-            $table->string('kode')->unique();
+            // $table->string('kode')->unique();
             // $table->foreignId('dcertificates_id')->constrained('dcertificates')->unique();
             $table->foreignId('dcertificates_id')->constrained('dcertificates');
             $table->foreignId('cars_id')->constrained('cars');

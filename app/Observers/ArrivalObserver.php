@@ -13,7 +13,7 @@ class ArrivalObserver
     public function created(Arrival $arrival): void
     {
         RawMaterial::firstOrCreate(
-            ['kode' => $arrival->kode],
+            ['kode' => $arrival->rm_code],
             ['biji' => 0, 'berat' => 0]
         );
     }
@@ -23,15 +23,15 @@ class ArrivalObserver
      */
     public function updated(Arrival $arrival): void
     {
-        if ($arrival->wasChanged('kode')) {
+        if ($arrival->wasChanged('rm_code')) {
 
-            $oldKode = $arrival->getOriginal('kode');
+            $oldKode = $arrival->getOriginal('rm_code');
 
-            $stillUsed = Arrival::where('kode', $oldKode)->exists();
+            $stillUsed = Arrival::where('rm_code', $oldKode)->exists();
 
             if (!$stillUsed) {
-                RawMaterial::where('kode', $oldKode)
-                    ->update(['kode' => $arrival->kode]);
+                RawMaterial::where('rm_code', $oldKode)
+                    ->update(['rm_code' => $arrival->rm_code]);
             }
         }
     }

@@ -25,7 +25,7 @@
         <tr data-id="{{ $arrival->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $arrival->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $arrival->kode }}</td>
+            <td>{{ $arrival->rm_code }}</td>
             <td>{{ $arrival->tgl_kedatangan }}</td>
             <td>{{ $arrival->dcertificate->no_skp }}</td>
             <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
