@@ -301,7 +301,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/rm-results/delete-multiple', [RmResultController::class, 'deleteMultiple']);
     Route::post('/rm-results/bulk', [RmResultController::class, 'bulk'])->name('rm-results.bulk');
     Route::get('/rm-results/{id}/water', [RmResultController::class, 'water'])->name('rm-results.water');
-    Route::get('/rm-results/{id}/nitrit', [RmResultController::class, 'nitrit'])->name('rm-results.nitrit');
+    Route::get('/rm-results/{id}/nitrite', [RmResultController::class, 'nitrite'])->name('rm-results.nitrite');
 
     // Hasil Uji Al BB
     Route::get('/rm-alums', [RmAlumController::class, 'index'])->name('rm-alums.index');
@@ -341,6 +341,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/fp-results/{id}', [FpResultController::class, 'destroy'])->name('fp-results.destroy');
     Route::post('/fp-results/delete-multiple', [FpResultController::class, 'deleteMultiple']);
     Route::post('/fp-results/bulk', [FpResultController::class, 'bulk'])->name('fp-results.bulk');
+    Route::get('/fp-results/{id}/water', [FpResultController::class, 'water'])->name('fp-results.water');
+    Route::get('/fp-results/{id}/nitrite', [FpResultController::class, 'nitrite'])->name('fp-results.nitrite');
 
     // Hasil Uji Aluminium PJ
     Route::get('/fp-alums', [FpAlumController::class, 'index'])->name('fp-alums.index');
@@ -350,6 +352,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/fp-alums/{id}', [FpAlumController::class, 'destroy'])->name('fp-alums.destroy');
     Route::post('/fp-alums/delete-multiple', [FpAlumController::class, 'deleteMultiple']);
     Route::post('/fp-alums/bulk', [FpAlumController::class, 'bulk'])->name('fp-alums.bulk');
+    Route::get('/fp-alums/{id}/export', [FpAlumController::class, 'export'])->name('fp-alums.export');
 
     // History
     Route::get('/histories', [HistoryController::class, 'index'])->name('histories.index');

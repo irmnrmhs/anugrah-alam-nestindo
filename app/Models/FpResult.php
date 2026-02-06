@@ -8,6 +8,7 @@ class fpResult extends Model
 {
     protected $fillable = [
         'products_id',
+        'tgl',
         'kadar_air',
         'kadar_nitrit',
         // 'kadar_aluminium'

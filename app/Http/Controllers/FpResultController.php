@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FinishedProduct;
+use App\Models\Document;
 use App\Models\FpResult;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Models\FinishedProduct;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 
 class FpResultController extends Controller
@@ -23,6 +25,7 @@ class FpResultController extends Controller
     {
         $validated = $request->validate([
             'products_id' => 'required|exists:finished_products,id',
+            'tgl' => 'required|date',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
         ]);
@@ -62,6 +65,7 @@ class FpResultController extends Controller
     {
         $validated = $request->validate([
             'products_id' => 'required|exists:finished_products,id',
+            'tgl' => 'required|date',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
         ]);
@@ -107,6 +111,7 @@ class FpResultController extends Controller
         $validated = $request->validate([
             'items' => 'required|array|min:1',
             'items.*.products_id'   => 'required|exists:finished_products,id',
+            'items.*.tgl' => 'required|date',
             'items.*.kadar_air' => 'nullable|numeric|min:0|max:999.99',
             'items.*.kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',
         ]);
@@ -123,6 +128,50 @@ class FpResultController extends Controller
         ]);
     }
 
+    public function water($id)
+    {
+        $fps = FpResult::with([
+            'product'
+        ])
+        ->findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'QCPJA')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.fpw-form', compact('fps', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Air Produk Jadi.pdf';
+
+        return $pdf->stream($filename);
+    }
+
+    public function nitrite($id)
+    {
+        $fps = FpResult::with([
+            'product'
+        ])
+        ->findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'QCPJN')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.fpn-form', compact('fps', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Nitrit Produk Jadi.pdf';
+
+        return $pdf->stream($filename);
+    }
+    
     public function deleteMultiple(Request $request): JsonResponse
     {
         $ids = $request->ids;

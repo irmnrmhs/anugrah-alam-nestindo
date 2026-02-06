@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\FpAlum;
+use App\Models\Document;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\FinishedProduct;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 
 class FpAlumController extends Controller
@@ -23,6 +25,7 @@ class FpAlumController extends Controller
     {
         $validated = $request->validate([
             'products_id' => 'required|exists:finished_products,id',
+            'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
@@ -53,6 +56,7 @@ class FpAlumController extends Controller
     {
         $validated = $request->validate([
             'products_id' => 'required|exists:finished_products,id',
+            'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
@@ -91,6 +95,7 @@ class FpAlumController extends Controller
         $validated = $request->validate([
             'items' => 'required|array|min:1',
             'items.*.products_id'   => 'required|exists:finished_products,id',
+            'items.*.tgl' => 'required|date',
             'items.*.kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
         ]);
 
@@ -104,6 +109,28 @@ class FpAlumController extends Controller
             'status' => 'success',
             'message' => 'Semua hasil uji berhasil ditambahkan.',
         ]);
+    }
+
+    public function export($id)
+    {
+        $fpls = FpAlum::with([
+            'product'
+        ])
+        ->findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'QCPJL')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.fpl-form', compact('fpls', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Aluminium Produk Jadi.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse

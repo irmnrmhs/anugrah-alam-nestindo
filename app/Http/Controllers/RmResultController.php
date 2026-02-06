@@ -157,7 +157,7 @@ class RmResultController extends Controller
         return $pdf->stream($filename);
     }
 
-    public function nitrit($id)
+    public function nitrite($id)
     {
         $bbs = RmResult::with([
             'rawMaterial'

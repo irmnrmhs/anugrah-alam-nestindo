@@ -8,6 +8,7 @@ class FpAlum extends Model
 {
     protected $fillable = [
         'products_id',
+        'tgl',
         'kadar_aluminium',
     ];
 
