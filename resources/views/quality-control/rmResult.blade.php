@@ -12,7 +12,7 @@
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Rumah Burung/No. Registrasi</th>
-    <th>Tanggal</th>
+    <th>Tanggal Pemeriksaan</th>
     <th>Kadar Air</th>
     <th>Kadar Nitrit</th>
 @stop
@@ -31,7 +31,6 @@
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
                 <a href="{{ route('rm-results.water', $result->id) }}" class="btn btn-sm btn-primary" target="_blank">Form Kadar Air</a>
                 <a href="{{ route('rm-results.nitrit', $result->id) }}" class="btn btn-sm btn-primary" target="_blank">Form Kadar NItrit</a>
-
             </td>
         </tr>
     @endforeach

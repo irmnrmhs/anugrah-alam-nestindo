@@ -12,6 +12,7 @@
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Rumah Burung/No. Registrasi</th>
+    <th>Tanggal Pemeriksaan</th>
     <th>Kadar Air</th>
     <th>Kadar Nitrit</th>
 @stop
@@ -22,9 +23,9 @@
             <td><input type="checkbox" class="row-check" value="{{ $result->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $result->product->kode }}</td>
+            <td>{{ $result->tgl }}</td>
             <td>{{ $result->kadar_air }}</td>
             <td>{{ $result->kadar_nitrit }}</td>
-            <td>{{ $result->kadar_aluminium }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -45,6 +46,11 @@
     </div>
 
     <div class="mb-3">
+        <label>Tanggal Pemeriksaan</label>
+        <input id="tgl" type="date" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
         <label>Jumlah Sampel</label>
         <input type="number" min="1" id="jumlah_sampel" class="form-control" required>
     </div>
@@ -53,6 +59,7 @@
 @section('form-submit-script')
     const id = $('#item_id').val();
     const products_id = $('#products_id').val();
+    const tgl = $('#tgl').val();
     const jumlah = parseInt($('#jumlah_sampel').val());
 
     if (!products_id || jumlah < 1) {
@@ -86,6 +93,7 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 products_id,
+                tgl,
                 kadar_air: $(`.kadar-air[data-index="${i}"]`).val(),
                 kadar_nitrit: $(`.kadar-nitrit[data-index="${i}"]`).val(),
             });
@@ -137,6 +145,7 @@
 
                     let payload = {
                         products_id: result.products_id,
+                        tgl: result.tgl,
                         kadar_air: parseFloat($('#edit_air').val()),
                         kadar_nitrit: parseFloat($('#edit_nitrit').val()),
                     };

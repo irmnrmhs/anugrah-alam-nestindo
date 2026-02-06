@@ -58,7 +58,7 @@
     </td>
     <td width="60%">
         {{-- : {{ \Carbon\Carbon::parse($bbs->tgl)->translatedFormat('F') }} --}}
-        {{ $bbs->tgl }}
+        : {{ $bbs->tgl }}
     </td>
 </tr>
 @php

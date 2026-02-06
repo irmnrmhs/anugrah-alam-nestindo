@@ -8,6 +8,7 @@ class RmAlum extends Model
 {
     protected $fillable = [
         'rms_id',
+        'tgl',
         'kadar_aluminium',
     ];
 

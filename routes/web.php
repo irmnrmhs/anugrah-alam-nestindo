@@ -301,7 +301,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/rm-results/delete-multiple', [RmResultController::class, 'deleteMultiple']);
     Route::post('/rm-results/bulk', [RmResultController::class, 'bulk'])->name('rm-results.bulk');
     Route::get('/rm-results/{id}/water', [RmResultController::class, 'water'])->name('rm-results.water');
-    Route::get('/rm-results/{id}/nitrit', [RmResultController::class, 'nitrit'])->name('rm-results.nitrit');
+    Route::get('/rm-results/{id}/nitrite', [RmResultController::class, 'nitrite'])->name('rm-results.nitrite');
 
     // Hasil Uji Al BB
     Route::get('/rm-alums', [RmAlumController::class, 'index'])->name('rm-alums.index');
@@ -311,6 +311,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/rm-alums/{id}', [RmAlumController::class, 'destroy'])->name('rm-alums.destroy');
     Route::post('/rm-alums/delete-multiple', [RmAlumController::class, 'deleteMultiple']);
     Route::post('/rm-alums/bulk', [RmAlumController::class, 'bulk'])->name('rm-alums.bulk');
+    Route::get('/rm-alums/{id}/export', [RmAlumController::class, 'export'])->name('rm-alums.export');
 
     // Hasil Uji CCP1 Nitrit
     Route::get('/ccp1', [Ccp1Controller::class, 'index'])->name('ccp1.index');
@@ -320,7 +321,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/ccp1/{id}', [Ccp1Controller::class, 'destroy'])->name('ccp1.destroy');
     Route::post('/ccp1/delete-multiple', [Ccp1Controller::class, 'deleteMultiple']);
     Route::post('/ccp1/bulk', [Ccp1Controller::class, 'bulk'])->name('ccp1.bulk');
-
+    Route::get('/ccp1/{id}/export', [Ccp1Controller::class, 'export'])->name('ccp1.export');
 
     // Hasil Uji CCP1 Aluminium
     Route::get('/ccp-al', [CcpAlumController::class, 'index'])->name('ccp-al.index');
@@ -330,6 +331,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/ccp-al/{id}', [CcpAlumController::class, 'destroy'])->name('ccp-al.destroy');
     Route::post('/ccp-al/delete-multiple', [CcpAlumController::class, 'deleteMultiple']);
     Route::post('/ccp-al/bulk', [CcpAlumController::class, 'bulk'])->name('ccp-al.bulk');
+    Route::get('/ccp-al/{id}/export', [CcpAlumController::class, 'export'])->name('ccp-al.export');
 
     // Hasil Uji Air dan Nitrit PJ
     Route::get('/fp-results', [FpResultController::class, 'index'])->name('fp-results.index');
@@ -339,6 +341,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/fp-results/{id}', [FpResultController::class, 'destroy'])->name('fp-results.destroy');
     Route::post('/fp-results/delete-multiple', [FpResultController::class, 'deleteMultiple']);
     Route::post('/fp-results/bulk', [FpResultController::class, 'bulk'])->name('fp-results.bulk');
+    Route::get('/fp-results/{id}/water', [FpResultController::class, 'water'])->name('fp-results.water');
+    Route::get('/fp-results/{id}/nitrite', [FpResultController::class, 'nitrite'])->name('fp-results.nitrite');
 
     // Hasil Uji Aluminium PJ
     Route::get('/fp-alums', [FpAlumController::class, 'index'])->name('fp-alums.index');
@@ -348,6 +352,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/fp-alums/{id}', [FpAlumController::class, 'destroy'])->name('fp-alums.destroy');
     Route::post('/fp-alums/delete-multiple', [FpAlumController::class, 'deleteMultiple']);
     Route::post('/fp-alums/bulk', [FpAlumController::class, 'bulk'])->name('fp-alums.bulk');
+    Route::get('/fp-alums/{id}/export', [FpAlumController::class, 'export'])->name('fp-alums.export');
 
     // History
     Route::get('/histories', [HistoryController::class, 'index'])->name('histories.index');

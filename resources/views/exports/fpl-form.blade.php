@@ -1,6 +1,6 @@
 @extends('exports.form')
 
-@section('title', 'Kadar Nitrit Bahan Baku')
+@section('title', 'Kadar Aluminium Produk Jadi')
 
 @push('styles')
 <style>
@@ -15,8 +15,8 @@
 </td>
 
 <td rowspan="3" width="40%" class="title">
-    CATATAN PEMERIKSAAN <br> KADAR NITRIT BAHAN BAKU <br>
-    <span class="small"><i>(Inspection Record Nitrite Content of Raw Material)</i></span>
+    CATATAN PEMERIKSAAN <br> KADAR ALUMINIUM PRODUK JADI <br>
+    <span class="small"><i>(Inspection Record Aluminum <br>Content of Finished Product)</i></span>
 </td>
 
 <td width="20%">
@@ -58,11 +58,11 @@
     </td>
     <td width="60%">
         {{-- : {{ \Carbon\Carbon::parse($bbs->tgl)->translatedFormat('F') }} --}}
-        : {{ $bbs->tgl }}
+        : {{ $fpls->tgl }}
     </td>
 </tr>
 @php
-    $arrival = $bbs->rawMaterial->arrivals->first();
+    $arrival = $fpls->product->product->history->identifier->rawMaterial->arrivals->first();
 @endphp
 <tr>
     <td width="10%">Sampel</td>

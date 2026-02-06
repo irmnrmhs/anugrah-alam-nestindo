@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\RmAlum;
+use App\Models\Document;
 use Illuminate\View\View;
 use App\Models\RawMaterial;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 
 class RmAlumController extends Controller
@@ -23,6 +25,7 @@ class RmAlumController extends Controller
     {
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
+            'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9',
         ]);
 
@@ -52,6 +55,7 @@ class RmAlumController extends Controller
     {
         $validated = $request->validate([
             'products_id' => 'required|exists:raw_materials,id',
+            'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
@@ -89,7 +93,8 @@ class RmAlumController extends Controller
     {
         $validated = $request->validate([
             'items' => 'required|array|min:1',
-            'items.*.products_id'   => 'required|exists:raw_materials,id',
+            'items.*.rms_id'   => 'required|exists:raw_materials,id',
+            'items.*.tgl' => 'required|date',
             'items.*.kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
         ]);
 
@@ -103,6 +108,28 @@ class RmAlumController extends Controller
             'status' => 'success',
             'message' => 'Semua hasil uji berhasil ditambahkan.',
         ]);
+    }
+
+    public function export($id)
+    {
+        $bbs = RmAlum::with([
+            'rawMaterial'
+        ])
+        ->findOrFail($id);
+
+        $document = Document::with([
+            'employee',
+            'department'
+        ])
+        ->where('kode', 'QCBBL')
+        ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.rml-form', compact('bbs', 'document'))
+                ->setPaper('A4', 'portrait');
+
+        $filename = 'Aluminium Bahan Baku.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse
