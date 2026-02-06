@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
-            $table->string('grade')->unique();
+            // $table->string('grade')->unique();
             $table->foreignId('shapes_id')->constrained('shapes');
             $table->foreignId('feathers_id')->constrained('feathers');
             $table->foreignId('colors_id')->constrained('colors');

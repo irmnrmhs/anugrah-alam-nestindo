@@ -15,7 +15,7 @@ class GradeSeeder extends Seeder
     {
         Grade::create([
             // 'categories_id' => 1,
-            'grade' => 'MK-BRP-P',
+            // 'grade' => 'MK-BRP-P',
             'shapes_id' => 1,
             'feathers_id' => 1,
             'colors_id' => 1,
@@ -24,7 +24,7 @@ class GradeSeeder extends Seeder
 
         Grade::create([
             // 'categories_id' => 1,
-            'grade' => 'OVL-BRP-P',
+            // 'grade' => 'OVL-BRP-P',
             'shapes_id' => 2,
             'feathers_id' => 1,
             'colors_id' => 1,
