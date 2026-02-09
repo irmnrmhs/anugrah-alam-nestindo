@@ -218,7 +218,8 @@
     });
 
     $('#exportForm').on('submit', function (e) {
-        const id = $('#export_dcertificate_id').val();
+        const id   = $('#export_dcertificate_id').val();
+        const type = $('select[name="type"]').val();
 
         if (!id) {
             e.preventDefault();
@@ -227,6 +228,9 @@
         }
 
         this.action = "{{ route('dcertificates.export', ':id') }}".replace(':id', id);
+        this.method = 'GET';
+
+        this.target = (type === 'pdf') ? '_blank' : '_self';
     });
 
 @stop

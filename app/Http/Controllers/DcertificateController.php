@@ -14,6 +14,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SkpExport;
 
 class DcertificateController extends Controller
 {
@@ -197,16 +199,30 @@ class DcertificateController extends Controller
         return view('exports.skp', compact('dcertificate', 'document'));
     }
 
-    public function export($id)
+    public function export(Request $request, $id)
     {
+        $type = $request->get('type', 'pdf');
+
         $dcertificate = Dcertificate::with([
             'company','supplier','wbhouse','details'
         ])->findOrFail($id);
 
+        if ($type === 'excel') {
+
+            $filename = 'SKP-' . str_replace(['/', '\\'], '-', $dcertificate->no_skp) . '.xlsx';
+
+            return Excel::download(
+                new SkpExport($dcertificate),
+                $filename
+            );
+        }
+
         $document = Document::where('kode', 'SKP058')->firstOrFail();
 
-        $pdf = Pdf::loadView('exports.skp', compact('dcertificate', 'document'))
-            ->setPaper('A4', 'portrait');
+        $pdf = Pdf::loadView(
+            'exports.skp',
+            compact('dcertificate', 'document')
+        )->setPaper('A4', 'portrait');
 
         $filename = 'SKP-' . str_replace(['/', '\\'], '-', $dcertificate->no_skp) . '.pdf';
 
