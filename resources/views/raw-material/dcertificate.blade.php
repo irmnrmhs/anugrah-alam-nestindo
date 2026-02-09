@@ -4,7 +4,6 @@
     $title = 'Kelola Data Pengiriman';
     $singular = 'Pengiriman';
     $deleteMultipleUrl = '/dcertificates/delete-multiple';
-    $hideImportButton = true;
 @endphp
 
 @section('table-headers')
@@ -28,7 +27,6 @@
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('dcertificates.export', $dcertificate->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak SKP</a>
             </td>
         </tr>
     @endforeach
@@ -62,8 +60,29 @@
         <label>Tanggal SKP</label>
         <input type="date" id="tgl_skp" class="form-control" required>
     </div>
-    
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>No SKP</label>
+        <select name="dcertificate_id" id="export_dcertificate_id" class="form-control" required>
+            <option value="">-- Pilih No SKP --</option>
+            @foreach ($dcertificates as $dc)
+                <option value="{{ $dc->id }}">
+                    {{ $dc->no_skp }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     const id = $('#item_id').val();
@@ -197,4 +216,17 @@
             }
         });
     });
+
+    $('#exportForm').on('submit', function (e) {
+        const id = $('#export_dcertificate_id').val();
+
+        if (!id) {
+            e.preventDefault();
+            Swal.fire('Oops', 'Pilih No SKP terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('dcertificates.export', ':id') }}".replace(':id', id);
+    });
+
 @stop

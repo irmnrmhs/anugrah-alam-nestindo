@@ -213,6 +213,22 @@ class DcertificateController extends Controller
         return $pdf->stream($filename);
     }
 
+    // public function export($id)
+    // {
+    //     $dcertificate = Dcertificate::with([
+    //         'company','supplier','wbhouse','details'
+    //     ])->findOrFail($id);
+
+    //     $document = Document::where('kode', 'SKP058')->firstOrFail();
+
+    //     $pdf = Pdf::loadView('exports.skp', compact('dcertificate', 'document'))
+    //         ->setPaper('A4', 'portrait');
+
+    //     $filename = 'SKP-' . str_replace(['/', '\\'], '-', $dcertificate->no_skp) . '.pdf';
+
+    //     return $pdf->stream($filename);
+    // }
+
     public function deleteMultiple(Request $request): JsonResponse
     {
         $ids = $request->ids;
