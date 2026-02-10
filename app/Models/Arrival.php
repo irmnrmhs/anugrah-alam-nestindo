@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Arrival extends Model
 {
     protected $fillable = [
-        'kode',
+        // 'kode',
         'dcertificates_id',
         'cars_id',
         'employees_id', 
@@ -17,6 +17,22 @@ class Arrival extends Model
         'kondisi',
         'keterangan',
     ];
+
+    public function getRmCodeAttribute(): string
+    {
+        if (!$this->relationLoaded('dcertificate')) {
+            $this->load('dcertificate.wbhouse');
+        }
+
+        if (!$this->dcertificate || !$this->dcertificate->wbhouse) {
+            return '-';
+        }
+
+        $kodeWb = $this->dcertificate->wbhouse->kode;
+        $tgl    = date('dmy', strtotime($this->tgl_kedatangan));
+
+        return "{$kodeWb}-{$tgl}";
+    }
 
     public function employee()
     {

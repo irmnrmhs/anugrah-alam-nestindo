@@ -24,7 +24,7 @@
         <tr data-id="{{ $container->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $container->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $container->arrival->kode }}</td>
+            <td>{{ $container->arrival->rm_code }}</td>
             <td>{{ $container->tanggal }}</td>
             <td>{{ $container->biji }}</td>
             <td>{{ $container->berat }}</td>
@@ -45,9 +45,14 @@
         <select id="arrivals_id" class="form-control" required>
             <option value="">-- Pilih Kode Bahan Baku --</option>
             @foreach($arrivals as $arrival)
-                <option value="{{ $arrival->id }}">{{ $arrival->kode }}</option>
+                <option value="{{ $arrival->id }}">{{ $arrival->rm_code }}</option>
             @endforeach
         </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Tanggal</label>
+        <input type="date" min="1" id="tanggal" class="form-control" required>
     </div>
 
     <div class="mb-3">
@@ -59,6 +64,7 @@
 @section('form-submit-script')
     const id = $('#item_id').val();
     const arrivals_id = $('#arrivals_id').val();
+    const tanggal = $('#tanggal').val();
     const jumlah = parseInt($('#jumlah_kontainer').val());
 
     if (!arrivals_id || jumlah < 1) {
@@ -73,9 +79,6 @@
         html += `
             <div class="border rounded p-3 mb-3">
                 <h6>Kontainer ${i}</h6>
-
-                <label>Tanggal</label>
-                <input type="date" class="form-control mb-2 c-tanggal" data-index="${i}" min="0" required>
 
                 <label>Biji</label>
                 <input type="number" class="form-control mb-2 c-biji" data-index="${i}" min="0" required>
@@ -106,7 +109,7 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 arrivals_id,
-                tanggal: $(`.c-tanggal[data-index="${i}"]`).val(),
+                tanggal,
                 biji: $(`.c-biji[data-index="${i}"]`).val(),
                 berat: $(`.c-berat[data-index="${i}"]`).val(),
                 keterangan: $(`.c-keterangan[data-index="${i}"]`).val(),
@@ -144,9 +147,6 @@
                 $('#item_id').val(container.id);
 
                 let html = `
-                    <label>Tanggal</label>
-                    <input type="date" class="form-control mb-2" id="edit_tanggal"
-                        value="${container.biji}" min="0">
 
                     <label>Biji</label>
                     <input type="number" class="form-control mb-2" id="edit_biji"
@@ -179,7 +179,7 @@
 
                     let payload = {
                         arrivals_id: container.arrivals_id,
-                        tanggal: $('#edit_tanggal').val(),
+                        tanggal: container.tanggal,
                         biji: parseInt($('#edit_biji').val()),
                         biji: parseInt($('#edit_biji').val()),
                         berat: parseFloat($('#edit_berat').val()),

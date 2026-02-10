@@ -44,11 +44,14 @@ class ArrivalController extends Controller
 
         $dcertificate = Dcertificate::with('wbhouse')->find($validated['dcertificates_id']);
 
-        $kode_wbhouse = $dcertificate->wbhouse->kode; 
-        $tgl_kedatangan = $validated['tgl_kedatangan'];
+        $arrival = Arrival::create($validated);
 
-        $format_tgl = date('dmy', strtotime($tgl_kedatangan));
-        $validated['kode'] = $kode_wbhouse . '-' . $format_tgl;
+        $arrival->load('dcertificate');
+        // $kode_wbhouse = $dcertificate->wbhouse->kode; 
+        // $tgl_kedatangan = $validated['tgl_kedatangan'];
+
+        // $format_tgl = date('dmy', strtotime($tgl_kedatangan));
+        // $validated['kode'] = $kode_wbhouse . '-' . $format_tgl;
 
         // if (Arrival::where('kode', $validated['kode'])->exists()) {
         //     return response()->json([
@@ -56,8 +59,6 @@ class ArrivalController extends Controller
         //         'message' => 'Gagal: Kode Kedatangan otomatis (' . $validated['kode'] . ') sudah ada. Silahkan periksa SKP atau tanggal kedatangan.',
         //     ], 409);
         // }
-        
-        $arrival = Arrival::create($validated);
 
         return response()->json([
             'status' => 'success',

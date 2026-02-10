@@ -21,7 +21,7 @@ class RawMaterial extends Model
 
     public function arrivals()
     {
-        return $this->hasMany(Arrival::class, 'kode', 'kode');
+        return $this->hasMany(Arrival::class, 'rm_code', 'kode');
     }
     
     public function rmResults()

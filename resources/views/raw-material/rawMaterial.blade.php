@@ -26,7 +26,7 @@
     @foreach($raw_materials as $index => $raw_material)
         <tr data-id="{{ $raw_material->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $raw_material->kode }}</td>
+            <td>{{ $raw_material->rm_code }}</td>
             <td>{{ $raw_material->biji }}</td>
             <td>{{ $raw_material->berat }}</td>
             <td>{{ $raw_material->biji_sisa }}</td>
