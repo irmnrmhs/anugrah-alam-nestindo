@@ -29,19 +29,21 @@
             @yield('bulk-actions')
             
             {{-- Tabel utama --}}
-            <table class="table table-bordered table-striped" id="dataTable" data-delete-multiple="{{ $deleteMultipleUrl ?? '' }}">
-                <thead>
-                    <tr>
-                        @yield('table-headers')
-                        @if (empty($hideActions))
-                            <th>Aksi</th>
-                        @endif
-                    </tr>
-                </thead>
-                <tbody>
-                    @yield('table-body')
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped" id="dataTable" data-delete-multiple="{{ $deleteMultipleUrl ?? '' }}">
+                    <thead>
+                        <tr>
+                            @yield('table-headers')
+                            @if (empty($hideActions))
+                                <th>Aksi</th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @yield('table-body')
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

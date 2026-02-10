@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('dcertificates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('companies_id')->constrained('companies');
-            $table->foreignId('suppliers_id')->constrained('suppliers');
+            // $table->foreignId('suppliers_id')->constrained('suppliers');
             $table->foreignId('wbhouses_id')->constrained('w_b_houses');
             $table->string('no_skp')->unique();
             $table->date('tgl_skp');

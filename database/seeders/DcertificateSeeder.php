@@ -15,7 +15,6 @@ class DcertificateSeeder extends Seeder
     {
         Dcertificate::create([
             'companies_id'  => 1,
-            'suppliers_id'  => 2,
             'wbhouses_id'   => 3,
             'no_skp'        => 'SKP01',
             'tgl_skp'       => '2025-12-05',
