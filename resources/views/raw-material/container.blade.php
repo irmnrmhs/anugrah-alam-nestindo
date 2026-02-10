@@ -58,11 +58,11 @@
 @section('export')
     <div class="mb-3">
         <label>Kode Bahan Baku</label>
-        <select name="containers_id" id="export_container" class="form-control" required>
+        <select id="export_controller" class="form-control" required>
             <option value="">-- Pilih Kode Bahan Baku --</option>
-            @foreach ($containers as $container)
-                <option value="{{ $container->id }}">
-                    {{ $container->arrival->kode }}
+            @foreach ($arrivals as $arrival)
+                <option value="{{ $arrival->id }}">
+                    {{ $arrival->kode }}
                 </option>
             @endforeach
         </select>
@@ -258,19 +258,23 @@
     });
 
     $('#exportForm').on('submit', function (e) {
-        const id   = $('#export_container').val();
-        const type = $('select[name="type"]').val();
+        e.preventDefault();
 
-        if (!id) {
-            e.preventDefault();
+        const arrivalId = $('#export_controller').val();
+        const type      = $('select[name="type"]').val();
+
+        if (!arrivalId) {
             Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
             return;
         }
 
-        this.action = "{{ route('containers.export', ':id') }}".replace(':id', id);
-        this.method = 'GET';
+        this.action = "{{ route('arrivals.export', ':id') }}"
+            .replace(':id', arrivalId);
 
+        this.method = 'GET';
         this.target = (type === 'pdf') ? '_blank' : '_self';
+
+        this.submit();
     });
 @stop
 

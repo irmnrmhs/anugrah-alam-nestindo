@@ -120,33 +120,26 @@ class ContainerController extends Controller
         ]);
     }
     
-    public function export(Request $request, $id)
+    public function export(Request $request, Arrival $arrival)
     {
-        $type = $request->get('type', 'pdf');
+        $containers = Container::with('employee')
+            ->where('arrivals_id', $arrival->id)
+            ->orderBy('tanggal')
+            ->get();
 
-        $container = Container::with([
-            'arrival.employee',
-            'arrival.dcertificate.wbhouse'
-        ])->findOrFail($id);
-
-        if ($type === 'excel') {
-
-            $filename = 'SKP-' . str_replace(['/', '\\'], '-', $container->arrival->kode) . '.xlsx';
-
-            return Excel::download(
-                new ContainerExport($container),
-                $filename
-            );
+        if ($containers->isEmpty()) {
+            abort(404, 'Tidak ada container untuk arrival ini');
         }
 
         $document = Document::where('kode', 'DBB058')->firstOrFail();
 
         $pdf = Pdf::loadView(
             'exports.container-form',
-            compact('container', 'document')
+            compact('arrival', 'containers', 'document')
         )->setPaper('A4', 'portrait');
 
-        $filename = 'Kedatangan Bahan Baku -' . str_replace(['/', '\\'], '-', $container->arrival->kode) . '.pdf';
+        $filename = 'Kedatangan Bahan Baku -' .
+            str_replace(['/', '\\'], '-', $arrival->kode) . '.pdf';
 
         return $pdf->stream($filename);
     }
