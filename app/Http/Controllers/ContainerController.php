@@ -9,6 +9,8 @@ use App\Models\Container;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ContainerExport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -117,46 +119,34 @@ class ContainerController extends Controller
             'message' => 'Semua kontainer berhasil ditambahkan.',
         ]);
     }
-
-    public function preview($id)
-    {
-        $containers = Container::with([
-            'arrival.employee',
-            'arrival.dcertificate.wbhouse'
-        ])
-        ->where('arrivals_id', $id)
-        ->get();
-        
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'DBB058')
-        ->firstOrFail();
-
-        return view('exports.container-form', compact('containers', 'document'));
-    }
     
-    public function export($id)
+    public function export(Request $request, $id)
     {
-        $containers = Container::with([
+        $type = $request->get('type', 'pdf');
+
+        $container = Container::with([
             'arrival.employee',
             'arrival.dcertificate.wbhouse'
-        ])
-        ->where('arrivals_id', $id)
-        ->get();
+        ])->findOrFail($id);
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'DBB058')
-        ->firstOrFail();
+        if ($type === 'excel') {
 
-        $pdf = Pdf::loadView('exports.container-form', compact('containers', 'document'))
-            ->setPaper('A4', 'portrait');
+            $filename = 'SKP-' . str_replace(['/', '\\'], '-', $container->arrival->kode) . '.xlsx';
 
-        $filename = 'Form Kontainer.pdf';
+            return Excel::download(
+                new ContainerExport($container),
+                $filename
+            );
+        }
+
+        $document = Document::where('kode', 'DBB058')->firstOrFail();
+
+        $pdf = Pdf::loadView(
+            'exports.container-form',
+            compact('container', 'document')
+        )->setPaper('A4', 'portrait');
+
+        $filename = 'Kedatangan Bahan Baku -' . str_replace(['/', '\\'], '-', $container->arrival->kode) . '.pdf';
 
         return $pdf->stream($filename);
     }

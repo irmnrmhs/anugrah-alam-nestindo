@@ -33,7 +33,6 @@
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('containers.export', $container->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak Form</a>
             </td>
         </tr>
     @endforeach
@@ -55,6 +54,28 @@
         <input type="number" min="1" id="jumlah_kontainer" class="form-control" required>
     </div>
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select name="containers_id" id="export_container" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($containers as $container)
+                <option value="{{ $container->id }}">
+                    {{ $container->arrival->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     const id = $('#item_id').val();
@@ -236,6 +257,21 @@
         });
     });
 
+    $('#exportForm').on('submit', function (e) {
+        const id   = $('#export_container').val();
+        const type = $('select[name="type"]').val();
+
+        if (!id) {
+            e.preventDefault();
+            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('containers.export', ':id') }}".replace(':id', id);
+        this.method = 'GET';
+
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+    });
 @stop
 
 @section('content')
