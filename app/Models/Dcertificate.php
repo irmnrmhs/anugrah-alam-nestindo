@@ -14,6 +14,16 @@ class Dcertificate extends Model
         'tgl_skp'
     ];
 
+    public function getTotalBeratAttribute()
+    {
+        return number_format(
+            $this->details()->sum('berat_kirim') * 1000,
+            0,
+            ',',
+            '.'
+        );
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class, 'companies_id');
