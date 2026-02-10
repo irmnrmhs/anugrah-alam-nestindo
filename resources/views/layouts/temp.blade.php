@@ -9,7 +9,7 @@
             <button class="btn btn-primary" id="btnAdd">Tambah {{ $singular ?? 'Data' }}</button>
         @endif
         @if (empty($hideExportButton))
-            <button class="btn btn-primary" id="btnExport">Export {{ $singular ?? 'Data' }}</button>
+            <button class="btn btn-success" id="btnExport">Export {{ $singular ?? 'Data' }}</button>
         @endif
         @if (empty($hideImportButton))
             <button class="btn btn-primary" id="btnImport">Import {{ $singular ?? 'Data' }}</button>
@@ -29,21 +29,19 @@
             @yield('bulk-actions')
             
             {{-- Tabel utama --}}
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped" id="dataTable" data-delete-multiple="{{ $deleteMultipleUrl ?? '' }}">
-                    <thead>
-                        <tr>
-                            @yield('table-headers')
-                            @if (empty($hideActions))
-                                <th>Aksi</th>
-                            @endif
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @yield('table-body')
-                    </tbody>
-                </table>
-            </div>
+            <table class="table table-bordered table-striped" id="dataTable" data-delete-multiple="{{ $deleteMultipleUrl ?? '' }}">
+                <thead>
+                    <tr>
+                        @yield('table-headers')
+                        @if (empty($hideActions))
+                            <th>Aksi</th>
+                        @endif
+                    </tr>
+                </thead>
+                <tbody>
+                    @yield('table-body')
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -69,35 +67,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Modal Export --}}
-    <div class="modal fade" id="exportModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <form id="exportForm" method="GET">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Export {{ $singular ?? 'Data' }}</h5>
-                    </div>
-
-                    <div class="modal-body">
-                        @yield('export')
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">
-                            Export
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Batal
-                        </button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
     {{-- Modal Import --}}
     <div class="modal fade" id="importModal" tabindex="-1">
         <div class="modal-dialog">
@@ -212,15 +181,69 @@
         // Init datatable
         $('#dataTable').DataTable({ responsive: true });
 
-        // ==== CRUD Modal ====
-        const crudModal = new bootstrap.Modal('#crudModal');
+        // Modal
+        const modal = new bootstrap.Modal('#crudModal');
 
         $('#btnAdd').click(() => {
             $('#crudForm')[0].reset();
             $('#item_id').val('');
             $('#modalTitle').text('Tambah {{ $singular ?? "Data" }}');
-            crudModal.show();
+            modal.show();
         });
+
+        // ==== Export ====
+        const exportModal = new bootstrap.Modal('#exportModal');
+
+        $('#btnExport').click(() => {
+            $('#exportForm')[0].reset();
+            exportModal.show();
+        });
+
+        $('#exportForm').submit(function (e) {
+            e.preventDefault();
+
+            if (!"{{ $exportUrl ?? '' }}") {
+                Swal.fire('Oops', 'URL export belum diset', 'warning');
+                return;
+            }
+
+            const formData = new FormData(this);
+
+            // redirect pakai query string (download)
+            const params = new URLSearchParams(formData).toString();
+            window.location.href = "{{ $exportUrl ?? '' }}?" + params;
+
+            exportModal.hide();
+        });
+
+        // Modal Export
+        <div class="modal fade" id="exportModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="exportForm">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                Export {{ $singular ?? 'Data' }}
+                            </h5>
+                        </div>
+
+                        <div class="modal-body">
+                            @yield('export-fields')
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">
+                                Export
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         // ==== Import ====
         const importModal = new bootstrap.Modal('#importModal');
@@ -245,6 +268,7 @@
             .then(res => res.json())
             .then(res => {
                 if (res.status === 'success') {
+
                     if (res.errors && res.errors.length > 0) {
                         Swal.fire({
                             title: 'Import Selesai (Dengan Kesalahan)',
@@ -258,10 +282,13 @@
                                 ">${res.errors.join('\n')}</pre>
                             `
                         }).then(() => location.reload());
-                    } else {
+
+                    }
+                    else {
                         Swal.fire('Sukses', res.message, 'success')
                             .then(() => location.reload());
                     }
+
                 } else {
                     Swal.fire('Gagal', res.message || 'Import gagal', 'error');
                 }
@@ -271,53 +298,13 @@
             });
         });
 
-        // ==== Export ====
-        const exportModal = new bootstrap.Modal('#exportModal');
-
-        $('#btnExport').click(() => {
-            $('#exportForm')[0].reset();
-            exportModal.show();
-        });
-
-        $('#exportForm').off('submit').on('submit', function () {
-            this.action = "{{ $exportUrl ?? '' }}";
-            this.method = "POST";
-            this.target = "_blank"; // optional
-        });
-
-
-        // $('#exportForm').submit(function (e) {
-        //     e.preventDefault();
-
-        //     let formData = new FormData(this);
-
-        //     fetch("{{ $exportUrl ?? '' }}", {
-        //         method: 'POST',
-        //         headers: {
-        //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //         },
-        //         body: formData
-        //     })
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         if (res.status === 'success') {
-        //             Swal.fire('Sukses', res.message, 'success');
-        //         } else {
-        //             Swal.fire('Gagal', res.message || 'Export gagal', 'error');
-        //         }
-        //     })
-        //     .catch(() => {
-        //         Swal.fire('Error', 'Terjadi kesalahan saat export', 'error');
-        //     });
-        // });
-
-        // Submit Form CRUD
+        // Submit Form
         $('#crudForm').submit(e => {
             e.preventDefault();
             @yield('form-submit-script')
         });
 
-        // Custom JS from child
+        // Custom Action from child
         @yield('custom-js')
     });
     </script>

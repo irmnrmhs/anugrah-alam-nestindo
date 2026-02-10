@@ -11,6 +11,8 @@ use App\Models\Dcertificate;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ArrivalExport;
 
 class ArrivalController extends Controller
 {
@@ -122,26 +124,21 @@ class ArrivalController extends Controller
         }
     }
 
-    public function preview($id)
+    public function export(Request $request, $id)
     {
-        $arrival = Arrival::with([
-            'employee',
-            'dcertificate.wbhouse'
-        ])->findOrFail($id);
+        $type = $request->get('type', 'pdf');
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'KBB058')
-        ->firstOrFail();
-
-        return view('exports.arrival-form', compact('arrival', 'document'));
-    }
-
-    public function export($id)
-    {
         $arrival = Arrival::findOrFail($id);
+
+        if ($type === 'excel') {
+
+            $filename = 'Kedatangan - ' . str_replace(['/', '\\'], '-', $arrival->kode) . '.xlsx';
+
+            return Excel::download(
+                new ArrivalExport($arrival),
+                $filename
+            );
+        }
 
         $document = Document::with([
             'employee',
@@ -153,7 +150,7 @@ class ArrivalController extends Controller
         $pdf = Pdf::loadView('exports.arrival-form', compact('arrival', 'document'))
                 ->setPaper('A4', 'portrait');
 
-        $filename = 'Kedatangan.pdf';
+        $filename = 'SKP-' . str_replace(['/', '\\'], '-', $arrival->kode) . '.pdf';
 
         return $pdf->stream($filename);
     }

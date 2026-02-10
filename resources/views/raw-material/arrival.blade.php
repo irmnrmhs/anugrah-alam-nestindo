@@ -11,12 +11,15 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode Bahan Baku</th>
-    <th>Tanggal Kedatangan</th>
-    <th>No. SKP</th>
-    <th>Mobil</th>
+    <th>Tanggal</th>
     <th>Supir</th>
+    <th>Mobil</th>
     <th>Kondisi</th>
+    <th>Kode Bahan Baku</th>
+    <th>Berat (gram)</th>
+    <th>Nama RBW/Noreg</th>
+    <th>Kadar Air (%)</th>
+    <th>No. SKP</th>
     <th>Keterangan</th>
 @stop
 
@@ -27,15 +30,18 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $arrival->rm_code }}</td>
             <td>{{ $arrival->tgl_kedatangan }}</td>
-            <td>{{ $arrival->dcertificate->no_skp }}</td>
-            <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
             <td>{{ $arrival->employee->nama }}</td>
+            <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
             <td>{{ $arrival->kondisi }}</td>
+            <td>{{ $arrival->kode }}</td>
+            <td>{{ $arrival->dcertificate->total_berat }}</td>
+            <td>{{ $arrival->dcertificate->wbhouse->nama . ' / ' . $arrival->dcertificate->wbhouse->kode}}</td>
+            <td>{{ empty($arrival->rawMaterial->rmResults->avg('kadar_air')) ? '-' : $arrival->rawMaterial->rmResults->avg('kadar_air') }}</td> 
+            <td>{{ $arrival->dcertificate->no_skp }}</td>
             <td>{{ empty($arrival->keterangan) ? '-' : $arrival->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('arrivals.export', $arrival->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak Form</a>
             </td>
         </tr>
     @endforeach
@@ -93,6 +99,28 @@
         <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select name="arrivals_id" id="export_arrival" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($arrivals as $arrival)
+                <option value="{{ $arrival->id }}">
+                    {{ $arrival->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     function getKondisiValue() {
@@ -212,5 +240,21 @@
                 .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
+    });
+
+    $('#exportForm').on('submit', function (e) {
+        const id   = $('#export_arrival').val();
+        const type = $('select[name="type"]').val();
+
+        if (!id) {
+            e.preventDefault();
+            Swal.fire('Oops', 'Pilih Kode terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('arrivals.export', ':id') }}".replace(':id', id);
+        this.method = 'GET';
+
+        this.target = (type === 'pdf') ? '_blank' : '_self';
     });
 @stop

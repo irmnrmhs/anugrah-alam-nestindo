@@ -8,21 +8,31 @@ class Dcertificate extends Model
 {
     protected $fillable = [
         'companies_id',
-        'suppliers_id',
+        // 'suppliers_id',
         'wbhouses_id',
         'no_skp',
         'tgl_skp'
     ];
+
+    public function getTotalBeratAttribute()
+    {
+        return number_format(
+            $this->details()->sum('berat_kirim') * 1000,
+            0,
+            ',',
+            '.'
+        );
+    }
 
     public function company()
     {
         return $this->belongsTo(Company::class, 'companies_id');
     }
     
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class, 'suppliers_id');
-    }
+    // public function supplier()
+    // {
+    //     return $this->belongsTo(Supplier::class, 'suppliers_id');
+    // }
 
     public function wbhouse()
     {

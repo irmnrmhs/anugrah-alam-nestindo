@@ -4,16 +4,15 @@
     $title = 'Kelola Data Pengiriman';
     $singular = 'Pengiriman';
     $deleteMultipleUrl = '/dcertificates/delete-multiple';
-    $hideImportButton = true;
 @endphp
 
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Supplier</th>
     <th>Rumah Burung</th>
-    <th>Nomor SKP</th>
+    <th>Alamat RBW</th>
     <th>Tanggal SKP</th>
+    <th>Nomor SKP</th>
 @stop
 
 @section('table-body')
@@ -21,14 +20,13 @@
         <tr data-id="{{ $dcertificate->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $dcertificate->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $dcertificate->supplier->nama }}</td>
             <td>{{ $dcertificate->wbhouse->nama }}</td>
-            <td>{{ $dcertificate->no_skp }}</td>
+            <td>{{ $dcertificate->wbhouse->alamat }}</td>
             <td>{{ $dcertificate->tgl_skp }}</td>
+            <td>{{ $dcertificate->no_skp }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('dcertificates.export', $dcertificate->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak SKP</a>
             </td>
         </tr>
     @endforeach
@@ -36,15 +34,6 @@
 
 @section('form-fields')
     <input type="hidden" id="companies_id" name="companies_id" value="1">
-    <div class="mb-3">
-        <label>Supplier</label>
-        <select id="suppliers_id" class="form-control" required>
-            <option value="">-- Pilih Supplier --</option>
-            @foreach($suppliers as $supplier)
-                <option value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
-            @endforeach
-        </select>
-    </div>
     <div class="mb-3">
         <label>Rumah Burung</label>
         <select id="wbhouses_id" class="form-control" required>
@@ -62,8 +51,29 @@
         <label>Tanggal SKP</label>
         <input type="date" id="tgl_skp" class="form-control" required>
     </div>
-    
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>No SKP</label>
+        <select name="dcertificate_id" id="export_dcertificate_id" class="form-control" required>
+            <option value="">-- Pilih No SKP --</option>
+            @foreach ($dcertificates as $dc)
+                <option value="{{ $dc->id }}">
+                    {{ $dc->no_skp }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     const id = $('#item_id').val();
@@ -73,7 +83,6 @@
     const data = {
         _token: '{{ csrf_token() }}',
         companies_id: $('#companies_id').val(),
-        suppliers_id: $('#suppliers_id').val(),
         wbhouses_id: $('#wbhouses_id').val(),
         no_skp: $('#no_skp').val(),
         tgl_skp: $('#tgl_skp').val()
@@ -92,82 +101,23 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan Nomor SKP belum digunakan.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan SKP tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')
-    $('#wbhouses_id').on('change', function () {
-        const id = $(this).val();
-        const isEdit = $('#item_id').val();
-
-        if (!id) return;
-
-        fetch(`/wbhouses/${id}`)
-            .then(r => r.json())
-            .then(wb => {
-                const kh = wb.area?.kh;
-
-                if (!isEdit) {
-                    if(kh == 1){
-                        $('#no_skp').prop('disabled', false);
-                        $('#no_skp').val('');
-                    }else{
-                        $('#no_skp').prop('disabled', true);
-                        $('#no_skp').val('AUTO');
-                    }
-                } else {
-                    if(kh == 1){
-                        $('#no_skp').prop('disabled', false);
-                        if($('#no_skp').val() == 'AUTO'){
-                            $('#no_skp').val('');
-                        }else{
-                            $('#no_skp').val();
-                        }
-                    }else{
-                        $('#no_skp').prop('disabled', true);
-                        $('#no_skp').val('AUTO');
-                    }
-                }
-            });
-    });
-
     $(document).on('click', '.btnEdit', function () {
         const id = $(this).closest('tr').data('id');
 
         fetch(`/dcertificates/${id}`)
             .then(r => r.json())
             .then(dcertificate => {
-
-                const kh = dcertificate.wbhouse.area.kh;
-
                 $('#item_id').val(dcertificate.id);
                 $('#companies_id').val(dcertificate.companies_id);
-                $('#suppliers_id').val(dcertificate.suppliers_id);
+                $('#wbhouses_id').val(dcertificate.wbhouses_id);
                 $('#tgl_skp').val(dcertificate.tgl_skp);
                 $('#no_skp').val(dcertificate.no_skp);
-
-                fetch(`/wbhouses/by-kh/${kh}`)
-                    .then(r => r.json())
-                    .then(wbhouses => {
-                        const select = $('#wbhouses_id');
-                        select.empty().append('<option value="">-- Pilih Rumah Burung --</option>');
-
-                        wbhouses.forEach(wb => {
-                            select.append(
-                                `<option value="${wb.id}">${wb.nama}</option>`
-                            );
-                        });
-
-                        // set value yg diedit
-                        select.val(dcertificate.wbhouses_id);
-
-                        // trigger KH logic (AUTO / MANUAL SKP)
-                        select.trigger('change');
-
-                        $('#modalTitle').text('Edit SKP');
-                        new bootstrap.Modal('#crudModal').show();
-                    });
-            });
+                new bootstrap.Modal('#crudModal').show();
+        });
     });
 
     $(document).on('click', '.btnDelete', function() {
@@ -197,4 +147,21 @@
             }
         });
     });
+
+    $('#exportForm').on('submit', function (e) {
+        const id   = $('#export_dcertificate_id').val();
+        const type = $('select[name="type"]').val();
+
+        if (!id) {
+            e.preventDefault();
+            Swal.fire('Oops', 'Pilih No SKP terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('dcertificates.export', ':id') }}".replace(':id', id);
+        this.method = 'GET';
+
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+    });
+
 @stop

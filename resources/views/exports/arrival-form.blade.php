@@ -136,7 +136,7 @@
         <td>Berat (Gram) <br>
             <i>(Weight)</i>
         </td>
-        <td>: {{ $arrival->rawMaterial->berat ?? '-' }} gram</td>
+        <td>: {{ $arrival->dcertificate->total_berat ?? '-' }}</td>
     </tr>
     <tr>
         <td>Nama RBW / No. Reg <br>
@@ -149,7 +149,7 @@
             Kadar Air (%) <br>
             <i>(Moisture Content)</i>
         </td>
-        <td>: {{ $arrival->rawMaterial->kadar_air ?? '-' }}</td>
+        <td>: {{ empty($arrival->rawMaterial->rmResults->avg('kadar_air')) ? '-' : $arrival->rawMaterial->rmResults->avg('kadar_air') }}%</td>
     </tr>
     <tr>
         <td>
