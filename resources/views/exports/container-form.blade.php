@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        :
+        : {{ \Carbon\Carbon::parse($month)->translatedFormat('F') }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -111,7 +111,7 @@
     @foreach ($containers as $i => $container)
         <tr>
             <td align="center">{{ $i + 1 }}</td>
-            <td>{{ $container->tanggal }}</td>
+            <td>{{ $container->arrival->tgl_kedatangan }}</td>
             <td>
                 {{ $arrival->dcertificate->wbhouse->kode ?? '-' }}
                 /

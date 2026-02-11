@@ -9,7 +9,6 @@ class Container extends Model
     protected $fillable = [
         'arrivals_id',
         'employees_id',
-        'tanggal',
         'biji',
         'berat',
         'keterangan'

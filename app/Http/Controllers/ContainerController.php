@@ -39,7 +39,6 @@ class ContainerController extends Controller
         $validated = $request->validate([
             'arrivals_id'  => 'required|exists:arrivals,id',
             'employees_id' => 'required|exists:employees,id',
-            'tanggal'      => 'required|date',
             'biji'         => 'required|integer|min:0',
             'berat'        => 'required|numeric|min:0|max:99999.99',
             'keterangan'   => 'nullable|string',
@@ -67,7 +66,6 @@ class ContainerController extends Controller
         $validated = $request->validate([
             'arrivals_id'  => 'required|exists:arrivals,id',
             'employees_id' => 'required|exists:employees,id',
-            'tanggal'      => 'required|date',
             'biji'         => 'required|integer|min:0',
             'berat'        => 'required|numeric|min:0|max:99999.99',
             'keterangan'   => 'nullable|string',
@@ -102,7 +100,6 @@ class ContainerController extends Controller
             'items'                   => 'required|array|min:1',
             'items.*.arrivals_id'     => 'required|exists:arrivals,id',
             'items.*.employees_id'    => 'required|exists:employees,id',
-            'items.*.tanggal'         => 'required|date',
             'items.*.biji'            => 'required|integer|min:0',
             'items.*.berat'           => 'required|numeric|min:0|max:99999.99',
             'items.*.keterangan'      => 'nullable|string',
@@ -122,20 +119,38 @@ class ContainerController extends Controller
     
     public function export(Request $request, Arrival $arrival)
     {
-        $containers = Container::with('employee')
-            ->where('arrivals_id', $arrival->id)
-            ->orderBy('tanggal')
+        $type = $request->get('type', 'pdf');
+
+        $containers = Container::query()
+            ->join('arrivals', 'containers.arrivals_id', '=', 'arrivals.id')
+            ->where('containers.arrivals_id', $arrival->id)
+            ->orderBy('arrivals.tgl_kedatangan')
+            ->select('containers.*')
+            ->with('employee')
             ->get();
+        
+        $first = $containers->first();
+        $month = $first->arrival->tgl_kedatangan;
 
         if ($containers->isEmpty()) {
-            abort(404, 'Tidak ada container untuk arrival ini');
+            abort(404, 'Data bahan baku belum tersedia untuk kode ini');
+        }
+
+        if ($type === 'excel') {
+
+            $filename = 'Kedatangan - ' . str_replace(['/', '\\'], '-', $arrival->kode) . '.xlsx';
+
+            return Excel::download(
+                new ContainerExport($containers),
+                $filename
+            );
         }
 
         $document = Document::where('kode', 'DBB058')->firstOrFail();
 
         $pdf = Pdf::loadView(
             'exports.container-form',
-            compact('arrival', 'containers', 'document')
+            compact('containers', 'month', 'document')
         )->setPaper('A4', 'portrait');
 
         $filename = 'Kedatangan Bahan Baku -' .

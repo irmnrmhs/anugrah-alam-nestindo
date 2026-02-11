@@ -258,7 +258,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/containers/bulk', [ContainerController::class, 'bulk'])->name('containers.bulk');
     Route::get('/containers/{id}/preview', [ContainerController::class, 'preview'])->name('containers.preview');
     // Route::get('/containers/{id}/export', [ContainerController::class, 'export'])->name('containers.export');
-    Route::get('/arrivals/{arrival}/export', [ContainerController::class, 'export'])->name('arrivals.export');
+    Route::get('/containers/{arrival}/export', [ContainerController::class, 'export'])->name('containers.export');
 
 
     // Raw Material

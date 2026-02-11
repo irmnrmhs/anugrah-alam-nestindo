@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('arrivals_id')->constrained('arrivals');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->date('tanggal');
             $table->integer('biji');
             $table->decimal('berat', 7, 2);
             $table->string('keterangan')->nullable();

@@ -11,8 +11,9 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
+    <th>Tanggal Kedatangan</th>
+    <th>Nama RBW/ No. Reg</th>
     <th>Kode</th>
-    <th>Tanggal</th>
     <th>Biji</th>
     <th>Berat</th>
     <th>Keterangan</th>
@@ -24,8 +25,9 @@
         <tr data-id="{{ $container->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $container->id }}"></td>
             <td>{{ $index + 1 }}</td>
+            <td>{{ $container->arrival->tgl_kedatangan }}</td>
+            <td>{{ ($container->arrival->dcertificate->wbhouse->nama ) . ' / ' . ($container->arrival->dcertificate->wbhouse->kode) }}</td>
             <td>{{ $container->arrival->kode }}</td>
-            <td>{{ $container->tanggal }}</td>
             <td>{{ $container->biji }}</td>
             <td>{{ $container->berat }}</td>
             <td>{{ empty($container->keterangan) ? '-' : $container->keterangan }}</td>
@@ -71,6 +73,7 @@
     <div class="mb-3">
         <label>Format</label>
         <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
             <option value="pdf">PDF</option>
             <option value="excel">Excel</option>
         </select>
@@ -94,9 +97,6 @@
         html += `
             <div class="border rounded p-3 mb-3">
                 <h6>Kontainer ${i}</h6>
-
-                <label>Tanggal</label>
-                <input type="date" class="form-control mb-2 c-tanggal" data-index="${i}" min="0" required>
 
                 <label>Biji</label>
                 <input type="number" class="form-control mb-2 c-biji" data-index="${i}" min="0" required>
@@ -127,7 +127,6 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 arrivals_id,
-                tanggal: $(`.c-tanggal[data-index="${i}"]`).val(),
                 biji: $(`.c-biji[data-index="${i}"]`).val(),
                 berat: $(`.c-berat[data-index="${i}"]`).val(),
                 keterangan: $(`.c-keterangan[data-index="${i}"]`).val(),
@@ -165,9 +164,6 @@
                 $('#item_id').val(container.id);
 
                 let html = `
-                    <label>Tanggal</label>
-                    <input type="date" class="form-control mb-2" id="edit_tanggal"
-                        value="${container.biji}" min="0">
 
                     <label>Biji</label>
                     <input type="number" class="form-control mb-2" id="edit_biji"
@@ -200,7 +196,6 @@
 
                     let payload = {
                         arrivals_id: container.arrivals_id,
-                        tanggal: $('#edit_tanggal').val(),
                         biji: parseInt($('#edit_biji').val()),
                         biji: parseInt($('#edit_biji').val()),
                         berat: parseFloat($('#edit_berat').val()),
@@ -268,7 +263,7 @@
             return;
         }
 
-        this.action = "{{ route('arrivals.export', ':id') }}"
+        this.action = "{{ route('containers.export', ':id') }}"
             .replace(':id', arrivalId);
 
         this.method = 'GET';
