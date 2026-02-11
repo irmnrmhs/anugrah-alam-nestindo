@@ -46,9 +46,14 @@
         <select id="arrivals_id" class="form-control" required>
             <option value="">-- Pilih Kode Bahan Baku --</option>
             @foreach($arrivals as $arrival)
-                <option value="{{ $arrival->id }}">{{ $arrival->kode }}</option>
+                <option value="{{ $arrival->id }}">{{ $arrival->rm_code }}</option>
             @endforeach
         </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Tanggal</label>
+        <input type="date" min="1" id="tanggal" class="form-control" required>
     </div>
 
     <div class="mb-3">
@@ -83,6 +88,7 @@
 @section('form-submit-script')
     const id = $('#item_id').val();
     const arrivals_id = $('#arrivals_id').val();
+    const tanggal = $('#tanggal').val();
     const jumlah = parseInt($('#jumlah_kontainer').val());
 
     if (!arrivals_id || jumlah < 1) {

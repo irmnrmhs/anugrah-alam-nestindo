@@ -24,7 +24,7 @@ class ContainerController extends Controller
             ->oldest()
             ->get();
 
-        $arrivals  = Arrival::orderBy('kode')->get()->unique('kode')->values();
+        $arrivals  = Arrival::get()->unique('rm_code')->values();
         $employees = Employee::where('status', 1)->get();
 
         return view('raw-material.container', compact(

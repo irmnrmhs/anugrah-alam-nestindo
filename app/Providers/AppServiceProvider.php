@@ -95,15 +95,15 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrap();
 
-        Shape::observe(ShapeObserver::class);
-        Feather::observe(FeatherObserver::class);
-        Color::observe(ColorObserver::class);
+        // Shape::observe(ShapeObserver::class);
+        // Feather::observe(FeatherObserver::class);
+        // Color::observe(ColorObserver::class);
         WBHouse::observe(WBHouseObserver::class);
         Arrival::observe(ArrivalObserver::class);
         Supplier::observe(SupplierObserver::class);
         Dcertificate::observe(DCertificateObserver::class);
         Area::observe(AreaObserver::class);
-        Grade::observe(GradeObserver::class);
+        // Grade::observe(GradeObserver::class);
         ProductIdentifier::observe(IdentifierObserver::class);
         Edge::observe(EdgeObserver::class);
         Wash::observe(WashObserver::class);
