@@ -10,6 +10,7 @@ use App\Models\RawMaterial;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class RmStockController extends Controller
 {
@@ -28,7 +29,7 @@ class RmStockController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_keluar' => 'required|date',
+            'tgl_keluar' => 'nullable|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
             'keterangan' => 'nullable'
@@ -77,7 +78,7 @@ class RmStockController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_keluar' => 'required|date',
+            'tgl_keluar' => 'nullable|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
             'keterangan' => 'nullable'
@@ -118,21 +119,37 @@ class RmStockController extends Controller
         ]);
     }
 
-    public function preview($id)
+    public function bulk(Request $request): JsonResponse
     {
-        $stocks = RmStock::with([
-            'employee',
-            'dcertificate.wbhouse'
-        ])->findOrFail($id);
+        $validated = $request->validate([
+            'items'                   => 'required|array|min:1',
+            'items.*.rms_id'          => 'required|exists:raw_materials,id',
+            'items.*.employees_id'    => 'required|exists:employees,id',
+            'items.*.tgl_keluar'      => 'nullable|date',
+            'items.*.biji_keluar'     => 'required|integer|min:0',
+            'items.*.berat_keluar'    => 'required|numeric|min:0|max:99999.99',
+            'items.*.keterangan'      => 'nullable',
+        ]);
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'SBB058')
-        ->firstOrFail();
+        DB::transaction(function () use ($validated) {
+            foreach ($validated['items'] as $item) {
+                $raw = RawMaterial::find($item['rms_id']);
 
-        return view('exports.rm-stock-form', compact('stocks', 'document'));
+                if (
+                    $item['biji_keluar'] > $raw->biji_sisa ||
+                    $item['berat_keluar'] > $raw->berat_sisa
+                ) {
+                    throw new \Exception('Melebihi stok sisa');
+                }
+
+                RmStock::create($item);
+            }
+        });
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Semua Stok berhasil ditambahkan.',
+        ]);
     }
 
     public function export($id)

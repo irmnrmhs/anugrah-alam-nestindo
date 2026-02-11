@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->date('tgl_keluar');
+            $table->date('tgl_keluar')->nullable();
             $table->integer('biji_keluar');
             $table->decimal('berat_keluar', 7, 2);
             $table->string('keterangan')->nullable();

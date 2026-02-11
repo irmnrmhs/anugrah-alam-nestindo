@@ -256,8 +256,6 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/containers/{id}', [ContainerController::class, 'destroy'])->name('containers.destroy');
     Route::post('/containers/delete-multiple', [ContainerController::class, 'deleteMultiple']);
     Route::post('/containers/bulk', [ContainerController::class, 'bulk'])->name('containers.bulk');
-    Route::get('/containers/{id}/preview', [ContainerController::class, 'preview'])->name('containers.preview');
-    // Route::get('/containers/{id}/export', [ContainerController::class, 'export'])->name('containers.export');
     Route::get('/containers/{arrival}/export', [ContainerController::class, 'export'])->name('containers.export');
 
 
@@ -273,7 +271,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/rmstocks/{id}', [RmStockController::class, 'destroy'])->name('rmstocks.destroy');
     Route::post('/rmstocks/delete-multiple', [RmStockController::class, 'deleteMultiple']);
     Route::get('/raw-material-info/{id}', [RmStockController::class, 'materialInfo']);
-    Route::get('/rmstocks/{id}/preview', [RmStockController::class, 'preview'])->name('rmstocks.preview');
+    Route::post('/rmstocks/bulk', [RmStockController::class, 'bulk'])->name('rmstocks.bulk');
     Route::get('/rmstocks/{id}/export', [RmStockController::class, 'export'])->name('rmstocks.export');
 
     // Pengidentifikasi Produk
