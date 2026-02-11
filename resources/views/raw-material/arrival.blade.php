@@ -116,6 +116,7 @@
     <div class="mb-3">
         <label>Format</label>
         <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
             <option value="pdf">PDF</option>
             <option value="excel">Excel</option>
         </select>

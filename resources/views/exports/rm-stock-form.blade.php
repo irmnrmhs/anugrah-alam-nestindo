@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($stocks->tanggal)->translatedFormat('F') }}
+        : {{ now()->translatedFormat('F') }}
     </td>
     <td width="25%">    
         Bagian <i>(Department)</i>
@@ -74,6 +74,10 @@
 @endsection
 
 @section('data')
+@php
+    $arrival = $rm->arrivals->first();
+@endphp
+
 <thead>
     <tr>
         <th rowspan="2">
@@ -123,59 +127,70 @@
     </tr>
 </thead>
 <tbody>
-    @php
-        $arrival = $stocks->rawMaterial->arrivals->first();
-    @endphp
+@foreach($stocks as $index => $stock)
     <tr>
-        <td class="text-center">1</td>
+        <td class="text-center">{{ $index + 1 }}</td>
+
         <td class="text-center">
             {{ $arrival->tgl_kedatangan ?? '-' }}
         </td>
+
         <td>
             {{ $arrival->dcertificate->wbhouse->nama ?? '-' }} /
             {{ $arrival->dcertificate->wbhouse->kode ?? '-' }}
         </td>
+
         <td class="text-center">
-            {{ $stocks->rawMaterial->kode }}
+            {{ $rm->kode }}
         </td>
+
         <td class="text-center">
-            {{ $stocks->rawMaterial->kadar_air ?? '-' }}%
+            {{ $rm->kadar_air ?? '-' }}%
         </td>
+
         <td class="text-right">
-            {{ $stocks->rawMaterial->biji ?? '-' }}
+            {{ $stock->biji_keluar ?? '-' }}
         </td>
+
         <td class="text-right">
-            {{ $stocks->rawMaterial->berat ?? '-' }}
+            {{ $stock->berat_keluar ?? '-' }}
         </td>
-        {{-- terpisah looping --}}
+
         <td class="text-center">
-            {{ $stocks->tgl_keluar }}
+            {{ $stock->tgl_keluar }}
         </td>
+
         <td class="text-right">
-            {{ $stocks->biji_keluar }}
+            {{ $stock->biji_keluar }}
         </td>
+
         <td class="text-right">
-            {{ $stocks->berat_keluar }}
+            {{ $stock->berat_keluar }}
         </td>
+
         <td>
-            {{ $stocks->keterangan ?? '-' }}
+            {{ $stock->keterangan ?? '-' }}
         </td>
-        <td class="text-center">-</td>
+
+        <td class="text-center">
+            {{ $stock->employee->nama ?? '-' }}
+        </td>
     </tr>
+    @endforeach
 </tbody>
 @endsection
 
 <br><br>
 
-@section('other')
-<tr>
-    <td width="50%" class="text-center">
-        Dibuat oleh,<br><br><br>
-        ( {{ $stocks->employee->nama }} )
-    </td>
-    <td width="50%" class="text-center">
-        Disetujui oleh,<br><br><br>
-        ( ....................... )
-    </td>
-</tr>
+@section('other')   
+    <tr>
+        <td width="50%" class="text-center">
+            Dibuat oleh,<br><br><br>
+            ( {{ $lastStock?->employee?->nama ?? '-' }} )
+        </td>
+        <td width="50%" class="text-center">
+            Disetujui oleh,<br><br><br>
+            ( ....................... )
+        </td>
+    </tr>
 @endsection

@@ -10,6 +10,9 @@ use App\Models\RawMaterial;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RmStockExport;
 
 class RmStockController extends Controller
 {
@@ -28,7 +31,7 @@ class RmStockController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_keluar' => 'required|date',
+            'tgl_keluar'   => 'nullable|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
             'keterangan' => 'nullable'
@@ -77,7 +80,7 @@ class RmStockController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_keluar' => 'required|date',
+            'tgl_keluar'   => 'nullable|date',
             'biji_keluar' => 'required|integer|min:0',
             'berat_keluar' => 'required|numeric|min:0|max:99999.99',
             'keterangan' => 'nullable'
@@ -118,39 +121,76 @@ class RmStockController extends Controller
         ]);
     }
 
-    public function preview($id)
+    public function bulk(Request $request): JsonResponse
     {
-        $stocks = RmStock::with([
-            'employee',
-            'dcertificate.wbhouse'
-        ])->findOrFail($id);
+        $validated = $request->validate([
+            'items'                   => 'required|array|min:1',
+            'items.*.rms_id'          => 'required|exists:raw_materials,id',
+            'items.*.employees_id'    => 'required|exists:employees,id',
+            'items.*.tgl_keluar'     => 'nullable|date',
+            'items.*.biji_keluar'     => 'required|integer|min:0',
+            'items.*.berat_keluar'    => 'required|numeric|min:0|max:99999.99',
+            'items.*.keterangan'      => 'nullable',
+        ]);
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'SBB058')
-        ->firstOrFail();
+        DB::transaction(function () use ($validated) {
+            foreach ($validated['items'] as $item) {
+                $raw = RawMaterial::find($item['rms_id']);
 
-        return view('exports.rm-stock-form', compact('stocks', 'document'));
+                if (
+                    $item['biji_keluar'] > $raw->biji_sisa ||
+                    $item['berat_keluar'] > $raw->berat_sisa
+                ) {
+                    throw new \Exception('Melebihi stok sisa');
+                }
+
+                RmStock::create($item);
+            }
+        });
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Semua Stok berhasil ditambahkan.',
+        ]);
     }
 
-    public function export($id)
+    public function export(Request $request, $id)
     {
-        $stocks = RmStock::with(['rawMaterial', 'employee'])
-            ->findOrFail($id);
+        $type = $request->get('type', 'pdf');
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'SBB058')
-        ->firstOrFail();
+        $rm = RawMaterial::with([
+            'arrivals.dcertificate.wbhouse',
+            'stocks.employee'
+        ])->findOrFail($id);
 
-        $pdf = Pdf::loadView('exports.rm-stock-form', compact('stocks', 'document'))
-            ->setPaper('A4', 'landscape');
+        $stocks = $rm->stocks()->with('employee')->get();
 
-        $filename = 'Form_Stok_Bahan_Baku_' . $stocks->id . '.pdf';
+        if ($stocks->isEmpty()) {
+            abort(404, 'Data stok keluar belum tersedia untuk kode ini');
+        }
+
+        if ($type === 'excel') {
+
+            $filename = 'Stok Bahan Baku - ' .
+                str_replace(['/', '\\'], '-', $rm->kode) . '.xlsx';
+
+            return Excel::download(
+                new RmStockExport($stocks),
+                $filename
+            );
+        }
+
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'SBB058')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView(
+            'exports.rm-stock-form',
+            compact('rm', 'stocks', 'document')
+        )->setPaper('A4', 'landscape');
+
+        $filename = 'Stok_Bahan_Baku_' .
+            str_replace(['/', '\\'], '-', $rm->kode) . '.pdf';
 
         return $pdf->stream($filename);
     }

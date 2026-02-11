@@ -11,8 +11,9 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
+    <th>Tanggal Kedatangan</th>
+    <th>Nama RBW/ No. Reg</th>
     <th>Kode</th>
-    <th>Tanggal</th>
     <th>Biji</th>
     <th>Berat</th>
     <th>Keterangan</th>
@@ -24,8 +25,9 @@
         <tr data-id="{{ $container->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $container->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $container->arrival->rm_code }}</td>
-            <td>{{ $container->tanggal }}</td>
+            <td>{{ $container->arrival->tgl_kedatangan }}</td>
+            <td>{{ ($container->arrival->dcertificate->wbhouse->nama ) . ' / ' . ($container->arrival->dcertificate->wbhouse->kode) }}</td>
+            <td>{{ $container->arrival->kode }}</td>
             <td>{{ $container->biji }}</td>
             <td>{{ $container->berat }}</td>
             <td>{{ empty($container->keterangan) ? '-' : $container->keterangan }}</td>
@@ -33,7 +35,6 @@
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('containers.export', $container->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak Form</a>
             </td>
         </tr>
     @endforeach
@@ -60,6 +61,29 @@
         <input type="number" min="1" id="jumlah_kontainer" class="form-control" required>
     </div>
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select id="export_controller" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($arrivals as $arrival)
+                <option value="{{ $arrival->id }}">
+                    {{ $arrival->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     const id = $('#item_id').val();
@@ -109,7 +133,6 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 arrivals_id,
-                tanggal,
                 biji: $(`.c-biji[data-index="${i}"]`).val(),
                 berat: $(`.c-berat[data-index="${i}"]`).val(),
                 keterangan: $(`.c-keterangan[data-index="${i}"]`).val(),
@@ -179,7 +202,6 @@
 
                     let payload = {
                         arrivals_id: container.arrivals_id,
-                        tanggal: container.tanggal,
                         biji: parseInt($('#edit_biji').val()),
                         biji: parseInt($('#edit_biji').val()),
                         berat: parseFloat($('#edit_berat').val()),
@@ -236,6 +258,25 @@
         });
     });
 
+    $('#exportForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const arrivalId = $('#export_controller').val();
+        const type      = $('select[name="type"]').val();
+
+        if (!arrivalId) {
+            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('containers.export', ':id') }}"
+            .replace(':id', arrivalId);
+
+        this.method = 'GET';
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+
+        this.submit();
+    });
 @stop
 
 @section('content')

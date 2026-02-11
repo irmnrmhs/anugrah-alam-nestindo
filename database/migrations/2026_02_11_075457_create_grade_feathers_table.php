@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('containers', function (Blueprint $table) {
+        Schema::create('grade_feathers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('arrivals_id')->constrained('arrivals');
-            $table->foreignId('employees_id')->constrained('employees');
-            $table->integer('biji');
-            $table->decimal('berat', 7, 2);
-            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('containers');
+        Schema::dropIfExists('grade_feathers');
     }
 };

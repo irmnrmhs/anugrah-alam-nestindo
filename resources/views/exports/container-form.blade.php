@@ -52,16 +52,12 @@
 <br>
 
 @section('info')
-@php
-    $first = $containers->first();
-@endphp
-
 <tr>
     <td width="15%">
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($first->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($month)->translatedFormat('F') }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -112,22 +108,21 @@
     </tr>
 </thead>
 <tbody>
-    @foreach ($containers as $i => $row)
-    <tr>
-        <td>{{ $i + 1 }}</td>
-        <td>
-            {{ \Carbon\Carbon::parse($row->arrival->tgl_kedatangan)->format('d-m-Y') }}
-        </td>
-        <td class="text-left">
-            {{ $row->arrival->dcertificate->wbhouse->nama ?? '-' }} / 
-            {{ $row->arrival->dcertificate->wbhouse->kode }}
-        </td>
-        <td>{{ $row->arrival->kode }}</td>
-        <td>{{ $row->biji ?? 0 }}</td>
-        <td>{{ $row->berat ?? 0 }}</td>
-        <td>{{ $row->keterangan ?? '-' }}</td>
-        <td>{{ $row->employee->nama }}</td>
-    </tr>
+    @foreach ($containers as $i => $container)
+        <tr>
+            <td align="center">{{ $i + 1 }}</td>
+            <td>{{ $container->arrival->tgl_kedatangan }}</td>
+            <td>
+                {{ $arrival->dcertificate->wbhouse->kode ?? '-' }}
+                /
+                {{ $arrival->dcertificate->wbhouse->nama ?? '-' }}
+            </td>
+            <td>{{ $arrival->rawMaterial->kode ?? '-' }}</td>
+            <td align="right">{{ $container->biji }}</td>
+            <td align="right">{{ number_format($container->berat, 2) }}</td>
+            <td>{{ $container->keterangan ?? '-' }}</td>
+            <td>{{ $container->employee->nama ?? '-' }}</td>
+        </tr>
     @endforeach
 </tbody>
 @endsection
