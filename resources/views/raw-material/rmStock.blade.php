@@ -11,12 +11,14 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
+    <th>Tanggal Kedatangan</th>
+    <th>RBW/Noreg</th>
     <th>Kode Bahan Baku</th>
-    <th>Petugas</th>
     <th>Tanggal Keluar</th>
     <th>Biji</th>
     <th>Berat</th>
     <th>Keterangan</th>
+    <th>Petugas</th>
 @stop
 
 @section('table-body')
@@ -24,16 +26,21 @@
         <tr data-id="{{ $stock->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $stock->id }}"></td>
             <td>{{ $index + 1 }}</td>
+            <td>
+                {{ optional($stock->rawMaterial->arrivals->sortBy('tgl_kedatangan')->first())->tgl_kedatangan ?? '-' }}
+            </td>
+            <td>
+                {{ (optional(optional($stock->rawMaterial->arrivals->first())->dcertificate)->wbhouse->nama) . " / " . optional(optional($stock->rawMaterial->arrivals->first())->dcertificate)->wbhouse->kode }}
+            </td>
             <td>{{ $stock->rawMaterial->kode }}</td>
-            <td>{{ $stock->employee->nama }}</td>
             <td>{{ $stock->tgl_keluar }}</td>
             <td>{{ $stock->biji_keluar }}</td>
             <td>{{ $stock->berat_keluar }}</td>
             <td>{{ empty($stock->keterangan) ? '-' : $stock->keterangan }}</td>
+            <td>{{ $stock->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('rmstocks.export', $stock->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak Form</a>
             </td>
         </tr>
     @endforeach
@@ -51,8 +58,8 @@
     </div>
 
     <div class="mb-3">
-        <label>Tanggal</label>
-        <input type="date" min="1" id="tgl_keluar" class="form-control">
+        <label>Tanggal Keluar</label>
+        <input type="date" id="tgl_keluar" class="form-control">
     </div>
 
     <div class="mb-3">
@@ -60,6 +67,29 @@
         <input type="number" min="1" id="jumlah_stok" class="form-control" required>
     </div>
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select id="export_controller" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($rms as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     const id = $('#item_id').val();
@@ -165,6 +195,10 @@
                 $('#item_id').val(rmstock.id);
 
                 let html = `
+                    <label>Tanggal</label>
+                    <input type="date" class="form-control mb-2" id="edit_tgl"
+                        value="${rmstock.tgl_keluar}" min="0">
+
                     <label>Biji</label>
                     <input type="number" class="form-control mb-2" id="edit_biji"
                         value="${rmstock.biji_keluar}" min="0">
@@ -196,7 +230,7 @@
 
                     let payload = {
                         rms_id: rmstock.rms_id,
-                        tgl_keluar: rmstock.tgl_keluar, 
+                        tgl_keluar: $('#edit_tgl').val(),
                         biji_keluar: parseInt($('#edit_biji').val()),
                         berat_keluar: parseFloat($('#edit_berat').val()),
                         keterangan: $('#edit_keterangan').val() || null,
@@ -251,6 +285,26 @@
                 .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
+    });
+
+    $('#exportForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const rmId = $('#export_controller').val();
+        const type = $('select[name="type"]').val();
+
+        if (!rmId) {
+            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('rmstocks.export', ':id') }}"
+            .replace(':id', rmId);
+
+        this.method = 'GET';
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+
+        this.submit();
     });
 @stop
 

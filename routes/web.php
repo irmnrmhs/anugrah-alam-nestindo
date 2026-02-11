@@ -272,7 +272,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/rmstocks/delete-multiple', [RmStockController::class, 'deleteMultiple']);
     Route::get('/raw-material-info/{id}', [RmStockController::class, 'materialInfo']);
     Route::post('/rmstocks/bulk', [RmStockController::class, 'bulk'])->name('rmstocks.bulk');
-    Route::get('/rmstocks/{id}/export', [RmStockController::class, 'export'])->name('rmstocks.export');
+    Route::get('/rmstocks/export/{id}', [RmStockController::class, 'export'])->name('rmstocks.export');
 
     // Pengidentifikasi Produk
     Route::get('/identifiers', [ProductIdentifierController::class, 'index'])->name('identifiers.index');
