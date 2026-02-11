@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('grade_feathers', function (Blueprint $table) {
+        Schema::create('grade_shapes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->foreignId('feathers_id')->constrained('feathers');
-            $table->string('kode')->unique();
-            $table->integer('biji');
+            $table->foreignId('shapes_id')->constrained('shapes');
             $table->integer('berat');
             $table->date('tanggal');
             $table->timestamps();
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('grade_feathers');
+        Schema::dropIfExists('grade_shapes');
     }
 };

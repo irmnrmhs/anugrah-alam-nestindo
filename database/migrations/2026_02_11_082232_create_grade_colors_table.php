@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('grade_colors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');
-            $table->foreignId('feathers_id')->constrained('feathers');
+            $table->foreignId('employees_id')->constrained('employees');
+            $table->foreignId('gfeathers_id')->constrained('grade_feathers');
+            $table->foreignId('colors_id')->constrained('colors');
             $table->string('kode')->unique();
-            $table->integer('bj_p')->nullable();
-            $table->integer('br_p')->nullable();
-            $table->integer('bj_pb')->nullable();
-            $table->integer('br_pb')->nullable();
-            $table->integer('bj_pg')->nullable();
-            $table->integer('br_pg')->nullable();
+            $table->integer('biji');
+            $table->integer('berat');
+            $table->integer('hcr');
             $table->date('tanggal');
+            $table->string('ket')->nullable();
             $table->timestamps();
         });
     }

@@ -523,11 +523,23 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [   
-                    'text' => 'Product Identifier',
-                    'url'  => 'identifiers',
+                    'text' => 'Grading Bulu',
+                    'url'  => 'gfeathers',
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
+                [   
+                    'text' => 'Grading Warna',
+                    'url'  => 'gcolors',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                // [   
+                //     'text' => 'Product Identifier',
+                //     'url'  => 'identifiers',
+                //     'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                //     'icon' => 'fas fa-users',
+                // ],
             ],
         ],
 
