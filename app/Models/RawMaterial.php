@@ -54,6 +54,16 @@ class RawMaterial extends Model
         return $this->hasMany(ProductIdentifier::class, 'rms_id');
     }
 
+    public function gfeathers()
+    {
+        return $this->hasMany(GradeFeather::class, 'rms_id');
+    }
+
+    public function gcolors()
+    {
+        return $this->hasMany(GradeColor::class, 'rms_id');
+    }
+
     // total biji keluar
     public function getTotalBijiKeluarAttribute()
     {
@@ -88,7 +98,16 @@ class RawMaterial extends Model
         return $this->stocks()->sum('berat_keluar');
     }
 
-    // Product Identifier Sisa
+    // Sisa Grade Feather
+    public function getBijiSisaFeatherAttribute(){
+        return $this->total_biji_rm - $this->gfeathers()->sum('biji');
+    }
+
+    public function getBeratSisaFeatherAttribute(){
+        return $this->total_berat_rm - $this->gfeathers()->sum('berat');
+    }
+
+    // Sisa Grade Color
     public function getBijiSisaIdentifierAttribute(){
         return $this->total_biji_rm - $this->identifiers()->sum('biji');
     }
