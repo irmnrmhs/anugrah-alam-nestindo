@@ -14,11 +14,8 @@
     <th>Tanggal</th>
     <th>RBW/Noreg</th>
     <th>Kode Bahan Baku</th>
-    <th>Mangkok</th>
-    <th>Oval</th>
-    <th>Sudut</th>
-    <th>Patahan</th>
-    <th>Hancuran</th>
+    <th>Jenis Bentuk</th>
+    <th>Berat</th>
     <th>Petugas</th>
 @stop
 
@@ -32,11 +29,8 @@
             <td>
                 {{ (optional(optional($shape->rawMaterial->arrivals->first())->dcertificate)->wbhouse->nama) . " / " . optional(optional($shape->rawMaterial->arrivals->first())->dcertificate)->wbhouse->kode }}
             </td>
-            <td>{{ $shape->shape->mk }}</td>
-            <td>{{ $shape->shape->ovl }}</td>
-            <td>{{ $shape->shape->sdt }}</td>
-            <td>{{ $shape->shape->pth }}</td>
-            <td>{{ $shape->shape->hcr }}</td>
+            <td>{{ $shape->shape->jenis_bentuk }}</td>
+            <td>{{ $shape->berat }}</td>
             <td>{{ $shape->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -56,18 +50,13 @@
             @endforeach
         </select>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-4">
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
             <input type="text" id="last" class="form-control" readonly>
         </div>
 
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Biji Sisa</label>
-            <input type="number" id="biji_sisa" class="form-control" readonly>
-        </div>
-
-        <div class="col-md-4">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Berat Sisa</label>
             <input type="number" id="berat_sisa" class="form-control" readonly>
         </div>
@@ -83,27 +72,37 @@
     </div>
     <div class="mb-3">
         <label>Tanggal Mulai</label>
-        <input type="date" id="tgl_mulai" class="form-control" required>
+        <input type="date" id="tanggal" class="form-control" required>
     </div>
-    @foreach ($shapeList as $shape)
-        <div class="mb-3">
-            <label>{{ $shape->jenis_bentuk }}</label>
-            <input type="number"
-                name="berat[{{ $shape->id }}]"
-                step="0.01"
-                min="0"
-                max="99999.99"
-                class="form-control">
+    <div class="mt-4">
+    <div class="border rounded p-3">
+        <h6 class="mb-3 fw-bold">Grade Bentuk</h6>
+
+        <div class="row">
+            @foreach ($shapeList as $shape)
+                <div class="col-md-6 mb-3 shape-field" id="shape-{{ $shape->id }}">
+                    <label class="form-label small">
+                        {{ $shape->jenis_bentuk }}
+                    </label>
+                    <input type="number"
+                        name="berat[{{ $shape->id }}]"
+                        step="0.01"
+                        min="0"
+                        max="99999.99"
+                        class="form-control form-control-sm">
+                </div>
+            @endforeach
         </div>
-    @endforeach
+    </div>
+</div>
 @stop
 
 @section('form-submit-script')
-    {{-- const id = $('#item_id').val();
+    const id = $('#item_id').val();
     const url = id ? `/gshapes/${id}` : '/gshapes';
     const method = id ? 'PUT' : 'POST';
 
-    const data = {
+    {{-- const data = {
         _token: '{{ csrf_token() }}',
         rms_id: $('#rms_id').val(),
         employees_id: $('#employees_id').val(),
@@ -195,14 +194,28 @@
 
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
+
         fetch(`/gshapes/${id}`)
             .then(r => r.json())
-            .then(shape => {
-                $('#item_id').val(shape.id);
-                $('#rms_id').val(shape.rms_id).trigger('change');
-                $('#employees_id').val(shape.employees_id);
-                $('#shapes_id').val(shape.shapes_id);
-                $('#berat').val(shape.berat);
+            .then(data => {
+
+                $('#item_id').val(data.id);
+                $('#rms_id').val(data.rms_id).trigger('change');
+                $('#employees_id').val(data.employees_id);
+                $('#tanggal').val(data.tanggal);
+
+                // reset semua input
+                $('input[name^="berat"]').val('');
+
+                // sembunyikan semua grade dulu
+                $('.shape-field').hide();
+
+                // tampilkan hanya grade yang diedit
+                const shapeId = data.shapes_id;
+
+                $(`#shape-${shapeId}`).show();
+                $(`input[name="berat[${shapeId}]"]`).val(data.berat);
+
                 new bootstrap.Modal('#crudModal').show();
             });
     });

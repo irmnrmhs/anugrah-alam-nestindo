@@ -16,12 +16,12 @@ class GradeShapeController extends Controller
     public string $obj = 'Stok keluar';
     public function index(): View
     {
-        $shapes = GradeShape::with('rawMaterial', 'employee')->latest()->get();
+        $shapes = GradeShape::with('rawMaterial', 'employee', 'shape')->latest()->get();
         $rms = RawMaterial::all();
         $employees = Employee::where('status', 1)->get();
         $shapeList = Shape::all();
 
-        return view('raw-material.grade-shape', compact('stocks', 'rms', 'employees', 'shapeList'));
+        return view('raw-material.grade-shape', compact('shapes', 'rms', 'employees', 'shapeList'));
     }
 
     public function store(Request $request): JsonResponse
@@ -76,18 +76,18 @@ class GradeShapeController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $shape = GradeShape::with('rawMaterial', 'employee')->findOrFail($id);
+        $shape = GradeShape::with('rawMaterial', 'employee', 'shape')->findOrFail($id);
         return response()->json($shape);
     }
 
     public function materialInfo($id)
     {
         $rm = RawMaterial::findOrFail($id);
-        $lastOut = GradeShape::where('rms_id', $id)->latest()->first();
+        $last = GradeShape::where('rms_id', $id)->latest()->first();
 
         return response()->json([
             'berat_sisa' => $rm->berat_sisa_shape,
-            'last_date' => $lastOut?->tgl_keluar,
+            'last_date' => $last?->tgl_keluar,
         ]);
     }
 
@@ -96,30 +96,34 @@ class GradeShapeController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'tanggal'   => 'required|date',
+            'tanggal' => 'required|date',
             'berat' => 'required|numeric|min:0|max:99999.99',
         ]);
 
-        $shape = GradeShape::findOrFail($id);
-        $rm = RawMaterial::find($validated['rms_id']);
+        $grade = GradeShape::findOrFail($id);
+        $rm = RawMaterial::findOrFail($validated['rms_id']);
 
-        $availableBerat = $rm->berat_sisa_shape + $shape->berat;
+        // Kembalikan berat lama ke stok
+        $berat_sisa = $rm->berat_sisa_shape + $grade->berat;
 
-        if (
-            $validated['berat'] > $availableBerat
-        ) {
+        if ($validated['berat'] > $berat_sisa) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa',
             ], 422);
         }
 
-        $shape->update($validated);
+        $grade->update([
+            'rms_id' => $validated['rms_id'],
+            'employees_id' => $validated['employees_id'],
+            'tanggal' => $validated['tanggal'],
+            'berat' => $validated['berat'],
+        ]);
 
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil diperbarui',
-            'data' => $shape,
+            'data' => $grade,
         ]);
     }
 
