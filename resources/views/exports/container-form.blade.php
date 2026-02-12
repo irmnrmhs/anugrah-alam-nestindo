@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($month)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($date)->translatedFormat('F') }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -113,11 +113,11 @@
             <td align="center">{{ $i + 1 }}</td>
             <td>{{ $container->arrival->tgl_kedatangan }}</td>
             <td>
-                {{ $arrival->dcertificate->wbhouse->kode ?? '-' }}
+                {{ $container->arrival->dcertificate->wbhouse->kode ?? '-' }}
                 /
-                {{ $arrival->dcertificate->wbhouse->nama ?? '-' }}
+                {{ $container->arrival->dcertificate->wbhouse->nama ?? '-' }}
             </td>
-            <td>{{ $arrival->rawMaterial->kode ?? '-' }}</td>
+            <td>{{ $container->arrival->rawMaterial->kode ?? '-' }}</td>
             <td align="right">{{ $container->biji }}</td>
             <td align="right">{{ number_format($container->berat, 2) }}</td>
             <td>{{ $container->keterangan ?? '-' }}</td>

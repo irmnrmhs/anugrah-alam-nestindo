@@ -319,6 +319,9 @@
 
         // Custom JS from child
         @yield('custom-js')
+        @if(session('error'))
+        Swal.fire('Oops', @json(session('error')), 'warning');
+        @endif
     });
     </script>
 @stop

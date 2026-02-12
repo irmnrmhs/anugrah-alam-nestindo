@@ -121,20 +121,17 @@ class ContainerController extends Controller
     {
         $type = $request->get('type', 'pdf');
 
-        $containers = Container::query()
-            ->join('arrivals', 'containers.arrivals_id', '=', 'arrivals.id')
-            ->where('containers.arrivals_id', $arrival->id)
-            ->orderBy('arrivals.tgl_kedatangan')
-            ->select('containers.*')
+        $containers = $arrival->containers()
             ->with('employee')
+            ->orderBy('created_at')
             ->get();
         
         $first = $containers->first();
-        $month = $first->arrival->tgl_kedatangan;
+        $date = $first->arrival->tgl_kedatangan;
 
-        if ($containers->isEmpty()) {
-            abort(404, 'Data bahan baku belum tersedia untuk kode ini');
-        }
+        // if ($containers->isEmpty()) {
+        //     abort(404, 'Data bahan baku belum tersedia untuk kode ini');
+        // }
 
         if ($type === 'excel') {
 
@@ -150,7 +147,7 @@ class ContainerController extends Controller
 
         $pdf = Pdf::loadView(
             'exports.container-form',
-            compact('containers', 'month', 'document')
+            compact('containers', 'date', 'document')
         )->setPaper('A4', 'portrait');
 
         $filename = 'Kedatangan Bahan Baku -' .

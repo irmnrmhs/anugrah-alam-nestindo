@@ -22,5 +22,20 @@ class ShapeSeeder extends Seeder
             'kode' => 'OVL',
             'jenis_bentuk' => 'Oval',
         ]);
+
+        Shape::create([
+            'kode' => 'SDT',
+            'jenis_bentuk' => 'Sudut',
+        ]);
+
+        Shape::create([
+            'kode' => 'PTH',
+            'jenis_bentuk' => 'Patahan',
+        ]);
+
+        Shape::create([
+            'kode' => 'HCR',
+            'jenis_bentuk' => 'Hancuran',
+        ]);
     }
 }

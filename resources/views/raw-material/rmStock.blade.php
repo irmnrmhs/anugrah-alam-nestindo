@@ -73,7 +73,7 @@
         <label>Kode Bahan Baku</label>
         <select id="export_controller" class="form-control" required>
             <option value="">-- Pilih Kode Bahan Baku --</option>
-            @foreach ($rms as $rm)
+            @foreach ($stocks->pluck('rawMaterial')->unique('id') as $rm)
                 <option value="{{ $rm->id }}">
                     {{ $rm->kode }}
                 </option>
@@ -104,29 +104,44 @@
 
     bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
 
-    let html = '';
+    let html = `
+    <div class="row mt-3 mb-3">
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
+            <input type="text" id="last_out_date" class="form-control" readonly value="${window.last_date}">
+        </div>
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Biji Sisa</label>
+            <input type="number" id="biji_sisa" class="form-control" readonly value="${window.biji_sisa}">
+        </div>
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Berat Sisa</label>
+            <input type="number" id="berat_sisa" class="form-control" readonly value="${window.berat_sisa}">
+        </div>
+    </div>`;
+
     for (let i = 1; i <= jumlah; i++) {
         html += `
-            <div class="border rounded p-3 mb-3">
-                <h6>Kontainer ${i}</h6>
+        <div class="border rounded p-3 mb-3">
+            <h6>Kontainer ${i}</h6>
 
-                <label>Biji</label>
-                <input type="number" class="form-control mb-2 c-biji" data-index="${i}" min="0" required>
+            <label>Biji</label>
+            <input type="number" class="form-control mb-2 c-biji" data-index="${i}" min="0" required>
 
-                <label>Berat</label>
-                <input type="number" class="form-control mb-2 c-berat" data-index="${i}" min="0" step="0.01" required>
+            <label>Berat</label>
+            <input type="number" class="form-control mb-2 c-berat" data-index="${i}" min="0" step="0.01" required>
 
-                <label>Keterangan</label>
-                <input type="text" class="form-control mb-2 c-keterangan" data-index="${i}" placeholder="Optional (tidak wajib diisi)">
+            <label>Keterangan</label>
+            <input type="text" class="form-control mb-2 c-keterangan" data-index="${i}" placeholder="Optional (tidak wajib diisi)">
 
-                <label>Petugas</label>
-                <select class="form-control c-petugas" data-index="${i}" required>
-                    <option value="">-- Pilih Petugas --</option>
-                    @foreach($employees as $employee)
-                        <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
-                    @endforeach
-                </select>
-            </div>
+            <label>Petugas</label>
+            <select class="form-control c-petugas" data-index="${i}" required>
+                <option value="">-- Pilih Petugas --</option>
+                @foreach($employees as $employee)
+                    <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
+                @endforeach
+            </select>
+        </div>
         `;
     }
 
@@ -168,20 +183,20 @@
 
 @section('custom-js')
     $('#rms_id').on('change', function () {
-        const id = $(this).val();
-        if (!id) return;
+        const rms_id = $(this).val();
+        if (!rms_id) return;
 
-        fetch(`/raw-material-info/${id}`)
+        fetch(`/raw-material-info/${rms_id}`)
             .then(r => r.json())
             .then(info => {
-                $('#biji_sisa').val(info.biji_sisa);
-                $('#berat_sisa').val(info.berat_sisa);
-                $('#last_out_date').val(info.last_date ?? '-');
-            })
-            .catch(() => {
-                $('#biji_sisa').val('-');
-                $('#berat_sisa').val('-');
-                $('#last_out_date').val('-');
+                // simpan info ini ke variabel lokal
+                window.last_date = info.last_date ?? '-';
+                window.biji_sisa = info.biji_sisa ?? 0;
+                window.berat_sisa = info.berat_sisa ?? 0;
+
+                $('#biji_sisa').val(window.biji_sisa);
+                $('#berat_sisa').val(window.berat_sisa);
+                $('#last_out_date').val(window.last_date);
             });
     });
 

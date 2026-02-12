@@ -15,20 +15,26 @@ return new class extends Migration
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');
             $table->foreignId('employees_id')->constrained('employees');
+            $table->foreignId('feathers_id')->constrained('feathers');
             $table->string('kode')->unique();
+<<<<<<< HEAD
+            $table->date('tgl');
+            $table->integer('mk')->nullable()->default(0)->default(0);
+            $table->integer('ovl')->nullable()->default(0);
+            $table->integer('sdt')->nullable()->default(0);
+            $table->integer('pth')->nullable()->default(0);
+            $table->integer('hcr')->nullable()->default(0);
+            $table->integer('bj_brp')->nullable()->default(0);
+            $table->integer('br_brp')->nullable()->default(0);
+            $table->integer('bj_bs')->nullable()->default(0);
+            $table->integer('br_bs')->nullable()->default(0);
+            $table->integer('bj_bb')->nullable()->default(0);
+            $table->integer('br_bb')->nullable()->default(0);
+=======
+            $table->integer('biji');
+            $table->integer('berat');
             $table->date('tanggal');
-            $table->integer('mk')->nullable();
-            $table->integer('ovl')->nullable();
-            $table->integer('sdt')->nullable();
-            $table->integer('pth')->nullable();
-            $table->integer('hcr')->nullable();
-            $table->integer('bj_brp')->nullable();
-            $table->integer('br_brp')->nullable();
-            $table->integer('bj_bs')->nullable();
-            $table->integer('br_bs')->nullable();
-            $table->integer('bj_bb')->nullable();
-            $table->integer('br_bb')->nullable();
-            $table->integer('other')->nullable();
+>>>>>>> 680c263c97758a2e1fdf450318fb06dcabdf5c3c
             $table->timestamps();
         });
     }

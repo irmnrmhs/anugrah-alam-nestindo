@@ -523,11 +523,31 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [   
-                    'text' => 'Product Identifier',
+                    'text' => 'Grading Bulu',
+<<<<<<< HEAD
                     'url'  => 'identifiers',
+=======
+                    'url'  => 'gfeathers',
+>>>>>>> 680c263c97758a2e1fdf450318fb06dcabdf5c3c
                     'can'  => ['Super Admin', 'Admin Bahan Baku'],
                     'icon' => 'fas fa-users',
                 ],
+                [   
+                    'text' => 'Grading Warna',
+<<<<<<< HEAD
+                    'url'  => 'identifiers',
+=======
+                    'url'  => 'gcolors',
+>>>>>>> 680c263c97758a2e1fdf450318fb06dcabdf5c3c
+                    'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                    'icon' => 'fas fa-users',
+                ],
+                // [   
+                //     'text' => 'Product Identifier',
+                //     'url'  => 'identifiers',
+                //     'can'  => ['Super Admin', 'Admin Bahan Baku'],
+                //     'icon' => 'fas fa-users',
+                // ],
             ],
         ],
 

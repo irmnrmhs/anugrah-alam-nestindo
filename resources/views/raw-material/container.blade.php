@@ -67,7 +67,7 @@
         <label>Kode Bahan Baku</label>
         <select id="export_controller" class="form-control" required>
             <option value="">-- Pilih Kode Bahan Baku --</option>
-            @foreach ($arrivals as $arrival)
+            @foreach ($containers->pluck('arrival')->unique('id') as $arrival)
                 <option value="{{ $arrival->id }}">
                     {{ $arrival->kode }}
                 </option>
