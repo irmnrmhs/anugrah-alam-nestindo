@@ -46,6 +46,21 @@ class Employee extends Model
         return $this->hasMany(RmStock::class, 'rms_id');
     }
 
+    public function shapes()
+    {
+        return $this->hasMany(GradeShape::class, 'employees_id');
+    }
+
+    public function feathers()
+    {
+        return $this->hasMany(GradeFeather::class, 'employees_id');
+    }
+
+    public function colors()
+    {
+        return $this->hasMany(GradeColor::class, 'employees_id');
+    }
+
     public function edges()
     {
         return $this->hasMany(Edge::class, 'employees_id');

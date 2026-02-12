@@ -14,4 +14,9 @@ class Shape extends Model
     {
         return $this->hasMany(Grade::class, 'shapes_id');
     }
+
+    public function gshapes()
+    {
+        return $this->hasMany(GradeShape::class, 'shapes_id');
+    }
 }

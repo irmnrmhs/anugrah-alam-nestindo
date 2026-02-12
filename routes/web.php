@@ -51,6 +51,9 @@ use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\GradeColorController;
+use App\Http\Controllers\GradeFeatherController;
+use App\Http\Controllers\GradeShapeController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\ProductIdentifierController;
@@ -284,6 +287,35 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/raw-material-info-pi/{id}', [ProductIdentifierController::class, 'materialInfo']);
     Route::get('/identifiers/{id}/preview', [ProductIdentifierController::class, 'preview'])->name('identifiers.preview');
     Route::get('/identifiers/{id}/export', [ProductIdentifierController::class, 'export'])->name('identifiers.export');
+
+    // Grading Bentuk
+    Route::get('/gshapes', [GradeShapeController::class, 'index'])->name('gshapes.index');
+    Route::post('/gshapes', [GradeShapeController::class, 'store'])->name('gshapes.store');
+    Route::get('/gshapes/{id}', [GradeShapeController::class, 'show'])->name('gshapes.show');
+    Route::put('/gshapes/{id}', [GradeShapeController::class, 'update'])->name('gshapes.update');
+    Route::delete('/gshapes/{id}', [GradeShapeController::class, 'destroy'])->name('gshapes.destroy');
+    Route::post('/gshapes/delete-multiple', [GradeShapeController::class, 'deleteMultiple']);
+    Route::get('/raw-material-info-gs/{id}', [GradeShapeController::class, 'materialInfo']);
+
+    // Grading Bulu
+    Route::get('/gfeathers', [GradeFeatherController::class, 'index'])->name('gfeathers.index');
+    Route::post('/gfeathers', [GradeFeatherController::class, 'store'])->name('gfeathers.store');
+    Route::get('/gfeathers/{id}', [GradeFeatherController::class, 'show'])->name('gfeathers.show');
+    Route::put('/gfeathers/{id}', [GradeFeatherController::class, 'update'])->name('gfeathers.update');
+    Route::delete('/gfeathers/{id}', [GradeFeatherController::class, 'destroy'])->name('gfeathers.destroy');
+    Route::post('/gfeathers/delete-multiple', [GradeFeatherController::class, 'deleteMultiple']);
+    Route::get('/raw-material-info-gf/{id}', [GradeFeatherController::class, 'materialInfo']);
+    Route::get('/gfeathers/{id}/export', [GradeFeatherController::class, 'export'])->name('gfeathers.export');
+
+    // Grading Warna
+    Route::get('/gcolor', [GradeColorController::class, 'index'])->name('gcolor.index');
+    Route::post('/gcolor', [GradeColorController::class, 'store'])->name('gcolor.store');
+    Route::get('/gcolor/{id}', [GradeColorController::class, 'show'])->name('gcolor.show');
+    Route::put('/gcolor/{id}', [GradeColorController::class, 'update'])->name('gcolor.update');
+    Route::delete('/gcolor/{id}', [GradeColorController::class, 'destroy'])->name('gcolor.destroy');
+    Route::post('/gcolor/delete-multiple', [GradeColorController::class, 'deleteMultiple']);
+    Route::get('/raw-material-info-gc/{id}', [GradeColorController::class, 'materialInfo']);
+    Route::get('/gcolor/{id}/export', [GradeColorController::class, 'export'])->name('gcolor.export');
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');

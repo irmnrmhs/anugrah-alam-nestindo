@@ -54,6 +54,21 @@ class RawMaterial extends Model
         return $this->hasMany(ProductIdentifier::class, 'rms_id');
     }
 
+    public function shapes()
+    {
+        return $this->hasMany(GradeShape::class, 'rms_id');
+    }
+
+    public function feathers()
+    {
+        return $this->hasMany(GradeFeather::class, 'rms_id');
+    }
+
+    public function colors()
+    {
+        return $this->hasMany(GradeColor::class, 'rms_id');
+    }
+
     // total biji keluar
     public function getTotalBijiKeluarAttribute()
     {
@@ -95,5 +110,28 @@ class RawMaterial extends Model
 
     public function getBeratSisaIdentifierAttribute(){
         return $this->total_berat_rm - $this->identifiers()->sum('berat');
+    }
+
+    // Grade Shape Sisa
+    public function getBeratSisaShapeAttribute(){
+        return $this->total_berat_rm - $this->shapes()->sum('berat');
+    }
+
+    // Grade Feather Sisa
+    public function getBeratSisaFeatherAttribute(){
+        return $this->total_berat_rm - $this->feathers()->sum('biji');
+    }
+
+    public function getBijitSisaFeatherAttribute(){
+        return $this->total_biji_rm - $this->feathers()->sum('berat');
+    }
+
+    // Grade Color Sisa
+    public function getBeratSisaColorAttribute(){
+        return $this->total_berat_rm - $this->colors()->sum('biji');
+    }
+
+    public function getBijiSisaColorAttribute(){
+        return $this->total_biji_rm - $this->colors()->sum('berat');
     }
 }

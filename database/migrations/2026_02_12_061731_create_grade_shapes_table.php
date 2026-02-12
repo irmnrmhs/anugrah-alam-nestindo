@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        
-        Schema::create('grade_feathers', function (Blueprint $table) {
+        Schema::create('grade_shapes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->integer('biji');
+            $table->foreignId('shapes_id')->constrained('shapes');
             $table->decimal('berat', 7, 2);
             $table->date('tanggal');
             $table->timestamps();
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('grade_feathers');
+        Schema::dropIfExists('grade_shapes');
     }
 };
