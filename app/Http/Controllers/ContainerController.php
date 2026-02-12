@@ -129,9 +129,9 @@ class ContainerController extends Controller
         $first = $containers->first();
         $date = $first->arrival->tgl_kedatangan;
 
-        if ($containers->isEmpty()) {
-            abort(404, 'Data bahan baku belum tersedia untuk kode ini');
-        }
+        // if ($containers->isEmpty()) {
+        //     abort(404, 'Data bahan baku belum tersedia untuk kode ini');
+        // }
 
         if ($type === 'excel') {
 
