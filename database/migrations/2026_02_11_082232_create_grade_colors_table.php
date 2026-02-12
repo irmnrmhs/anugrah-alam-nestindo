@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('rms_id')->constrained('raw_materials');
             $table->foreignId('employees_id')->constrained('employees');
             $table->foreignId('gfeathers_id')->constrained('grade_feathers');
+<<<<<<< HEAD
             $table->string('kode')->unique();
             $table->integer('bj_p')->nullable()->default(0);
             $table->integer('br_p')->nullable()->default(0);
@@ -25,6 +26,15 @@ return new class extends Migration
             $table->integer('br_pg')->nullable()->default(0);
             $table->integer('other')->nullable()->default(0);
             $table->date('tgl');
+=======
+            $table->foreignId('colors_id')->constrained('colors');
+            $table->string('kode')->unique();
+            $table->integer('biji');
+            $table->integer('berat');
+            $table->integer('hcr');
+            $table->date('tanggal');
+            $table->string('ket')->nullable();
+>>>>>>> 680c263c97758a2e1fdf450318fb06dcabdf5c3c
             $table->timestamps();
         });
     }
