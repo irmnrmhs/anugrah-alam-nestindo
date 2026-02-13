@@ -102,15 +102,6 @@
     const url = id ? `/gshapes/${id}` : '/gshapes';
     const method = id ? 'PUT' : 'POST';
 
-    {{-- const data = {
-        _token: '{{ csrf_token() }}',
-        rms_id: $('#rms_id').val(),
-        employees_id: $('#employees_id').val(),
-        shapes_id: $('#shapes_id').val(),
-        tanggal: $('#tanggal').val(),
-        berat: $('#berat').val(),
-    }; --}}
-
     const beratInputs = {};
     $('input[name^="berat"]').each(function () {
         const name = $(this).attr('name');
@@ -183,7 +174,7 @@
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
                 $('#berat_sisa').val(info.berat_sisa);
-                $('#last').val(info.last ?? '-');
+                $('#last').val(info.last_date ?? '-');
             })
             .catch(() => {
                 $('#biji_sisa').val('-');

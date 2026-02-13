@@ -43,8 +43,10 @@ class GradeShapeController extends Controller
 
                 if ($berat <= 0) continue;
 
-                if ($berat > $rm->berat_sisa_shape) {
-                    throw new \Exception('Melebihi stok sisa');
+                $totalBerat = array_sum($request->berat);
+
+                if ($totalBerat > $rm->berat_sisa_shape) {
+                    throw new \Exception('Total berat melebihi stok sisa');
                 }
 
                 GradeShape::create([
@@ -87,7 +89,7 @@ class GradeShapeController extends Controller
 
         return response()->json([
             'berat_sisa' => $rm->berat_sisa_shape,
-            'last_date' => $last?->tgl_keluar,
+            'last_date' => $last?->tanggal,
         ]);
     }
 
@@ -97,16 +99,18 @@ class GradeShapeController extends Controller
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
-            'berat' => 'required|numeric|min:0|max:99999.99',
+            'berat' => 'required|array',
         ]);
 
         $grade = GradeShape::findOrFail($id);
         $rm = RawMaterial::findOrFail($validated['rms_id']);
 
-        // Kembalikan berat lama ke stok
+        $shapeId = array_key_first($validated['berat']);
+        $beratBaru = $validated['berat'][$shapeId];
+
         $berat_sisa = $rm->berat_sisa_shape + $grade->berat;
 
-        if ($validated['berat'] > $berat_sisa) {
+        if ($beratBaru > $berat_sisa) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa',
@@ -117,7 +121,8 @@ class GradeShapeController extends Controller
             'rms_id' => $validated['rms_id'],
             'employees_id' => $validated['employees_id'],
             'tanggal' => $validated['tanggal'],
-            'berat' => $validated['berat'],
+            'shapes_id' => $shapeId,
+            'berat' => $beratBaru,
         ]);
 
         return response()->json([
