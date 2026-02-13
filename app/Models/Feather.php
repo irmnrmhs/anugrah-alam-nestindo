@@ -14,4 +14,9 @@ class Feather extends Model
     {
         return $this->hasMany(Grade::class, 'feathers_id');
     }
+
+    public function gfeathers()
+    {
+        return $this->hasMany(GradeFeather::class, 'feathers_id');
+    }
 }

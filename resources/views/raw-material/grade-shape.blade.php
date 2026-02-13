@@ -172,12 +172,10 @@
         fetch(`/raw-material-info-gs/${id}`)
             .then(r => r.json())
             .then(info => {
-                $('#biji_sisa').val(info.biji_sisa);
                 $('#berat_sisa').val(info.berat_sisa);
                 $('#last').val(info.last_date ?? '-');
             })
             .catch(() => {
-                $('#biji_sisa').val('-');
                 $('#berat_sisa').val('-');
                 $('#last').val('-');
             });

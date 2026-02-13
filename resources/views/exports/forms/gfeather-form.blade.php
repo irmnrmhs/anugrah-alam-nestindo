@@ -15,8 +15,8 @@
     </td>
 
     <td rowspan="3" width="40%" class="title">
-        FORM STOK BAHAN BAKU <br>
-        <span class="small">(RAW MATERIALS STOCK FORM)</span>
+        FORM GRADING BAHAN BAKU <br>
+        <span class="small">(RAW MATERIALS GRADING FORM)</span>
     </td>
 
     <td width="20%">
@@ -58,7 +58,6 @@
     </td>
     <td width="35%">
         : {{ now()->translatedFormat('F') }}
-        {{-- : {{ $stock->tgl_keluar->translatedFormat('F') }} --}}
     </td>
     <td width="25%">    
         Bagian <i>(Department)</i>
@@ -85,7 +84,7 @@
             No <br> <i>(No)</i>
         </th>
         <th rowspan="2">
-            Tanggal Kedatangan <br> <i>(Arrival Date)</i>
+            Tanggal <br> <i>(Date)</i>
         </th>
         <th rowspan="2">
             Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
@@ -94,19 +93,28 @@
             Kode Bahan Baku <br> <i>(Raw Material Code)</i>
         </th>
         <th rowspan="2">
-            Kadar Air (%) <br> <i>(Moisture <br> Content)</i>
-        </th>
-        <th colspan="2">
-            Jumlah Barang Masuk <br> <i>(Quantity of Incoming)</i>
+            Mangkok (MK)<br> <i>(Cup) - (Gram)</i>
         </th>
         <th rowspan="2">
-            Tanggal Keluar <br> <i>Exit Date</i>
-        </th>
-        <th colspan="2">
-            Jumlah Barang Keluar <br> <i>(Quantity of Outgoing)</i>
+            Oval (MK)<br> <i>(Oval) - (Gram)</i>
         </th>
         <th rowspan="2">
-            Keterangan <br> <i>(Description)</i>
+            Sudut <br> <i>(Triangle) - (Gram)</i>
+        </th>
+        <th rowspan="2">
+            Patahan <br> <i>(Broken) - (Gram)</i>
+        </th>
+        <th rowspan="2">
+            Hancuran <br> <i>(Mess) - (Gram)</i>
+        </th>
+        <th colspan="2">
+            Bulu Ringan Plontos <br> <i>(BRP)</i>
+        </th>
+        <th colspan="2">
+            Bulu Sedang <br> <i>(BS)</i>
+        </th>
+        <th colspan="2">
+            Bulu Berat <br> <i>(BB)</i>
         </th>
         <th rowspan="2">
             Petugas <br> <i>(Officer)</i>
@@ -125,15 +133,32 @@
         <th>
             Gram <br> <i>(Gram)</i>
         </th>
+        <th>
+            Biji <br> <i>(Piece)</i>
+        </th>
+        <th>
+            Gram <br> <i>(Gram)</i>
+        </th>
     </tr>
 </thead>
 <tbody>
-@foreach($stocks as $index => $stock)
+    @php
+        $grouped = $feathers->groupBy(function ($item) {
+            return $item->tanggal . '-' . $item->employees_id;
+        });
+    @endphp
+    @foreach($grouped as $key => $items)
+    @php
+        $first = $items->first();
+        $brp = $items->firstWhere('feather.kode', 'BRP');
+        $bs  = $items->firstWhere('feather.kode', 'BS');
+        $bb  = $items->firstWhere('feather.kode', 'BB');
+    @endphp
     <tr>
-        <td class="text-center">{{ $index + 1 }}</td>
+        <td class="text-center">{{ $loop->iteration }}</td>
 
         <td class="text-center">
-            {{ $arrival->tgl_kedatangan ?? '-' }}
+            {{ $first->tanggal }}
         </td>
 
         <td>
@@ -145,53 +170,40 @@
             {{ $rm->kode }}
         </td>
 
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+
+        {{-- BRP --}}
+        <td class="text-right">
+            {{ $brp->biji ?? '-' }}
+        </td>
+        <td class="text-right">
+            {{ $brp->berat ?? '-' }}
+        </td>
+
+        {{-- BS --}}
+        <td class="text-right">
+            {{ $bs->biji ?? '-' }}
+        </td>
+        <td class="text-right">
+            {{ $bs->berat ?? '-' }}
+        </td>
+
+        {{-- BB --}}
+        <td class="text-right">
+            {{ $bb->biji ?? '-' }}
+        </td>
+        <td class="text-right">
+            {{ $bb->berat ?? '-' }}
+        </td>
+
         <td class="text-center">
-            {{ $rm->kadar_air ?? '-' }}%
-        </td>
-
-        <td class="text-right">
-            {{ $stock->biji_keluar ?? '-' }}
-        </td>
-
-        <td class="text-right">
-            {{ $stock->berat_keluar ?? '-' }}
-        </td>
-
-        <td class="text-center">
-            {{ $stock->tgl_keluar }}
-        </td>
-
-        <td class="text-right">
-            {{ $stock->biji_keluar }}
-        </td>
-
-        <td class="text-right">
-            {{ $stock->berat_keluar }}
-        </td>
-
-        <td>
-            {{ $stock->keterangan ?? '-' }}
-        </td>
-
-        <td class="text-center">
-            {{ $stock->employee->nama ?? '-' }}
+            {{ $first->employee->nama ?? '-' }}
         </td>
     </tr>
     @endforeach
 </tbody>
-@endsection
-
-<br><br>
-
-@section('other')   
-    <tr>
-        <td width="50%" class="text-center">
-            Dibuat oleh,<br><br><br>
-            ( {{ $lastStock?->employee?->nama ?? '-' }} )
-        </td>
-        <td width="50%" class="text-center">
-            Disetujui oleh,<br><br><br>
-            ( ....................... )
-        </td>
-    </tr>
 @endsection

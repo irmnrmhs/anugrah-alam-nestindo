@@ -122,7 +122,7 @@ class RawMaterial extends Model
         return $this->total_berat_rm - $this->feathers()->sum('biji');
     }
 
-    public function getBijitSisaFeatherAttribute(){
+    public function getBijiSisaFeatherAttribute(){
         return $this->total_biji_rm - $this->feathers()->sum('berat');
     }
 
