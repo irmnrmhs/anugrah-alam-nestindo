@@ -146,7 +146,7 @@ class ArrivalController extends Controller
         ->where('kode', 'KBB058')
         ->firstOrFail();
 
-        $pdf = Pdf::loadView('exports.arrival-form', compact('arrival', 'document'))
+        $pdf = Pdf::loadView('exports.forms.arrival-form', compact('arrival', 'document'))
                 ->setPaper('A4', 'portrait');
 
         $filename = 'SKP-' . str_replace(['/', '\\'], '-', $arrival->kode) . '.pdf';

@@ -129,10 +129,6 @@ class ContainerController extends Controller
         $first = $containers->first();
         $date = $first->arrival->tgl_kedatangan;
 
-        // if ($containers->isEmpty()) {
-        //     abort(404, 'Data bahan baku belum tersedia untuk kode ini');
-        // }
-
         if ($type === 'excel') {
 
             $filename = 'Kedatangan - ' . str_replace(['/', '\\'], '-', $arrival->kode) . '.xlsx';
@@ -146,7 +142,7 @@ class ContainerController extends Controller
         $document = Document::where('kode', 'DBB058')->firstOrFail();
 
         $pdf = Pdf::loadView(
-            'exports.container-form',
+            'exports.forms.container-form',
             compact('containers', 'date', 'document')
         )->setPaper('A4', 'portrait');
 

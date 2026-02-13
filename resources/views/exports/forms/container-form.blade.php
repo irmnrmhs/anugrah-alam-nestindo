@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Kedatangan Bahan Baku')
 

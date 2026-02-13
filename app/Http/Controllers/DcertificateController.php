@@ -103,7 +103,7 @@ class DcertificateController extends Controller
 
         $document = Document::where('kode', 'SKP058')->firstOrFail();
 
-        return view('exports.skp', compact('dcertificate', 'document'));
+        return view('exports.forms.skp', compact('dcertificate', 'document'));
     }
 
     public function export(Request $request, $id)
@@ -127,7 +127,7 @@ class DcertificateController extends Controller
         $document = Document::where('kode', 'SKP058')->firstOrFail();
 
         $pdf = Pdf::loadView(
-            'exports.skp',
+            'exports.forms.skp',
             compact('dcertificate', 'document')
         )->setPaper('A4', 'portrait');
 

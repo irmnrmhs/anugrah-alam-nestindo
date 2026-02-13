@@ -183,6 +183,23 @@
             });
     });
 
+    $(document).on('click', '.btnTambah', function() {
+        $('#item_id').val('');
+        $('#rms_id').val('');
+        $('#employees_id').val('');
+        $('#tanggal').val('');
+
+        $('input[name^="berat"]').val('');
+
+        $('.shape-field').show();
+    });
+
+    $('#crudModal').on('hidden.bs.modal', function () {
+        $('.shape-field').show();
+        $('input[name^="berat"]').val('');
+        $('#item_id').val('');
+    });
+
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
 
@@ -195,13 +212,10 @@
                 $('#employees_id').val(data.employees_id);
                 $('#tanggal').val(data.tanggal);
 
-                // reset semua input
                 $('input[name^="berat"]').val('');
 
-                // sembunyikan semua grade dulu
                 $('.shape-field').hide();
 
-                // tampilkan hanya grade yang diedit
                 const shapeId = data.shapes_id;
 
                 $(`#shape-${shapeId}`).show();

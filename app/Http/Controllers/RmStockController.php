@@ -185,7 +185,7 @@ class RmStockController extends Controller
             ->firstOrFail();
 
         $pdf = Pdf::loadView(
-            'exports.rm-stock-form',
+            'exports.forms.rm-stock-form',
             compact('rm', 'stocks', 'document')
         )->setPaper('A4', 'landscape');
 
