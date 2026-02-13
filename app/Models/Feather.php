@@ -19,4 +19,9 @@ class Feather extends Model
     {
         return $this->hasMany(GradeFeather::class, 'feathers_id');
     }
+
+    public function gcolors()
+    {
+        return $this->hasMany(GradeColor::class, 'colors_id');
+    }
 }

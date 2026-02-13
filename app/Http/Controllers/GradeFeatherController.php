@@ -156,7 +156,7 @@ class GradeFeatherController extends Controller
 
         $rm = RawMaterial::with([
             'arrivals.dcertificate.wbhouse',
-            'stocks.employee'
+            'feathers.employee'
         ])->findOrFail($id);
 
         // $shapes = $rm->shapes()->with('employee')->get();
@@ -164,7 +164,7 @@ class GradeFeatherController extends Controller
 
         if ($type === 'excel') {
 
-            $filename = 'Stok Bahan Baku - ' .
+            $filename = 'Grading Bulu - ' .
                 str_replace(['/', '\\'], '-', $rm->kode) . '.xlsx';
 
             return Excel::download(
@@ -182,7 +182,7 @@ class GradeFeatherController extends Controller
             compact('rm', 'feathers', 'document')
         )->setPaper('A4', 'landscape');
 
-        $filename = 'Grading Bulu Noreg ' .
+        $filename = 'Grading Bulu - ' .
             str_replace(['/', '\\'], '-', $rm->kode) . '.pdf';
 
         return $pdf->stream($filename);

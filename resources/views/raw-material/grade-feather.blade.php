@@ -83,7 +83,7 @@
     </div>
     <div class="mt-3">
     <div class="border rounded p-3">
-        <h6 class="mb-3 fw-bold">Grade Feather</h6>
+        <h6 class="mb-3 fw-bold">Grade Bulu</h6>
             @foreach ($featherList as $feather)
                 <div class="mb-3 feather-field" id="feather-{{ $feather->id }}">
                     <label class="form-label fw-semibold small">
@@ -238,9 +238,6 @@
             });
     });
 
-    // =============================
-    // CREATE MODE
-    // =============================
     $(document).on('click', '.btnTambah', function() {
 
         $('#item_id').val('');
@@ -256,10 +253,7 @@
 
         $('.feather-field').show();
     });
-
-    // =============================
-    // RESET MODAL
-    // =============================
+    
     $('#crudModal').on('hidden.bs.modal', function () {
 
         // Pastikan kembali aktif saat modal ditutup
@@ -271,10 +265,7 @@
         $('input[name^="biji"]').val('');
         $('#item_id').val('');
     });
-
-    // =============================
-    // EDIT MODE
-    // =============================
+    
     $(document).on('click', '.btnEdit', function() {
 
         const id = $(this).closest('tr').data('id');
@@ -312,9 +303,6 @@
             });
     });
 
-    // =============================
-    // DELETE
-    // =============================
     $(document).on('click', '.btnDelete', function() {
 
         const id = $(this).closest('tr').data('id');
@@ -350,9 +338,6 @@
         });
     });
 
-    // =============================
-    // EXPORT
-    // =============================
     $('#exportForm').on('submit', function (e) {
 
         e.preventDefault();

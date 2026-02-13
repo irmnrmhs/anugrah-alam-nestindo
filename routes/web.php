@@ -308,14 +308,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/gfeathers/{id}/export', [GradeFeatherController::class, 'export'])->name('gfeathers.export');
 
     // Grading Warna
-    Route::get('/gcolor', [GradeColorController::class, 'index'])->name('gcolor.index');
-    Route::post('/gcolor', [GradeColorController::class, 'store'])->name('gcolor.store');
-    Route::get('/gcolor/{id}', [GradeColorController::class, 'show'])->name('gcolor.show');
-    Route::put('/gcolor/{id}', [GradeColorController::class, 'update'])->name('gcolor.update');
-    Route::delete('/gcolor/{id}', [GradeColorController::class, 'destroy'])->name('gcolor.destroy');
-    Route::post('/gcolor/delete-multiple', [GradeColorController::class, 'deleteMultiple']);
+    Route::get('/gcolors', [GradeColorController::class, 'index'])->name('gcolors.index');
+    Route::post('/gcolors', [GradeColorController::class, 'store'])->name('gcolors.store');
+    Route::get('/gcolors/{id}', [GradeColorController::class, 'show'])->name('gcolors.show');
+    Route::put('/gcolors/{id}', [GradeColorController::class, 'update'])->name('gcolors.update');
+    Route::delete('/gcolors/{id}', [GradeColorController::class, 'destroy'])->name('gcolors.destroy');
+    Route::post('/gcolors/delete-multiple', [GradeColorController::class, 'deleteMultiple']);
     Route::get('/raw-material-info-gc/{id}', [GradeColorController::class, 'materialInfo']);
-    Route::get('/gcolor/{id}/export', [GradeColorController::class, 'export'])->name('gcolor.export');
+    Route::get('/gcolors/{id}/export', [GradeColorController::class, 'export'])->name('gcolors.export');
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');

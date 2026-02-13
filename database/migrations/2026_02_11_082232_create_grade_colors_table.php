@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->foreignId('gfeathers_id')->constrained('grade_feathers');
+            $table->foreignId('feathers_id')->constrained('feathers');
             $table->foreignId('colors_id')->constrained('colors');
-            $table->string('kode')->unique();
+            // $table->string('kode')->unique();
             $table->integer('biji');
             $table->decimal('berat', 7, 2);
-            $table->integer('other')->nullable();
+            $table->decimal('other', 7, 2)->nullable();
             $table->date('tanggal');
             $table->timestamps();
         });

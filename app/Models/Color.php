@@ -14,4 +14,9 @@ class Color extends Model
     {
         return $this->hasMany(Grade::class, 'colors_id');
     }
+
+    public function gcolors()
+    {
+        return $this->hasMany(GradeColor::class, 'colors_id');
+    }
 }
