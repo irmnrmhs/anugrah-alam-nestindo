@@ -82,9 +82,9 @@
 <tbody>
 @foreach($exportData as $idx => $row)
     @php
-        $p  = $row['data']->firstWhere('color.kode', 'P');
-        $pb = $row['data']->firstWhere('color.kode', 'PB');
-        $pg = $row['data']->firstWhere('color.kode', 'PG');
+        $p  = $row['data']['P']  ?? null;
+        $pb = $row['data']['PB'] ?? null;
+        $pg = $row['data']['PG'] ?? null;
 
         $hcr = $row['hancuran'] ?? '-';
     @endphp
@@ -103,7 +103,7 @@
     <td class="text-right">{{ $pg->biji ?? '-' }}</td>
     <td class="text-right">{{ $pg->berat ?? '-' }}</td>
 
-    <td class="text-center">{{ $firstFeather = $row['data']->first()?->feather->jenis_bulu ?? '-' }}</td>
+    <td class="text-center">{{ $row['feather']->jenis_bulu ?? '-' }}</td>
     <td class="text-right">{{ $hcr }}</td>
     <td class="text-center">{{ $firstEmployee = $row['data']->first()?->employee->nama ?? '-' }}</td>
 </tr>

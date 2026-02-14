@@ -140,18 +140,20 @@ class GradeColorController extends Controller
 
         $colors = $rm->colors()->with('employee','feather','color')->get();
 
-        // --- Mapping grouping by tanggal & petugas ---
         $grouped = $colors->groupBy(function($item){
-            return $item->tanggal.'-'.$item->employees_id;
+            return $item->tanggal
+                .'-'.$item->employees_id
+                .'-'.$item->feathers_id;
         });
 
         $exportData = [];
-        foreach($grouped as $key => $items){
+
+        foreach($grouped as $items){
+
             $first = $items->first();
 
-            // mapping by feather + color
             $dataMap = $items->mapWithKeys(function($item){
-                return [$item->feather->kode.'-'.$item->color->kode => $item];
+                return [strtoupper($item->color->kode) => $item];
             });
 
             $exportData[] = [
@@ -159,6 +161,7 @@ class GradeColorController extends Controller
                 'employee' => $first->employee,
                 'arrival' => $rm->arrivals->first(),
                 'rm' => $rm,
+                'feather' => $first->feather,
                 'data' => $dataMap
             ];
         }
