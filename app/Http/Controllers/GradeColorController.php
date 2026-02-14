@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\GradeColor;
 use App\Models\RawMaterial;
-use App\Exports\GradeColorExport;
 use App\Models\Document;
 use App\Models\Employee;
 use App\Models\Feather;
@@ -15,19 +14,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\GradeColorExport;
 
 class GradeColorController extends Controller
 {
     public string $obj = 'Grading Warna';
+
     public function index(): View
     {
         $colors = GradeColor::with('rawMaterial', 'employee', 'feather', 'color')->latest()->get();
         $rms = RawMaterial::all();
-        $employees = Employee::where('status', 1)->get();
+        $employees = Employee::where('status',1)->get();
         $featherList = Feather::all();
         $colorList = Color::all();
 
-        return view('raw-material.grade-color', compact('colors', 'rms', 'employees', 'featherList', 'colorList'));
+        return view('raw-material.grade-color', compact('colors','rms','employees','featherList','colorList'));
     }
 
     public function store(Request $request): JsonResponse
@@ -40,16 +41,11 @@ class GradeColorController extends Controller
         ]);
 
         DB::beginTransaction();
-
         try {
-
             foreach ($request->data as $featherId => $colors) {
-
                 foreach ($colors as $colorId => $values) {
-
                     $berat = $values['berat'] ?? 0;
-                    $biji = $values['biji'] ?? 0;
-
+                    $biji  = $values['biji'] ?? 0;
                     if ($berat <= 0 && $biji <= 0) continue;
 
                     GradeColor::create([
@@ -66,33 +62,24 @@ class GradeColorController extends Controller
             }
 
             DB::commit();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Grading warna berhasil disimpan'
-            ]);
+            return response()->json(['status'=>'success','message'=>'Grading warna berhasil disimpan']);
 
         } catch (\Exception $e) {
-
             DB::rollBack();
-
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 422);
+            return response()->json(['status'=>'error','message'=>$e->getMessage()],422);
         }
     }
 
     public function show(int $id): JsonResponse
     {
-        $color = GradeColor::with('rawMaterial', 'employee', 'color', 'feather')->findOrFail($id);
+        $color = GradeColor::with('rawMaterial','employee','color','feather')->findOrFail($id);
         return response()->json($color);
     }
 
     public function materialInfo($id)
     {
         $rm = RawMaterial::findOrFail($id);
-        $last = GradeColor::where('rms_id', $id)->latest()->first();
+        $last = GradeColor::where('rms_id',$id)->latest()->first();
 
         return response()->json([
             'berat_sisa' => $rm->berat_sisa_color,
@@ -101,13 +88,12 @@ class GradeColorController extends Controller
         ]);
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request,int $id): JsonResponse
     {
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
-            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
             'berat' => 'required|array',
             'biji' => 'required|array',
         ]);
@@ -120,13 +106,10 @@ class GradeColorController extends Controller
         $bijiBaru = $validated['biji'][$colorId];
 
         $berat_sisa = $rm->berat_sisa_color + $grade->berat;
-        $biji_sisa = $rm->biji_sisa_color + $grade->biji;
+        $biji_sisa  = $rm->biji_sisa_color + $grade->biji;
 
-        if ($beratBaru > $berat_sisa || $bijiBaru > $biji_sisa) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Melebihi stok sisa',
-            ], 422);
+        if($beratBaru > $berat_sisa || $bijiBaru > $biji_sisa){
+            return response()->json(['status'=>'error','message'=>'Melebihi stok sisa'],422);
         }
 
         $grade->update([
@@ -138,11 +121,7 @@ class GradeColorController extends Controller
             'biji' => $bijiBaru,
         ]);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil diperbarui',
-            'data' => $grade,
-        ]);
+        return response()->json(['status'=>'success','message'=>$this->obj.' berhasil diperbarui','data'=>$grade]);
     }
 
     public function destroy(int $id): JsonResponse
@@ -150,58 +129,58 @@ class GradeColorController extends Controller
         $grade = GradeColor::findOrFail($id);
         $grade->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil dihapus',
-        ]);
+        return response()->json(['status'=>'success','message'=>$this->obj.' berhasil dihapus']);
     }
 
     public function export(Request $request, $id)
     {
-        $type = $request->get('type', 'pdf');
+        $type = $request->get('type','pdf');
 
-        $rm = RawMaterial::with([
-            'arrivals.dcertificate.wbhouse',
-            'colors.employee'
-        ])->findOrFail($id);
+        $rm = RawMaterial::with(['arrivals.dcertificate.wbhouse','colors.employee','colors.feather','colors.color'])->findOrFail($id);
 
-        $colors = $rm->colors()->with('employee')->get();
+        $colors = $rm->colors()->with('employee','feather','color')->get();
 
-        if ($type === 'excel') {
+        // --- Mapping grouping by tanggal & petugas ---
+        $grouped = $colors->groupBy(function($item){
+            return $item->tanggal.'-'.$item->employees_id;
+        });
 
-            $filename = 'Grading Warna - ' .
-                str_replace(['/', '\\'], '-', $rm->kode) . '.xlsx';
+        $exportData = [];
+        foreach($grouped as $key => $items){
+            $first = $items->first();
 
-            return Excel::download(
-                new GradeColorExport($colors),
-                $filename
-            );
+            // mapping by feather + color
+            $dataMap = $items->mapWithKeys(function($item){
+                return [$item->feather->kode.'-'.$item->color->kode => $item];
+            });
+
+            $exportData[] = [
+                'tanggal' => $first->tanggal,
+                'employee' => $first->employee,
+                'arrival' => $rm->arrivals->first(),
+                'rm' => $rm,
+                'data' => $dataMap
+            ];
         }
 
-        $document = Document::with(['employee', 'department'])
-            ->where('kode', 'PR01GB')
-            ->firstOrFail();
+        if($type==='excel'){
+            $filename = 'Grading Warna - '.str_replace(['/','\\'],'-',$rm->kode).'.xlsx';
+            return Excel::download(new GradeColorExport($exportData),$filename);
+        }
 
-        $pdf = Pdf::loadView(
-            'exports.forms.gcolor-form',
-            compact('rm', 'colors', 'document')
-        )->setPaper('A4', 'landscape');
+        $document = Document::with(['employee','department'])->where('kode','PR01GB')->firstOrFail();
 
-        $filename = 'Grading Bulu - ' .
-            str_replace(['/', '\\'], '-', $rm->kode) . '.pdf';
+        $pdf = Pdf::loadView('exports.forms.gcolor-form',compact('exportData','document'))->setPaper('A4','landscape');
 
+        $filename = 'Grading Warna - '.str_replace(['/','\\'],'-',$rm->kode).'.pdf';
         return $pdf->stream($filename);
     }
 
     public function deleteMultiple(Request $request): JsonResponse
     {
         $ids = $request->ids;
+        GradeColor::whereIn('id',$ids)->delete();
 
-        GradeColor::whereIn('id', $ids)->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data terpilih berhasil dihapus'
-        ]);
+        return response()->json(['status'=>'success','message'=>'Data terpilih berhasil dihapus']);
     }
 }

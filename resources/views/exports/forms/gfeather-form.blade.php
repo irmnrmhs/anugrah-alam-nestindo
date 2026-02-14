@@ -142,22 +142,18 @@
         {{ $rm->kode }}
     </td>
 
-    {{-- SHAPE --}}
     <td class="text-right">{{ $mk->berat  ?? '-' }}</td>
     <td class="text-right">{{ $ovl->berat ?? '-' }}</td>
     <td class="text-right">{{ $sdt->berat ?? '-' }}</td>
     <td class="text-right">{{ $pth->berat ?? '-' }}</td>
     <td class="text-right">{{ $hcr->berat ?? '-' }}</td>
 
-    {{-- BRP --}}
     <td class="text-right">{{ $brp->biji ?? '-' }}</td>
     <td class="text-right">{{ $brp->berat ?? '-' }}</td>
 
-    {{-- BS --}}
     <td class="text-right">{{ $bs->biji ?? '-' }}</td>
     <td class="text-right">{{ $bs->berat ?? '-' }}</td>
 
-    {{-- BB --}}
     <td class="text-right">{{ $bb->biji ?? '-' }}</td>
     <td class="text-right">{{ $bb->berat ?? '-' }}</td>
 

@@ -1,6 +1,6 @@
 @extends('exports.forms.form')
 
-@section('title', 'Kedatangan Bahan Baku')
+@section('title', 'Grading Warna Bahan Baku')
 
 @push('styles')
 <style>
@@ -14,13 +14,12 @@
     </td>
 
     <td rowspan="3" width="40%" class="title">
-        FORM GRADING BAHAN BAKU <br>
-        <span class="small">(RAW MATERIALS GRADING FORM)</span>
+        FORM GRADING WARNA <br>
+        <span class="small">(RAW MATERIALS COLOR GRADING FORM)</span>
     </td>
 
     <td width="20%">
-        No. Dokumen
-        <i>(Document No.)</i>
+        No. Dokumen <i>(Document No.)</i>
     </td>
     <td width="20%">
         : {{ $document->no ?? '-' }}
@@ -29,8 +28,7 @@
 
 <tr>
     <td>
-        Revisi
-        <i>(Revision)</i>
+        Revisi <i>(Revision)</i>
     </td>
     <td>
         : Rev-{{ $document->getRevFormattedAttribute() }}
@@ -39,8 +37,7 @@
 
 <tr>
     <td>
-        Tanggal
-        <i>(Date)</i>
+        Tanggal <i>(Date)</i>
     </td>
     <td>
         : {{ \Carbon\Carbon::parse($document->tgl)->translatedFormat('d F Y') }}
@@ -48,23 +45,12 @@
 </tr>
 @endsection
 
-<br>
-
 @section('info')
 <tr>
-    <td width="15%">
-        Bulan <i>(Month)</i>
-    </td>
-    <td width="35%">
-        : {{ now()->translatedFormat('F') }}
-    </td>
-    <td width="25%">    
-        Bagian <i>(Department)</i>
-    </td>
-    <td width="25%">
-        : {{ $document->department->nama_dept }} 
-        <i>({{ $document->department->nama_eng }})</i>
-    </td>
+    <td width="15%">Bulan <i>(Month)</i></td>
+    <td width="35%">: {{ now()->translatedFormat('F') }}</td>
+    <td width="25%">Bagian <i>(Department)</i></td>
+    <td width="25%">: {{ $document->department->nama_dept }} <i>({{ $document->department->nama_eng }})</i></td>
 </tr>
 <tr>
     <td width="10%">PIC</td>
@@ -92,9 +78,35 @@
     <th>Biji</th><th>Gram</th>
 </tr>
 </thead>
-<tbody>
-    <td class="text-center">{{ $loop->iteration }}</td>
-    
-</tbody>
 
+<tbody>
+@foreach($exportData as $idx => $row)
+    @php
+        $p  = $row['data']->firstWhere('color.kode', 'P');
+        $pb = $row['data']->firstWhere('color.kode', 'PB');
+        $pg = $row['data']->firstWhere('color.kode', 'PG');
+
+        $hcr = $row['hancuran'] ?? '-';
+    @endphp
+<tr>
+    <td class="text-center">{{ $loop->iteration }}</td>
+    <td class="text-center">{{ $row['tanggal'] }}</td>
+    <td>{{ $row['arrival']->dcertificate->wbhouse->nama ?? '-' }} / {{ $row['arrival']->dcertificate->wbhouse->kode ?? '-' }}</td>
+    <td class="text-center">{{ $row['rm']->kode }}</td>
+
+    <td class="text-right">{{ $p->biji ?? '-' }}</td>
+    <td class="text-right">{{ $p->berat ?? '-' }}</td>
+
+    <td class="text-right">{{ $pb->biji ?? '-' }}</td>
+    <td class="text-right">{{ $pb->berat ?? '-' }}</td>
+
+    <td class="text-right">{{ $pg->biji ?? '-' }}</td>
+    <td class="text-right">{{ $pg->berat ?? '-' }}</td>
+
+    <td class="text-center">{{ $firstFeather = $row['data']->first()?->feather->jenis_bulu ?? '-' }}</td>
+    <td class="text-right">{{ $hcr }}</td>
+    <td class="text-center">{{ $firstEmployee = $row['data']->first()?->employee->nama ?? '-' }}</td>
+</tr>
+@endforeach
+</tbody>
 @endsection
