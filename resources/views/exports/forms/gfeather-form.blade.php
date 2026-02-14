@@ -4,7 +4,6 @@
 
 @push('styles')
 <style>
-    
 </style>
 @endpush
 
@@ -74,136 +73,99 @@
 @endsection
 
 @section('data')
+
 @php
     $arrival = $rm->arrivals->first();
+
+    // Group feather berdasarkan tanggal + employee
+    $grouped = $feathers->groupBy(function ($item) {
+        return $item->tanggal . '-' . $item->employees_id;
+    });
 @endphp
 
 <thead>
-    <tr>
-        <th rowspan="2">
-            No <br> <i>(No)</i>
-        </th>
-        <th rowspan="2">
-            Tanggal <br> <i>(Date)</i>
-        </th>
-        <th rowspan="2">
-            Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
-        </th>
-        <th rowspan="2">
-            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
-        </th>
-        <th rowspan="2">
-            Mangkok (MK)<br> <i>(Cup) - (Gram)</i>
-        </th>
-        <th rowspan="2">
-            Oval (MK)<br> <i>(Oval) - (Gram)</i>
-        </th>
-        <th rowspan="2">
-            Sudut <br> <i>(Triangle) - (Gram)</i>
-        </th>
-        <th rowspan="2">
-            Patahan <br> <i>(Broken) - (Gram)</i>
-        </th>
-        <th rowspan="2">
-            Hancuran <br> <i>(Mess) - (Gram)</i>
-        </th>
-        <th colspan="2">
-            Bulu Ringan Plontos <br> <i>(BRP)</i>
-        </th>
-        <th colspan="2">
-            Bulu Sedang <br> <i>(BS)</i>
-        </th>
-        <th colspan="2">
-            Bulu Berat <br> <i>(BB)</i>
-        </th>
-        <th rowspan="2">
-            Petugas <br> <i>(Officer)</i>
-        </th>
-    </tr>
-    <tr>
-        <th>
-            Biji <br> <i>(Piece)</i>
-        </th>
-        <th>
-            Gram <br> <i>(Gram)</i>
-        </th>
-        <th>
-            Biji <br> <i>(Piece)</i>
-        </th>
-        <th>
-            Gram <br> <i>(Gram)</i>
-        </th>
-        <th>
-            Biji <br> <i>(Piece)</i>
-        </th>
-        <th>
-            Gram <br> <i>(Gram)</i>
-        </th>
-    </tr>
+<tr>
+    <th rowspan="2">No</th>
+    <th rowspan="2">Tanggal</th>
+    <th rowspan="2">Nama BRW / No. Reg</th>
+    <th rowspan="2">Kode Bahan Baku</th>
+    <th rowspan="2">Mangkok (MK)</th>
+    <th rowspan="2">Oval (OVL)</th>
+    <th rowspan="2">Sudut (SDT)</th>
+    <th rowspan="2">Patahan (PTH)</th>
+    <th rowspan="2">Hancuran (HCR)</th>
+    <th colspan="2">BRP</th>
+    <th colspan="2">BS</th>
+    <th colspan="2">BB</th>
+    <th rowspan="2">Petugas</th>
+</tr>
+<tr>
+    <th>Biji</th><th>Gram</th>
+    <th>Biji</th><th>Gram</th>
+    <th>Biji</th><th>Gram</th>
+</tr>
 </thead>
+
 <tbody>
-    @php
-        $grouped = $feathers->groupBy(function ($item) {
-            return $item->tanggal . '-' . $item->employees_id;
-        });
-    @endphp
-    @foreach($grouped as $key => $items)
+@foreach($grouped as $key => $items)
+
     @php
         $first = $items->first();
+
         $brp = $items->firstWhere('feather.kode', 'BRP');
         $bs  = $items->firstWhere('feather.kode', 'BS');
         $bb  = $items->firstWhere('feather.kode', 'BB');
+
+        $shapeItems = $shapes
+            ->where('tanggal', $first->tanggal);
+
+        $mk  = $shapeItems->firstWhere('shape.kode', 'MK');
+        $ovl = $shapeItems->firstWhere('shape.kode', 'OVL');
+        $sdt = $shapeItems->firstWhere('shape.kode', 'SDT');
+        $pth = $shapeItems->firstWhere('shape.kode', 'PTH');
+        $hcr = $shapeItems->firstWhere('shape.kode', 'HCR');
     @endphp
-    <tr>
-        <td class="text-center">{{ $loop->iteration }}</td>
 
-        <td class="text-center">
-            {{ $first->tanggal }}
-        </td>
+<tr>
+    <td class="text-center">{{ $loop->iteration }}</td>
 
-        <td>
-            {{ $arrival->dcertificate->wbhouse->nama ?? '-' }} /
-            {{ $arrival->dcertificate->wbhouse->kode ?? '-' }}
-        </td>
+    <td class="text-center">
+        {{ $first->tanggal }}
+    </td>
 
-        <td class="text-center">
-            {{ $rm->kode }}
-        </td>
+    <td>
+        {{ $arrival->dcertificate->wbhouse->nama ?? '-' }} /
+        {{ $arrival->dcertificate->wbhouse->kode ?? '-' }}
+    </td>
 
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+    <td class="text-center">
+        {{ $rm->kode }}
+    </td>
 
-        {{-- BRP --}}
-        <td class="text-right">
-            {{ $brp->biji ?? '-' }}
-        </td>
-        <td class="text-right">
-            {{ $brp->berat ?? '-' }}
-        </td>
+    {{-- SHAPE --}}
+    <td class="text-right">{{ $mk->berat  ?? '-' }}</td>
+    <td class="text-right">{{ $ovl->berat ?? '-' }}</td>
+    <td class="text-right">{{ $sdt->berat ?? '-' }}</td>
+    <td class="text-right">{{ $pth->berat ?? '-' }}</td>
+    <td class="text-right">{{ $hcr->berat ?? '-' }}</td>
 
-        {{-- BS --}}
-        <td class="text-right">
-            {{ $bs->biji ?? '-' }}
-        </td>
-        <td class="text-right">
-            {{ $bs->berat ?? '-' }}
-        </td>
+    {{-- BRP --}}
+    <td class="text-right">{{ $brp->biji ?? '-' }}</td>
+    <td class="text-right">{{ $brp->berat ?? '-' }}</td>
 
-        {{-- BB --}}
-        <td class="text-right">
-            {{ $bb->biji ?? '-' }}
-        </td>
-        <td class="text-right">
-            {{ $bb->berat ?? '-' }}
-        </td>
+    {{-- BS --}}
+    <td class="text-right">{{ $bs->biji ?? '-' }}</td>
+    <td class="text-right">{{ $bs->berat ?? '-' }}</td>
 
-        <td class="text-center">
-            {{ $first->employee->nama ?? '-' }}
-        </td>
-    </tr>
-    @endforeach
+    {{-- BB --}}
+    <td class="text-right">{{ $bb->biji ?? '-' }}</td>
+    <td class="text-right">{{ $bb->berat ?? '-' }}</td>
+
+    <td class="text-center">
+        {{ $first->employee->nama ?? '-' }}
+    </td>
+</tr>
+
+@endforeach
 </tbody>
 @endsection

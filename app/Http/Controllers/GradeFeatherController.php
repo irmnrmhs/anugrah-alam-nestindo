@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\Employee;
 use App\Models\Feather;
 use App\Models\GradeFeather;
+use App\Models\GradeShape;
 use App\Models\RawMaterial;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,14 +19,21 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class GradeFeatherController extends Controller
 {
     public string $obj = 'Grading Bulu';
+
     public function index(): View
     {
-        $feathers = GradeFeather::with('rawMaterial', 'employee', 'feather')->latest()->get();
+        $feathers = GradeFeather::with('rawMaterial', 'employee', 'feather')
+            ->latest()
+            ->get();
+
         $rms = RawMaterial::all();
         $employees = Employee::where('status', 1)->get();
         $featherList = Feather::all();
 
-        return view('raw-material.grade-feather', compact('feathers', 'rms', 'employees', 'featherList'));
+        return view(
+            'raw-material.grade-feather',
+            compact('feathers', 'rms', 'employees', 'featherList')
+        );
     }
 
     public function store(Request $request): JsonResponse
@@ -38,27 +46,27 @@ class GradeFeatherController extends Controller
             'berat' => 'required|array',
         ]);
 
-        $rm = RawMaterial::findOrFail($request->rms_id);
-
         DB::beginTransaction();
 
         try {
 
             foreach ($request->berat as $featherId => $berat) {
 
-            $biji = $request->biji[$featherId] ?? 0;
+                $biji = $request->biji[$featherId] ?? 0;
 
-            if ($berat <= 0 && $biji <= 0) continue;
+                if ($berat <= 0 && $biji <= 0) {
+                    continue;
+                }
 
-            GradeFeather::create([
-                'rms_id' => $request->rms_id,
-                'employees_id' => $request->employees_id,
-                'feathers_id' => $featherId,
-                'tanggal' => $request->tanggal,
-                'berat' => $berat,
-                'biji' => $biji,
-            ]);
-        }
+                GradeFeather::create([
+                    'rms_id' => $request->rms_id,
+                    'employees_id' => $request->employees_id,
+                    'feathers_id' => $featherId,
+                    'tanggal' => $request->tanggal,
+                    'berat' => $berat,
+                    'biji' => $biji,
+                ]);
+            }
 
             DB::commit();
 
@@ -80,14 +88,21 @@ class GradeFeatherController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $feather = GradeFeather::with('rawMaterial', 'employee', 'feather')->findOrFail($id);
+        $feather = GradeFeather::with(
+            'rawMaterial',
+            'employee',
+            'feather'
+        )->findOrFail($id);
+
         return response()->json($feather);
     }
 
     public function materialInfo($id)
     {
         $rm = RawMaterial::findOrFail($id);
-        $last = GradeFeather::where('rms_id', $id)->latest()->first();
+        $last = GradeFeather::where('rms_id', $id)
+            ->latest()
+            ->first();
 
         return response()->json([
             'berat_sisa' => $rm->berat_sisa_feather,
@@ -156,11 +171,17 @@ class GradeFeatherController extends Controller
 
         $rm = RawMaterial::with([
             'arrivals.dcertificate.wbhouse',
-            'feathers.employee'
         ])->findOrFail($id);
 
-        // $shapes = $rm->shapes()->with('employee')->get();
-        $feathers = $rm->feathers()->with('employee')->get();
+        $feathers = GradeFeather::with('employee', 'feather')
+            ->where('rms_id', $id)
+            ->orderBy('tanggal')
+            ->get();
+
+        $shapes = GradeShape::with('employee')
+            ->where('rms_id', $id)
+            ->orderBy('tanggal')
+            ->get();
 
         if ($type === 'excel') {
 
@@ -179,7 +200,12 @@ class GradeFeatherController extends Controller
 
         $pdf = Pdf::loadView(
             'exports.forms.gfeather-form',
-            compact('rm', 'feathers', 'document')
+            compact(
+                'rm',
+                'feathers',
+                'shapes',
+                'document'
+            )
         )->setPaper('A4', 'landscape');
 
         $filename = 'Grading Bulu - ' .
