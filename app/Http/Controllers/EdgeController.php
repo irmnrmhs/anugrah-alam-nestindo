@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Response;
 
 class EdgeController extends Controller
 {
@@ -32,33 +31,20 @@ class EdgeController extends Controller
         $validated = $request->validate([
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_mulai' => 'required|date',
-            'biji_masuk' => 'required|integer|min:0',
-            'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'nullable|date',
-            'biji_keluar' => 'nullable|integer|min:0',
-            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99'
+            'tanggal' => 'required|date',
+            'biji' => 'required|integer|min:0',
+            'berat' => 'required|numeric|min:0|max:99999.99',
         ]);
 
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_sesek ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_sesek
+            $validated['biji'] > $tracker->sisa_biji_sesek ||
+            $validated['berat'] > $tracker->sisa_berat_sesek
         ){
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
-            ], 422);
-        }
-
-        if(
-            $validated['biji_keluar'] > $validated['biji_masuk'] ||
-            $validated['berat_keluar'] > $validated['berat_masuk']
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
             ], 422);
         }
 
@@ -85,7 +71,7 @@ class EdgeController extends Controller
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_sesek,
             'berat_sisa' => $tracker->sisa_berat_sesek,
-            'last' => $last?->tgl_mulai,
+            'last' => $last?->tanggal,
         ]);
     }
 
@@ -94,23 +80,20 @@ class EdgeController extends Controller
         $validated = $request->validate([
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_mulai' => 'required|date',
-            'biji_masuk' => 'required|integer|min:0',
-            'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'nullable|date',
-            'biji_keluar' => 'nullable|integer|min:0',
-            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99'
+            'tanggal' => 'required|date',
+            'biji' => 'required|integer|min:0',
+            'berat' => 'required|numeric|min:0|max:99999.99',
         ]);
 
         $edge = Edge::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_sesek + $edge->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_sesek + $edge->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_sesek + $edge->biji;
+        $berat_sisa = $tracker->sisa_berat_sesek + $edge->berat;
 
         if(
-            $validated['biji_masuk'] > $biji_sisa ||
-            $validated['berat_masuk'] > $berat_sisa
+            $validated['biji'] > $biji_sisa ||
+            $validated['berat'] > $berat_sisa
         ){
             return response()->json([
                 'status' => 'error',
@@ -118,26 +101,6 @@ class EdgeController extends Controller
             ], 422);
         }
 
-        if(
-            $validated['biji_keluar'] > $validated['biji_masuk'] ||
-            $validated['berat_keluar'] > $validated['berat_masuk']
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
-            ], 422);
-        }
-
-        // if(
-        //     $validated['biji_keluar'] < $tracker->total_biji_cuci ||
-        //     $validated['berat_keluar'] < $tracker->total_berat_cuci
-        // ){
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya.',
-        //     ], 422);
-        // }
-        
         $edge->update($validated);
 
         return response()->json([

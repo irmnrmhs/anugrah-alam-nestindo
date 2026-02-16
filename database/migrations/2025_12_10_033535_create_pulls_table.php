@@ -15,13 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('histories_id')->constrained('histories');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->date('tgl_mulai');
-            $table->integer('biji_masuk');
-            $table->decimal('berat_masuk', 7, 2);
-            $table->date('tgl_selesai')->nullable();
-            $table->integer('biji_keluar')->default(0)->nullable();
-            $table->decimal('berat_keluar', 7, 2)->default(0)->nullable();
-            $table->integer('status')->default(0)->nullable();
+            $table->date('tanggal');
+            $table->integer('biji');
             $table->string('keterangan')->nullable();
             $table->integer('shift');
             $table->timestamps();

@@ -10,12 +10,11 @@ class Product extends Model
         'histories_id',
         'employees_id',
         'grades_id',
+        'tanggal',
         'kode',
-        'kd_proses',
-        'tgl_mulai',
         'biji',
         'berat',
-        'tgl_selesai'
+        'ket',
     ];
 
     public function history()

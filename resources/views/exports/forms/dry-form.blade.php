@@ -124,7 +124,7 @@
     <tr>
         <td class="text-center">1</td>
         <td class="text-center">
-            {{ $dries->tgl_mulai }}
+            {{ $dries->tanggal }}
         </td>
         <td>
             {{ $rm->kode}}
@@ -137,13 +137,13 @@
             {{ $dries->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $dries->biji_masuk }}
+            {{ $dries->biji }}
         </td>
         <td>
-            {{ $dries->waktu_masuk }}
+            {{ $dries->waktu_in }}
         </td>
         <td>
-            {{ $dries->waktu_keluar }}
+            {{ $dries->waktu_out }}
         </td>
         <td>
             {{ $dries->employee->nama }}

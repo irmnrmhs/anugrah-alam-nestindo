@@ -10,15 +10,13 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode Produk</th>
     <th>Karyawan</th>
     <th>Grade</th>
-    <th>Kode Grade</th>
     <th>Kode Proses</th>
-    <th>Tanggal Mulai</th>
+    <th>Tanggal</th>
     <th>Jumlah Biji</th>
     <th>Berat</th>
-    <th>Tanggal Selesai</th>
+    <th>Keterangan</th>
 @stop
 
 @section('table-body')
@@ -26,19 +24,16 @@
         <tr data-id="{{ $product->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $product->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $product->history->identifier->kode }}</td>
             <td>{{ $product->employee->nama }}</td>
             <td>{{ $product->grade->grade }}</td>
             <td>{{ $product->kode }}</td>
-            <td>{{ $product->kd_proses }}</td>
-            <td>{{ empty($product->tgl_mulai) ? '-' : $product->tgl_mulai }}</td>
+            <td>{{ $product->tanggal }}</td>
             <td>{{ empty($product->biji) ? 0 : $product->biji }}</td>
             <td>{{ empty($product->berat) ? 0 : $product->berat }}</td>
-            <td>{{ $product->tgl_selesai }}</td>
+            <td>{{ $product->ket }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-                <a href="{{ route('products.export', $product->id) }}" class="btn btn-sm btn-primary" target="_blank">Cetak Form</a>
             </td>
         </tr>
     @endforeach
@@ -89,8 +84,8 @@
         </select>
     </div>
     <div class="mb-3">
-        <label>Tanggal Mulai</label>
-        <input type="date" id="tgl_mulai" class="form-control" required>
+        <label>Tanggal</label>
+        <input type="date" id="tanggal" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Jumlah Biji</label>
@@ -99,10 +94,6 @@
     <div class="mb-3">
         <label>Total Berat</label>
         <input type="number" id="berat" step="0.001" min="0" max="99999.99" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Tanggal Selesai</label>
-        <input type="date" id="tgl_selesai" class="form-control" required>
     </div>
 @stop
 
@@ -116,10 +107,9 @@
         histories_id: $('#histories_id').val(),
         employees_id: $('#employees_id').val(),
         grades_id: $('#grades_id').val(),
-        tgl_mulai: $('#tgl_mulai').val(),
+        tanggal: $('#tanggal').val(),
         biji: $('#biji').val(),
         berat: $('#berat').val(),
-        tgl_selesai: $('#tgl_selesai').val()
     };
 
     fetch(url, {
@@ -193,10 +183,9 @@
                 $('#histories_id').val(product.histories_id).trigger('change');
                 $('#employees_id').val(product.employees_id);
                 $('#grades_id').val(product.grades_id);
-                $('#tgl_mulai').val(product.tgl_mulai);
+                $('#tanggal').val(product.tanggal);
                 $('#biji').val(product.biji);
                 $('#berat').val(product.berat);
-                $('#tgl_selesai').val(product.tgl_selesai);
                 $('#modalTitle').text('Edit Produk Jadi');
                 new bootstrap.Modal('#crudModal').show();
             });

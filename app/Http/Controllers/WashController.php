@@ -31,19 +31,15 @@ class WashController extends Controller
         $validated = $request->validate([
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_mulai' => 'required|date',
-            'biji_masuk' => 'required|integer|min:0',
-            'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'nullable|date',
-            'biji_keluar' => 'nullable|integer|min:0',
-            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99'
+            'tanggal' => 'required|date',
+            'biji_in' => 'required|integer|min:0',
+            'biji_out' => 'required|integer|min:0',
         ]);
 
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_cuci ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_cuci
+            $validated['biji_in'] > $tracker->sisa_biji_cuci
         ){
             return response()->json([
                 'status' => 'error',
@@ -52,12 +48,11 @@ class WashController extends Controller
         }
 
         if(
-            $validated['biji_keluar'] > $validated['biji_masuk'] ||
-            $validated['berat_keluar'] > $validated['berat_masuk']
+            $validated['biji_out'] > $validated['biji_in']
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
+                'message' => 'Stok keluar melebihi stok masuk',
             ], 422);
         }
 
@@ -83,8 +78,7 @@ class WashController extends Controller
 
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_cuci,
-            'berat_sisa' => $tracker->sisa_berat_cuci,
-            'last' => $last?->tgl_mulai,
+            'last' => $last?->tanggal,
         ]);
     }
 
@@ -93,23 +87,18 @@ class WashController extends Controller
         $validated = $request->validate([
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_mulai' => 'required|date',
-            'biji_masuk' => 'required|integer|min:0',
-            'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'nullable|date',
-            'biji_keluar' => 'nullable|integer|min:0',
-            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99'
+            'tanggal' => 'required|date',
+            'biji_in' => 'required|integer|min:0',
+            'biji_out' => 'required|integer|min:0',
         ]);
 
         $wash = Wash::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_cuci + $wash->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_cuci + $wash->berat_masuk;
+        $masuk_sisa = $tracker->sisa_biji_cuci + $wash->biji_in;
 
         if(
-            $validated['biji_masuk'] > $biji_sisa ||
-            $validated['berat_masuk'] > $berat_sisa
+            $validated['biji_in'] > $masuk_sisa
         ){
             return response()->json([
                 'status' => 'error',
@@ -118,25 +107,14 @@ class WashController extends Controller
         }
 
         if(
-            $validated['biji_keluar'] > $validated['biji_masuk'] ||
-            $validated['berat_keluar'] > $validated['berat_masuk']
+            $validated['biji_out'] > $validated['biji_in']
         ){
             return response()->json([
                 'status' => 'error',
-                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
+                'message' => 'Stok keluar melebihi stok masuk',
             ], 422);
         }
-
-        // if(
-        //     $validated['biji_keluar'] < $tracker->total_biji_koreksi ||
-        //     $validated['berat_keluar'] < $tracker->total_berat_koreksi
-        // ){
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Biji atau berat keluar tidak boleh lebih kecil dari stok yang sedang diproses pada tahapan setelahnya.',
-        //     ], 422);
-        // }
-
+        
         $wash->update($validated);
 
         return response()->json([

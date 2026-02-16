@@ -116,7 +116,7 @@
     <tr>
         <td class="text-center">1</td>
         <td class="text-center">
-            {{ $pulls->tgl_mulai }}
+            {{ $pulls->tanggal }}
         </td>
         <td>
             {{ $rm->kode}}
@@ -129,7 +129,7 @@
             {{ $pulls->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $pulls->biji_masuk }}
+            {{ $pulls->biji }}
         </td>
         <td>
             {{ empty($pulls->keterangan) ? '-' : $pulls->keterangan }}

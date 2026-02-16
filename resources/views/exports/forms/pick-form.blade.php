@@ -112,7 +112,7 @@
     <tr>
         <td class="text-center">1</td>
         <td class="text-center">
-            {{ $picks->tgl_mulai }}
+            {{ $picks->tanggal }}
         </td>
         <td>
             {{ $arrival->dcertificate->wbhouse->nama }} /
@@ -125,7 +125,7 @@
             {{ $picks->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $picks->biji_masuk }}
+            {{ $picks->biji }}
         </td>
         <td>
             {{ empty($picks->keterangan) ? '-' : $picks->keterangan }}
