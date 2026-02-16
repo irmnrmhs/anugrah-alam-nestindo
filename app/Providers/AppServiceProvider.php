@@ -15,6 +15,7 @@ use App\Models\Supplier;
 use App\Models\Dcertificate;
 use App\Models\Grade;
 use App\Models\ProductIdentifier;
+use App\Models\GradeColor;
 use App\Models\Edge;
 use App\Models\Wash;
 use App\Models\Correction;
@@ -27,7 +28,6 @@ use App\Models\Dry;
 use App\Models\Product;
 use App\Models\Area;
 use App\Models\Container;
-use App\Models\GradeColor;
 use App\Models\RmStock;
 
 use App\Observers\DCertificateObserver;

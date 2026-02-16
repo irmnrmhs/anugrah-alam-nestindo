@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gcolors_id')->constrained('gcolors_id');
+            $table->foreignId('gcolors_id')->constrained('grade_colors');
             $table->string('asal')->nullable();
             $table->string('tujuan');
             $table->integer('biji');
