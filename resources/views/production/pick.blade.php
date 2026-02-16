@@ -12,14 +12,9 @@
     <th>No</th>
     <th>Kode Produk</th>
     <th>Petugas</th>
-    <th>Tanggal Mulai</th>
-    <th>Jumlah Biji</th>
-    <th>Berat</th>
-    <th>Tanggal Selesai</th>
-    <th>Biji Keluar</th>
-    <th>Berat Keluar</th>
+    <th>Tanggal</th>
+    <th>Biji</th>
     <th>Keterangan</th>
-    <th>Status</th>
 @stop
 
 @section('table-body')
@@ -29,22 +24,9 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $pick->history->identifier->kode }}</td>
             <td>{{ $pick->employee->nama }}</td>
-            <td>{{ $pick->tgl_mulai }}</td>
-            <td>{{ $pick->biji_masuk }}</td>
-            <td>{{ $pick->berat_masuk }}</td>
-            <td>{{ empty($pick->tgl_selesai) ? '-' : $pick->tgl_selesai }}</td>
-            <td>{{ empty($pick->biji_keluar) ? 0 : $pick->biji_keluar }}</td>
-            <td>{{ empty($pick->berat_keluar) ? 0 : $pick->berat_keluar }}</td>
+            <td>{{ $pick->tanggal }}</td>
+            <td>{{ $pick->biji }}</td>
             <td>{{ empty($pick->keterangan) ? '-' : $pick->keterangan }}</td>
-            <td>
-                @if($pick->status == 0)
-                <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($pick->status == 1)
-                <span class="badge bg-success">Disetujui</span>
-                @else
-                <span class="badge bg-danger">Ditolak</span>
-                @endif
-            </td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -90,28 +72,12 @@
         </select>
     </div>
     <div class="mb-3">
-        <label>Tanggal Mulai</label>
-        <input type="date" id="tgl_mulai" class="form-control" required>
+        <label>Tanggal</label>
+        <input type="date" id="tanggal" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Biji Sebelum Proses</label>
-        <input type="number" id="biji_masuk" step="1" min="0" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Berat Sebelum Proses</label>
-        <input type="number" id="berat_masuk" step="0.001" min="0" max="99999.99" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Tanggal Selesai</label>
-        <input type="date" id="tgl_selesai" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Biji Setelah Proses</label>
-        <input type="number" id="biji_keluar" step="1" min="0" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Berat Setelah Proses</label>
-        <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
+        <label>Biji</label>
+        <input type="number" id="biji" step="1" min="0" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Keterangan</label>
@@ -129,11 +95,7 @@
         histories_id: $('#histories_id').val(),
         employees_id: $('#employees_id').val(),
         tgl_mulai: $('#tgl_mulai').val(),
-        biji_masuk: $('#biji_masuk').val(),
-        berat_masuk: $('#berat_masuk').val(),
-        tgl_selesai: $('#tgl_selesai').val(),
-        biji_keluar: $('#biji_keluar').val(),
-        berat_keluar: $('#berat_keluar').val(),
+        biji: $('#biji').val(),
         keterangan: $('#keterangan').val()
     };
 
@@ -189,12 +151,10 @@
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
-                $('#berat_sisa').val(info.berat_sisa);
                 $('#last').val(info.last ?? '-');
             })
             .catch(() => {
                 $('#biji_sisa').val('-');
-                $('#berat_sisa').val('-');
                 $('#last').val('-');
             });
     });
@@ -207,12 +167,8 @@
                 $('#item_id').val(pick.id);
                 $('#histories_id').val(pick.histories_id).trigger('change');
                 $('#employees_id').val(pick.employees_id);
-                $('#tgl_mulai').val(pick.tgl_mulai);
-                $('#biji_masuk').val(pick.biji_masuk);
-                $('#berat_masuk').val(pick.berat_masuk);
-                $('#tgl_selesai').val(pick.tgl_selesai);
-                $('#biji_keluar').val(pick.biji_keluar);
-                $('#berat_keluar').val(pick.berat_keluar);
+                $('#tanggal').val(pick.tanggal);
+                $('#biji').val(pick.biji);
                 $('#keterangan').val(pick.keterangan);
                 $('#modalTitle').text('Edit Pencabutan Bulu');
                 new bootstrap.Modal('#crudModal').show();

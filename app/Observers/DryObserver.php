@@ -20,14 +20,14 @@ class DryObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $dry->history->identifiers_id)
+        $history = History::where('gcolors_id', $dry->history->gcolors_id)
             ->where('asal', 'PR10PK')
             ->where('tujuan', 'PR11GP')
             ->first();
 
         if (!$history) {
             $history = History::create([
-                'identifiers_id' => $dry->history->identifiers_id,
+                'gcolors_id' => $dry->history->gcolors_id,
                 'asal' => 'PR10PK',
                 'tujuan' => 'PR11GP',
                 'biji' => 0,
@@ -49,7 +49,7 @@ class DryObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $dry->history->identifiers_id)
+        $history = History::where('gcolors_id', $dry->history->gcolors_id)
             ->where('asal', 'PR10PK')
             ->where('tujuan', 'PR11GP')
             ->first();
@@ -69,7 +69,7 @@ class DryObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $dry->history->identifiers_id)
+        $history = History::where('gcolors_id', $dry->history->gcolors_id)
             ->where('asal', 'PR10PK')
             ->where('tujuan', 'PR11GP')
             ->first();
@@ -109,7 +109,7 @@ class DryObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $dry->history->identifiers_id)
+        $history = History::where('gcolors_id', $dry->history->gcolors_id)
             ->where('asal', 'PR10PK')
             ->where('tujuan', 'PR11GP')
             ->first();

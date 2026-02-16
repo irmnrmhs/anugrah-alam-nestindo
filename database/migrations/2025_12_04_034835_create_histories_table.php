@@ -13,14 +13,11 @@ return new class extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('identifiers_id')->constrained('product_identifiers');
+            $table->foreignId('gcolors_id')->constrained('gcolors_id');
             $table->string('asal')->nullable();
             $table->string('tujuan');
             $table->integer('biji');
-            $table->decimal('berat', 7, 3);
-            // $table->unique(['identifiers_id', 'asal', 'tujuan']);
-            // $table->integer('biji_sisa');
-            // $table->decimal('berat_sisa', 7, 3);
+            $table->decimal('berat', 7, 3)->nullable();
             $table->timestamps();
         });
     }

@@ -16,12 +16,11 @@ return new class extends Migration
             $table->foreignId('histories_id')->constrained('histories');
             $table->foreignId('employees_id')->constrained('employees');
             $table->foreignId('grades_id')->constrained('fp_grades');
+            $table->date('tanggal');
             $table->string('kode')->unique();
-            $table->string('kd_proses')->unique();
-            $table->date('tgl_mulai');
             $table->integer('biji');
             $table->decimal('berat', 7, 2);
-            $table->date('tgl_selesai')->nullable();
+            $table->string('ket')->nullable();
             $table->timestamps();
         });
     }

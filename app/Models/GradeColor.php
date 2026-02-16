@@ -37,4 +37,9 @@ class GradeColor extends Model
     {
         return $this->belongsTo(Color::class, 'colors_id');
     }
+
+    public function histories()
+    {
+        return $this->hasMany(History::class, 'identifiers_id');
+    }
 }

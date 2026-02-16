@@ -31,34 +31,19 @@ class PickController extends Controller
         $validated = $request->validate([
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_mulai' => 'required|date',
-            'biji_masuk' => 'required|integer|min:0',
-            'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'nullable|date',
-            'biji_keluar' => 'nullable|integer|min:0',
-            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
+            'tanggal' => 'required|date',
+            'biji' => 'required|integer|min:0',
             'keterangan' => 'nullable'
         ]);
 
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji_masuk'] > $tracker->sisa_biji_cabut ||
-            $validated['berat_masuk'] > $tracker->sisa_berat_cabut
+            $validated['biji'] > $tracker->sisa_biji_cabut
         ){
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
-            ], 422);
-        }
-
-        if(
-            $validated['biji_keluar'] > $validated['biji_masuk'] ||
-            $validated['berat_keluar'] > $validated['berat_masuk']
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
             ], 422);
         }
 
@@ -84,8 +69,7 @@ class PickController extends Controller
 
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_cabut,
-            'berat_sisa' => $tracker->sisa_berat_cabut,
-            'last' => $last?->tgl_mulai,
+            'last' => $last?->tanggal,
         ]);
     }
 
@@ -94,12 +78,8 @@ class PickController extends Controller
         $validated = $request->validate([
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_mulai' => 'required|date',
-            'biji_masuk' => 'required|integer|min:0',
-            'berat_masuk' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'nullable|date',
-            'biji_keluar' => 'nullable|integer|min:0',
-            'berat_keluar' => 'nullable|numeric|min:0|max:99999.99',
+            'tanggal' => 'required|date',
+            'biji' => 'required|integer|min:0',
             'keterangan' => 'nullable'
         ]);
 
@@ -107,25 +87,13 @@ class PickController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         $biji_sisa = $tracker->sisa_biji_cabut + $pick->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_cabut + $pick->berat_masuk;
 
         if(
-            $validated['biji_masuk'] > $biji_sisa ||
-            $validated['berat_masuk'] > $berat_sisa
+            $validated['biji'] > $biji_sisa
         ){
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
-            ], 422);
-        }
-
-        if(
-            $validated['biji_keluar'] > $validated['biji_masuk'] ||
-            $validated['berat_keluar'] > $validated['berat_masuk']
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
             ], 422);
         }
 

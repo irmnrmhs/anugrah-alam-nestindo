@@ -118,7 +118,7 @@
     <tr>
         <td class="text-center">1</td>
         <td class="text-center">
-            {{ $soaks->tgl_mulai }}
+            {{ $soaks->tanggal }}
         </td>
         <td>
             {{ $arrival->dcertificate->wbhouse->nama }} /
@@ -131,7 +131,7 @@
             {{ $soaks->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $soaks->biji_masuk }}
+            {{ $soaks->biji }}
         </td>
         <td>
             {{ $soaks->durasi }}

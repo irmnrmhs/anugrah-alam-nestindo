@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($edges->tgl_mulai)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($edges->tanggal)->translatedFormat('F') }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -118,7 +118,7 @@
     <tr>
         <td class="text-center">1</td>
         <td class="text-center">
-            {{ $edges->tgl_mulai }}
+            {{ $edges->tanggal }}
         </td>
         <td>
             {{ $arrival->dcertificate->wbhouse->nama }} /
@@ -131,10 +131,10 @@
             {{ $edges->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $edges->biji_masuk }}
+            {{ $edges->biji }}
         </td>
         <td>
-            {{ $edges->berat_masuk }}
+            {{ $edges->berat }}
         </td>
         <td>
             {{ $edges->employee->nama }}

@@ -14,31 +14,28 @@ class PickObserver
     public function created(Pick $pick): void
     {
         if (
-            empty($pick->biji_keluar) &&
-            empty($pick->berat_keluar)
+            empty($pick->biji)
         ) {
-            $pick->biji_keluar = 0;
-            $pick->berat_keluar = 0;
+            $pick->biji = 0;
         }
 
-        $history = History::where('identifiers_id', $pick->history->identifiers_id)
+        $history = History::where('gcolors_id', $pick->history->gcolors_id)
             ->where('asal', 'PR05PB')
             ->where('tujuan', 'PR06PR')
             ->first();
 
         if (!$history) {
             $history = History::create([
-                'identifiers_id' => $pick->history->identifiers_id,
+                'gcolors_id' => $pick->history->gcolors_id,
                 'asal' => 'PR05PB',
                 'tujuan' => 'PR06PR',
                 'biji' => 0,
                 'berat' => 0,
-                'status' => 0
             ]);
         }
 
-        $history->increment('biji', $pick->biji_keluar);
-        $history->increment('berat', $pick->berat_keluar);
+        $history->increment('biji', $pick->biji);
+        $history->increment('berat', $pick->berat);
     }
 
     /**
@@ -46,49 +43,40 @@ class PickObserver
      */
     public function updated(Pick $pick): void
     {
-        if (!$pick->wasChanged(['biji_keluar', 'berat_keluar'])) {
+        if (!$pick->wasChanged(['biji'])) {
             return;
         }
 
-        $history = History::where('identifiers_id', $pick->history->identifiers_id)
+        $history = History::where('gcolors_id', $pick->history->gcolors_id)
             ->where('asal', 'PR05PB')
             ->where('tujuan', 'PR06PR')
             ->first();
 
         if (!$history) return;
 
-        $history->decrement('biji', $pick->getOriginal('biji_keluar') ?? 0);
-        $history->decrement('berat', $pick->getOriginal('berat_keluar') ?? 0);
+        $history->decrement('biji', $pick->getOriginal('biji') ?? 0);
 
-        $history->increment('biji', $pick->biji_keluar ?? 0);
-        $history->increment('berat', $pick->berat_keluar ?? 0);
+        $history->increment('biji', $pick->biji ?? 0);
     }
 
     public function updating(Pick $pick)
     {
-        if (!$pick->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (!$pick->isDirty(['biji'])) {
             return;
         }
 
-        $history = History::where('identifiers_id', $pick->history->identifiers_id)
+        $history = History::where('gcolors_id', $pick->history->gcolors_id)
             ->where('asal', 'PR05PB')
             ->where('tujuan', 'PR06PR')
             ->first();
 
         if (!$history) return;
 
-        $dipakaiBiji = $history->soaks()->sum('biji_masuk');
-        $dipakaiBerat = $history->soaks()->sum('berat_masuk');
+        $dipakaiBiji = $history->soaks()->sum('biji');
 
-        if ($pick->biji_keluar < $dipakaiBiji) {
+        if ($pick->biji < $dipakaiBiji) {
             throw ValidationException::withMessages([
-                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
-
-        if ($pick->berat_keluar < $dipakaiBerat) {
-            throw ValidationException::withMessages([
-                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+                'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
             ]);
         }
     }
@@ -104,13 +92,12 @@ class PickObserver
     public function deleting(Pick $pick): void
     {
         if (
-            empty($pick->biji_keluar) &&
-            empty($pick->berat_keluar)
+            empty($pick->biji)
         ) {
             return;
         }
 
-        $history = History::where('identifiers_id', $pick->history->identifiers_id)
+        $history = History::where('gcolors_id', $pick->history->gcolors_id)
             ->where('asal', 'PR05PB')
             ->where('tujuan', 'PR06PR')
             ->first();
@@ -118,16 +105,14 @@ class PickObserver
         if (!$history) return;
 
         if (
-            ($pick->biji_keluar ?? 0) > $history->sisa_biji_rendam ||
-            ($pick->berat_keluar ?? 0) > $history->sisa_berat_rendam
+            ($pick->biji ?? 0) > $history->sisa_biji_rendam
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
             ]);
         }
 
-        $history->decrement('biji', $pick->biji_keluar ?? 0);
-        $history->decrement('berat', $pick->berat_keluar ?? 0);
+        $history->decrement('biji', $pick->biji ?? 0);
 
         if ($history->biji <= 0 && $history->berat <= 0) {
             $history->delete();

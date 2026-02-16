@@ -58,7 +58,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($corrections->tgl_mulai)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($corrections->tanggal)->translatedFormat('F') }}
     </td>
 </tr>
 <tr>
@@ -105,7 +105,7 @@
     @endphp
     <tr>
         <td class="text-center">
-            {{ $corrections->tgl_mulai }}
+            {{ $corrections->tanggal }}
         </td>
         <td>
             {{ $arrival->dcertificate->wbhouse->nama }} /
@@ -118,7 +118,7 @@
             {{ $corrections->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $corrections->biji_masuk }}
+            {{ $corrections->biji }}
         </td>
         <td>
             {{ (($corrections->cek) === 1 ? 'Lulus Cek' : 'Tidak Lulus Cek') }}

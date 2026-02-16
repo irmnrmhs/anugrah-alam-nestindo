@@ -112,7 +112,7 @@
     <tr>
         <td class="text-center">1</td>
         <td class="text-center">
-            {{ $entries->tgl_mulai }}
+            {{ $entries->tanggal }}
         </td>
         <td>
             {{ $rm->kode}}
@@ -125,7 +125,7 @@
             {{ $entries->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $entries->biji_masuk }}
+            {{ $entries->biji }}
         </td>
         <td>
             {{ $entries->employee->nama }}

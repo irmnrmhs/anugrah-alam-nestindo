@@ -31,18 +31,14 @@ class ProductController extends Controller
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
             'grades_id' => 'required|exists:fp_grades,id',
-            'tgl_mulai' => 'required|date',
+            'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'nullable|date'
+            'ket' => 'nullable',
         ]);
 
         $tracker = History::with('identifier')->find($validated['histories_id']);
-
-        // Kode Grade
         $grade = FpGrade::find($validated['grades_id']);
-        $pi = preg_replace('/[^A-Za-z0-9]/', '', $tracker->identifier->kode);
-        $validated['kode'] = $grade->kode . "-" . $pi;
 
         // Kode Proses
         $kd_reg = History::with('identifier.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
@@ -50,10 +46,10 @@ class ProductController extends Controller
             $kd_reg->identifier->rawMaterial->arrivals->first()?->dcertificate?->wbhouse
         )->kode;
 
-        $tgl = $validated['tgl_mulai'];
+        $tgl = $validated['tanggal'];
         $format_tgl = date('dmy', strtotime($tgl));
 
-        $validated['kd_proses'] = $grade->kode . $noreg . '-' . $format_tgl;
+        $validated['kode'] = $grade->kode . $noreg . '-' . $format_tgl;
 
         if(
             $validated['biji'] > $tracker->sisa_biji_produk ||
@@ -88,7 +84,7 @@ class ProductController extends Controller
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_produk,
             'berat_sisa' => $tracker->sisa_berat_produk,
-            'last' => $last?->tgl_mulai,
+            'last' => $last?->tanggal,
         ]);
     }
 
@@ -98,20 +94,15 @@ class ProductController extends Controller
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
             'grades_id' => 'required|exists:fp_grades,id',
-            'kd_proses' => 'required',
-            'tgl_mulai' => 'required|date',
+            'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
             'berat' => 'required|numeric|min:0|max:99999.99',
-            'tgl_selesai' => 'nullable|date'
+            'ket' => 'nullable',
         ]);
 
         $product = Product::findOrFail($id);
         $tracker = History::with('identifier')->find($validated['histories_id']);
-
-        // Kode Grade
         $grade = FpGrade::find($validated['grades_id']);
-        $pi = preg_replace('/[^A-Za-z0-9]/', '', $tracker->identifier->kode);
-        $validated['kode'] = $grade->kode . "-" . $pi;
 
         $biji_sisa = $tracker->sisa_biji_produk + $product->biji;
         $berat_sisa = $tracker->sisa_berat_produk + $product->berat;
@@ -122,16 +113,6 @@ class ProductController extends Controller
         $format_tgl = date('dmy', strtotime($tgl));
 
         $validated['kd_proses'] = $grade . $kd_reg . '-' . $format_tgl;
-
-        if(
-            $validated['biji'] > $biji_sisa ||
-            $validated['berat'] > $berat_sisa   
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
-            ], 422);
-        }
 
         $product->update($validated);
 

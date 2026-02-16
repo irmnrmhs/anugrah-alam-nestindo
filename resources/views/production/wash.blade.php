@@ -12,13 +12,9 @@
     <th>No</th>
     <th>Kode Produk</th>
     <th>Petugas</th>
-    <th>Tanggal Mulai</th>
-    <th>Jumlah Biji</th>
-    <th>Berat</th>
-    <th>Tanggal Selesai</th>
+    <th>Tanggal</th>
+    <th>Biji Masuk</th>
     <th>Biji Keluar</th>
-    <th>Berat Keluar</th>
-    <th>Status</th>
 @stop
 
 @section('table-body')
@@ -28,21 +24,9 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $wash->history->identifier->kode }}</td>
             <td>{{ $wash->employee->nama }}</td>
-            <td>{{ $wash->tgl_mulai }}</td>
-            <td>{{ $wash->biji_masuk }}</td>
-            <td>{{ $wash->berat_masuk }}</td>
-            <td>{{ empty($wash->tgl_selesai) ? '-' : $wash->tgl_selesai }}</td>
-            <td>{{ empty($wash->biji_keluar) ? 0 : $wash->biji_keluar }}</td>
-            <td>{{ empty($wash->berat_keluar) ? 0 : $wash->berat_keluar }}</td>
-            <td>
-                @if($wash->status == 0)
-                    <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($wash->status == 1)
-                    <span class="badge bg-success">Disetujui</span>
-                @else
-                    <span class="badge bg-danger">Ditolak</span>
-                @endif
-            </td>
+            <td>{{ $wash->tanggal }}</td>
+            <td>{{ $wash->biji_in }}</td>
+            <td>{{ $wash->biji_out }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -67,15 +51,9 @@
             <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
             <input type="text" id="last" class="form-control" readonly>
         </div>
-
         <div class="col-md-4">
             <label style="font-size: 10pt">Biji Sisa</label>
             <input type="number" id="biji_sisa" class="form-control" readonly>
-        </div>
-
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Berat Sisa</label>
-            <input type="number" id="berat_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">
@@ -88,28 +66,16 @@
         </select>
     </div>
     <div class="mb-3">
-        <label>Tanggal Mulai</label>
-        <input type="date" id="tgl_mulai" class="form-control" required>
+        <label>Tanggal</label>
+        <input type="date" id="tanggal" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Biji Sebelum Proses</label>
-        <input type="number" id="biji_masuk" step="1" min="0" class="form-control" required>
+        <label>Biji Masuk</label>
+        <input type="number" id="biji_in" step="1" min="0" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Berat Sebelum Proses</label>
-        <input type="number" id="berat_masuk" step="0.001" min="0" max="99999.99" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Tanggal Selesai</label>
-        <input type="date" id="tgl_selesai" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Biji Setelah Proses</label>
-        <input type="number" id="biji_keluar" step="1" min="0" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Berat Setelah Proses</label>
-        <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
+        <label>Biji Keluar</label>
+        <input type="number" id="biji_out" step="1" min="0" class="form-control" required>
     </div>
 @stop
 
@@ -122,12 +88,9 @@
         _token: '{{ csrf_token() }}',
         histories_id: $('#histories_id').val(),
         employees_id: $('#employees_id').val(),
-        tgl_mulai: $('#tgl_mulai').val(),
-        biji_masuk: $('#biji_masuk').val(),
-        berat_masuk: $('#berat_masuk').val(),
-        tgl_selesai: $('#tgl_selesai').val(),
-        biji_keluar: $('#biji_keluar').val(),
-        berat_keluar: $('#berat_keluar').val()
+        tanggal: $('#tanggal').val(),
+        biji_in: $('#biji_in').val(),
+        biji_out: $('#biji_out').val(),
     };
 
     fetch(url, {
@@ -171,21 +134,6 @@
 
         Swal.fire('Gagal', message, 'error');
     });
-
-    {{-- fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(res => {
-        if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-        } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
-        }
-    })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap.', 'error')); --}}
 @stop
 
 @section('custom-js')
@@ -197,12 +145,10 @@
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
-                $('#berat_sisa').val(info.berat_sisa);
                 $('#last').val(info.last ?? '-');
             })
             .catch(() => {
                 $('#biji_sisa').val('-');
-                $('#berat_sisa').val('-');
                 $('#last').val('-');
             });
     });
@@ -215,12 +161,9 @@
                 $('#item_id').val(wash.id);
                 $('#histories_id').val(wash.histories_id).trigger('change');
                 $('#employees_id').val(wash.employees_id);
-                $('#tgl_mulai').val(wash.tgl_mulai);
-                $('#biji_masuk').val(wash.biji_masuk);
-                $('#berat_masuk').val(wash.berat_masuk);
-                $('#tgl_selesai').val(wash.tgl_selesai);
-                $('#biji_keluar').val(wash.biji_keluar);
-                $('#berat_keluar').val(wash.berat_keluar);
+                $('#tanggal').val(wash.tanggal);
+                $('#biji_in').val(wash.biji_in);
+                $('#biji_out').val(wash.biji_out);
                 $('#modalTitle').text('Edit Pencucian');
                 new bootstrap.Modal('#crudModal').show();
             });

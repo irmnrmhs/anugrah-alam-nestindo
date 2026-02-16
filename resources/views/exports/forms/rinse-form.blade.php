@@ -113,7 +113,7 @@
     @endphp
     <tr>
         <td class="text-center">
-            {{ $rinses->tgl_mulai }}
+            {{ $rinses->tanggal }}
         </td>
         <td>
             {{ $arrival->dcertificate->wbhouse->nama }} /
@@ -126,7 +126,7 @@
             {{ $rinses->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $rinses->biji_masuk }}
+            {{ $rinses->biji }}
         </td>
         <td>
             {{ (($rinses->cek) === 1 ? 'Lulus Cek' : 'Tidak Lulus Cek') }}

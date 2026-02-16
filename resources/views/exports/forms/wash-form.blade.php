@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($washes->tgl_mulai)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($washes->tanggal)->translatedFormat('F') }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -131,10 +131,10 @@
             {{ $washes->history->identifier->grade->grade }}
         </td>
         <td>
-            {{ $washes->biji_masuk }}
+            {{ $washes->biji_in }}
         </td>
         <td>
-            {{ $washes->biji_keluar }}
+            {{ $washes->biji_out }}
         </td>
         <td>
             {{ $washes->employee->nama }}

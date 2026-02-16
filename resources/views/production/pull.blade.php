@@ -12,15 +12,10 @@
     <th>No</th>
     <th>Kode Produk</th>
     <th>Petugas</th>
-    <th>Tanggal Mulai</th>
-    <th>Jumlah Biji</th>
-    <th>Berat</th>
-    <th>Tanggal Selesai</th>
-    <th>Biji Keluar</th>
-    <th>Berat Keluar</th>
+    <th>Tanggal</th>
+    <th>Biji</th>
     <th>Shift</th>
     <th>Keterangan</th>
-    <th>Status</th>
 @stop
 
 @section('table-body')
@@ -30,23 +25,10 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $pull->history->identifier->kode }}</td>
             <td>{{ $pull->employee->nama }}</td>
-            <td>{{ $pull->tgl_mulai }}</td>
-            <td>{{ $pull->biji_masuk }}</td>
-            <td>{{ $pull->berat_masuk }}</td>
-            <td>{{ empty($pull->tgl_selesai) ? '-' : $pull->tgl_selesai }}</td>
-            <td>{{ empty($pull->biji_keluar) ? 0 : $pull->biji_keluar }}</td>
-            <td>{{ empty($pull->berat_keluar) ? 0 : $pull->berat_keluar }}</td>
+            <td>{{ $pull->tanggal }}</td>
+            <td>{{ $pull->biji }}</td>
             <td>{{ $pull->shift }}</td>
             <td>{{ empty($pull->keterangan) ? '-' : $pull->keterangan }}</td>
-            <td>
-                @if($pull->status == 0)
-                <span class="badge bg-warning">Menunggu Persetujuan</span>
-                @elseif ($pull->status == 1)
-                <span class="badge bg-success">Disetujui</span>
-                @else
-                <span class="badge bg-danger">Ditolak</span>
-                @endif
-            </td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -76,11 +58,6 @@
             <label style="font-size: 10pt">Biji Sisa</label>
             <input type="number" id="biji_sisa" class="form-control" readonly>
         </div>
-
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Berat Sisa</label>
-            <input type="number" id="berat_sisa" class="form-control" readonly>
-        </div>
     </div>
     <div class="mb-3">
         <label>Petugas</label>
@@ -92,28 +69,12 @@
         </select>
     </div>
     <div class="mb-3">
-        <label>Tanggal Mulai</label>
-        <input type="date" id="tgl_mulai" class="form-control" required>
+        <label>Tanggal</label>
+        <input type="date" id="tanggal" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Biji Sebelum Proses</label>
-        <input type="number" id="biji_masuk" step="1" min="0" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Berat Sebelum Proses</label>
-        <input type="number" id="berat_masuk" step="0.001" min="0" max="99999.99" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Tanggal Selesai</label>
-        <input type="date" id="tgl_selesai" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Biji Setelah Proses</label>
-        <input type="number" id="biji_keluar" step="1" min="0" class="form-control">
-    </div>
-    <div class="mb-3">
-        <label>Berat Setelah Proses</label>
-        <input type="number" id="berat_keluar" step="0.001" min="0" max="99999.99" class="form-control">
+        <label>Biji</label>
+        <input type="number" id="biji" step="1" min="0" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Shift</label>
@@ -138,12 +99,8 @@
         _token: '{{ csrf_token() }}',
         histories_id: $('#histories_id').val(),
         employees_id: $('#employees_id').val(),
-        tgl_mulai: $('#tgl_mulai').val(),
-        biji_masuk: $('#biji_masuk').val(),
-        berat_masuk: $('#berat_masuk').val(),
-        tgl_selesai: $('#tgl_selesai').val(),
-        biji_keluar: $('#biji_keluar').val(),
-        berat_keluar: $('#berat_keluar').val(),
+        tanggal: $('#tanggal').val(),
+        biji: $('#biji').val(),
         shift: $('#shift').val(),
         keterangan: $('#keterangan').val()
     };
@@ -200,12 +157,10 @@
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
-                $('#berat_sisa').val(info.berat_sisa);
                 $('#last').val(info.last ?? '-');
             })
             .catch(() => {
                 $('#biji_sisa').val('-');
-                $('#berat_sisa').val('-');
                 $('#last').val('-');
             });
     });
@@ -218,12 +173,8 @@
                 $('#item_id').val(pull.id);
                 $('#histories_id').val(pull.histories_id).trigger('change');
                 $('#employees_id').val(pull.employees_id);
-                $('#tgl_mulai').val(pull.tgl_mulai);
-                $('#biji_masuk').val(pull.biji_masuk);
-                $('#berat_masuk').val(pull.berat_masuk);
-                $('#tgl_selesai').val(pull.tgl_selesai);
-                $('#biji_keluar').val(pull.biji_keluar);
-                $('#berat_keluar').val(pull.berat_keluar);
+                $('#tanggal').val(pull.tanggal);
+                $('#biji').val(pull.biji);
                 $('#shift').val(pull.shift);
                 $('#keterangan').val(pull.keterangan);
                 $('#modalTitle').text('Edit Masuk Cetak');

@@ -9,14 +9,9 @@ class Pick extends Model
     protected $fillable = [
         'histories_id',
         'employees_id',
-        'tgl_mulai',
-        'biji_masuk',
-        'berat_masuk',
-        'tgl_selesai',
-        'biji_keluar',
-        'berat_keluar',
+        'tanggal',
+        'biji',
         'keterangan',
-        'status'
     ];
 
     public function history()
