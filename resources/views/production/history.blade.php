@@ -22,15 +22,13 @@
     <th>Berat Awal</th>
     <th>Biji Sisa</th>
     <th>Berat Sisa</th>
-    {{-- <th>Biji Diproses</th>
-    <th>Berat Diproses</th> --}}
 @stop
 
 @section('table-body')
     @foreach($histories as $index => $history)
         <tr data-id="{{ $history->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $history->identifier->kode }}</td>
+            <td>{{ $history->gcolor->kode }}</td>
             <td>
                 @if($history->asal === 'PR01GB')
                     <span>Grading Bahan Baku</span>

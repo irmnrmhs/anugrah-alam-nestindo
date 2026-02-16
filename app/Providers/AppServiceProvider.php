@@ -27,6 +27,7 @@ use App\Models\Dry;
 use App\Models\Product;
 use App\Models\Area;
 use App\Models\Container;
+use App\Models\GradeColor;
 use App\Models\RmStock;
 
 use App\Observers\DCertificateObserver;
@@ -37,6 +38,7 @@ use App\Observers\WBHouseObserver;
 use App\Observers\ArrivalObserver;
 use App\Observers\SupplierObserver;
 use App\Observers\GradeObserver;
+use App\Observers\RmGradeObserver;
 use App\Observers\IdentifierObserver;
 use App\Observers\EdgeObserver;
 use App\Observers\WashObserver;
@@ -104,7 +106,8 @@ class AppServiceProvider extends ServiceProvider
         Dcertificate::observe(DCertificateObserver::class);
         Area::observe(AreaObserver::class);
         Grade::observe(GradeObserver::class);
-        ProductIdentifier::observe(IdentifierObserver::class);
+        GradeColor::observe(RmGradeObserver::class);
+        // ProductIdentifier::observe(IdentifierObserver::class);
         Edge::observe(EdgeObserver::class);
         Wash::observe(WashObserver::class);
         Correction::observe(CorrectionObserver::class);

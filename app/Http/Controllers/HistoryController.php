@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\History;
 use App\Models\ProductIdentifier;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HistoryController extends Controller
@@ -13,7 +12,7 @@ class HistoryController extends Controller
 
     public function index(): View
     {
-        $histories = History::with('identifier')->latest()->get();
+        $histories = History::with('gcolor')->latest()->get();
         $identifiers = ProductIdentifier::all();
 
         return view('production.history', compact('histories'));

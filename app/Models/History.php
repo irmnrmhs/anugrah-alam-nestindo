@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class History extends Model
 {
     protected $fillable = [
-        'identifiers_id',
+        'gcolors_id',
         'asal',
         'tujuan',
         'biji',
@@ -17,6 +17,11 @@ class History extends Model
     public function identifier()
     {
         return $this->belongsTo(ProductIdentifier::class, 'identifiers_id');
+    }
+
+    public function gcolor()
+    {
+        return $this->belongsTo(GradeColor::class, 'gcolors_id');
     }
 
     public function edges()

@@ -14,31 +14,27 @@ class CorrectionObserver
     public function created(Correction $correction): void
     {
         if (
-            empty($correction->biji_keluar) &&
-            empty($correction->berat_keluar)
+            empty($correction->biji)
         ) {
-            $correction->biji_keluar = 0;
-            $correction->berat_keluar = 0;
+            $correction->biji = 0;
         }
 
-        $history = History::where('identifiers_id', $correction->history->identifiers_id)
+        $history = History::where('gcolors_id', $correction->history->gcolors_id)
             ->where('asal', 'PR04IK')
             ->where('tujuan', 'PR05PB')
             ->first();
 
         if (!$history) {
             $history = History::create([
-                'identifiers_id' => $correction->history->identifiers_id,
+                'gcolors_id' => $correction->history->gcolors_id,
                 'asal' => 'PR04IK',
                 'tujuan' => 'PR05PB',
                 'biji' => 0,
                 'berat' => 0,
-                'status' => 0
             ]);
         }
 
-        $history->increment('biji', $correction->biji_keluar);
-        $history->increment('berat', $correction->berat_keluar);
+        $history->increment('biji', $correction->biji);
     }
 
     /**
@@ -46,49 +42,40 @@ class CorrectionObserver
      */
     public function updated(Correction $correction): void
     {
-        if (!$correction->wasChanged(['biji_keluar', 'berat_keluar'])) {
+        if (!$correction->wasChanged(['biji'])) {
             return;
         }
 
-        $history = History::where('identifiers_id', $correction->history->identifiers_id)
+        $history = History::where('gcolors_id', $correction->history->gcolors_id)
             ->where('asal', 'PR04IK')
             ->where('tujuan', 'PR05PB')
             ->first();
 
         if (!$history) return;
 
-        $history->decrement('biji', $correction->getOriginal('biji_keluar') ?? 0);
-        $history->decrement('berat', $correction->getOriginal('berat_keluar') ?? 0);
+        $history->decrement('biji', $correction->getOriginal('biji') ?? 0);
 
-        $history->increment('biji', $correction->biji_keluar ?? 0);
-        $history->increment('berat', $correction->berat_keluar ?? 0);
+        $history->increment('biji', $correction->biji ?? 0);
     }
 
     public function updating(Correction $correction)
     {
-        if (!$correction->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (!$correction->isDirty(['biji_keluar'])) {
             return;
         }
 
-        $history = History::where('identifiers_id', $correction->history->identifiers_id)
+        $history = History::where('gcolors_id', $correction->history->gcolors_id)
             ->where('asal', 'PR04IK')
             ->where('tujuan', 'PR05PB')
             ->first();
 
         if (!$history) return;
 
-        $dipakaiBiji = $history->picks()->sum('biji_masuk');
-        $dipakaiBerat = $history->picks()->sum('berat_masuk');
+        $dipakaiBiji = $history->picks()->sum('biji');
 
-        if ($correction->biji_keluar < $dipakaiBiji) {
+        if ($correction->biji < $dipakaiBiji) {
             throw ValidationException::withMessages([
-                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
-
-        if ($correction->berat_keluar < $dipakaiBerat) {
-            throw ValidationException::withMessages([
-                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+                'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
             ]);
         }
     }
@@ -104,13 +91,12 @@ class CorrectionObserver
     public function deleting(Correction $correction): void
     {
         if (
-            empty($correction->biji_keluar) &&
-            empty($correction->berat_keluar)
+            empty($correction->biji)
         ) {
             return;
         }
 
-        $history = History::where('identifiers_id', $correction->history->identifiers_id)
+        $history = History::where('gcolors_id', $correction->history->gcolors_id)
             ->where('asal', 'PR04IK')
             ->where('tujuan', 'PR05PB')
             ->first();
@@ -118,16 +104,14 @@ class CorrectionObserver
         if (!$history) return;
 
         if (
-            ($correction->biji_keluar ?? 0) > $history->sisa_biji_cabut ||
-            ($correction->berat_keluar ?? 0) > $history->sisa_berat_cabut
+            ($correction->biji ?? 0) > $history->sisa_biji_cabut
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
             ]);
         }
 
-        $history->decrement('biji', $correction->biji_keluar ?? 0);
-        $history->decrement('berat', $correction->berat_keluar ?? 0);
+        $history->decrement('biji', $correction->biji ?? 0);
 
         if ($history->biji <= 0 && $history->berat <= 0) {
             $history->delete();

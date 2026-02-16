@@ -11,7 +11,6 @@ class Pick extends Model
         'employees_id',
         'tanggal',
         'biji',
-        'berat',
         'keterangan',
     ];
 

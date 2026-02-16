@@ -14,21 +14,19 @@ class EntryObserver
     public function created(Entry $entry): void
     {
         if (
-            empty($entry->biji_keluar) &&
-            empty($entry->berat_keluar)
+            empty($entry->biji)
         ) {
-            $entry->biji_keluar = 0;
-            $entry->berat_keluar = 0;
+            $entry->biji = 0;
         }
 
-        $history = History::where('identifiers_id', $entry->history->identifiers_id)
+        $history = History::where('gcolors_id', $entry->history->gcolors_id)
             ->where('asal', 'PR08MC')
             ->where('tujuan', 'PR09KC')
             ->first();
 
         if (!$history) {
             $history = History::create([
-                'identifiers_id' => $entry->history->identifiers_id,
+                'gcolors_id' => $entry->history->gcolors_id,
                 'asal' => 'PR08MC',
                 'tujuan' => 'PR09KC',
                 'biji' => 0,
@@ -37,8 +35,7 @@ class EntryObserver
             ]);
         }
 
-        $history->increment('biji', $entry->biji_keluar);
-        $history->increment('berat', $entry->berat_keluar);
+        $history->increment('biji', $entry->biji);
     }
 
     /**
@@ -46,49 +43,40 @@ class EntryObserver
      */
     public function updated(Entry $entry): void
     {
-        if (!$entry->wasChanged(['biji_keluar', 'berat_keluar'])) {
+        if (!$entry->wasChanged(['biji'])) {
             return;
         }
 
-        $history = History::where('identifiers_id', $entry->history->identifiers_id)
+        $history = History::where('gcolors_id', $entry->history->gcolors_id)
             ->where('asal', 'PR08MC')
             ->where('tujuan', 'PR09KC')
             ->first();
 
         if (!$history) return;
 
-        $history->decrement('biji', $entry->getOriginal('biji_keluar') ?? 0);
-        $history->decrement('berat', $entry->getOriginal('berat_keluar') ?? 0);
+        $history->decrement('biji', $entry->getOriginal('biji') ?? 0);
 
-        $history->increment('biji', $entry->biji_keluar ?? 0);
-        $history->increment('berat', $entry->berat_keluar ?? 0);
+        $history->increment('biji', $entry->biji ?? 0);
     }
 
     public function updating(Entry $entry)
     {
-        if (!$entry->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (!$entry->isDirty(['biji'])) {
             return;
         }
 
-        $history = History::where('identifiers_id', $entry->history->identifiers_id)
+        $history = History::where('gcolors_id', $entry->history->gcolors_id)
             ->where('asal', 'PR08MC')
             ->where('tujuan', 'PR09KC')
             ->first();
 
         if (!$history) return;
 
-        $dipakaiBiji = $history->pulls()->sum('biji_masuk');
-        $dipakaiBerat = $history->pulls()->sum('berat_masuk');
+        $dipakaiBiji = $history->pulls()->sum('biji');
 
-        if ($entry->biji_keluar < $dipakaiBiji) {
+        if ($entry->biji < $dipakaiBiji) {
             throw ValidationException::withMessages([
-                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
-
-        if ($entry->berat_keluar < $dipakaiBerat) {
-            throw ValidationException::withMessages([
-                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+                'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
             ]);
         }
     }
@@ -104,13 +92,12 @@ class EntryObserver
     public function deleting(Entry $entry): void
     {
         if (
-            empty($entry->biji_keluar) &&
-            empty($entry->berat_keluar)
+            empty($entry->biji)
         ) {
             return;
         }
 
-        $history = History::where('identifiers_id', $entry->history->identifiers_id)
+        $history = History::where('gcolors_id', $entry->history->gcolors_id)
             ->where('asal', 'PR08MC')
             ->where('tujuan', 'PR09KC')
             ->first();
@@ -118,16 +105,14 @@ class EntryObserver
         if (!$history) return;
 
         if (
-            ($entry->biji_keluar ?? 0) > $history->sisa_biji_keluar ||
-            ($entry->berat_keluar ?? 0) > $history->sisa_berat_keluar
+            ($entry->biji ?? 0) > $history->sisa_biji_keluar
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
             ]);
         }
 
-        $history->decrement('biji', $entry->biji_keluar ?? 0);
-        $history->decrement('berat', $entry->berat_keluar ?? 0);
+        $history->decrement('biji', $entry->biji ?? 0);
 
         if ($history->biji <= 0 && $history->berat <= 0) {
             $history->delete();

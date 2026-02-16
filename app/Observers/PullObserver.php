@@ -21,14 +21,14 @@ class PullObserver
             $pull->berat_keluar = 0;
         }
 
-        $history = History::where('identifiers_id', $pull->history->identifiers_id)
+        $history = History::where('gcolors_id', $pull->history->gcolors_id)
             ->where('asal', 'PR09KC')
             ->where('tujuan', 'PR10PK')
             ->first();
 
         if (!$history) {
             $history = History::create([
-                'identifiers_id' => $pull->history->identifiers_id,
+                'gcolors_id' => $pull->history->gcolors_id,
                 'asal' => 'PR09KC',
                 'tujuan' => 'PR10PK',
                 'biji' => 0,
@@ -50,7 +50,7 @@ class PullObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $pull->history->identifiers_id)
+        $history = History::where('gcolors_id', $pull->history->gcolors_id)
             ->where('asal', 'PR09KC')
             ->where('tujuan', 'PR10PK')
             ->first();
@@ -70,7 +70,7 @@ class PullObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $pull->history->identifiers_id)
+        $history = History::where('gcolors_id', $pull->history->gcolors_id)
             ->where('asal', 'PR09KC')
             ->where('tujuan', 'PR10PK')
             ->first();
@@ -110,7 +110,7 @@ class PullObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $pull->history->identifiers_id)
+        $history = History::where('gcolors_id', $pull->history->gcolors_id)
             ->where('asal', 'PR09KC')
             ->where('tujuan', 'PR10PK')
             ->first();
