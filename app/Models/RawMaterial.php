@@ -93,6 +93,22 @@ class RawMaterial extends Model
         return $this->berat - $this->total_berat_keluar;
     }
 
+    public function reduceStock($biji, $berat)
+    {
+        if ($biji > $this->biji_sisa || $berat > $this->berat_sisa) {
+            throw new \Exception('Melebihi stok sisa');
+        }
+
+        $this->decrement('biji_sisa', $biji);
+        $this->decrement('berat_sisa', $berat);
+    }
+
+    public function returnStock($biji, $berat)
+    {
+        $this->increment('biji_sisa', $biji);
+        $this->increment('berat_sisa', $berat);
+    }
+
     public function getTotalBijiRmAttribute()
     {
         return $this->stocks()->sum('biji_keluar');

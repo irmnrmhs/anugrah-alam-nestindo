@@ -48,7 +48,6 @@ class DcertificateController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan',
-            'data' => $dcertificate,
         ]);
     }
 
@@ -77,10 +76,12 @@ class DcertificateController extends Controller
             ]
         ]);
 
+        $dcertificate->update($validated);
+
         return response()->json([
             'status'  => 'success',
             'message' => $this->obj . ' berhasil diperbarui',
-            'data'    => $dcertificate,
+            // 'data'    => $dcertificate->fresh(),
         ]);
     }
 

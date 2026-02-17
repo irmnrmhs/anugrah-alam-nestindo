@@ -151,7 +151,7 @@
 
     <script>
 
-    // ==== Multi Delete Universal ====
+    // multiple delete
     function toggleBulkDeleteButton() {
         const selected = $('.row-check:checked').length;
         if (selected > 0) $('#btnDeleteSelected').show();
@@ -180,8 +180,6 @@
             confirmButtonText: 'Ya, hapus'
         }).then(result => {
             if (result.isConfirmed) {
-
-                // URL delete multiple diambil dari attribute
                 const url = $('#dataTable').data('delete-multiple');
 
                 fetch(url, {
@@ -206,13 +204,10 @@
         });
     });
 
-
-    // ==== Main ====
     $(function() {
-        // Init datatable
         $('#dataTable').DataTable({ responsive: true });
 
-        // ==== CRUD Modal ====
+        // CRUD modal
         const crudModal = new bootstrap.Modal('#crudModal');
 
         $('#btnAdd').click(() => {
@@ -222,7 +217,7 @@
             crudModal.show();
         });
 
-        // ==== Import ====
+        // import
         const importModal = new bootstrap.Modal('#importModal');
 
         $('#btnImport').click(() => {
@@ -271,7 +266,7 @@
             });
         });
 
-        // ==== Export ====
+        // export
         const exportModal = new bootstrap.Modal('#exportModal');
 
         $('#btnExport').click(() => {
@@ -282,42 +277,16 @@
         $('#exportForm').off('submit').on('submit', function () {
             this.action = "{{ $exportUrl ?? '' }}";
             this.method = "POST";
-            this.target = "_blank"; // optional
+            this.target = "_blank";
         });
 
-
-        // $('#exportForm').submit(function (e) {
-        //     e.preventDefault();
-
-        //     let formData = new FormData(this);
-
-        //     fetch("{{ $exportUrl ?? '' }}", {
-        //         method: 'POST',
-        //         headers: {
-        //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //         },
-        //         body: formData
-        //     })
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         if (res.status === 'success') {
-        //             Swal.fire('Sukses', res.message, 'success');
-        //         } else {
-        //             Swal.fire('Gagal', res.message || 'Export gagal', 'error');
-        //         }
-        //     })
-        //     .catch(() => {
-        //         Swal.fire('Error', 'Terjadi kesalahan saat export', 'error');
-        //     });
-        // });
-
-        // Submit Form CRUD
+        // submit Form CRUD
         $('#crudForm').submit(e => {
             e.preventDefault();
             @yield('form-submit-script')
         });
 
-        // Custom JS from child
+        // custom JS from child
         @yield('custom-js')
         @if(session('error'))
         Swal.fire('Oops', @json(session('error')), 'warning');

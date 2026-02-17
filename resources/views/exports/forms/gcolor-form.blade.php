@@ -1,4 +1,4 @@
-@extends('exports.forms.form')
+s@extends('exports.forms.form')
 
 @section('title', 'Grading Warna Bahan Baku')
 
