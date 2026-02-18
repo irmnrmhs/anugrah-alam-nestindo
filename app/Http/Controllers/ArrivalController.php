@@ -34,7 +34,6 @@ class ArrivalController extends Controller
     {
         $validated = $request->validate([
             'dcertificates_id'  => 'required|exists:dcertificates,id',
-            // 'dcertificates_id'  => 'required|exists:dcertificates,id|unique:arrivals,dcertificates_id',
             'cars_id'           => 'required|exists:cars,id',
             'employees_id'      => 'required|exists:employees,id',
             'tgl_kedatangan'    => 'required|date',
@@ -76,7 +75,6 @@ class ArrivalController extends Controller
     {
         $validated = $request->validate([
             'dcertificates_id'  => 'required|exists:dcertificates,id',
-            // 'dcertificates_id'  => 'required|exists:dcertificates,id|unique:arrivals,dcertificates_id,' . $id,
             'cars_id'           => 'required|exists:cars,id',
             'employees_id'      => 'required|exists:employees,id',
             'tgl_kedatangan'   => 'required|date',

@@ -34,9 +34,7 @@ class DcertificateController extends Controller
             'companies_id' => 'required|exists:companies,id',
             'wbhouses_id' => 'required|exists:w_b_houses,id',
             'no_skp' => 'required|unique:dcertificates,no_skp',
-            'tgl_skp' => [
-                'required',
-                'date',
+            'tgl_skp' => ['required','date',
                 Rule::unique('dcertificates')->where(function ($query) use ($request) {
                     return $query->where('wbhouses_id', $request->wbhouses_id);
                 }),
@@ -65,9 +63,7 @@ class DcertificateController extends Controller
             'companies_id' => 'required|exists:companies,id',
             'wbhouses_id'  => 'required|exists:w_b_houses,id',
             'no_skp' => 'required|unique:dcertificates,no_skp,' .$id,
-            'tgl_skp' => [
-                'required',
-                'date',
+            'tgl_skp' => ['required', 'date',
                 Rule::unique('dcertificates')
                     ->where(fn ($q) =>
                         $q->where('wbhouses_id', $request->wbhouses_id)

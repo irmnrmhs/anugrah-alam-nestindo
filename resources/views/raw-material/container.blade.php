@@ -60,7 +60,7 @@
 @section('export')
     <div class="mb-3">
         <label>Kode Bahan Baku</label>
-        <select id="export_controller" class="form-control" required>
+        <select id="export" class="form-control" required>
             <option value="">-- Pilih Kode Bahan Baku --</option>
             @foreach ($containers->pluck('arrival')->unique('id') as $arrival)
                 <option value="{{ $arrival->id }}">
@@ -255,7 +255,7 @@
     $('#exportForm').on('submit', function (e) {
         e.preventDefault();
 
-        const arrivalId = $('#export_controller').val();
+        const arrivalId = $('#export').val();
         const type      = $('select[name="type"]').val();
 
         if (!arrivalId) {

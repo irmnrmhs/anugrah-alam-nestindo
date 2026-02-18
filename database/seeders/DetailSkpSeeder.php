@@ -15,17 +15,17 @@ class DetailSkpSeeder extends Seeder
     {
         DetailSkp::create([
             'dcertificates_id' => 1,
-            'tgl_panen' => '2025-12-03',
+            'tgl_panen' => '2025-12-23',
             'berat_panen' => 100,
-            'tgl_kirim' => '2025-12-05',
+            'tgl_kirim' => '2025-12-23',
             'berat_kirim' => 100
         ]);
 
         DetailSkp::create([
             'dcertificates_id' => 1,
-            'tgl_panen' => '2025-12-03',
+            'tgl_panen' => '2025-12-24',
             'berat_panen' => 250,
-            'tgl_kirim' => '2025-12-06',
+            'tgl_kirim' => '2025-12-24',
             'berat_kirim' => 200
         ]);
     }

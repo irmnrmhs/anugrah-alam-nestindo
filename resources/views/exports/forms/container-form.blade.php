@@ -111,7 +111,7 @@
     @foreach ($containers as $i => $container)
         <tr>
             <td align="center">{{ $i + 1 }}</td>
-            <td>{{ $container->arrival->tgl_kedatangan }}</td>
+            <td>{{ \Carbon\Carbon::parse($container->arrival?->tgl_kedatangan)->translatedFormat('d F Y') }}</td>
             <td>
                 {{ $container->arrival->dcertificate->wbhouse->kode ?? '-' }}
                 /

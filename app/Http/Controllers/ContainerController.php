@@ -20,18 +20,11 @@ class ContainerController extends Controller
 
     public function index(): View
     {
-        $containers = Container::with(['arrival', 'employee'])
-            ->oldest()
-            ->get();
-
+        $containers = Container::with(['arrival', 'employee'])->oldest()->get();
         $arrivals  = Arrival::orderBy('kode')->get()->unique('kode')->values();
         $employees = Employee::where('status', 1)->get();
 
-        return view('raw-material.container', compact(
-            'containers',
-            'arrivals',
-            'employees'
-        ));
+        return view('raw-material.container', compact('containers', 'arrivals', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -49,7 +42,6 @@ class ContainerController extends Controller
         return response()->json([
             'status'  => 'success',
             'message' => 'Kontainer berhasil ditambahkan',
-            'data'    => $container
         ]);
     }
 
@@ -122,7 +114,7 @@ class ContainerController extends Controller
         $type = $request->get('type', 'pdf');
 
         $containers = $arrival->containers()
-            ->with('employee')
+            ->with(['employee', 'arrival.dcertificate.wbhouse', 'arrival.rawMaterial'])
             ->orderBy('created_at')
             ->get();
         

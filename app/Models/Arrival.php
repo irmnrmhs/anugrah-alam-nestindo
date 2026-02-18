@@ -12,7 +12,6 @@ class Arrival extends Model
         'dcertificates_id',
         'cars_id',
         'employees_id', 
-        // 'receivers_id', 
         'tgl_kedatangan',
         'kondisi',
         'keterangan',
@@ -43,12 +42,11 @@ class Arrival extends Model
         return $this->belongsTo(RawMaterial::class, 'kode', 'kode');
     }
 
-    public function generateKode(): string
-    {
-        $kodeWb = $this->dcertificate->wbhouse->kode;
-        $tgl = date('dmy', strtotime($this->tgl_kedatangan));
+    // public function generateCode(): string
+    // {
+    //     $kodeWb = $this->dcertificate->wbhouse->kode;
+    //     $tgl = date('dmy', strtotime($this->tgl_kedatangan));
 
-        return $kodeWb . '-' . $tgl;
-    }
-
+    //     return $kodeWb . '-' . $tgl;
+    // }
 }

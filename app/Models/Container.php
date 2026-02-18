@@ -18,11 +18,6 @@ class Container extends Model
     {
         return $this->belongsTo(Arrival::class, 'arrivals_id');
     }
-    
-    // public function rawMaterial()
-    // {
-    //     return $this->belongsTo(RawMaterial::class, 'raw_materials_id');
-    // }
 
     public function employee()
     {
