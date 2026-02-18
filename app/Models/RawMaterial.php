@@ -72,13 +72,13 @@ class RawMaterial extends Model
     // total biji keluar
     public function getTotalBijiKeluarAttribute()
     {
-        return $this->stocks()->sum('biji_keluar');
+        return $this->stocks()->sum('biji');
     }
 
     // total berat keluar
     public function getTotalBeratKeluarAttribute()
     {
-        return $this->stocks()->sum('berat_keluar');
+        return $this->stocks()->sum('berat');
     }
 
     // biji sisa
@@ -109,15 +109,15 @@ class RawMaterial extends Model
         $this->increment('berat_sisa', $berat);
     }
 
-    public function getTotalBijiRmAttribute()
-    {
-        return $this->stocks()->sum('biji_keluar');
-    }
+    // public function getTotalBijiRmAttribute()
+    // {
+    //     return $this->stocks()->sum('biji');
+    // }
 
-    public function getTotalBeratRmAttribute()
-    {
-        return $this->stocks()->sum('berat_keluar');
-    }
+    // public function getTotalBeratRmAttribute()
+    // {
+    //     return $this->stocks()->sum('berat');
+    // }
 
     // Product Identifier Sisa
     public function getBijiSisaIdentifierAttribute(){
@@ -150,4 +150,11 @@ class RawMaterial extends Model
     public function getBijiSisaColorAttribute(){
         return $this->total_biji_rm - $this->colors()->sum('berat');
     }
+
+    public function getRbwAttribute()
+    {
+        $arrival = $this->arrivals->first();
+        return optional(optional($arrival?->dcertificate)?->wbhouse)?->nama . ' / ' . optional(optional($arrival?->dcertificate)?->wbhouse)?->kode;
+    }
+
 }

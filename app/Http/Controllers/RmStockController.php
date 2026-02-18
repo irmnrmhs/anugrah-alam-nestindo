@@ -19,7 +19,7 @@ class RmStockController extends Controller
     public string $obj = 'Stok keluar';
     public function index(): View
     {
-        $stocks = RmStock::with('rawMaterial', 'employee')->latest()->get();
+        $stocks = RmStock::with('rawMaterial.arrivals', 'employee')->latest()->get();
         $rms = RawMaterial::all();
         $employees = Employee::where('status', 1)->get();
 
@@ -31,25 +31,24 @@ class RmStockController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_keluar'   => 'nullable|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99',
+            'tanggal'   => 'nullable|date',
+            'biji' => 'required|integer|min:0',
+            'berat' => 'required|numeric|min:0|max:99999.99',
             'keterangan' => 'nullable'
         ]);
 
-        $raw = RawMaterial::find($validated['rms_id']);
+        DB::transaction(function () use ($validated) {
+            $rm = RawMaterial::lockForUpdate()->find($validated['rms_id']);
 
-        if (
-            $validated['biji_keluar'] > $raw->biji_sisa ||
-            $validated['berat_keluar'] > $raw->berat_sisa
-        ) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Melebihi stok sisa',
-            ], 422);
-        }
+            if (
+                $validated['biji'] > $rm->biji_sisa ||
+                $validated['berat'] > $rm->berat_sisa
+            ) {
+                throw new \Exception('Melebihi stok sisa');
+            }
 
-        RmStock::create($validated);
+            RmStock::create($validated);
+        });
 
         return response()->json([
             'status' => 'success',
@@ -65,13 +64,13 @@ class RmStockController extends Controller
 
     public function materialInfo($id)
     {
-        $raw = RawMaterial::findOrFail($id);
+        $rm = RawMaterial::findOrFail($id);
         $lastOut = RmStock::where('rms_id', $id)->latest()->first();
 
         return response()->json([
-            'biji_sisa' => $raw->biji_sisa,
-            'berat_sisa' => $raw->berat_sisa,
-            'last_date' => $lastOut?->tgl_keluar,
+            'biji_sisa' => $rm->biji_sisa,
+            'berat_sisa' => $rm->berat_sisa,
+            'last_date' => $lastOut?->tanggal,
         ]);
     }
 
@@ -80,29 +79,30 @@ class RmStockController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'tgl_keluar'   => 'nullable|date',
-            'biji_keluar' => 'required|integer|min:0',
-            'berat_keluar' => 'required|numeric|min:0|max:99999.99',
+            'tanggal'   => 'nullable|date',
+            'biji' => 'required|integer|min:0',
+            'berat' => 'required|numeric|min:0|max:99999.99',
             'keterangan' => 'nullable'
         ]);
 
-        $stock = RmStock::findOrFail($id);
-        $raw = RawMaterial::find($validated['rms_id']);
+        DB::transaction(function () use ($validated, $id) {
 
-        $biji_sisa = $raw->biji_sisa + $stock->biji_keluar;
-        $berat_sisa = $raw->berat_sisa + $stock->berat_keluar;
+            $stock = RmStock::lockForUpdate()->findOrFail($id);
 
-        if (
-            $validated['biji_keluar'] > $biji_sisa ||
-            $validated['berat_keluar'] > $berat_sisa
-        ) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Melebihi stok sisa',
-            ], 422);
-        }
+            $rm = RawMaterial::lockForUpdate()->find($validated['rms_id']);
 
-        $stock->update($validated);
+            $biji_sisa  = $rm->biji_sisa + $stock->biji;
+            $berat_sisa = $rm->berat_sisa + $stock->berat;
+
+            if (
+                $validated['biji'] > $biji_sisa ||
+                $validated['berat'] > $berat_sisa
+            ) {
+                throw new \Exception('Melebihi stok sisa');
+            }
+
+            $stock->update($validated);
+        });
 
         return response()->json([
             'status' => 'success',
@@ -127,9 +127,9 @@ class RmStockController extends Controller
             'items'                   => 'required|array|min:1',
             'items.*.rms_id'          => 'required|exists:raw_materials,id',
             'items.*.employees_id'    => 'required|exists:employees,id',
-            'items.*.tgl_keluar'     => 'nullable|date',
-            'items.*.biji_keluar'     => 'required|integer|min:0',
-            'items.*.berat_keluar'    => 'required|numeric|min:0|max:99999.99',
+            'items.*.tanggal'     => 'nullable|date',
+            'items.*.biji'     => 'required|integer|min:0',
+            'items.*.berat'    => 'required|numeric|min:0|max:99999.99',
             'items.*.keterangan'      => 'nullable',
         ]);
 
@@ -138,8 +138,8 @@ class RmStockController extends Controller
                 $raw = RawMaterial::find($item['rms_id']);
 
                 if (
-                    $item['biji_keluar'] > $raw->biji_sisa ||
-                    $item['berat_keluar'] > $raw->berat_sisa
+                    $item['biji'] > $raw->biji_sisa ||
+                    $item['berat'] > $raw->berat_sisa
                 ) {
                     throw new \Exception('Melebihi stok sisa');
                 }

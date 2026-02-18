@@ -19,8 +19,8 @@ class RmStockObserver
     {
         // $raw = $stock->rawMaterial;
 
-        // $totalBijiKeluar = $raw->stocks()->sum('biji_keluar');
-        // $totalBeratKeluar = $raw->stocks()->sum('berat_keluar');
+        // $totalBijiKeluar = $raw->stocks()->sum('biji');
+        // $totalBeratKeluar = $raw->stocks()->sum('berat');
 
         // $totalBijiIdentifier = $raw->identifiers()->sum('biji');
         // $totalBeratIdentifier = $raw->identifiers()->sum('berat');
@@ -36,8 +36,8 @@ class RmStockObserver
         //     - $totalBeratIdentifier;
 
         // if (
-        //     $stock->biji_keluar > $bijiTersedia ||
-        //     $stock->berat_keluar > $beratTersedia
+        //     $stock->biji > $bijiTersedia ||
+        //     $stock->berat > $beratTersedia
         // ) {
         //     throw ValidationException::withMessages([
         //         'stok' => 'Melebihi stok bahan baku yang tersedia'
@@ -54,11 +54,11 @@ class RmStockObserver
 
         $totalBijiKeluar = $raw->stocks()
             ->where('id', '!=', $stock->id)
-            ->sum('biji_keluar');
+            ->sum('biji');
 
         $totalBeratKeluar = $raw->stocks()
             ->where('id', '!=', $stock->id)
-            ->sum('berat_keluar');
+            ->sum('berat');
 
         $totalBijiIdentifier = $raw->identifiers()->sum('biji');
         $totalBeratIdentifier = $raw->identifiers()->sum('berat');
@@ -74,8 +74,8 @@ class RmStockObserver
             - $totalBeratIdentifier;
 
         if (
-            $stock->biji_keluar > $bijiTersedia ||
-            $stock->berat_keluar > $beratTersedia
+            $stock->biji > $bijiTersedia ||
+            $stock->berat > $beratTersedia
         ) {
             throw new HttpResponseException(
                 response()->json([

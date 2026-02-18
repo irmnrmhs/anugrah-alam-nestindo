@@ -30,12 +30,13 @@
                 {{ optional($stock->rawMaterial->arrivals->sortBy('tgl_kedatangan')->first())->tgl_kedatangan ?? '-' }}
             </td>
             <td>
-                {{ (optional(optional($stock->rawMaterial->arrivals->first())->dcertificate)->wbhouse->nama) . " / " . optional(optional($stock->rawMaterial->arrivals->first())->dcertificate)->wbhouse->kode }}
+                <!-- {{ (optional(optional($stock->rawMaterial->arrivals->first())->dcertificate)->wbhouse->nama) . " / " . optional(optional($stock->rawMaterial->arrivals->first())->dcertificate)->wbhouse->kode }} -->
+                {{ $stock->rawMaterial->rbw }}
             </td>
             <td>{{ $stock->rawMaterial->kode }}</td>
-            <td>{{ $stock->tgl_keluar }}</td>
-            <td>{{ $stock->biji_keluar }}</td>
-            <td>{{ $stock->berat_keluar }}</td>
+            <td>{{ $stock->tanggal }}</td>
+            <td>{{ $stock->biji }}</td>
+            <td>{{ $stock->berat }}</td>
             <td>{{ empty($stock->keterangan) ? '-' : $stock->keterangan }}</td>
             <td>{{ $stock->employee->nama }}</td>
             <td>
@@ -59,11 +60,11 @@
 
     <div class="mb-3">
         <label>Tanggal Keluar</label>
-        <input type="date" id="tgl_keluar" class="form-control">
+        <input type="date" id="tanggal" class="form-control">
     </div>
 
     <div class="mb-3">
-        <label>Jumlah Data</label>
+        <label>Jumlah Stok</label>
         <input type="number" min="1" id="jumlah_stok" class="form-control" required>
     </div>
 @stop
@@ -94,13 +95,13 @@
 @section('form-submit-script')
     const id = $('#item_id').val();
     const rms_id = $('#rms_id').val();
-    const tgl_keluar = $('#tgl_keluar').val();
+    const tanggal = $('#tanggal').val();
     const jumlah = parseInt($('#jumlah_stok').val());
 
-    if (!rms_id || jumlah < 1) {
+    <!-- if (!rms_id || jumlah < 1) {
         Swal.fire('Error', 'Lengkapi Kode & Jumlah Stok!', 'error');
         return;
-    }
+    } -->
 
     bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
 
@@ -154,10 +155,10 @@
         for (let i = 1; i <= jumlah; i++) {
             list.push({
                 rms_id,
-                tgl_keluar,
+                tanggal,
                 employees_id: $(`.c-petugas[data-index="${i}"]`).val(),
-                biji_keluar: $(`.c-biji[data-index="${i}"]`).val(),
-                berat_keluar: $(`.c-berat[data-index="${i}"]`).val(),
+                biji: $(`.c-biji[data-index="${i}"]`).val(),
+                berat: $(`.c-berat[data-index="${i}"]`).val(),
                 keterangan: $(`.c-keterangan[data-index="${i}"]`).val(),
             });
         }
@@ -189,7 +190,6 @@
         fetch(`/raw-material-info/${rms_id}`)
             .then(r => r.json())
             .then(info => {
-                // simpan info ini ke variabel lokal
                 window.last_date = info.last_date ?? '-';
                 window.biji_sisa = info.biji_sisa ?? 0;
                 window.berat_sisa = info.berat_sisa ?? 0;
@@ -212,15 +212,15 @@
                 let html = `
                     <label>Tanggal</label>
                     <input type="date" class="form-control mb-2" id="edit_tgl"
-                        value="${rmstock.tgl_keluar}" min="0">
+                        value="${rmstock.tanggal}" min="0">
 
                     <label>Biji</label>
                     <input type="number" class="form-control mb-2" id="edit_biji"
-                        value="${rmstock.biji_keluar}" min="0">
+                        value="${rmstock.biji}" min="0">
 
                     <label>Berat</label>
                     <input type="number" class="form-control mb-2" id="edit_berat"
-                        value="${rmstock.berat_keluar}" min="0" step="0.01">
+                        value="${rmstock.berat}" min="0" step="0.01">
 
                     <label>Keterangan</label>
                     <input type="text" class="form-control mb-2" id="edit_keterangan"
@@ -245,9 +245,9 @@
 
                     let payload = {
                         rms_id: rmstock.rms_id,
-                        tgl_keluar: $('#edit_tgl').val(),
-                        biji_keluar: parseInt($('#edit_biji').val()),
-                        berat_keluar: parseFloat($('#edit_berat').val()),
+                        tanggal: $('#edit_tgl').val(),
+                        biji: parseInt($('#edit_biji').val()),
+                        berat: parseFloat($('#edit_berat').val()),
                         keterangan: $('#edit_keterangan').val() || null,
                         employees_id: parseInt($('#edit_petugas').val())
                     };

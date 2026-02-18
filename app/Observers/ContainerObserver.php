@@ -69,20 +69,20 @@ class ContainerObserver
         $rm = RawMaterial::where('kode', $container->arrival->kode)->first();
         if (!$rm) return;
 
-        $bijiBaru  = $rm->biji  - $container->biji;
-        $beratBaru = $rm->berat - $container->berat;
+        $newBiji  = $rm->biji  - $container->biji;
+        $newBerat = $rm->berat - $container->berat;
 
         if (
-            $bijiBaru  < $rm->total_biji_keluar ||
-            $beratBaru < $rm->total_berat_keluar
+            $newBiji  < $rm->total_biji_keluar ||
+            $newBerat < $rm->total_berat_keluar
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Kontainer tidak dapat dihapus karena stok sudah digunakan'
             ]);
         }
 
-        $rm->biji  = $bijiBaru;
-        $rm->berat = $beratBaru;
+        $rm->biji  = $newBiji;
+        $rm->berat = $newBerat;
         $rm->save();
     }
 

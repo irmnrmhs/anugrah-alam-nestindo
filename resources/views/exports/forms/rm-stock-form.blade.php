@@ -44,7 +44,7 @@
         <i>(Date)</i>
     </td>
     <td>
-        : {{ \Carbon\Carbon::parse($document->tgl)->translatedFormat('d F Y') }}
+        : {{ \Carbon\Carbon::parse($document->tanggal)->translatedFormat('d F Y') }}
     </td>
 </tr>
 @endsection
@@ -58,7 +58,7 @@
     </td>
     <td width="35%">
         : {{ now()->translatedFormat('F') }}
-        {{-- : {{ $stock->tgl_keluar->translatedFormat('F') }} --}}
+        {{-- : {{ $stock->tanggal->translatedFormat('F') }} --}}
     </td>
     <td width="25%">    
         Bagian <i>(Department)</i>
@@ -133,7 +133,7 @@
         <td class="text-center">{{ $index + 1 }}</td>
 
         <td class="text-center">
-            {{ $arrival->tgl_kedatangan ?? '-' }}
+            {{ $arrival->tanggal_kedatangan ?? '-' }}
         </td>
 
         <td>
@@ -150,23 +150,23 @@
         </td>
 
         <td class="text-right">
-            {{ $stock->biji_keluar ?? '-' }}
+            {{ $stock->biji ?? '-' }}
         </td>
 
         <td class="text-right">
-            {{ $stock->berat_keluar ?? '-' }}
+            {{ $stock->berat ?? '-' }}
         </td>
 
         <td class="text-center">
-            {{ $stock->tgl_keluar }}
+            {{ $stock->tanggal }}
         </td>
 
         <td class="text-right">
-            {{ $stock->biji_keluar }}
+            {{ $stock->biji }}
         </td>
 
         <td class="text-right">
-            {{ $stock->berat_keluar }}
+            {{ $stock->berat }}
         </td>
 
         <td>
