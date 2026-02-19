@@ -15,7 +15,7 @@
 
 @section('table-headers')
     <th>No</th>
-    <th>Kode Produk</th>
+    <th>Kode Bahan Baku</th>
     <th>Asal</th>
     <th>Tujuan</th>
     <th>Biji Awal</th>
@@ -28,7 +28,7 @@
     @foreach($histories as $index => $history)
         <tr data-id="{{ $history->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $history->gcolor->kode }}</td>
+            <td>{{ $history->gcolor->rawMaterial->kode }}</td>
             <td>
                 @if($history->asal === 'PR01GB')
                     <span>Grading Bahan Baku</span>

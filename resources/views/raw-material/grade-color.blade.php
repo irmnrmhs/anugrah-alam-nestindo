@@ -100,16 +100,15 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <input type="number"
-                                            name="data[{{ $feather->id }}][{{ $color->id }}][berat]"
-                                            class="form-control form-control-sm"
-                                            placeholder="Berat">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <input type="number"
                                             name="data[{{ $feather->id }}][{{ $color->id }}][biji]"
                                             class="form-control form-control-sm"
                                             placeholder="Biji">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="number"
+                                            name="data[{{ $feather->id }}][{{ $color->id }}][berat]"
+                                            class="form-control form-control-sm"
+                                            placeholder="Berat">
                                     </div>
                                 </div>
                             </div>

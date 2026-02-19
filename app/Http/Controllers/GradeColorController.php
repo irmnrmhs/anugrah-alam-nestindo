@@ -40,12 +40,51 @@ class GradeColorController extends Controller
             'data' => 'required|array',
         ]);
 
+        $rm = RawMaterial::findOrFail($request->rms_id);
+
         DB::beginTransaction();
+
         try {
+
+            $totalBerat = 0;
+            $totalBiji  = 0;
+
+            // 🔹 1. Hitung total dulu
             foreach ($request->data as $featherId => $colors) {
                 foreach ($colors as $colorId => $values) {
+
                     $berat = $values['berat'] ?? 0;
                     $biji  = $values['biji'] ?? 0;
+
+                    if ($berat <= 0 && $biji <= 0) continue;
+
+                    $totalBerat += $berat;
+                    $totalBiji  += $biji;
+                }
+            }
+
+            // 🔹 2. Validasi stok sisa
+            if ($totalBerat > $rm->berat_sisa_color) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Total berat melebihi stok sisa'
+                ], 422);
+            }
+
+            if ($totalBiji > $rm->biji_sisa_color) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Total biji melebihi stok sisa'
+                ], 422);
+            }
+
+            // 🔹 3. Insert data
+            foreach ($request->data as $featherId => $colors) {
+                foreach ($colors as $colorId => $values) {
+
+                    $berat = $values['berat'] ?? 0;
+                    $biji  = $values['biji'] ?? 0;
+
                     if ($berat <= 0 && $biji <= 0) continue;
 
                     GradeColor::create([
@@ -62,11 +101,20 @@ class GradeColorController extends Controller
             }
 
             DB::commit();
-            return response()->json(['status'=>'success','message'=>'Grading warna berhasil disimpan']);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Grading warna berhasil disimpan'
+            ]);
 
         } catch (\Exception $e) {
+
             DB::rollBack();
-            return response()->json(['status'=>'error','message'=>$e->getMessage()],422);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 422);
         }
     }
 
@@ -88,40 +136,92 @@ class GradeColorController extends Controller
         ]);
     }
 
-    public function update(Request $request,int $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
-            'berat' => 'required|array',
-            'biji' => 'required|array',
+            'data' => 'required|array',
         ]);
 
         $grade = GradeColor::findOrFail($id);
         $rm = RawMaterial::findOrFail($validated['rms_id']);
 
-        $colorId = array_key_first($validated['berat']);
-        $beratBaru = $validated['berat'][$colorId];
-        $bijiBaru = $validated['biji'][$colorId];
+        DB::beginTransaction();
 
-        $berat_sisa = $rm->berat_sisa_color + $grade->berat;
-        $biji_sisa  = $rm->biji_sisa_color + $grade->biji;
+        try {
 
-        if($beratBaru > $berat_sisa || $bijiBaru > $biji_sisa){
-            return response()->json(['status'=>'error','message'=>'Melebihi stok sisa'],422);
+            $totalBeratBaru = 0;
+            $totalBijiBaru  = 0;
+
+            $featherIdBaru = null;
+            $colorIdBaru   = null;
+
+            // 🔹 1. Hitung total baru (meskipun cuma 1 kombinasi aktif)
+            foreach ($validated['data'] as $featherId => $colors) {
+                foreach ($colors as $colorId => $values) {
+
+                    $berat = $values['berat'] ?? 0;
+                    $biji  = $values['biji'] ?? 0;
+
+                    if ($berat <= 0 && $biji <= 0) continue;
+
+                    $totalBeratBaru += $berat;
+                    $totalBijiBaru  += $biji;
+
+                    $featherIdBaru = $featherId;
+                    $colorIdBaru   = $colorId;
+                }
+            }
+
+            // 🔹 2. Hitung stok tersedia (kembalikan nilai lama dulu)
+            $stokBeratTersedia = $rm->berat_sisa_color + $grade->berat;
+            $stokBijiTersedia  = $rm->biji_sisa_color + $grade->biji;
+
+            // 🔹 3. Validasi total
+            if ($totalBeratBaru > $stokBeratTersedia) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Total berat melebihi stok sisa'
+                ], 422);
+            }
+
+            if ($totalBijiBaru > $stokBijiTersedia) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Total biji melebihi stok sisa'
+                ], 422);
+            }
+
+            // 🔹 4. Update data
+            $grade->update([
+                'rms_id' => $validated['rms_id'],
+                'employees_id' => $validated['employees_id'],
+                'tanggal' => $validated['tanggal'],
+                'feathers_id' => $featherIdBaru,
+                'colors_id' => $colorIdBaru,
+                'berat' => $totalBeratBaru,
+                'biji' => $totalBijiBaru,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $this->obj . ' berhasil diperbarui',
+                'data' => $grade
+            ]);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 422);
         }
-
-        $grade->update([
-            'rms_id' => $validated['rms_id'],
-            'employees_id' => $validated['employees_id'],
-            'tanggal' => $validated['tanggal'],
-            'colors_id' => $colorId,
-            'berat' => $beratBaru,
-            'biji' => $bijiBaru,
-        ]);
-
-        return response()->json(['status'=>'success','message'=>$this->obj.' berhasil diperbarui','data'=>$grade]);
     }
 
     public function destroy(int $id): JsonResponse

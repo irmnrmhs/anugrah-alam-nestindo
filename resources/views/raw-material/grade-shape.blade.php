@@ -4,6 +4,8 @@
     $title = 'Kelola Grading Bentuk';
     $singular = 'Grading Bentuk';
     $deleteMultipleUrl = '/gshapes/delete-multiple';
+    $hideExportButton = true;
+    $hideImportButton = true;
     // $importUrl = route('rmstocks.import');
     // $templateUrl = route('rmstocks.template');
 @endphp

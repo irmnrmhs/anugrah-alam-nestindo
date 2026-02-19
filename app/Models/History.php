@@ -77,12 +77,12 @@ class History extends Model
     // 1. Sesek Kaki
     public function getTotalBijiSesekAttribute()
     {
-        return $this->edges()->sum('biji_masuk');
+        return $this->edges()->sum('biji');
     }
 
     public function getTotalBeratSesekAttribute()
     {
-        return $this->edges()->sum('berat_masuk');
+        return $this->edges()->sum('berat');
     }
 
     public function getSisaBijiSesekAttribute()

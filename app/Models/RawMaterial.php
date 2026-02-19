@@ -144,11 +144,11 @@ class RawMaterial extends Model
 
     // Grade Color Sisa
     public function getBeratSisaColorAttribute(){
-        return $this->total_berat_keluar - $this->colors()->sum('biji');
+        return $this->total_berat_keluar - $this->colors()->sum('berat');
     }
 
     public function getBijiSisaColorAttribute(){
-        return $this->total_biji_keluar - $this->colors()->sum('berat');
+        return $this->total_biji_keluar - $this->colors()->sum('biji');
     }
 
     public function getRbwAttribute()

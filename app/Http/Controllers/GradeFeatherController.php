@@ -74,7 +74,7 @@ class GradeFeatherController extends Controller
 
                 $biji = $request->biji[$featherId] ?? 0;
 
-                if ($berat <= 0 || $biji <= 0) {
+                if ($berat <= 0 && $biji <= 0) {
                     continue;
                 }
 

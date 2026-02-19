@@ -18,14 +18,14 @@ class RmGradeObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $gradeColor->id)
+        $history = History::where('gcolors_id', $gradeColor->id)
             ->where('asal', 'PR01GB')
             ->where('tujuan', 'PR02SK')
             ->first();
 
         if (!$history) {
             $history = History::create([
-                'identifiers_id' => $gradeColor->id,
+                'gcolors_id' => $gradeColor->id,
                 'asal' => 'PR01GB',
                 'tujuan' => 'PR02SK',
                 'biji' => 0,
@@ -43,7 +43,7 @@ class RmGradeObserver
             return;
         }
 
-        $history = History::where('identifiers_id', $gradeColor->id)
+        $history = History::where('gcolors_id', $gradeColor->id)
                 ->where('asal', 'PR01GB')
                 ->where('tujuan', 'PR02SK')
                 ->first();
@@ -73,7 +73,7 @@ class RmGradeObserver
         // 1. Sync stok ke history
         if ($gradeColor->wasChanged(['biji', 'berat'])) {
 
-            $history = History::where('identifiers_id', $gradeColor->id)
+            $history = History::where('gcolors_id', $gradeColor->id)
                 ->where('asal', 'PR01GB')
                 ->where('tujuan', 'PR02SK')
                 ->first();
@@ -91,7 +91,7 @@ class RmGradeObserver
         if ($gradeColor->wasChanged('kode')) {
 
             $products = Product::whereHas('history', function ($q) use ($gradeColor) {
-                $q->where('identifiers_id', $gradeColor->id);
+                $q->where('gcolors_id', $gradeColor->id);
             })->with(['history', 'grade'])->get();
 
             foreach ($products as $product) {
