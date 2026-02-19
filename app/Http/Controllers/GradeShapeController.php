@@ -39,15 +39,18 @@ class GradeShapeController extends Controller
 
         try {
 
+            $totalBerat = array_sum($request->berat);
+
+            if ($totalBerat > $rm->berat_sisa_shape) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Total berat melebihi stok sisa',
+                ], 422);
+            }
+
             foreach ($request->berat as $shapeId => $berat) {
 
                 if ($berat <= 0) continue;
-
-                $totalBerat = array_sum($request->berat);
-
-                if ($totalBerat > $rm->berat_sisa_shape) {
-                    throw new \Exception('Total berat melebihi stok sisa');
-                }
 
                 GradeShape::create([
                     'rms_id' => $request->rms_id,
@@ -105,25 +108,29 @@ class GradeShapeController extends Controller
         $grade = GradeShape::findOrFail($id);
         $rm = RawMaterial::findOrFail($validated['rms_id']);
 
-        $shapeId = array_key_first($validated['berat']);
-        $beratBaru = $validated['berat'][$shapeId];
+        $totalBeratBaru = array_sum($validated['berat']);
 
-        $berat_sisa = $rm->berat_sisa_shape + $grade->berat;
+        $stokTersedia = $rm->berat_sisa_shape + $grade->berat;
 
-        if ($beratBaru > $berat_sisa) {
+        if ($totalBeratBaru > $stokTersedia) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa',
             ], 422);
         }
 
-        $grade->update([
-            'rms_id' => $validated['rms_id'],
-            'employees_id' => $validated['employees_id'],
-            'tanggal' => $validated['tanggal'],
-            'shapes_id' => $shapeId,
-            'berat' => $beratBaru,
-        ]);
+        foreach ($validated['berat'] as $shapeId => $berat) {
+
+            if ($berat <= 0) continue;
+
+            $grade->update([
+                'rms_id' => $validated['rms_id'],
+                'employees_id' => $validated['employees_id'],
+                'tanggal' => $validated['tanggal'],
+                'shapes_id' => $shapeId,
+                'berat' => $berat,
+            ]);
+        }
 
         return response()->json([
             'status' => 'success',

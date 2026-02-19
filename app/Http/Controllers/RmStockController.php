@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\RmStockExport;
+use Illuminate\Validation\ValidationException;
 
 class RmStockController extends Controller
 {
@@ -28,32 +29,46 @@ class RmStockController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'rms_id' => 'required|exists:raw_materials,id',
-            'employees_id' => 'required|exists:employees,id',
-            'tanggal'   => 'nullable|date',
-            'biji' => 'required|integer|min:0',
-            'berat' => 'required|numeric|min:0|max:99999.99',
-            'keterangan' => 'nullable'
-        ]);
+        try {
 
-        DB::transaction(function () use ($validated) {
-            $rm = RawMaterial::lockForUpdate()->find($validated['rms_id']);
+            $validated = $request->validate([
+                'rms_id' => 'required|exists:raw_materials,id',
+                'employees_id' => 'required|exists:employees,id',
+                'tanggal'   => 'nullable|date',
+                'biji' => 'required|integer|min:0',
+                'berat' => 'required|numeric|min:0|max:99999.99',
+                'keterangan' => 'nullable'
+            ]);
 
-            if (
-                $validated['biji'] > $rm->biji_sisa ||
-                $validated['berat'] > $rm->berat_sisa
-            ) {
-                throw new \Exception('Melebihi stok sisa');
-            }
+            DB::transaction(function () use ($validated) {
 
-            RmStock::create($validated);
-        });
+                $rm = RawMaterial::lockForUpdate()->find($validated['rms_id']);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => $this->obj . ' berhasil ditambahkan'
-        ]);
+                if (
+                    $validated['biji'] > $rm->biji_sisa ||
+                    $validated['berat'] > $rm->berat_sisa
+                ) {
+                    throw new \Exception('Melebihi stok sisa');
+                }
+
+                RmStock::create($validated);
+
+                $rm->decrement('biji_sisa', $validated['biji']);
+                $rm->decrement('berat_sisa', $validated['berat']);
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $this->obj . ' berhasil ditambahkan'
+            ]);
+
+        } catch (\Throwable $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 
     public function show(int $id): JsonResponse

@@ -121,34 +121,34 @@ class RawMaterial extends Model
 
     // Product Identifier Sisa
     public function getBijiSisaIdentifierAttribute(){
-        return $this->total_biji_rm - $this->identifiers()->sum('biji');
+        return $this->total_biji_keluar - $this->identifiers()->sum('biji');
     }
 
     public function getBeratSisaIdentifierAttribute(){
-        return $this->total_berat_rm - $this->identifiers()->sum('berat');
+        return $this->total_berat_keluar - $this->identifiers()->sum('berat');
     }
 
     // Grade Shape Sisa
     public function getBeratSisaShapeAttribute(){
-        return $this->total_berat_rm - $this->shapes()->sum('berat');
+        return $this->total_berat_keluar - $this->shapes()->sum('berat');
     }
 
     // Grade Feather Sisa
     public function getBeratSisaFeatherAttribute(){
-        return $this->total_berat_rm - $this->feathers()->sum('biji');
+        return $this->total_berat_keluar - $this->feathers()->sum('biji');
     }
 
     public function getBijiSisaFeatherAttribute(){
-        return $this->total_biji_rm - $this->feathers()->sum('berat');
+        return $this->total_biji_keluar - $this->feathers()->sum('berat');
     }
 
     // Grade Color Sisa
     public function getBeratSisaColorAttribute(){
-        return $this->total_berat_rm - $this->colors()->sum('biji');
+        return $this->total_berat_keluar - $this->colors()->sum('biji');
     }
 
     public function getBijiSisaColorAttribute(){
-        return $this->total_biji_rm - $this->colors()->sum('berat');
+        return $this->total_biji_keluar - $this->colors()->sum('berat');
     }
 
     public function getRbwAttribute()

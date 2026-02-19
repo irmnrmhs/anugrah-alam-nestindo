@@ -98,10 +98,10 @@
     const tanggal = $('#tanggal').val();
     const jumlah = parseInt($('#jumlah_stok').val());
 
-    <!-- if (!rms_id || jumlah < 1) {
-        Swal.fire('Error', 'Lengkapi Kode & Jumlah Stok!', 'error');
-        return;
-    } -->
+    // if (!rms_id || jumlah < 1) {
+    //    Swal.fire('Error', 'Lengkapi Kode & Jumlah Stok!', 'error');
+    //    return;
+    // }
 
     bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
 
@@ -167,17 +167,22 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({ items: list })
         })
-        .then(r => r.json())
+        .then(async res => {
+            const data = await res.json();
+            if (!res.ok) throw data;
+            return data;
+        })
         .then(res => {
-            if (res.status === 'success') {
-                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
-            } else {
-                Swal.fire('Error', res.message, 'error');
-            }
+            Swal.fire('Berhasil', res.message, 'success')
+                .then(() => location.reload());
+        })
+        .catch(err => {
+            Swal.fire('Error', err.message, 'error');
         });
     });
 @stop
@@ -256,18 +261,22 @@
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Accept': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         body: JSON.stringify(payload)
                     })
-                    .then(r => r.json())
+                    .then(async res => {
+                        const data = await res.json();
+                        if (!res.ok) throw data;
+                        return data;
+                    })
                     .then(res => {
-                        if (res.status === 'success') {
-                            Swal.fire('Berhasil', res.message, 'success')
-                                .then(() => location.reload());
-                        } else {
-                            Swal.fire('Error', res.message, 'error');
-                        }
+                        Swal.fire('Berhasil', res.message, 'success')
+                            .then(() => location.reload());
+                    })
+                    .catch(err => {
+                        Swal.fire('Error', err.message, 'error');
                     });
                 });
             });

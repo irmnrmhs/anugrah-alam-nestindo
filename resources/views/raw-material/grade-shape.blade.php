@@ -108,6 +108,7 @@
         const value = $(this).val();
         const shapeId = name.match(/\d+/)[0];
 
+        <!-- if berat null atau berat 0 maka data tidak ditambahkan  -->
         if (value && parseFloat(value) > 0) {
             beratInputs[shapeId] = value;
         }

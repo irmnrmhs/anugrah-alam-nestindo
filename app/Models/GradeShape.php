@@ -29,33 +29,39 @@ class GradeShape extends Model
         return $this->belongsTo(Shape::class, 'shapes_id');
     }
 
-    public function mk()
-    {
-        $mk = $this->shape()->where('kode', 'mk')->get();
-        return $mk;
-    }
+    // public function mk()
+    // {
+    //     $mk = $this->shape()->where('kode', 'mk')->get();
+    //     return $mk;
+    // }
 
-    public function ovl()
-    {
-        $ovl = $this->shape()->where('kode', 'ovl')->get();
-        return $ovl;
-    }
+    // public function ovl()
+    // {
+    //     $ovl = $this->shape()->where('kode', 'ovl')->get();
+    //     return $ovl;
+    // }
 
-    public function sdt()
-    {
-        $sdt = $this->shape()->where('kode', 'sdt')->get();
-        return $sdt;
-    }
+    // public function sdt()
+    // {
+    //     $sdt = $this->shape()->where('kode', 'sdt')->get();
+    //     return $sdt;
+    // }
 
-    public function pth()
-    {
-        $pth = $this->shape()->where('kode', 'pth')->get();
-        return $pth;
-    }
+    // public function pth()
+    // {
+    //     $pth = $this->shape()->where('kode', 'pth')->get();
+    //     return $pth;
+    // }
 
-    public function hcr()
-    {
-        $hcr = $this->shape()->where('kode', 'hcr')->get();
-        return $hcr;
-    }
+    // public function hcr()
+    // {
+    //     $hcr = $this->shape()->where('kode', 'hcr')->get();
+    //     return $hcr;
+    // }
+
+    // public function isMK(): bool
+    // {
+    //     return $this->shape?->kode === 'mk';
+    // }
+
 }
