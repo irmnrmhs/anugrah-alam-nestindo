@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GradeColor;
+use App\Models\GradeFeather;
 use App\Models\RawMaterial;
 use App\Models\Document;
 use App\Models\Employee;
@@ -285,5 +286,17 @@ class GradeColorController extends Controller
         GradeColor::whereIn('id',$ids)->delete();
 
         return response()->json(['status'=>'success','message'=>'Data terpilih berhasil dihapus']);
+    }
+
+    public function getFeathersByRms($rms_id)
+    {
+        $feathers = GradeFeather::where('rms_id', $rms_id)
+            ->with('feather')
+            ->get()
+            ->pluck('feather')
+            ->unique('id')
+            ->values();
+
+        return response()->json($feathers);
     }
 }

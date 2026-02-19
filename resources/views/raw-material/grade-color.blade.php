@@ -14,7 +14,7 @@
     <th>Tanggal</th>
     <th>RBW/Noreg</th>
     <th>Kode Bahan Baku</th>
-    <th>Jenis Bentuk</th>
+    <th>Jenis Bulu</th>
     <th>Jenis Warna</th>
     <th>Berat</th>
     <th>Biji</th>
@@ -228,18 +228,38 @@
         const id = $(this).val();
         if (!id) return;
 
-        fetch(`/raw-material-info-gc/${id}`)
-            .then(r => r.json())
-            .then(info => {
-                $('#biji_sisa').val(info.biji_sisa);
-                $('#berat_sisa').val(info.berat_sisa);
-                $('#last').val(info.last_date ?? '-');
-            })
-            .catch(() => {
-                $('#biji_sisa').val('-');
-                $('#berat_sisa').val('-');
-                $('#last').val('-');
+        Promise.all([
+            fetch(`/raw-material-info-gc/${id}`).then(r => r.json()),
+            fetch(`/grade-color-feathers/${id}`).then(r => r.json())
+        ])
+        .then(([info, feathers]) => {
+
+            // ========================
+            // 1️⃣ Update info bahan baku
+            // ========================
+            $('#biji_sisa').val(info.biji_sisa);
+            $('#berat_sisa').val(info.berat_sisa);
+            $('#last').val(info.last_date ?? '-');
+
+            // ========================
+            // 2️⃣ Disable semua dulu
+            // ========================
+            $('.feather-group input').prop('disabled', true);
+
+            // ========================
+            // 3️⃣ Enable yg sesuai
+            // ========================
+            feathers.forEach(f => {
+                $(`#feather-group-${f.id} input`).prop('disabled', false);
             });
+
+        })
+        .catch(() => {
+            $('#biji_sisa').val('-');
+            $('#berat_sisa').val('-');
+            $('#last').val('-');
+            $('.feather-group input').prop('disabled', true);
+        });
     });
 
     $(document).on('click', '.btnTambah', function() {
