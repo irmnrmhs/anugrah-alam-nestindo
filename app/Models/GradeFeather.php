@@ -33,21 +33,21 @@ class GradeFeather extends Model
         return $this->belongsTo(Feather::class, 'feathers_id');
     }
 
-    public function brp()
-    {
-        $brp = $this->feather()->where('kode', 'brp')->get();
-        return $brp;
-    }
+    // public function brp()
+    // {
+    //     $brp = $this->feather()->where('kode', 'brp')->get();
+    //     return $brp;
+    // }
 
-    public function bs()
-    {
-        $bs = $this->feather()->where('kode', 'bs')->get();
-        return $bs;
-    }
+    // public function bs()
+    // {
+    //     $bs = $this->feather()->where('kode', 'bs')->get();
+    //     return $bs;
+    // }
 
-    public function bb()
-    {
-        $bb = $this->feather()->where('kode', 'bb')->get();
-        return $bb;
-    }
+    // public function bb()
+    // {
+    //     $bb = $this->feather()->where('kode', 'bb')->get();
+    //     return $bb;
+    // }
 }

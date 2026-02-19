@@ -59,13 +59,13 @@
         </div>
 
         <div class="col-md-4">
-            <label style="font-size: 10pt">Berat Sisa</label>
-            <input type="number" id="berat_sisa" class="form-control" readonly>
+            <label style="font-size: 10pt">Biji Sisa</label>
+            <input type="number" id="biji_sisa" class="form-control" readonly>
         </div>
 
         <div class="col-md-4">
-            <label style="font-size: 10pt">Biji Sisa</label>
-            <input type="number" id="biji_sisa" class="form-control" readonly>
+            <label style="font-size: 10pt">Berat Sisa</label>
+            <input type="number" id="berat_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">
@@ -92,21 +92,20 @@
 
                     <div class="row">
                         <div class="col-md-6">
+                            <label class="small">Biji</label>
+                            <input type="number"
+                                name="biji[{{ $feather->id }}]"
+                                step="1"
+                                min="0"
+                                class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-6">
                             <label class="small">Berat</label>
                             <input type="number"
                                 name="berat[{{ $feather->id }}]"
                                 step="0.01"
                                 min="0"
                                 max="99999.99"
-                                class="form-control form-control-sm">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="small">Biji</label>
-                            <input type="number"
-                                name="biji[{{ $feather->id }}]"
-                                step="1"
-                                min="0"
                                 class="form-control form-control-sm">
                         </div>
                     </div>
@@ -219,7 +218,6 @@
 @stop
 
 @section('custom-js')
-
     $('#rms_id').on('change', function () {
         const id = $(this).val();
         if (!id) return;
@@ -239,10 +237,9 @@
     });
 
     $(document).on('click', '.btnTambah', function() {
-
         $('#item_id').val('');
 
-        // Aktifkan kembali select
+        // aktifkan kembali select
         $('#rms_id').prop('disabled', false).val('');
         $('#employees_id').prop('disabled', false).val('');
 
@@ -255,8 +252,6 @@
     });
     
     $('#crudModal').on('hidden.bs.modal', function () {
-
-        // Pastikan kembali aktif saat modal ditutup
         $('#rms_id').prop('disabled', false);
         $('#employees_id').prop('disabled', false);
 
@@ -275,17 +270,8 @@
             .then(data => {
 
                 $('#item_id').val(data.id);
-
-                // Set value lalu disable
-                $('#rms_id')
-                    .val(data.rms_id)
-                    .trigger('change')
-                    .prop('disabled', true);
-
-                $('#employees_id')
-                    .val(data.employees_id)
-                    .prop('disabled', true);
-
+                $('#rms_id').val(data.rms_id).trigger('change').prop('disabled', true);
+                $('#employees_id').val(data.employees_id).prop('disabled', true);
                 $('#tanggal').val(data.tanggal);
 
                 $('input[name^="berat"]').val('');

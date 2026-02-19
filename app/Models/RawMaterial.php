@@ -135,11 +135,11 @@ class RawMaterial extends Model
 
     // Grade Feather Sisa
     public function getBeratSisaFeatherAttribute(){
-        return $this->total_berat_keluar - $this->feathers()->sum('biji');
+        return $this->total_berat_keluar - $this->feathers()->sum('berat');
     }
 
     public function getBijiSisaFeatherAttribute(){
-        return $this->total_biji_keluar - $this->feathers()->sum('berat');
+        return $this->total_biji_keluar - $this->feathers()->sum('biji');
     }
 
     // Grade Color Sisa

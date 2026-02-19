@@ -184,8 +184,8 @@
 
     $(document).on('click', '.btnTambah', function() {
         $('#item_id').val('');
-        $('#rms_id').val('');
-        $('#employees_id').val('');
+        $('#rms_id').prop('disabled', false).val('');
+        $('#employees_id').prop('disabled', false).val('');
         $('#tanggal').val('');
 
         $('input[name^="berat"]').val('');
@@ -194,6 +194,9 @@
     });
 
     $('#crudModal').on('hidden.bs.modal', function () {
+        $('#rms_id').prop('disabled', false);
+        $('#employees_id').prop('disabled', false);
+
         $('.shape-field').show();
         $('input[name^="berat"]').val('');
         $('#item_id').val('');
@@ -207,8 +210,8 @@
             .then(data => {
 
                 $('#item_id').val(data.id);
-                $('#rms_id').val(data.rms_id).trigger('change');
-                $('#employees_id').val(data.employees_id);
+                $('#rms_id').val(data.rms_id).trigger('change').prop('disabled', true);
+                $('#employees_id').val(data.employees_id).prop('disabled', true);
                 $('#tanggal').val(data.tanggal);
 
                 $('input[name^="berat"]').val('');

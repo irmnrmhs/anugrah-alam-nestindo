@@ -41,20 +41,40 @@ class GradeFeatherController extends Controller
         $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
+            // 'feathers_id' => 'required|exists:feathers,id',
             'tanggal' => 'required|date',
             'biji' => 'required|array',
             'berat' => 'required|array',
         ]);
 
+        $rm = RawMaterial::findOrFail($request->rms_id);
+
         DB::beginTransaction();
 
         try {
+
+            $totalBerat = array_sum($request->berat);
+            $totalBiji  = array_sum($request->biji);
+
+            if ($totalBerat > $rm->berat_sisa_feather) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Total berat melebihi stok sisa',
+                ], 422);
+            }
+
+            if ($totalBiji > $rm->biji_sisa_feather) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Total biji melebihi stok sisa',
+                ], 422);
+            }
 
             foreach ($request->berat as $featherId => $berat) {
 
                 $biji = $request->biji[$featherId] ?? 0;
 
-                if ($berat <= 0 && $biji <= 0) {
+                if ($berat <= 0 || $biji <= 0) {
                     continue;
                 }
 
@@ -100,9 +120,7 @@ class GradeFeatherController extends Controller
     public function materialInfo($id)
     {
         $rm = RawMaterial::findOrFail($id);
-        $last = GradeFeather::where('rms_id', $id)
-            ->latest()
-            ->first();
+        $last = GradeFeather::where('rms_id', $id)->latest()->first();
 
         return response()->json([
             'berat_sisa' => $rm->berat_sisa_feather,
@@ -124,28 +142,41 @@ class GradeFeatherController extends Controller
         $grade = GradeFeather::findOrFail($id);
         $rm = RawMaterial::findOrFail($validated['rms_id']);
 
-        $featherId = array_key_first($validated['berat']);
-        $beratBaru = $validated['berat'][$featherId];
-        $bijiBaru = $validated['biji'][$featherId];
+        $totalBeratBaru = array_sum($validated['berat']);
+        $totalBijiBaru  = array_sum($validated['biji']);
 
-        $berat_sisa = $rm->berat_sisa_feather + $grade->berat;
-        $biji_sisa = $rm->biji_sisa_feather + $grade->biji;
+        $stokBeratTersedia = $rm->berat_sisa_feather + $grade->berat;
+        $stokBijiTersedia  = $rm->biji_sisa_feather + $grade->biji;
 
-        if ($beratBaru > $berat_sisa || $bijiBaru > $biji_sisa) {
+        if ($totalBeratBaru > $stokBeratTersedia) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Melebihi stok sisa',
+                'message' => 'Total berat melebihi stok sisa',
             ], 422);
         }
 
-        $grade->update([
-            'rms_id' => $validated['rms_id'],
-            'employees_id' => $validated['employees_id'],
-            'tanggal' => $validated['tanggal'],
-            'feathers_id' => $featherId,
-            'berat' => $beratBaru,
-            'biji' => $bijiBaru,
-        ]);
+        if ($totalBijiBaru > $stokBijiTersedia) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Total biji melebihi stok sisa',
+            ], 422);
+        }
+
+        foreach ($validated['berat'] as $featherId => $berat) {
+
+            if ($berat <= 0 && ($validated['biji'][$featherId] ?? 0) <= 0) {
+                continue;
+            }
+
+            $grade->update([
+                'rms_id' => $validated['rms_id'],
+                'employees_id' => $validated['employees_id'],
+                'tanggal' => $validated['tanggal'],
+                'feathers_id' => $featherId,
+                'berat' => $berat,
+                'biji' => $validated['biji'][$featherId] ?? 0,
+            ]);
+        }
 
         return response()->json([
             'status' => 'success',
