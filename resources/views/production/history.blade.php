@@ -16,6 +16,7 @@
 @section('table-headers')
     <th>No</th>
     <th>Kode Bahan Baku</th>
+    <th>Grade</th>
     <th>Asal</th>
     <th>Tujuan</th>
     <th>Biji Awal</th>
@@ -29,6 +30,7 @@
         <tr data-id="{{ $history->id }}">
             <td>{{ $index + 1 }}</td>
             <td>{{ $history->gcolor->rawMaterial->kode }}</td>
+            <td>{{ $history->gcolor->grade }}</td>
             <td>
                 @if($history->asal === 'PR01GB')
                     <span>Grading Bahan Baku</span>

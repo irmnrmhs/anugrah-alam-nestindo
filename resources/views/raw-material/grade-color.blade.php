@@ -13,6 +13,7 @@
     <th>No</th>
     <th>Tanggal</th>
     <th>RBW/Noreg</th>
+    <th>Grade</th>
     <th>Kode Bahan Baku</th>
     <th>Jenis Bulu</th>
     <th>Jenis Warna</th>
@@ -28,6 +29,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $color->tanggal }}</td>
             <td>{{ $color->rawMaterial->kode }}</td>
+            <td>{{ $color->grade }}</td>
             <td>
                 {{ (optional(optional($color->rawMaterial->arrivals->first())->dcertificate)->wbhouse->nama) . " / " . optional(optional($color->rawMaterial->arrivals->first())->dcertificate)->wbhouse->kode }}
             </td>
@@ -175,6 +177,7 @@
         rms_id: $('#rms_id').val(),
         employees_id: $('#employees_id').val(),
         tanggal: $('#tanggal').val(),
+        grade: $('#grade').val(),
         other: $('#other').val(),
         data: formData,
     };
@@ -260,6 +263,7 @@
         $('#rms_id').prop('disabled', false).val('');
         $('#employees_id').prop('disabled', false).val('');
         $('#tanggal').val('');
+        $('#grade').val('');
 
         $('input[name^="data"]').val('');
 
@@ -272,6 +276,7 @@
         $('#rms_id').prop('disabled', false);
         $('#employees_id').prop('disabled', false);
         $('#tanggal').val('');
+        $('#grade').val('');
         $('#item_id').val('');
 
         $('input[name^="data"]').val('');
@@ -300,6 +305,7 @@
                     .prop('disabled', true);
 
                 $('#tanggal').val(data.tanggal);
+                $('#grade').val(data.grade);
 
                 // kosongkan semua input
                 $('input[name^="data"]').val('');

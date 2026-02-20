@@ -11,7 +11,7 @@ class GradeColor extends Model
         'employees_id',
         'feathers_id',
         'colors_id',
-        // 'kode',
+        'grade',
         'biji',
         'berat',
         'other',

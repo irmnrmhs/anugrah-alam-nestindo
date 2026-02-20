@@ -16,6 +16,7 @@ use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\GradeColorExport;
+use Illuminate\Validation\Rule;
 
 class GradeColorController extends Controller
 {
@@ -37,6 +38,13 @@ class GradeColorController extends Controller
         $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
+            'grade' => [
+                'required',
+                Rule::unique('grade_colors')
+                    ->where(fn ($query) =>
+                        $query->where('rms_id', $request->rms_id)
+                    )
+            ],
             'tanggal' => 'required|date',
             'data' => 'required|array',
         ]);
@@ -85,12 +93,18 @@ class GradeColorController extends Controller
 
                     if ($berat <= 0 && $biji <= 0) continue;
 
+                    $feather = Feather::find($featherId);
+                    $color   = Color::find($colorId);
+
+                    $grade = strtoupper($feather->kode . '-' . $color->kode);
+
                     GradeColor::create([
                         'rms_id' => $request->rms_id,
                         'employees_id' => $request->employees_id,
                         'feathers_id' => $featherId,
                         'colors_id' => $colorId,
                         'tanggal' => $request->tanggal,
+                        'grade' => $grade,
                         'other' => $request->other,
                         'berat' => $berat,
                         'biji' => $biji,
@@ -111,7 +125,7 @@ class GradeColorController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Grade bahan baku duplikat'
             ], 422);
         }
     }
@@ -139,6 +153,14 @@ class GradeColorController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
+            'grade' => [
+                'required',
+                Rule::unique('grade_colors')
+                    ->where(fn ($query) =>
+                        $query->where('rms_id', $request->rms_id)
+                    )
+                    ->ignore($id)
+            ],
             'tanggal' => 'required|date',
             'data' => 'required|array',
         ]);
@@ -189,12 +211,18 @@ class GradeColorController extends Controller
                 ], 422);
             }
 
+            $feather = Feather::find($featherIdBaru);
+            $color   = Color::find($colorIdBaru);
+
+            $gradeText = strtoupper($feather->kode . '-' . $color->kode);
+
             $grade->update([
                 'rms_id' => $validated['rms_id'],
                 'employees_id' => $validated['employees_id'],
                 'tanggal' => $validated['tanggal'],
                 'feathers_id' => $featherIdBaru,
                 'colors_id' => $colorIdBaru,
+                'grade' => $gradeText,
                 'berat' => $totalBeratBaru,
                 'biji' => $totalBijiBaru,
             ]);

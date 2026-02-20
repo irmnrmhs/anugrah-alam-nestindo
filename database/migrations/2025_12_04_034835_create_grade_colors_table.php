@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('employees_id')->constrained('employees');
             $table->foreignId('feathers_id')->constrained('feathers');
             $table->foreignId('colors_id')->constrained('colors');
-            // $table->string('kode')->unique();
+            $table->string('grade');
             $table->integer('biji');
             $table->decimal('berat', 7, 2);
             $table->decimal('other', 7, 2)->nullable();

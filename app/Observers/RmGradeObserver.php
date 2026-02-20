@@ -70,7 +70,7 @@ class RmGradeObserver
      */
     public function updated(GradeColor $gradeColor): void
     {
-        // 1. Sync stok ke history
+        // 1. sync stok ke history
         if ($gradeColor->wasChanged(['biji', 'berat'])) {
 
             $history = History::where('gcolors_id', $gradeColor->id)
@@ -87,8 +87,8 @@ class RmGradeObserver
             }
         }
 
-        // 2. Sync kode Product
-        if ($gradeColor->wasChanged('kode')) {
+        // 2. sync grade product
+        if ($gradeColor->wasChanged('grade')) {
 
             $products = Product::whereHas('history', function ($q) use ($gradeColor) {
                 $q->where('gcolors_id', $gradeColor->id);
@@ -101,9 +101,9 @@ class RmGradeObserver
                 }
 
                 $product->updateQuietly([
-                    'kode' => Product::generateCode(
-                        $product->grade->kode,
-                        $gradeColor->kode
+                    'grade' => Product::generateCode(
+                        $product->grade->grade,
+                        $gradeColor->grade
                     )
                 ]);
             }
