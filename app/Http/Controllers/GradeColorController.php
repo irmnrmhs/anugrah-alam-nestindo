@@ -50,7 +50,6 @@ class GradeColorController extends Controller
             $totalBerat = 0;
             $totalBiji  = 0;
 
-            // 🔹 1. Hitung total dulu
             foreach ($request->data as $featherId => $colors) {
                 foreach ($colors as $colorId => $values) {
 
@@ -64,7 +63,6 @@ class GradeColorController extends Controller
                 }
             }
 
-            // 🔹 2. Validasi stok sisa
             if ($totalBerat > $rm->berat_sisa_color) {
                 return response()->json([
                     'status' => 'error',
@@ -79,7 +77,6 @@ class GradeColorController extends Controller
                 ], 422);
             }
 
-            // 🔹 3. Insert data
             foreach ($request->data as $featherId => $colors) {
                 foreach ($colors as $colorId => $values) {
 
@@ -159,7 +156,6 @@ class GradeColorController extends Controller
             $featherIdBaru = null;
             $colorIdBaru   = null;
 
-            // 🔹 1. Hitung total baru (meskipun cuma 1 kombinasi aktif)
             foreach ($validated['data'] as $featherId => $colors) {
                 foreach ($colors as $colorId => $values) {
 
@@ -176,11 +172,9 @@ class GradeColorController extends Controller
                 }
             }
 
-            // 🔹 2. Hitung stok tersedia (kembalikan nilai lama dulu)
             $stokBeratTersedia = $rm->berat_sisa_color + $grade->berat;
             $stokBijiTersedia  = $rm->biji_sisa_color + $grade->biji;
 
-            // 🔹 3. Validasi total
             if ($totalBeratBaru > $stokBeratTersedia) {
                 return response()->json([
                     'status' => 'error',
@@ -195,7 +189,6 @@ class GradeColorController extends Controller
                 ], 422);
             }
 
-            // 🔹 4. Update data
             $grade->update([
                 'rms_id' => $validated['rms_id'],
                 'employees_id' => $validated['employees_id'],

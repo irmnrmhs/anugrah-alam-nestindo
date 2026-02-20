@@ -316,7 +316,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/gcolors/delete-multiple', [GradeColorController::class, 'deleteMultiple']);
     Route::get('/raw-material-info-gc/{id}', [GradeColorController::class, 'materialInfo']);
     Route::get('/gcolors/{id}/export', [GradeColorController::class, 'export'])->name('gcolors.export');
-    Route::get('/grade-color-feathers/{rms_id}', [GradeColorController::class, 'getFeathersByRms']);
+    Route::get('/gcolor-feathers/{rms_id}', [GradeColorController::class, 'getFeathersByRms']);
 
     // Jenis Uji
     Route::get('/testTypes', [TestTypeController::class, 'index'])->name('testTypes.index');

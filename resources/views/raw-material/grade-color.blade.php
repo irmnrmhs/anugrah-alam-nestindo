@@ -230,25 +230,16 @@
 
         Promise.all([
             fetch(`/raw-material-info-gc/${id}`).then(r => r.json()),
-            fetch(`/grade-color-feathers/${id}`).then(r => r.json())
+            fetch(`/gcolor-feathers/${id}`).then(r => r.json())
         ])
         .then(([info, feathers]) => {
 
-            // ========================
-            // 1️⃣ Update info bahan baku
-            // ========================
             $('#biji_sisa').val(info.biji_sisa);
             $('#berat_sisa').val(info.berat_sisa);
             $('#last').val(info.last_date ?? '-');
 
-            // ========================
-            // 2️⃣ Disable semua dulu
-            // ========================
             $('.feather-group input').prop('disabled', true);
 
-            // ========================
-            // 3️⃣ Enable yg sesuai
-            // ========================
             feathers.forEach(f => {
                 $(`#feather-group-${f.id} input`).prop('disabled', false);
             });
@@ -272,7 +263,6 @@
 
         $('input[name^="data"]').val('');
 
-        // Show semua kombinasi
         $('.combination-field').show();
         $('.feather-group').show();
     });
@@ -284,10 +274,8 @@
         $('#tanggal').val('');
         $('#item_id').val('');
 
-        // Kosongkan semua input kombinasi
         $('input[name^="data"]').val('');
 
-        // Tampilkan kembali semua feather dan kombinasi
         $('.feather-group').show();
         $('.combination-field').show();
     });
@@ -313,27 +301,27 @@
 
                 $('#tanggal').val(data.tanggal);
 
-                // Kosongkan semua input
+                // kosongkan semua input
                 $('input[name^="data"]').val('');
 
-                // Hide semua kombinasi
+                // hide semua kombinasi
                 $('.combination-field').hide();
 
-                // Hide semua feather group
+                // hide semua feather group
                 $('.feather-group').hide();
 
-                // Ambil kombinasi yang sesuai
+                // ambil kombinasi yang sesuai
                 const featherId = data.feathers_id;
                 const colorId = data.colors_id;
 
-                // Tampilkan feather group yang sesuai
+                // tampilkan feather group yang sesuai
                 $(`#feather-group-${featherId}`).show();
 
-                // Tampilkan kombinasi yang sesuai
+                // tampilkan kombinasi yang sesuai
                 const target = `#combination-${featherId}-${colorId}`;
                 $(target).show();
 
-                // Set value
+                // set value
                 $(`input[name="data[${featherId}][${colorId}][berat]"]`)
                     .val(data.berat);
 
