@@ -16,7 +16,6 @@ use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\GradeColorExport;
-use Illuminate\Validation\Rule;
 
 class GradeColorController extends Controller
 {
@@ -38,13 +37,6 @@ class GradeColorController extends Controller
         $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'grade' => [
-                'required',
-                Rule::unique('grade_colors')
-                    ->where(fn ($query) =>
-                        $query->where('rms_id', $request->rms_id)
-                    )
-            ],
             'tanggal' => 'required|date',
             'data' => 'required|array',
         ]);
@@ -97,6 +89,13 @@ class GradeColorController extends Controller
                     $color   = Color::find($colorId);
 
                     $grade = strtoupper($feather->kode . '-' . $color->kode);
+                    $exists = GradeColor::where('rms_id', $request->rms_id)
+                        ->where('grade', $grade)
+                        ->exists();
+
+                    if ($exists) {
+                        throw new \Exception('Grade bahan baku duplikat');
+                    }
 
                     GradeColor::create([
                         'rms_id' => $request->rms_id,
@@ -125,7 +124,7 @@ class GradeColorController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Grade bahan baku duplikat'
+                'message' => $e->getMessage()
             ], 422);
         }
     }
@@ -153,14 +152,6 @@ class GradeColorController extends Controller
         $validated = $request->validate([
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
-            'grade' => [
-                'required',
-                Rule::unique('grade_colors')
-                    ->where(fn ($query) =>
-                        $query->where('rms_id', $request->rms_id)
-                    )
-                    ->ignore($id)
-            ],
             'tanggal' => 'required|date',
             'data' => 'required|array',
         ]);

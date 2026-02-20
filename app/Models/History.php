@@ -293,4 +293,9 @@ class History extends Model
     {
         return $this->berat - $this->total_berat_produk;
     }
+
+    public function getGradeRmAttribute()
+    {
+        return $this->gcolor->rawMaterial->kode . ' (' . $this->gcolor->grade . ')';
+    }
 }

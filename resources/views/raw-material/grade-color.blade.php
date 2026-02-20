@@ -61,15 +61,15 @@
             <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
             <input type="text" id="last" class="form-control" readonly>
         </div>
+        
+        <div class="col-md-4">
+            <label style="font-size: 10pt">Biji Sisa</label>
+            <input type="number" id="biji_sisa" class="form-control" readonly>
+        </div>
 
         <div class="col-md-4">
             <label style="font-size: 10pt">Berat Sisa</label>
             <input type="number" id="berat_sisa" class="form-control" readonly>
-        </div>
-
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Biji Sisa</label>
-            <input type="number" id="biji_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">
