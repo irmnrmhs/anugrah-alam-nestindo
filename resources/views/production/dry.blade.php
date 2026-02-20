@@ -25,7 +25,7 @@
         <tr data-id="{{ $dry->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $dry->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $dry->history->identifier->kode }}</td>
+            <td>{{ $dry->history->gcolor->kode }}</td>
             <td>{{ $dry->employee->nama }}</td>
             <td>{{ $dry->tanggal }}</td>
             <td>{{ $dry->biji }}</td>
@@ -47,7 +47,7 @@
         <select id="histories_id" class="form-control" required>
             <option value="">-- Pilih Produk --</option>
             @foreach($histories as $history)
-                <option value="{{ $history->id }}">{{ $history->identifier->kode }}</option>
+                <option value="{{ $history->id }}">{{ $history->grade_rm }}</option>
             @endforeach
         </select>
     </div>
