@@ -9,7 +9,6 @@
 @section('table-headers')
     <th>No</th>
     <th>Grade</th>
-    <th>Jenis Bentuk</th>
     <th>Jenis Bulu</th>
     <th>Jenis Warna</th>
     <th>Status</th>
@@ -20,7 +19,6 @@
         <tr data-id="{{ $grade->id }}">
             <td>{{ $index + 1 }}</td>
             <td>{{ $grade->grade }}</td>
-            <td>{{ $grade->shape->jenis_bentuk }}</td>
             <td>{{ $grade->feather->jenis_bulu }}</td>
             <td>{{ $grade->color->jenis_warna }}</td>
             <td>
@@ -39,15 +37,6 @@
 @stop
 
 @section('form-fields')
-    <div class="mb-3">
-        <label>Jenis Bentuk</label>
-        <select id="shapes_id" class="form-control" required>
-            <option value="">-- Pilih Jenis Bentuk --</option>
-            @foreach($shapes as $shape)
-                <option value="{{ $shape->id }}">{{ $shape->jenis_bentuk }}</option>
-            @endforeach
-        </select>
-    </div>
     <div class="mb-3">
         <label>Jenis Bulu</label>
         <select id="feathers_id" class="form-control" required>
@@ -82,7 +71,6 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
-        shapes_id: $('#shapes_id').val(),
         feathers_id: $('#feathers_id').val(),
         colors_id: $('#colors_id').val(),
         status: $('#status').val()
@@ -111,7 +99,6 @@
             .then(r => r.json())
             .then(grade => {
                 $('#item_id').val(grade.id);
-                $('#shapes_id').val(grade.shapes_id);
                 $('#feathers_id').val(grade.feathers_id);
                 $('#colors_id').val(grade.colors_id);
                 $('#status').val(grade.status);

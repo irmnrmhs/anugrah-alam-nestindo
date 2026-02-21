@@ -46,18 +46,13 @@
             @endforeach
         </select>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
-            <input type="text" id="last" class="form-control" readonly>
-        </div>
-
-        <div class="col-md-4">
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Biji Sisa</label>
             <input type="number" id="biji_sisa" class="form-control" readonly>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Berat Sisa</label>
             <input type="number" id="berat_sisa" class="form-control" readonly>
         </div>
@@ -83,6 +78,38 @@
         <label>Berat</label>
         <input type="number" id="berat" step="0.001" min="0" max="99999.99" class="form-control" required>
     </div>
+    {{-- <div class="mt-3">
+    <div class="border rounded p-3">
+        <h6 class="mb-3 fw-bold">Grade Bulu</h6>
+            @foreach ($grades as $grade)
+                <div class="mb-3 grade-field" id="grade-{{ $grade->id }}">
+                    <label class="form-label fw-semibold small">
+                        {{ $grade->jenis_bulu }}
+                    </label>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="small">Biji</label>
+                            <input type="number"
+                                name="biji[{{ $grade->id }}]"
+                                step="1"
+                                min="0"
+                                class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small">Berat</label>
+                            <input type="number"
+                                name="berat[{{ $grade->id }}]"
+                                step="0.01"
+                                min="0"
+                                max="99999.99"
+                                class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div> --}}
 @stop
 
 @section('form-submit-script')

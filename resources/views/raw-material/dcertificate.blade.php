@@ -22,7 +22,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $dcertificate->wbhouse->nama }}</td>
             <td>{{ $dcertificate->wbhouse->alamat }}</td>
-            <td>{{ $dcertificate->tgl_skp }}</td>
+            <td>{{ \Carbon\Carbon::parse($dcertificate->tgl_skp)->translatedFormat('d/m/Y') }}</td>
             <td>{{ $dcertificate->no_skp }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>

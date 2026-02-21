@@ -19,6 +19,7 @@ class EdgeController extends Controller
     {
         $edges = Edge::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR02SK')->get();
+        // $grades = mapping kombinasi ...
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();

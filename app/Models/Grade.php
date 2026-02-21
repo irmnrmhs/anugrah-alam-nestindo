@@ -8,7 +8,6 @@ class Grade extends Model
 {
     protected $fillable = [
         'grade',
-        'shapes_id',
         'feathers_id',
         'colors_id',
         'status'

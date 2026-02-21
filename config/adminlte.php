@@ -422,12 +422,12 @@ return [
                 //     'icon' => 'fas fa-users',
                 // ],
                 [   'header' => 'Bahan Baku' ],
-                // [
-                //     'text' => 'Kategori Grade',
-                //     'url'  => 'types',
-                //     'can'  => ['Super Admin', 'Admin Bahan Baku', 'Administrasi'],
-                //     'icon' => 'fas fa-users',
-                // ],
+                [
+                    'text' => 'Kategori Grade',
+                    'url'  => 'types',
+                    'can'  => ['Super Admin', 'Admin Bahan Baku', 'Administrasi'],
+                    'icon' => 'fas fa-users',
+                ],
                 [
                     'text' => 'Jenis Bentuk',
                     'url'  => 'shapes',
