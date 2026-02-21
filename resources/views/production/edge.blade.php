@@ -42,7 +42,9 @@
         <select id="histories_id" class="form-control" required>
             <option value="">-- Pilih Produk --</option>
             @foreach($histories as $history)
-                <option value="{{ $history->id }}">{{ $history->grade_rm }}</option>
+                <option value="{{ $history->id }}" data-kode="{{ $history->gcolor->rawMaterial->kode }}">
+                    {{ $history->gcolor->rawMaterial->kode }}
+                </option>
             @endforeach
         </select>
     </div>
@@ -70,46 +72,28 @@
         <label>Tanggal Mulai</label>
         <input type="date" id="tanggal" class="form-control" required>
     </div>
-    <div class="mb-3">
-        <label>Biji</label>
-        <input type="number" id="biji" step="1" min="0" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Berat</label>
-        <input type="number" id="berat" step="0.001" min="0" max="99999.99" class="form-control" required>
-    </div>
-    {{-- <div class="mt-3">
-    <div class="border rounded p-3">
-        <h6 class="mb-3 fw-bold">Grade Bulu</h6>
-            @foreach ($grades as $grade)
-                <div class="mb-3 grade-field" id="grade-{{ $grade->id }}">
-                    <label class="form-label fw-semibold small">
-                        {{ $grade->jenis_bulu }}
-                    </label>
+    <div class="row">
+        @foreach($grades as $grade)
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 h-100 grade-card" data-kode="{{ $grade->kode_bahan_baku }}">
+                    <h6 class="text-center">{{ $grade->grade }}</h6>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="small">Biji</label>
-                            <input type="number"
-                                name="biji[{{ $grade->id }}]"
-                                step="1"
-                                min="0"
-                                class="form-control form-control-sm">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="small">Berat</label>
-                            <input type="number"
-                                name="berat[{{ $grade->id }}]"
-                                step="0.01"
-                                min="0"
-                                max="99999.99"
-                                class="form-control form-control-sm">
-                        </div>
-                    </div>
+                    <input type="number"
+                        name="biji[]"
+                        class="form-control mb-2"
+                        placeholder="Biji"
+                        min="0">
+
+                    <input type="number"
+                        name="berat[]"
+                        class="form-control"
+                        placeholder="Berat"
+                        step="0.01"
+                        min="0">
                 </div>
-            @endforeach
-        </div>
-    </div> --}}
+            </div>
+        @endforeach
+    </div>
 @stop
 
 @section('form-submit-script')
@@ -170,7 +154,7 @@
 @stop
 
 @section('custom-js')
-    $('#histories_id').on('change', function () {
+    {{-- $('#histories_id').on('change', function () {
         const id = $(this).val();
         if (!id) return;
 
@@ -185,6 +169,38 @@
                 $('#biji_sisa').val('-');
                 $('#berat_sisa').val('-');
                 $('#last').val('-');
+            });
+    }); --}}
+
+    $('#histories_id').on('change', function () {
+        const id = $(this).val();
+        if (!id) return;
+
+        fetch(`/edges-info/${id}`)
+            .then(r => r.json())
+            .then(info => {
+                $('#biji_sisa').val(info.biji_sisa);
+                $('#berat_sisa').val(info.berat_sisa);
+                $('#last').val(info.last ?? '-');
+
+                const kodeBahanBaku = info.kode_bahan_baku;
+
+                $('.grade-card').each(function () {
+                    const gradeKode = $(this).data('kode');
+                    if (gradeKode === kodeBahanBaku) {
+                        $(this).find('input').prop('disabled', false);
+                        $(this).removeClass('disabled-card'); // opsional styling
+                    } else {
+                        $(this).find('input').prop('disabled', true);
+                        $(this).addClass('disabled-card'); // opsional styling
+                    }
+                });
+            })
+            .catch(() => {
+                $('#biji_sisa').val('-');
+                $('#berat_sisa').val('-');
+                $('#last').val('-');
+                $('.grade-card').find('input').prop('disabled', false).removeClass('disabled-card');
             });
     });
 

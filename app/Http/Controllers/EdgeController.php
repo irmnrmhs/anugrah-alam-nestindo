@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Edge;
-use App\Models\History;
 use App\Models\Document;
+use App\Models\Edge;
 use App\Models\Employee;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Models\Grade;
+use App\Models\History;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class EdgeController extends Controller
 {
@@ -19,12 +20,12 @@ class EdgeController extends Controller
     {
         $edges = Edge::with('history', 'employee')->latest()->get();
         $histories = History::where('tujuan', 'PR02SK')->get();
-        // $grades = mapping kombinasi ...
+        $grades = Grade::where('status', 1)->get();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.edge', compact('edges', 'histories', 'employees'));
+        return view('production.edge', compact('edges', 'histories', 'employees', 'grades'));
     }
 
     public function store(Request $request): JsonResponse
@@ -33,15 +34,18 @@ class EdgeController extends Controller
             'histories_id' => 'required|exists:histories,id',
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
-            'biji' => 'required|integer|min:0',
-            'berat' => 'required|numeric|min:0|max:99999.99',
+            'biji' => 'required|array',
+            'berat' => 'required|array',
         ]);
+
+        $total_biji = array_sum($request->biji);
+        $total_berat = array_sum($request->berat);
 
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji'] > $tracker->sisa_biji_sesek ||
-            $validated['berat'] > $tracker->sisa_berat_sesek
+            $total_biji > $tracker->sisa_biji_sesek ||
+            $total_berat > $tracker->sisa_berat_sesek
         ){
             return response()->json([
                 'status' => 'error',
@@ -49,12 +53,17 @@ class EdgeController extends Controller
             ], 422);
         }
 
-        $edge = Edge::create($validated);
+        Edge::create([
+            'histories_id' => $validated['histories_id'],
+            'employees_id' => $validated['employees_id'],
+            'tanggal' => $validated['tanggal'],
+            'biji' => $total_biji,
+            'berat' => $total_berat,
+        ]);
 
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan',
-            'data' => $edge,
         ]);
     }
 
@@ -66,13 +75,15 @@ class EdgeController extends Controller
 
     public function info($id)
     {
-        $tracker = History::findOrFail($id);
+        // $tracker = History::findOrFail($id);
+        $tracker = History::with('gcolor.rawMaterial')->findOrFail($id);
         $last = Edge::where('histories_id', $id)->latest()->first();
 
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_sesek,
             'berat_sisa' => $tracker->sisa_berat_sesek,
             'last' => $last?->tanggal,
+            'kode_bahan_baku' => $tracker->gcolor->rawMaterial->kode,
         ]);
     }
 
