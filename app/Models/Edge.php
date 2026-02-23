@@ -11,7 +11,7 @@ class Edge extends Model
         'employees_id',
         'tanggal',
         'biji',
-        'berat',
+        'hancuran',
     ];
 
     public function history()

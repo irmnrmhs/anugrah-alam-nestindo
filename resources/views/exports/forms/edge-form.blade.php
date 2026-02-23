@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Sesek Kaki')
 
@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($edges->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($edges->first()?->tanggal)->translatedFormat('F') ?? '-' }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -111,34 +111,24 @@
     </tr>
 </thead>
 <tbody>
-    @php
-        $arrival = $edges->history->identifier->rawMaterial->arrivals->first();
-        $rm = $edges->history->identifier->rawMaterial;
-    @endphp
-    <tr>
-        <td class="text-center">1</td>
-        <td class="text-center">
-            {{ $edges->tanggal }}
-        </td>
-        <td>
-            {{ $arrival->dcertificate->wbhouse->nama }} /
-            {{ $arrival->dcertificate->wbhouse->kode }}
-        </td>
-        <td>
-            {{ $rm->kode}}
-        </td>
-        <td>
-            {{ $edges->history->identifier->grade->grade }}
-        </td>
-        <td>
-            {{ $edges->biji }}
-        </td>
-        <td>
-            {{ $edges->berat }}
-        </td>
-        <td>
-            {{ $edges->employee->nama }}
-        </td>
-    </tr>
+    <tbody>
+    @foreach($edges as $index => $edge)
+        @php
+            $gcolor = $edge->history?->gcolor;
+            $arrival = $gcolor?->rawMaterial?->arrivals->first();
+            $rm = $gcolor?->rawMaterial;
+        @endphp
+        <tr>
+            <td class="text-center">{{ $index + 1 }}</td>
+            <td class="text-center">{{ $edge->tanggal }}</td>
+            <td>{{ $arrival?->dcertificate?->wbhouse?->nama ?? '-' }} / {{ $arrival?->dcertificate?->wbhouse?->kode ?? '-' }}</td>
+            <td>{{ $rm->kode ?? '-' }}</td>
+            <td>{{ $gcolor?->grade ?? '-' }}</td>
+            <td>{{ $edge->biji }}</td>
+            <td>{{ $edge->berat }}</td>
+            <td>{{ $edge->employee?->nama ?? '-' }}</td>
+        </tr>
+    @endforeach
+    </tbody>
 </tbody>
 @endsection

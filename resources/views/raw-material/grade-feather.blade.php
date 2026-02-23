@@ -325,7 +325,6 @@
     });
 
     $('#exportForm').on('submit', function (e) {
-
         e.preventDefault();
 
         const rmId = $('#export_controller').val();

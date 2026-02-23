@@ -22,9 +22,7 @@ class GradeFeatherController extends Controller
 
     public function index(): View
     {
-        $feathers = GradeFeather::with('rawMaterial', 'employee', 'feather')
-            ->latest()
-            ->get();
+        $feathers = GradeFeather::with('rawMaterial', 'employee', 'feather')->latest()->get();
 
         $rms = RawMaterial::all();
         $employees = Employee::where('status', 1)->get();
@@ -231,12 +229,7 @@ class GradeFeatherController extends Controller
 
         $pdf = Pdf::loadView(
             'exports.forms.gfeather-form',
-            compact(
-                'rm',
-                'feathers',
-                'shapes',
-                'document'
-            )
+            compact('rm', 'feathers', 'shapes','document')
         )->setPaper('A4', 'landscape');
 
         $filename = 'Grading Bulu - ' .

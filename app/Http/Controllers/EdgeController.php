@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Edge;
-use App\Models\History;
+use App\Exports\EdgeExport;
 use App\Models\Document;
+use App\Models\Edge;
 use App\Models\Employee;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Models\History;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EdgeController extends Controller
 {
@@ -33,14 +35,14 @@ class EdgeController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
-            'berat' => 'required|numeric|min:0|max:99999.99',
+            'hancuran' => 'nullable|numeric|min:0|max:99999.99',
         ]);
 
         $tracker = History::find($validated['histories_id']);
 
         if(
             $validated['biji'] > $tracker->sisa_biji_sesek ||
-            $validated['berat'] > $tracker->sisa_berat_sesek
+            $validated['hancuran'] > $tracker->sisa_berat_sesek
         ){
             return response()->json([
                 'status' => 'error',
@@ -82,7 +84,7 @@ class EdgeController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
-            'berat' => 'required|numeric|min:0|max:99999.99',
+            'berat' => 'nullable|numeric|min:0|max:99999.99',
         ]);
 
         $edge = Edge::findOrFail($id);
@@ -132,22 +134,45 @@ class EdgeController extends Controller
         }
     }
 
-    public function export($id)
+    public function export(Request $request, $id)
     {
+        $type = $request->get('type', 'pdf');
+
+        $rm = History::with([
+            'gcolor.rawMaterial',
+            'edges.employee'
+        ])->findOrFail($id);
+
+        // $edges = Edge::with(['employee', 'history'])
+        //     ->findOrFail($id);
+
         $edges = Edge::with(['employee', 'history'])
-            ->findOrFail($id);
+            ->where('histories_id', $id)
+            ->orderBy('tanggal')
+            ->get();
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'PR02SK')
-        ->firstOrFail();
+        if ($type === 'excel') {
 
-        $pdf = Pdf::loadView('exports.edge-form', compact('edges', 'document'))
-                ->setPaper('A4', 'portrait');
+            $filename = 'Sesek Kaki - ' .
+                str_replace(['/', '\\'], '-', $rm->gcolor->rawMaterial->kode) . '.xlsx';
 
-        $filename = 'Sesek Kaki.pdf';
+            return Excel::download(
+                new EdgeExport($edges),
+                $filename
+            );
+        }
+
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'PR02SK')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView(
+            'exports.forms.edge-form',
+            compact('rm', 'edges', 'document')
+        )->setPaper('A4', 'landscape');
+
+        $filename = 'Sesek_Kaki' .
+            str_replace(['/', '\\'], '-', $rm->gcolor->rawMaterial->kode) . '.pdf';
 
         return $pdf->stream($filename);
     }

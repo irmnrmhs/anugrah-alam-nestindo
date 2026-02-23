@@ -13,7 +13,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\RmStockExport;
-use Illuminate\Validation\ValidationException;
 
 class RmStockController extends Controller
 {

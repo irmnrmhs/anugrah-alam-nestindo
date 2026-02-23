@@ -82,7 +82,7 @@ class History extends Model
 
     public function getTotalBeratSesekAttribute()
     {
-        return $this->edges()->sum('berat');
+        return $this->edges()->sum('hancuran');
     }
 
     public function getSisaBijiSesekAttribute()
@@ -92,7 +92,7 @@ class History extends Model
 
     public function getSisaBeratSesekAttribute()
     {
-        return $this->berat - $this->total_berat_sesek;
+        return $this->hancuran - $this->total_berat_sesek;
     }
 
     // public function getDiprosesBijiSesekAttribute()
