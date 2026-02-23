@@ -400,6 +400,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/edges/delete-multiple', [EdgeController::class, 'deleteMultiple']);
     Route::get('/edges-info/{id}', [EdgeController::class, 'info']);
     Route::get('/edges/{id}/export', [EdgeController::class, 'export'])->name('edges.export');
+    Route::get('/edges-grades/{rawMaterialId}', [EdgeController::class, 'getGrades']);
     
     // Pencucian
     Route::get('/washes', [WashController::class, 'index'])->name('washes.index');

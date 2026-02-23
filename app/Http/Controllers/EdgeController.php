@@ -19,13 +19,25 @@ class EdgeController extends Controller
     public string $obj = 'Sesek Kaki';
     public function index(): View
     {
-        $edges = Edge::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR02SK')->get();
+        $edges = Edge::with([
+            'history.gcolor.rawMaterial',
+            'employee'
+        ])->latest()->get();
+
+        $histories = History::with('gcolor.rawMaterial')
+            ->where('tujuan', 'PR02SK')
+            ->get();
+
+        $rawMaterials = $histories
+            ->pluck('gcolor.rawMaterial')
+            ->unique('id')
+            ->values();
+
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.edge', compact('edges', 'histories', 'employees'));
+        return view('production.edge', compact('edges', 'histories', 'rawMaterials', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -109,6 +121,18 @@ class EdgeController extends Controller
             'status' => 'success',
             'message' => $this->obj . ' berhasil diperbarui'
         ]);
+    }
+
+    public function getGrades($rawMaterialId)
+    {
+        $histories = History::with('gcolor')
+            ->where('tujuan', 'PR02SK')
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->get();
+
+        return response()->json($histories);
     }
 
     public function destroy(int $id): JsonResponse

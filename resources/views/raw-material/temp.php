@@ -1,325 +1,136 @@
-@extends('layouts.form')
+@extends('exports.forms.form')
 
-@php
-    $title = 'Kelola Grading Bentuk';
-    $singular = 'Grading Bentuk';
-    $deleteMultipleUrl = '/gshapes/delete-multiple';
-    // $importUrl = route('rmstocks.import');
-    // $templateUrl = route('rmstocks.template');
-@endphp
+@section('title', 'Sesek Kaki')
 
-@section('table-headers')
-    <th><input type="checkbox" id="checkAll"></th>
-    <th>No</th>
-    <th>Tanggal</th>
-    <th>RBW/Noreg</th>
-    <th>Kode Bahan Baku</th>
-    <th>Mangkok</th>
-    <th>Oval</th>
-    <th>Sudut</th>
-    <th>Patahan</th>
-    <th>Hancuran</th>
-    <th>Petugas</th>
-@stop
+@push('styles')
+<style>
+    
+</style>
+@endpush
 
-@section('table-body')
-    @foreach($shapes as $index => $shape)
-        <tr data-id="{{ $shape->id }}">
-            <td><input type="checkbox" class="row-check" value="{{ $shape->id }}"></td>
-            <td>{{ $index + 1 }}</td>
-            <td>{{ $shape->tanggal }}</td>
-            <td>{{ $shape->rawMaterial->kode }}</td>
-            <td>
-                {{ (optional(optional($shape->rawMaterial->arrivals->first())->dcertificate)->wbhouse->nama) . " / " . optional(optional($shape->rawMaterial->arrivals->first())->dcertificate)->wbhouse->kode }}
-            </td>
-            <td>{{ $shape->shape->mk }}</td>
-            <td>{{ $shape->shape->ovl }}</td>
-            <td>{{ $shape->shape->sdt }}</td>
-            <td>{{ $shape->shape->pth }}</td>
-            <td>{{ $shape->shape->hcr }}</td>
-            <td>{{ $shape->employee->nama }}</td>
-            <td>
-                <button class="btn btn-sm btn-warning btnEdit">Edit</button>
-                <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
-            </td>
+@section('header')
+<tr>
+<td rowspan="3" width="20%" align="center">
+    <img src="{{ public_path('img/Logo.png') }}" width="80" alt="Logo">
+</td>
+
+<td rowspan="3" width="40%" class="title">
+    FORM PEMBERSIHAN KAKIAN SARANG WALET <br>
+    <span class="small"><i>(BIRD'S NEST FOOT CLEANING FORM)</i></span>
+</td>
+
+<td width="20%">
+    No. Dokumen
+    <i>(Document No.)</i>
+</td>
+<td width="20%">
+    : {{ $document->no ?? '-' }}
+</td>
+</tr>
+
+<tr>
+<td>
+    Revisi
+    <i>(Revision)</i>
+</td>
+<td>
+    : {{ $document->getRevFormattedAttribute() }}
+</td>
+</tr>
+
+<tr>
+<td>
+    Tanggal
+    <i>(Date)</i>
+</td>
+<td>
+    : {{ \Carbon\Carbon::parse($document->tgl)->translatedFormat('d F Y') }}
+</td>
+</tr>
+@endsection
+
+<br>
+
+@section('info')
+<tr>
+    <td width="15%">
+        Bulan <i>(Month)</i>
+    </td>
+    <td width="35%">
+        : {{ \Carbon\Carbon::parse($edges->first()?->tanggal)->translatedFormat('F') ?? '-' }}
+    </td>
+    <td width="25%">
+        Bagian <i>(Department)</i>
+    </td>
+    <td width="25%">
+        : {{ $document->department->nama_dept }}
+        ({{ $document->department->nama_eng }})
+    </td>
+</tr>
+<tr>
+    <td width="10%">PIC</td>
+    <td width="60%">: {{ $document->employee->nama ?? '-' }}</td>
+</tr>
+@endsection
+
+@section('data')
+<thead>
+    <tr>
+        <th rowspan="2">
+            No <br> <i>(No)</i>
+        </th>
+        <th rowspan="2">
+            Tanggal <br> <i>(Date)</i>
+        </th>
+        <th rowspan="2">
+            Nama BRW / No. Reg <br> <i>(Bird's House Name <br> Registration No.)</i>
+        </th>
+        <th rowspan="2">
+            Kode Bahan Baku <br> <i>(Raw Material Code)</i>
+        </th>
+        <th rowspan="2">
+            Grade <br> <i>(Grade)</i>
+        </th>
+        <th>
+            Jumlah <i>(Amount)</i>
+        </th>
+        <th>
+            Hancuran <i>(Mess)</i>
+        </th>
+        <th rowspan="2">
+            Petugas <br> <i>(Officer)</i>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            Biji <i>(Piece)</i>
+        </th>
+        <th>
+            Gram <i>(Gram)</i>
+        </th>
+    </tr>
+</thead>
+<tbody>
+    <tbody>
+    @foreach($edges as $index => $edge)
+        @php
+            $gcolor = $edge->history?->gcolor;
+            $arrival = $gcolor?->rawMaterial?->arrivals->first();
+            $rm = $gcolor?->rawMaterial;
+        @endphp
+        <tr>
+            <td class="text-center">{{ $index + 1 }}</td>
+            <td class="text-center">{{ $edge->tanggal }}</td>
+            <td>{{ $arrival?->dcertificate?->wbhouse?->nama ?? '-' }} / {{ $arrival?->dcertificate?->wbhouse?->kode ?? '-' }}</td>
+            <td>{{ $rm->kode ?? '-' }}</td>
+            <td>{{ $gcolor?->grade ?? '-' }}</td>
+            <td>{{ $edge->biji }}</td>
+            <td>{{ $edge->berat }}</td>
+            <td>{{ $edge->employee?->nama ?? '-' }}</td>
         </tr>
     @endforeach
-@stop
-
-@section('form-fields')
-    <div class="mb-3">
-        <label>Kode Bahan Baku</label>
-        <select id="rms_id" class="form-control" required>
-            <option value="">-- Kode Bahan Baku --</option>
-            @foreach($rms as $rm)
-                <option value="{{ $rm->id }}">{{ $rm->kode }}</option>
-            @endforeach
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label>Tanggal</label>
-        <input type="date" id="tanggal" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label>Jumlah Data</label>
-        <input type="number" min="1" id="jumlah_stok" class="form-control" required>
-    </div>
-@stop
-
-@section('form-submit-script')
-    const id = $('#item_id').val();
-    const rms_id = $('#rms_id').val();
-    const tanggal = $('#tanggal').val();
-    const jumlah = parseInt($('#jumlah_stok').val());
-
-    if (!rms_id || jumlah < 1) {
-        Swal.fire('Error', 'Lengkapi Kode & Jumlah Stok!', 'error');
-        return;
-    }
-
-    bootstrap.Modal.getInstance(document.getElementById('crudModal')).hide();
-
-    let html = `
-    <div class="row mt-3 mb-3">
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
-            <input type="text" id="last_out_date" class="form-control" readonly value="${window.last_date}">
-        </div>
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Biji Sisa</label>
-            <input type="number" id="biji_sisa" class="form-control" readonly value="${window.biji_sisa}">
-        </div>
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Berat Sisa</label>
-            <input type="number" id="berat_sisa" class="form-control" readonly value="${window.berat_sisa}">
-        </div>
-    </div>`;
-
-    for (let i = 1; i <= jumlah; i++) {
-        html += `
-        <div class="border rounded p-3 mb-3">
-            <h6>Kontainer ${i}</h6>
-
-            <label>Biji</label>
-            <input type="number" class="form-control mb-2 c-biji" data-index="${i}" min="0" required>
-
-            <label>Berat</label>
-            <input type="number" class="form-control mb-2 c-berat" data-index="${i}" min="0" step="0.01" required>
-
-            <label>Keterangan</label>
-            <input type="text" class="form-control mb-2 c-keterangan" data-index="${i}" placeholder="Optional (tidak wajib diisi)">
-
-            <label>Petugas</label>
-            <select class="form-control c-petugas" data-index="${i}" required>
-                <option value="">-- Pilih Petugas --</option>
-                @foreach($employees as $employee)
-                    <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
-                @endforeach
-            </select>
-        </div>
-        `;
-    }
-
-    $('#secondModalBody').html(html);
-    $('#secondModal').modal('show');
-
-    $('#btnSubmitAll').off().on('click', function () {
-        let list = [];
-
-        for (let i = 1; i <= jumlah; i++) {
-            list.push({
-                rms_id,
-                tgl_keluar,
-                employees_id: $(`.c-petugas[data-index="${i}"]`).val(),
-                biji_keluar: $(`.c-biji[data-index="${i}"]`).val(),
-                berat_keluar: $(`.c-berat[data-index="${i}"]`).val(),
-                keterangan: $(`.c-keterangan[data-index="${i}"]`).val(),
-            });
-        }
-
-        fetch('/rmstocks/bulk', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ items: list })
-        })
-        .then(r => r.json())
-        .then(res => {
-            if (res.status === 'success') {
-                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
-            } else {
-                Swal.fire('Error', res.message, 'error');
-            }
-        });
-    });
-@stop
-
-@section('custom-js')
-    $('#rms_id').on('change', function () {
-        const rms_id = $(this).val();
-        if (!rms_id) return;
-
-        fetch(`/raw-material-info/${rms_id}`)
-            .then(r => r.json())
-            .then(info => {
-                // simpan info ini ke variabel lokal
-                window.last_date = info.last_date ?? '-';
-                window.biji_sisa = info.biji_sisa ?? 0;
-                window.berat_sisa = info.berat_sisa ?? 0;
-
-                $('#biji_sisa').val(window.biji_sisa);
-                $('#berat_sisa').val(window.berat_sisa);
-                $('#last_out_date').val(window.last_date);
-            });
-    });
-
-    $(document).on('click', '.btnEdit', function () {
-        const id = $(this).closest('tr').data('id');
-
-        fetch(`/rmstocks/${id}`)
-            .then(r => r.json())
-            .then(rmstock => {
-
-                $('#item_id').val(rmstock.id);
-
-                let html = `
-                    <label>Tanggal</label>
-                    <input type="date" class="form-control mb-2" id="edit_tgl"
-                        value="${rmstock.tgl_keluar}" min="0">
-
-                    <label>Biji</label>
-                    <input type="number" class="form-control mb-2" id="edit_biji"
-                        value="${rmstock.biji_keluar}" min="0">
-
-                    <label>Berat</label>
-                    <input type="number" class="form-control mb-2" id="edit_berat"
-                        value="${rmstock.berat_keluar}" min="0" step="0.01">
-
-                    <label>Keterangan</label>
-                    <input type="text" class="form-control mb-2" id="edit_keterangan"
-                        value="${rmstock.keterangan ?? ''}">
-
-                    <label>Petugas</label>
-                    <select class="form-control" id="edit_petugas">
-                        <option value="">-- Pilih Petugas --</option>
-                        @foreach($employees as $employee)
-                            <option value="{{ $employee->id }}"
-                                ${rmstock.employees_id == "{{ $employee->id }}" ? 'selected' : ''}>
-                                {{ $employee->nama }} ({{ $employee->nip }})
-                            </option>
-                        @endforeach
-                    </select>
-                `;
-
-                $('#secondModalBody').html(html);
-                $('#secondModal').modal('show');
-
-                $('#btnSubmitAll').off().on('click', function () {
-
-                    let payload = {
-                        rms_id: rmstock.rms_id,
-                        tgl_keluar: $('#edit_tgl').val(),
-                        biji_keluar: parseInt($('#edit_biji').val()),
-                        berat_keluar: parseFloat($('#edit_berat').val()),
-                        keterangan: $('#edit_keterangan').val() || null,
-                        employees_id: parseInt($('#edit_petugas').val())
-                    };
-
-                    fetch(`/rmstocks/${rmstock.id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify(payload)
-                    })
-                    .then(r => r.json())
-                    .then(res => {
-                        if (res.status === 'success') {
-                            Swal.fire('Berhasil', res.message, 'success')
-                                .then(() => location.reload());
-                        } else {
-                            Swal.fire('Error', res.message, 'error');
-                        }
-                    });
-                });
-            });
-    });
-
-    $(document).on('click', '.btnDelete', function() {
-        const id = $(this).closest('tr').data('id');
-        Swal.fire({
-            title: 'Anda Yakin?',
-            text: 'Data tidak dapat dikembalikan',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Batal'
-        }).then(result => {
-            if (result.isConfirmed) {
-                fetch(`/rmstocks/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-                })
-                .then(r => r.json())
-                .then(res => {
-                    if (res.status === 'success') {
-                        Swal.fire('Terhapus!', res.message, 'success').then(() => location.reload());
-                    } else {
-                        Swal.fire('Gagal', res.message || 'Tidak bisa menghapus data', 'error');
-                    }
-                })
-                
-                .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
-            }
-        });
-    });
-
-    $('#exportForm').on('submit', function (e) {
-        e.preventDefault();
-
-        const rmId = $('#export_controller').val();
-        const type = $('select[name="type"]').val();
-
-        if (!rmId) {
-            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
-            return;
-        }
-
-        this.action = "{{ route('rmstocks.export', ':id') }}"
-            .replace(':id', rmId);
-
-        this.method = 'GET';
-        this.target = (type === 'pdf') ? '_blank' : '_self';
-
-        this.submit();
-    });
-@stop
-
-@section('content')
-@parent
-
-<div class="modal fade" id="secondModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Input Detail Stok</h5>
-            </div>
-
-            <div class="modal-body overflow-auto" id="secondModalBody" style="max-height: 70vh;">
-                {{-- auto generated --}}
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-primary" id="btnSubmitAll">Simpan Semua</button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            </div>
-
-        </div>
-    </div>
-</div>
+    </tbody>
+</tbody>
 @endsection
+
+<!-- edge -->

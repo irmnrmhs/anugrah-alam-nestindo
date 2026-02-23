@@ -37,12 +37,20 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Kode</label>
-        <select id="histories_id" class="form-control" required>
-            <option value="">-- Pilih Bahan Baku --</option>
-            @foreach($histories as $history)
-                <option value="{{ $history->id }}">{{ $history->grade_rm }}</option>
+        <label>Kode Bahan Baku</label>
+        <select id="raw_material_id" class="form-control" required>
+            <option value="">-- Pilih Kode --</option>
+            @foreach($rawMaterials as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
             @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Grade</label>
+        <select id="histories_id" class="form-control" required>
+            <option value="">-- Pilih Grade --</option>
         </select>
     </div>
     <div class="row mt-3">
@@ -165,21 +173,33 @@
 @stop
 
 @section('custom-js')
-    $('#histories_id').on('change', function () {
-        const id = $(this).val();
-        if (!id) return;
+    $('#raw_material_id').on('change', function () {
+        const rmId = $(this).val();
 
-        fetch(`/edges-info/${id}`)
+        $('#histories_id').html('<option value="">Loading...</option>');
+
+        if (!rmId) {
+            $('#histories_id').html('<option value="">-- Pilih Grade --</option>');
+            return;
+        }
+
+        fetch(`/edges-grades/${rmId}`)
             .then(r => r.json())
-            .then(info => {
-                $('#biji_sisa').val(info.biji_sisa);
-                $('#berat_sisa').val(info.berat_sisa);
-                $('#last').val(info.last ?? '-');
+            .then(data => {
+                let options = '<option value="">-- Pilih Grade --</option>';
+
+                data.forEach(history => {
+                    options += `
+                        <option value="${history.id}">
+                            ${history.gcolor.grade}
+                        </option>
+                    `;
+                });
+
+                $('#histories_id').html(options);
             })
             .catch(() => {
-                $('#biji_sisa').val('-');
-                $('#berat_sisa').val('-');
-                $('#last').val('-');
+                $('#histories_id').html('<option value="">Error</option>');
             });
     });
 
