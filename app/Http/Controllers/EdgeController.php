@@ -162,11 +162,21 @@ class EdgeController extends Controller
         }
     }
 
-    public function export(Request $request, $id)
+    public function export(Request $request, $rawMaterialId)
     {
         $type = $request->get('type', 'pdf');
-        $history = History::with('gcolor.rawMaterial')->findOrFail($id);
-        $rawMaterialId = $history->gcolor->rawMaterial->id;
+        
+        $histories = History::with([
+            'edges.employee',
+            'gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+        ])
+        ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+            $q->where('id', $rawMaterialId);
+        })
+        ->where('tujuan', 'PR02SK')
+        ->get();
+
+        // $rawMaterialId = $history->gcolor->rawMaterial->id;
         $histories = History::with([
                 'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
                 'edges.employee'

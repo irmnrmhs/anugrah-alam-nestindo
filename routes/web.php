@@ -399,7 +399,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/edges/{id}', [EdgeController::class, 'destroy'])->name('edges.destroy');
     Route::post('/edges/delete-multiple', [EdgeController::class, 'deleteMultiple']);
     Route::get('/edges-info/{id}', [EdgeController::class, 'info']);
-    Route::get('/edges/{id}/export', [EdgeController::class, 'export'])->name('edges.export');
+    // Route::get('/edges/{id}/export', [EdgeController::class, 'export'])->name('edges.export');
+    Route::get('/edges/export/{rawMaterialId}', [EdgeController::class, 'export'])->name('edges.export');
     Route::get('/edges-grades/{rawMaterialId}', [EdgeController::class, 'getGrades']);
     Route::get('/edges-hancuran-info/{id}', [EdgeController::class, 'hancuranInfo']);
     

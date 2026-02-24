@@ -167,14 +167,13 @@ class WashController extends Controller
         $history = History::with('gcolor.rawMaterial')->findOrFail($id);
         $rawMaterialId = $history->gcolor->rawMaterial->id;
         $histories = History::with([
-                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
-                'washes.employee'
-            ])
-            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
-                $q->where('id', $rawMaterialId);
-            })
-            ->where('tujuan', 'PR03PC')
-            ->get();
+            'washes',
+            'gcolor.rawMaterial'
+        ])
+        ->where('tujuan', 'PR03PC')
+        ->get();
+
+    dd($histories);
 
         $historyIds = $histories->pluck('id');
 
