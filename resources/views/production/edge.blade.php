@@ -14,7 +14,7 @@
     <th>Petugas</th>
     <th>Tanggal</th>
     <th>Jumlah Biji</th>
-    <th>Berat</th>
+    <th>Hancuran</th>
 @stop
 
 @section('table-body')
@@ -26,7 +26,7 @@
             <td>{{ $edge->employee->nama }}</td>
             <td>{{ $edge->tanggal }}</td>
             <td>{{ $edge->biji }}</td>
-            <td>{{ $edge->berat }}</td>
+            <td>{{ $edge->hancuran }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -87,8 +87,8 @@
         <input type="number" id="biji" step="1" min="0" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Berat</label>
-        <input type="number" id="berat" step="0.001" min="0" max="99999.99" class="form-control" required>
+        <label>Hancuran</label>
+        <input type="number" id="hancuran" step="0.001" min="0" max="99999.99" class="form-control" required>
     </div>
 @stop
 
@@ -126,7 +126,7 @@
         employees_id: $('#employees_id').val(),
         tanggal: $('#tanggal').val(),
         biji: $('#biji').val(),
-        berat: $('#berat').val(),
+        hancuran: $('#hancuran').val(),
     };
 
     fetch(url, {
@@ -213,7 +213,7 @@
                 $('#employees_id').val(edge.employees_id);
                 $('#tanggal').val(edge.tanggal);
                 $('#biji').val(edge.biji);
-                $('#berat').val(edge.berat);
+                $('#hancuran').val(edge.hancuran);
                 $('#modalTitle').text('Edit Sesek Kaki');
                 new bootstrap.Modal('#crudModal').show();
             });

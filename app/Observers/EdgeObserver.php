@@ -14,11 +14,9 @@ class EdgeObserver
     public function created(Edge $edge): void
     {
         if (
-            empty($edge->biji) &&
-            empty($edge->berat)
+            empty($edge->biji)
         ) {
             $edge->biji = 0;
-            $edge->berat = 0;
         }
 
         $history = History::where('gcolors_id', $edge->history->gcolors_id)
@@ -32,12 +30,10 @@ class EdgeObserver
                 'asal' => 'PR02SK',
                 'tujuan' => 'PR03PC',
                 'biji' => 0,
-                'berat' => 0,
             ]);
         }
 
         $history->increment('biji', $edge->biji);
-        $history->increment('berat', $edge->berat);
     }
 
     /**
@@ -45,7 +41,7 @@ class EdgeObserver
     */
     public function updated(Edge $edge): void
     {
-        if (!$edge->wasChanged(['biji', 'berat'])) {
+        if (!$edge->wasChanged('biji')) {
             return;
         }
 
@@ -57,15 +53,13 @@ class EdgeObserver
         if (!$history) return;
 
         $history->decrement('biji', $edge->getOriginal('biji') ?? 0);
-        $history->decrement('berat', $edge->getOriginal('berat') ?? 0);
 
         $history->increment('biji', $edge->biji ?? 0);
-        $history->increment('berat', $edge->berat ?? 0);
     }
 
     public function updating(Edge $edge)
     {
-        if (!$edge->isDirty(['biji', 'berat'])) {
+        if (!$edge->isDirty('biji')) {
             return;
         }
 
@@ -96,8 +90,7 @@ class EdgeObserver
     public function deleting(Edge $edge): void
     {
         if (
-            empty($edge->biji) &&
-            empty($edge->berat)
+            empty($edge->biji)
         ) {
             return;
         }
@@ -110,8 +103,7 @@ class EdgeObserver
         if (!$history) return;
 
         if (
-            ($edge->biji ?? 0) > $history->sisa_biji_cuci ||
-            ($edge->berat ?? 0) > $history->sisa_berat_cuci
+            ($edge->biji ?? 0) > $history->sisa_biji_cuci
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
@@ -119,9 +111,8 @@ class EdgeObserver
         }
 
         $history->decrement('biji', $edge->biji ?? 0);
-        $history->decrement('berat', $edge->berat ?? 0);
 
-        if ($history->biji <= 0 && $history->berat <= 0) {
+        if ($history->biji <= 0) {
             $history->delete();
         }
     }

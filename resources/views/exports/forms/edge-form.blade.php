@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($edges->first()?->tanggal)->translatedFormat('F') ?? '-' }}
+        : {{ \Carbon\Carbon::parse($histories->first()?->edges->first()?->tanggal)->translatedFormat('F') ?? '-' }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -111,24 +111,47 @@
     </tr>
 </thead>
 <tbody>
-    <tbody>
-    @foreach($edges as $index => $edge)
-        @php
-            $gcolor = $edge->history?->gcolor;
-            $arrival = $gcolor?->rawMaterial?->arrivals->first();
-            $rm = $gcolor?->rawMaterial;
-        @endphp
+@php $no = 1; @endphp
+
+@foreach($histories as $history)
+    @php
+        $gcolor = $history->gcolor;
+        $rm = $gcolor?->rawMaterial;
+        $arrival = $rm?->arrivals->first();
+    @endphp
+
+    @forelse($history->edges as $edge)
         <tr>
-            <td class="text-center">{{ $index + 1 }}</td>
+            <td class="text-center">{{ $no++ }}</td>
             <td class="text-center">{{ $edge->tanggal }}</td>
-            <td>{{ $arrival?->dcertificate?->wbhouse?->nama ?? '-' }} / {{ $arrival?->dcertificate?->wbhouse?->kode ?? '-' }}</td>
+            <td>
+                {{ $arrival?->dcertificate?->wbhouse?->nama ?? '-' }}
+                /
+                {{ $arrival?->dcertificate?->wbhouse?->kode ?? '-' }}
+            </td>
             <td>{{ $rm->kode ?? '-' }}</td>
             <td>{{ $gcolor?->grade ?? '-' }}</td>
-            <td>{{ $edge->biji }}</td>
-            <td>{{ $edge->berat }}</td>
+            <td>{{ $edge->biji ?? 0 }}</td>
+            <td>{{ $edge->hancuran ?? 0 }}</td>
             <td>{{ $edge->employee?->nama ?? '-' }}</td>
         </tr>
-    @endforeach
-    </tbody>
+    @empty
+        <tr>
+            <td class="text-center">{{ $no++ }}</td>
+            <td class="text-center">-</td>
+            <td>
+                {{ $arrival?->dcertificate?->wbhouse?->nama ?? '-' }}
+                /
+                {{ $arrival?->dcertificate?->wbhouse?->kode ?? '-' }}
+            </td>
+            <td>{{ $rm->kode ?? '-' }}</td>
+            <td>{{ $gcolor?->grade ?? '-' }}</td>
+            <td class="text-center">0</td>
+            <td class="text-center">0</td>
+            <td>-</td>
+        </tr>
+    @endforelse
+
+@endforeach
 </tbody>
 @endsection

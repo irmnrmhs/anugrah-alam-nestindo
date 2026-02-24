@@ -53,8 +53,7 @@ class EdgeController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji'] > $tracker->sisa_biji_sesek ||
-            $validated['hancuran'] > $tracker->sisa_berat_sesek
+            $validated['biji'] > $tracker->sisa_biji_sesek
         ){
             return response()->json([
                 'status' => 'error',
@@ -84,7 +83,6 @@ class EdgeController extends Controller
 
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_sesek,
-            'berat_sisa' => $tracker->sisa_berat_sesek,
             'last' => $last?->tanggal,
         ]);
     }
@@ -96,18 +94,16 @@ class EdgeController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
-            'berat' => 'nullable|numeric|min:0|max:99999.99',
+            'hancuran' => 'nullable|numeric|min:0|max:99999.99',
         ]);
 
         $edge = Edge::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
         $biji_sisa = $tracker->sisa_biji_sesek + $edge->biji;
-        $berat_sisa = $tracker->sisa_berat_sesek + $edge->berat;
 
         if(
-            $validated['biji'] > $biji_sisa ||
-            $validated['berat'] > $berat_sisa
+            $validated['biji'] > $biji_sisa
         ){
             return response()->json([
                 'status' => 'error',
@@ -162,27 +158,35 @@ class EdgeController extends Controller
     {
         $type = $request->get('type', 'pdf');
 
-        $rm = History::with([
-            'gcolor.rawMaterial',
-            'edges.employee'
-        ])->findOrFail($id);
+        $history = History::with('gcolor.rawMaterial')->findOrFail($id);
 
-        // $edges = Edge::with(['employee', 'history'])
-        //     ->findOrFail($id);
+        $rawMaterialId = $history->gcolor->rawMaterial->id;
 
-        $edges = Edge::with(['employee', 'history'])
-            ->where('histories_id', $id)
+        $histories = History::with([
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'edges.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR02SK')
+            ->get();
+
+        $historyIds = $histories->pluck('id');
+
+        $edges = Edge::with([
+                'employee',
+                'history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+            ])
+            ->whereIn('histories_id', $historyIds)
             ->orderBy('tanggal')
             ->get();
 
         if ($type === 'excel') {
 
-            $filename = 'Sesek Kaki - ' .
-                str_replace(['/', '\\'], '-', $rm->gcolor->rawMaterial->kode) . '.xlsx';
-
             return Excel::download(
                 new EdgeExport($edges),
-                $filename
+                'Sesek Kaki.xlsx'
             );
         }
 
@@ -192,13 +196,10 @@ class EdgeController extends Controller
 
         $pdf = Pdf::loadView(
             'exports.forms.edge-form',
-            compact('rm', 'edges', 'document')
+            compact('edges', 'document', 'histories')
         )->setPaper('A4', 'landscape');
 
-        $filename = 'Sesek_Kaki' .
-            str_replace(['/', '\\'], '-', $rm->gcolor->rawMaterial->kode) . '.pdf';
-
-        return $pdf->stream($filename);
+        return $pdf->stream('Sesek_Kaki.pdf');
     }
 
     public function deleteMultiple(Request $request): JsonResponse
