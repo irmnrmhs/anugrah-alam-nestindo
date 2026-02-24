@@ -110,6 +110,26 @@ class RmGradeObserver
         }
     }
 
+    public function deleting(GradeColor $gradeColor): void
+    {
+        $history = History::where('gcolors_id', $gradeColor->id)
+            ->where('asal', 'PR01GB')
+            ->where('tujuan', 'PR02SK')
+            ->first();
+
+        if (!$history) return;
+        
+        if (
+            $history->sisa_biji_sesek < $history->biji
+        ) {
+            throw new \Exception(
+                'Data tidak dapat dihapus karena stok sudah digunakan'
+            );
+        }
+
+        $history->delete();
+    }
+
     /**
      * Handle the GradeColor "deleted" event.
      */

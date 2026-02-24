@@ -401,6 +401,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/edges-info/{id}', [EdgeController::class, 'info']);
     Route::get('/edges/{id}/export', [EdgeController::class, 'export'])->name('edges.export');
     Route::get('/edges-grades/{rawMaterialId}', [EdgeController::class, 'getGrades']);
+    Route::get('/edges-hancuran-info/{id}', [EdgeController::class, 'hancuranInfo']);
     
     // Pencucian
     Route::get('/washes', [WashController::class, 'index'])->name('washes.index');

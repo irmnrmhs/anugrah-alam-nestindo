@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('employees_id')->constrained('employees');
             $table->date('tanggal');
             $table->integer('biji');
-            $table->decimal('hancuran', 7, 2)->nullable();
             $table->timestamps();
         });
     }

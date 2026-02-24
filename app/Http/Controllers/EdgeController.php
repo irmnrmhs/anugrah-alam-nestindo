@@ -47,14 +47,12 @@ class EdgeController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
-            'hancuran' => 'nullable|numeric|min:0|max:99999.99',
         ]);
 
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji'] > $tracker->sisa_biji_sesek ||
-            $validated['hancuran'] > $tracker->total_hancuran
+            $validated['biji'] > $tracker->sisa_biji_sesek
         ){
             return response()->json([
                 'status' => 'error',
@@ -89,6 +87,26 @@ class EdgeController extends Controller
         ]);
     }
 
+    public function hancuranInfo($rawMaterialId)
+    {
+        $histories = History::whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+            $q->where('id', $rawMaterialId);
+        })
+        ->where('tujuan', 'PR02SK')
+        ->get();
+
+        $totalHancuran = $histories->sum('total_hancuran');
+
+        $last = Edge::whereIn('histories_id', $histories->pluck('id'))
+            ->latest()
+            ->first();
+
+        return response()->json([
+            'hcr_sisa' => $totalHancuran,
+            'last' => $last?->tanggal,
+        ]);
+    }
+
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
@@ -96,7 +114,6 @@ class EdgeController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
-            'hancuran' => 'nullable|numeric|min:0|max:99999.99',
         ]);
 
         $edge = Edge::findOrFail($id);
@@ -105,8 +122,7 @@ class EdgeController extends Controller
         $biji_sisa = $tracker->sisa_biji_sesek + $edge->biji;
 
         if(
-            $validated['biji'] > $biji_sisa  ||
-            $validated['hancuran'] > $tracker->total_hancuran
+            $validated['biji'] > $biji_sisa
         ){
             return response()->json([
                 'status' => 'error',

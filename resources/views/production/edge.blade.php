@@ -26,7 +26,7 @@
             <td>{{ $edge->employee->nama }}</td>
             <td>{{ $edge->tanggal }}</td>
             <td>{{ $edge->biji }}</td>
-            <td>{{ $edge->hancuran }}</td>
+            <td>{{ empty($edge->hancuran) ? '0' : $edge->hancuran }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -53,20 +53,15 @@
             <option value="">-- Pilih Grade --</option>
         </select>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-4">
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
             <input type="text" id="last" class="form-control" readonly>
         </div>
 
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Biji Sisa</label>
+        <div class="col-md-5">
+            <label id="sisa_label" style="font-size: 10pt">Biji Sisa</label>
             <input type="number" id="biji_sisa" class="form-control" readonly>
-        </div>
-
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Hancuran Sisa</label>
-            <input type="number" id="hcr_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">
@@ -85,10 +80,6 @@
     <div class="mb-3">
         <label>Biji</label>
         <input type="number" id="biji" step="1" min="0" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Hancuran</label>
-        <input type="number" id="hancuran" step="0.001" min="0" max="99999.99" class="form-control">
     </div>
 @stop
 
@@ -126,7 +117,6 @@
         employees_id: $('#employees_id').val(),
         tanggal: $('#tanggal').val(),
         biji: $('#biji').val(),
-        hancuran: $('#hancuran').val(),
     };
 
     fetch(url, {
@@ -184,40 +174,63 @@
         }
 
         fetch(`/edges-grades/${rmId}`)
-            .then(r => r.json())
-            .then(data => {
-                let options = '<option value="">-- Pilih Grade --</option>';
+        .then(r => r.json())
+        .then(data => {
+            let options = `
+                <option value="">-- Pilih Grade --</option>
+                <option value="Hancuran">Hancuran</option>
+            `;
 
-                data.forEach(history => {
-                    options += `
-                        <option value="${history.id}">
-                            ${history.gcolor.grade}
-                        </option>
-                    `;
-                });
-
-                $('#histories_id').html(options);
-            })
-            .catch(() => {
-                $('#histories_id').html('<option value="">Error</option>');
+            data.forEach(history => {
+                options += `
+                    <option value="${history.id}">
+                        ${history.gcolor.grade}
+                    </option>
+                `;
             });
+
+            $('#histories_id').html(options);
+        });
     });
 
     $('#histories_id').on('change', function () {
-        const historyId = $(this).val();
+        const value = $(this).val();
 
-        if (!historyId) return;
+        if (!value) {
+            $('#biji_sisa').val('');
+            return;
+        }
 
-        fetch(`/edges-info/${historyId}`)
+        if (value === 'Hancuran') {
+
+            $('#sisa_label').text('Hancuran Sisa');
+
+            const rmId = $('#raw_material_id').val();
+
+            fetch(`/edges-hancuran-info/${rmId}`)
+                .then(r => r.json())
+                .then(info => {
+                    $('#biji_sisa').val(info.hcr_sisa);
+                    $('#last').val(info.last ?? '-');
+                })
+                .catch(() => {
+                    $('#biji_sisa').val('-');
+                    $('#last').val('-');
+                });
+
+            return;
+        }
+
+        $('#sisa_label').text('Biji Sisa');
+
+        fetch(`/edges-info/${value}`)
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
-                $('#hcr_sisa').val(info.hcr_sisa);
                 $('#last').val(info.last ?? '-');
             })
             .catch(() => {
                 $('#biji_sisa').val('-');
-                $('#hcr_sisa').val('-');
                 $('#last').val('-');
             });
     });
@@ -232,7 +245,6 @@
                 $('#employees_id').val(edge.employees_id);
                 $('#tanggal').val(edge.tanggal);
                 $('#biji').val(edge.biji);
-                $('#hancuran').val(edge.hancuran);
                 $('#modalTitle').text('Edit Sesek Kaki');
                 new bootstrap.Modal('#crudModal').show();
             });
