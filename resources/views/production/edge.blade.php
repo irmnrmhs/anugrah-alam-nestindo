@@ -65,8 +65,8 @@
         </div>
 
         <div class="col-md-4">
-            <label style="font-size: 10pt">Berat Sisa</label>
-            <input type="number" id="berat_sisa" class="form-control" readonly>
+            <label style="font-size: 10pt">Hancuran Sisa</label>
+            <input type="number" id="hcr_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">
@@ -88,7 +88,7 @@
     </div>
     <div class="mb-3">
         <label>Hancuran</label>
-        <input type="number" id="hancuran" step="0.001" min="0" max="99999.99" class="form-control" required>
+        <input type="number" id="hancuran" step="0.001" min="0" max="99999.99" class="form-control">
     </div>
 @stop
 
@@ -200,6 +200,25 @@
             })
             .catch(() => {
                 $('#histories_id').html('<option value="">Error</option>');
+            });
+    });
+
+    $('#histories_id').on('change', function () {
+        const historyId = $(this).val();
+
+        if (!historyId) return;
+
+        fetch(`/edges-info/${historyId}`)
+            .then(r => r.json())
+            .then(info => {
+                $('#biji_sisa').val(info.biji_sisa);
+                $('#hcr_sisa').val(info.hcr_sisa);
+                $('#last').val(info.last ?? '-');
+            })
+            .catch(() => {
+                $('#biji_sisa').val('-');
+                $('#hcr_sisa').val('-');
+                $('#last').val('-');
             });
     });
 

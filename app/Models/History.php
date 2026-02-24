@@ -11,7 +11,7 @@ class History extends Model
         'asal',
         'tujuan',
         'biji',
-        'berat'
+        'berat',
     ];
 
     public function identifier()
@@ -74,13 +74,18 @@ class History extends Model
         return $this->hasMany(Product::class, 'histories_id');
     }
 
+    public function getTotalHancuranAttribute()
+    {
+        return $this->gcolor()->sum('other');
+    }
+
     // 1. Sesek Kaki
     public function getTotalBijiSesekAttribute()
     {
         return $this->edges()->sum('biji');
     }
 
-    public function getTotalBeratSesekAttribute()
+    public function getHancuranSesekAttribute()
     {
         return $this->edges()->sum('hancuran');
     }
@@ -89,21 +94,6 @@ class History extends Model
     {
         return $this->biji - $this->total_biji_sesek;
     }
-
-    public function getSisaBeratSesekAttribute()
-    {
-        return $this->hancuran - $this->total_berat_sesek;
-    }
-
-    // public function getDiprosesBijiSesekAttribute()
-    // {
-    //     return $this->diproses_biji -= $this->sisa_biji_sesek;
-    // }
-
-    // public function getDiprosesBeratSesekAttribute()
-    // {
-    //     return $this->sisa_berat_sesek -= $this->diproses_berat;
-    // }
 
     // 2. Pencucian
     public function getTotalBijiCuciAttribute()

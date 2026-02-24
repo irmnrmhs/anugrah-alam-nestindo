@@ -121,6 +121,7 @@
     @endphp
 
     @forelse($history->edges as $edge)
+        @continue($edge->biji == 0)
         <tr>
             <td class="text-center">{{ $no++ }}</td>
             <td class="text-center">{{ $edge->tanggal }}</td>

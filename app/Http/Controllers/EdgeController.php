@@ -53,7 +53,8 @@ class EdgeController extends Controller
         $tracker = History::find($validated['histories_id']);
 
         if(
-            $validated['biji'] > $tracker->sisa_biji_sesek
+            $validated['biji'] > $tracker->sisa_biji_sesek ||
+            $validated['hancuran'] > $tracker->total_hancuran
         ){
             return response()->json([
                 'status' => 'error',
@@ -83,6 +84,7 @@ class EdgeController extends Controller
 
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_sesek,
+            'hcr_sisa' => $tracker->total_hancuran,
             'last' => $last?->tanggal,
         ]);
     }
@@ -103,7 +105,8 @@ class EdgeController extends Controller
         $biji_sisa = $tracker->sisa_biji_sesek + $edge->biji;
 
         if(
-            $validated['biji'] > $biji_sisa
+            $validated['biji'] > $biji_sisa  ||
+            $validated['hancuran'] > $tracker->total_hancuran
         ){
             return response()->json([
                 'status' => 'error',

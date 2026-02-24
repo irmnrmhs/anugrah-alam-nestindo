@@ -30,6 +30,7 @@ class EdgeObserver
                 'asal' => 'PR02SK',
                 'tujuan' => 'PR03PC',
                 'biji' => 0,
+                'berat' => 0,
             ]);
         }
 
