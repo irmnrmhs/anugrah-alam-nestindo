@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Wash;
-use App\Models\History;
+use App\Exports\WashExport;
 use App\Models\Document;
 use App\Models\Employee;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Models\History;
+use App\Models\Wash;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WashController extends Controller
 {
     public string $obj = 'Pencucian';
     public function index(): View
     {
-        $washes = Wash::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR03PC')->get();
+        $washes = Wash::with(['history.gcolor.rawMaterial', 'employee'])->latest()->get();
+        $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR03PC')->get();
+        $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.wash', compact('washes', 'histories', 'employees'));
+        return view('production.wash', compact('washes', 'histories', 'rms', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -123,6 +126,18 @@ class WashController extends Controller
         ]);
     }
 
+    public function getGrades($rawMaterialId)
+    {
+        $histories = History::with('gcolor')
+            ->where('tujuan', 'PR03PC')
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->get();
+
+        return response()->json($histories);
+    }
+
     public function destroy(int $id): JsonResponse
     {
         try {
@@ -146,24 +161,49 @@ class WashController extends Controller
         }
     }
 
-    public function export($id)
+    public function export(Request $request, $id)
     {
-        $washes = Wash::with(['employee', 'history'])
-            ->findOrFail($id);
+        $type = $request->get('type', 'pdf');
+        $history = History::with('gcolor.rawMaterial')->findOrFail($id);
+        $rawMaterialId = $history->gcolor->rawMaterial->id;
+        $histories = History::with([
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'washes.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR03PC')
+            ->get();
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'PR03PC')
-        ->firstOrFail();
+        $historyIds = $histories->pluck('id');
 
-        $pdf = Pdf::loadView('exports.wash-form', compact('washes', 'document'))
-                ->setPaper('A4', 'landscape');
+        $washes = Wash::with([
+                'employee',
+                'history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+            ])
+            ->whereIn('histories_id', $historyIds)
+            ->orderBy('tanggal')
+            ->get();
 
-        $filename = 'Pencucian.pdf';
+        if ($type === 'excel') {
 
-        return $pdf->stream($filename);
+            return Excel::download(
+                new WashExport($washes),
+                'Pencucian.xlsx'
+            );
+        }
+
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'PR03PC')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView(
+            'exports.forms.wash-form',
+            compact('washes', 'document', 'histories')
+        )->setPaper('A4', 'landscape');
+
+        return $pdf->stream('Pencucian.pdf');
     }
 
     public function deleteMultiple(Request $request): JsonResponse

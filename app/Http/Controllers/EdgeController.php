@@ -19,25 +19,14 @@ class EdgeController extends Controller
     public string $obj = 'Sesek Kaki';
     public function index(): View
     {
-        $edges = Edge::with([
-            'history.gcolor.rawMaterial',
-            'employee'
-        ])->latest()->get();
-
-        $histories = History::with('gcolor.rawMaterial')
-            ->where('tujuan', 'PR02SK')
-            ->get();
-
-        $rawMaterials = $histories
-            ->pluck('gcolor.rawMaterial')
-            ->unique('id')
-            ->values();
-
+        $edges = Edge::with(['history.gcolor.rawMaterial', 'employee'])->latest()->get();
+        $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR02SK')->get();
+        $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.edge', compact('edges', 'histories', 'rawMaterials', 'employees'));
+        return view('production.edge', compact('edges', 'histories', 'rms', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -87,25 +76,25 @@ class EdgeController extends Controller
         ]);
     }
 
-    public function hancuranInfo($rawMaterialId)
-    {
-        $histories = History::whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
-            $q->where('id', $rawMaterialId);
-        })
-        ->where('tujuan', 'PR02SK')
-        ->get();
+    // public function hancuranInfo($rawMaterialId)
+    // {
+    //     $histories = History::whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+    //         $q->where('id', $rawMaterialId);
+    //     })
+    //     ->where('tujuan', 'PR02SK')
+    //     ->get();
 
-        $totalHancuran = $histories->sum('total_hancuran');
+    //     $totalHancuran = $histories->sum('total_hancuran');
 
-        $last = Edge::whereIn('histories_id', $histories->pluck('id'))
-            ->latest()
-            ->first();
+    //     $last = Edge::whereIn('histories_id', $histories->pluck('id'))
+    //         ->latest()
+    //         ->first();
 
-        return response()->json([
-            'hcr_sisa' => $totalHancuran,
-            'last' => $last?->tanggal,
-        ]);
-    }
+    //     return response()->json([
+    //         'hcr_sisa' => $totalHancuran,
+    //         'last' => $last?->tanggal,
+    //     ]);
+    // }
 
     public function update(Request $request, int $id): JsonResponse
     {
@@ -176,11 +165,8 @@ class EdgeController extends Controller
     public function export(Request $request, $id)
     {
         $type = $request->get('type', 'pdf');
-
         $history = History::with('gcolor.rawMaterial')->findOrFail($id);
-
         $rawMaterialId = $history->gcolor->rawMaterial->id;
-
         $histories = History::with([
                 'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
                 'edges.employee'

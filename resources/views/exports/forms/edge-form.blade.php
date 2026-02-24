@@ -114,45 +114,19 @@
 @php $no = 1; @endphp
 
 @foreach($histories as $history)
-    @php
-        $gcolor = $history->gcolor;
-        $rm = $gcolor?->rawMaterial;
-        $arrival = $rm?->arrivals->first();
-    @endphp
-
-    @forelse($history->edges as $edge)
+    @foreach($history->edges as $edge)
         @continue($edge->biji == 0)
         <tr>
             <td class="text-center">{{ $no++ }}</td>
             <td class="text-center">{{ $edge->tanggal }}</td>
-            <td>
-                {{ $arrival?->dcertificate?->wbhouse?->nama ?? '-' }}
-                /
-                {{ $arrival?->dcertificate?->wbhouse?->kode ?? '-' }}
-            </td>
-            <td>{{ $rm->kode ?? '-' }}</td>
-            <td>{{ $gcolor?->grade ?? '-' }}</td>
+            <td>{{ $edge->history->rbw }}</td>
+            <td>{{ $edge->history->rm }}</td>
+            <td>{{ $edge->history->grade }}</td>
             <td>{{ $edge->biji ?? 0 }}</td>
             <td>{{ $edge->hancuran ?? 0 }}</td>
             <td>{{ $edge->employee?->nama ?? '-' }}</td>
         </tr>
-    @empty
-        <tr>
-            <td class="text-center">{{ $no++ }}</td>
-            <td class="text-center">-</td>
-            <td>
-                {{ $arrival?->dcertificate?->wbhouse?->nama ?? '-' }}
-                /
-                {{ $arrival?->dcertificate?->wbhouse?->kode ?? '-' }}
-            </td>
-            <td>{{ $rm->kode ?? '-' }}</td>
-            <td>{{ $gcolor?->grade ?? '-' }}</td>
-            <td class="text-center">0</td>
-            <td class="text-center">0</td>
-            <td>-</td>
-        </tr>
-    @endforelse
-
+    @endforeach
 @endforeach
 </tbody>
 @endsection

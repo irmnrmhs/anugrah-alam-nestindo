@@ -204,8 +204,18 @@ class History extends Model
         return $this->berat - $this->total_berat_produk;
     }
 
-    public function getGradeRmAttribute()
+    public function getRbwAttribute()
     {
-        return $this->gcolor->rawMaterial->kode . ' (' . $this->gcolor->grade . ')';
+        return $this->gcolor->rawMaterial->arrivals->first()->dcertificate->wbhouse->nama . ' / ' . $this->gcolor->rawMaterial->arrivals->first()->dcertificate->wbhouse->kode;
+    }
+
+    public function getRmAttribute()
+    {
+        return $this->gcolor->rawMaterial->kode;
+    }
+
+    public function getGradeAttribute()
+    {
+        return $this->gcolor->grade;
     }
 }

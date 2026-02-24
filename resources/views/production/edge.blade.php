@@ -10,11 +10,13 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode Produk</th>
-    <th>Petugas</th>
     <th>Tanggal</th>
+    <th>Nama RBW / No. Reg</th>
+    <th>Kode Bahan Baku</th>
+    <th>Kode Grade</th>
     <th>Jumlah Biji</th>
     <th>Hancuran</th>
+    <th>Petugas</th>
 @stop
 
 @section('table-body')
@@ -22,11 +24,13 @@
         <tr data-id="{{ $edge->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $edge->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $edge->history->gcolor->grade }}</td>
-            <td>{{ $edge->employee->nama }}</td>
             <td>{{ $edge->tanggal }}</td>
+            <td>{{ $edge->history->rbw }}</td>
+            <td>{{ $edge->history->rm }}</td>
+            <td>{{ $edge->history->gcolor->grade }}</td>
             <td>{{ $edge->biji }}</td>
             <td>{{ empty($edge->hancuran) ? '0' : $edge->hancuran }}</td>
+            <td>{{ $edge->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -40,7 +44,7 @@
         <label>Kode Bahan Baku</label>
         <select id="raw_material_id" class="form-control" required>
             <option value="">-- Pilih Kode --</option>
-            @foreach($rawMaterials as $rm)
+            @foreach($rms as $rm)
                 <option value="{{ $rm->id }}">
                     {{ $rm->kode }}
                 </option>
@@ -194,6 +198,25 @@
     });
 
     $('#histories_id').on('change', function () {
+        const historyId = $(this).val();
+
+        if (!historyId) return;
+
+        fetch(`/edges-info/${historyId}`)
+            .then(r => r.json())
+            .then(info => {
+                $('#biji_sisa').val(info.biji_sisa);
+                $('#hcr_sisa').val(info.hcr_sisa);
+                $('#last').val(info.last ?? '-');
+            })
+            .catch(() => {
+                $('#biji_sisa').val('-');
+                $('#hcr_sisa').val('-');
+                $('#last').val('-');
+            });
+    });
+
+    {{-- $('#histories_id').on('change', function () {
         const value = $(this).val();
 
         if (!value) {
@@ -233,7 +256,7 @@
                 $('#biji_sisa').val('-');
                 $('#last').val('-');
             });
-    });
+    }); --}}
 
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');

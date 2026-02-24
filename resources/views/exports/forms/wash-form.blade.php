@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Pencucian')
 
@@ -44,7 +44,7 @@
     <i>(Date)</i>
 </td>
 <td>
-    : {{ \Carbon\Carbon::parse($document->tgl)->translatedFormat('d F Y') }}
+    : \Carbon\Carbon::parse($histories->first()?->washes->first()?->tanggal)->translatedFormat('d F Y') }}
 </td>
 </tr>
 @endsection
@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($washes->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($histories->first()?->washes->first()?->tanggal)->translatedFormat('F') }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -111,34 +111,22 @@
     </tr>
 </thead>
 <tbody>
-    @php
-        $arrival = $washes->history->identifier->rawMaterial->arrivals->first();
-        $rm = $washes->history->identifier->rawMaterial;
-    @endphp
-    <tr>
-        <td class="text-center">1</td>
-        <td class="text-center">
-            {{ $washes->tgl_mulai }}
-        </td>
-        <td>
-            {{ $arrival->dcertificate->wbhouse->nama }} /
-            {{ $arrival->dcertificate->wbhouse->kode }}
-        </td>
-        <td>
-            {{ $rm->kode}}
-        </td>
-        <td>
-            {{ $washes->history->identifier->grade->grade }}
-        </td>
-        <td>
-            {{ $washes->biji_in }}
-        </td>
-        <td>
-            {{ $washes->biji_out }}
-        </td>
-        <td>
-            {{ $washes->employee->nama }}
-        </td>
-    </tr>
+@php $no = 1; @endphp
+
+@foreach($histories as $history)
+    @foreach($history->washes as $wash)
+        @continue($wash->biji == 0)
+        <tr>
+            <td class="text-center">{{ $no++ }}</td>
+            <td class="text-center">{{ $wash->tanggal }}</td>
+            <td>{{ $wash->history->rbw }}</td>
+            <td>{{ $wash->history->rm }}</td>
+            <td>{{ $wash->history->grade }}</td>
+            <td>{{ $wash->biji_in }}</td>
+            <td>{{ $wash->biji_out }}</td>
+            <td>{{ $wash->employee->nama }}</td>
+        </tr>
+    @endforeach
+@endforeach     
 </tbody>
 @endsection

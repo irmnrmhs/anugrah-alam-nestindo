@@ -412,6 +412,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/washes/delete-multiple', [WashController::class, 'deleteMultiple']);
     Route::get('/washes-info/{id}', [WashController::class, 'info']);
     Route::get('/washes/{id}/export', [WashController::class, 'export'])->name('washes.export');
+    Route::get('/washes-grades/{rawMaterialId}', [EdgeController::class, 'getGrades']);
 
     // Inspeksi dan Koreksi
     Route::get('/corrections', [CorrectionController::class, 'index'])->name('corrections.index');
