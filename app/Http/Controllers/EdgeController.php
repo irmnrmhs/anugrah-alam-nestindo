@@ -199,10 +199,8 @@ class EdgeController extends Controller
             ->where('kode', 'PR02SK')
             ->firstOrFail();
 
-        $pdf = Pdf::loadView(
-            'exports.forms.edge-form',
-            compact('edges', 'document', 'histories')
-        )->setPaper('A4', 'landscape');
+        $pdf = Pdf::loadView('exports.forms.edge-form', compact('edges', 'document', 'histories'))
+                ->setPaper('A4', 'landscape');
 
         return $pdf->stream('Sesek_Kaki.pdf');
     }

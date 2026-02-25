@@ -186,7 +186,6 @@ class WashController extends Controller
             ->get();
 
         if ($type === 'excel') {
-
             return Excel::download(
                 new WashExport($washes),
                 'Pencucian.xlsx'

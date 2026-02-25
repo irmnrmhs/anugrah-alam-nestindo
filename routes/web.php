@@ -435,6 +435,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/picks/delete-multiple', [PickController::class, 'deleteMultiple']);
     Route::get('/picks-info/{id}', [PickController::class, 'info']);
     Route::get('/picks/{id}/export', [PickController::class, 'export'])->name('picks.export');
+    Route::get('/picks-grades/{rawMaterialId}', [PickController::class, 'getGrades']);
     
     // Perendaman
     Route::get('/soaks', [SoakController::class, 'index'])->name('soaks.index');

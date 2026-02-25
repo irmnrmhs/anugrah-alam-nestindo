@@ -35,7 +35,6 @@ class PickObserver
         }
 
         $history->increment('biji', $pick->biji);
-        $history->increment('berat', $pick->berat);
     }
 
     /**

@@ -10,11 +10,13 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode Produk</th>
-    <th>Petugas</th>
     <th>Tanggal</th>
-    <th>Biji</th>
+    <th>Nama RBW / No. Reg</th>
+    <th>Kode Bahan Baku</th>
+    <th>Kode Grade</th>
+    <th>Jumlah Biji</th>
     <th>Keterangan</th>
+    <th>Petugas</th>
 @stop
 
 @section('table-body')
@@ -22,11 +24,13 @@
         <tr data-id="{{ $pick->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $pick->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $pick->history->gcolor->kode }}</td>
-            <td>{{ $pick->employee->nama }}</td>
             <td>{{ $pick->tanggal }}</td>
+            <td>{{ $pick->history->rbw }}</td>
+            <td>{{ $pick->history->rm }}</td>
+            <td>{{ $pick->history->gcolor->grade }}</td>
             <td>{{ $pick->biji }}</td>
             <td>{{ empty($pick->keterangan) ? '-' : $pick->keterangan }}</td>
+            <td>{{ $pick->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -37,28 +41,31 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Kode</label>
-        <select id="histories_id" class="form-control" required>
-            <option value="">-- Pilih Produk --</option>
-            @foreach($histories as $history)
-                <option value="{{ $history->id }}">{{ $history->grade_rm }}</option>
+        <label>Kode Bahan Baku</label>
+        <select id="raw_material_id" class="form-control" required>
+            <option value="">-- Pilih Kode --</option>
+            @foreach($rms as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
             @endforeach
         </select>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-4">
+    <div class="mb-3">
+        <label>Grade</label>
+        <select id="histories_id" class="form-control" required>
+            <option value="">-- Pilih Grade --</option>
+        </select>
+    </div>
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
             <input type="text" id="last" class="form-control" readonly>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Biji Sisa</label>
             <input type="number" id="biji_sisa" class="form-control" readonly>
-        </div>
-
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Berat Sisa</label>
-            <input type="number" id="berat_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">
@@ -84,6 +91,29 @@
     </div>
 @stop
 
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select id="export_controller" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($picks->pluck('history.gcolor.rawMaterial')->unique('id') as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
+
 @section('form-submit-script')
     const id = $('#item_id').val();
     const url = id ? `/picks/${id}` : '/picks';
@@ -93,7 +123,7 @@
         _token: '{{ csrf_token() }}',
         histories_id: $('#histories_id').val(),
         employees_id: $('#employees_id').val(),
-        tgl_mulai: $('#tgl_mulai').val(),
+        tanggal: $('#tanggal').val(),
         biji: $('#biji').val(),
         keterangan: $('#keterangan').val()
     };
@@ -142,11 +172,42 @@
 @stop
 
 @section('custom-js')
-    $('#histories_id').on('change', function () {
-        const id = $(this).val();
-        if (!id) return;
+    $('#raw_material_id').on('change', function () {
+        const rmId = $(this).val();
 
-        fetch(`/picks-info/${id}`)
+        $('#histories_id').html('<option value="">Loading...</option>');
+
+        if (!rmId) {
+            $('#histories_id').html('<option value="">-- Pilih Grade --</option>');
+            return;
+        }
+
+        fetch(`/picks-grades/${rmId}`)
+        .then(r => r.json())
+        .then(data => {
+            let options = `
+                <option value="">-- Pilih Grade --</option>
+                <option value="Hancuran">Hancuran</option>
+            `;
+
+            data.forEach(history => {
+                options += `
+                    <option value="${history.id}">
+                        ${history.gcolor.grade}
+                    </option>
+                `;
+            });
+
+            $('#histories_id').html(options);
+        });
+    });
+
+    $('#histories_id').on('change', function () {
+        const historyId = $(this).val();
+
+        if (!historyId) return;
+
+        fetch(`/picks-info/${historyId}`)
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
@@ -200,5 +261,25 @@
                 .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
+    });
+
+    $('#exportForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const rmId = $('#export_controller').val();
+        const type = $('select[name="type"]').val();
+
+        if (!rmId) {
+            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('picks.export', ':id') }}"
+            .replace(':id', rmId);
+
+        this.method = 'GET';
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+
+        this.submit();
     });
 @stop

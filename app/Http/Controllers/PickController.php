@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pick;
-use App\Models\History;
+use App\Exports\PickExport;
 use App\Models\Document;
 use App\Models\Employee;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Models\History;
+use App\Models\Pick;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PickController extends Controller
 {
     public string $obj = 'Pencabutan Bulu';
     public function index(): View
     {
-        $picks = Pick::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR05PB')->get();
+        $picks = Pick::with(['history.gcolor.rawMaterial', 'employee'])->latest()->get();
+        $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR05PB')->get();
+        $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.pick', compact('picks', 'histories', 'employees'));
+        return view('production.pick', compact('picks', 'histories', 'rms', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -105,6 +108,18 @@ class PickController extends Controller
         ]);
     }
 
+    public function getGrades($rawMaterialId)
+    {
+        $histories = History::with('gcolor')
+            ->where('tujuan', 'PR05PB')
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->get();
+
+        return response()->json($histories);
+    }
+
     public function destroy(int $id): JsonResponse
     {
         try {
@@ -128,19 +143,43 @@ class PickController extends Controller
         }
     }
 
-    public function export($id)
+    public function export(Request $request, $rawMaterialId)
     {
-        $picks = Pick::with(['employee', 'history'])
-            ->findOrFail($id);
+        $type = $request->get('type', 'pdf');
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'PR05PB')
-        ->firstOrFail();
+        $histories = History::with([
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'edges.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR05PB')
+            ->get();
 
-        $pdf = Pdf::loadView('exports.pick-form', compact('picks', 'document'))
+        $historyIds = $histories->pluck('id');
+
+        $picks = Pick::with([
+                'employee',
+                'history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+            ])
+            ->whereIn('histories_id', $historyIds)
+            ->orderBy('tanggal')
+            ->get();
+
+        if ($type === 'excel') {
+
+            return Excel::download(
+                new PickExport($picks),
+                'Cabut Bulu.xlsx'
+            );
+        }
+
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'PR05PB')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.forms.pick-form', compact('picks', 'document', 'histories'))
                 ->setPaper('A4', 'landscape');
 
         $filename = 'Pencabutan Bulu.pdf';
