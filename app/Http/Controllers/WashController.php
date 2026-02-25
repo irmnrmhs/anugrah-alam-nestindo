@@ -161,19 +161,19 @@ class WashController extends Controller
         }
     }
 
-    public function export(Request $request, $id)
+    public function export(Request $request, $rawMaterialId)
     {
         $type = $request->get('type', 'pdf');
-        $history = History::with('gcolor.rawMaterial')->findOrFail($id);
-        $rawMaterialId = $history->gcolor->rawMaterial->id;
+        
         $histories = History::with([
-            'washes',
-            'gcolor.rawMaterial'
-        ])
-        ->where('tujuan', 'PR03PC')
-        ->get();
-
-    dd($histories);
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'washes.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR03PC')
+            ->get();
 
         $historyIds = $histories->pluck('id');
 

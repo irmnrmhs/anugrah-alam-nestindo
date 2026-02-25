@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('employees_id')->constrained('employees');
             $table->date('tanggal');
             $table->integer('biji');
-            $table->integer('cek')->default(0);
+            $table->integer('cek')->default(1);
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

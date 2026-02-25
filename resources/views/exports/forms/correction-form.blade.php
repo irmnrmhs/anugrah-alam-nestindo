@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Inspeksi dan Koreksi')
 
@@ -58,7 +58,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($corrections->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($histories->first()?->corrections->first()?->tanggal)->translatedFormat('F') ?? '-' }}
     </td>
 </tr>
 <tr>
@@ -72,7 +72,7 @@
 @section('data')
 <thead>
     <tr>
-        <th >
+        <th>
             Tanggal <br> <i>(Date)</i>
         </th>
         <th >
@@ -99,37 +99,25 @@
     </tr>
 </thead>
 <tbody>
-    @php
-        $arrival = $corrections->history->identifier->rawMaterial->arrivals->first();
-        $rm = $corrections->history->identifier->rawMaterial;
-    @endphp
-    <tr>
-        <td class="text-center">
-            {{ $corrections->tanggal }}
-        </td>
-        <td>
-            {{ $arrival->dcertificate->wbhouse->nama }} /
-            {{ $arrival->dcertificate->wbhouse->kode }}
-        </td>
-        <td>
-            {{ $rm->kode}}
-        </td>
-        <td>
-            {{ $corrections->history->identifier->grade->grade }}
-        </td>
-        <td>
-            {{ $corrections->biji }}
-        </td>
-        <td>
-            {{ (($corrections->cek) === 1 ? 'Lulus Cek' : 'Tidak Lulus Cek') }}
-        </td>
-        <td>
-            {{ empty($corrections->keterangan) ? '-' : $corrections->keterangan }}
-        </td>
-        <td>
-            {{ $corrections->employee->nama }}
-        </td>
-    </tr>
+@php $no = 1; @endphp
+
+@foreach($histories as $history)
+    @foreach($history->corrections as $correction)
+        @continue($correction->biji == 0)
+        <tr>
+            <td>{{ $correction->tanggal }}</td>
+            <td>{{ $correction->history->rbw }}</td>
+            <td>{{ $correction->history->rm }}</td>
+            <td>{{ $correction->history->grade }}</td>
+            <td>{{ $correction->biji ?? 0 }}</td>
+            <td>
+                {{ (($correction->cek) === 1 ? 'Lulus Cek' : 'Tidak Lulus Cek') }}
+            </td>
+            <td>{{ empty($correction->keterangan) ? '-' : $corrections->keterangan }}</td>
+            <td>{{ $correction->employee->nama }}</td>
+        </tr>
+    @endforeach
+@endforeach
 </tbody>
 <table>
     <tr>

@@ -165,16 +165,6 @@ class EdgeController extends Controller
     public function export(Request $request, $rawMaterialId)
     {
         $type = $request->get('type', 'pdf');
-        
-        $histories = History::with([
-            'edges.employee',
-            'gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
-        ])
-        ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
-            $q->where('id', $rawMaterialId);
-        })
-        ->where('tujuan', 'PR02SK')
-        ->get();
 
         // $rawMaterialId = $history->gcolor->rawMaterial->id;
         $histories = History::with([

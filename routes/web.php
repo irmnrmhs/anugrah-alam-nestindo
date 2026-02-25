@@ -412,8 +412,8 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/washes/{id}', [WashController::class, 'destroy'])->name('washes.destroy');
     Route::post('/washes/delete-multiple', [WashController::class, 'deleteMultiple']);
     Route::get('/washes-info/{id}', [WashController::class, 'info']);
-    Route::get('/washes/{id}/export', [WashController::class, 'export'])->name('washes.export');
-    Route::get('/washes-grades/{rawMaterialId}', [EdgeController::class, 'getGrades']);
+    Route::get('/washes/export/{rawMaterialId}', [WashController::class, 'export'])->name('washes.export');
+    Route::get('/washes-grades/{rawMaterialId}', [WashController::class, 'getGrades']);
 
     // Inspeksi dan Koreksi
     Route::get('/corrections', [CorrectionController::class, 'index'])->name('corrections.index');
@@ -424,6 +424,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/corrections/delete-multiple', [CorrectionController::class, 'deleteMultiple']);
     Route::get('/corrections-info/{id}', [CorrectionController::class, 'info']);
     Route::get('/corrections/{id}/export', [CorrectionController::class, 'export'])->name('corrections.export');
+    Route::get('/corrections-grades/{rawMaterialId}', [CorrectionController::class, 'getGrades']);
     
     // Pencabutan Bulu
     Route::get('/picks', [PickController::class, 'index'])->name('picks.index');

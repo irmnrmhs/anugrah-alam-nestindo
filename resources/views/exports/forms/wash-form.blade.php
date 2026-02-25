@@ -44,7 +44,7 @@
     <i>(Date)</i>
 </td>
 <td>
-    : \Carbon\Carbon::parse($histories->first()?->washes->first()?->tanggal)->translatedFormat('d F Y') }}
+    : {{ \Carbon\Carbon::parse($histories->first()?->washes->first()?->tanggal)->translatedFormat('d F Y') }}
 </td>
 </tr>
 @endsection
@@ -123,7 +123,7 @@
             <td>{{ $wash->history->rm }}</td>
             <td>{{ $wash->history->grade }}</td>
             <td>{{ $wash->biji_in }}</td>
-            <td>{{ $wash->biji_out }}</td>
+            <td>{{ $wash->biji_out}}</td>
             <td>{{ $wash->employee->nama }}</td>
         </tr>
     @endforeach

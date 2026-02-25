@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\History;
+use App\Exports\CorrectionExport;
+use App\Models\Correction;
 use App\Models\Document;
 use App\Models\Employee;
-use Illuminate\View\View;
-use App\Models\Correction;
-use Illuminate\Http\Request;
+use App\Models\History;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CorrectionController extends Controller
 {
     public string $obj = 'Inspeksi dan Koreksi';
     public function index(): View
     {
-        $corrections = Correction::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR04IK')->get();
+        $corrections = Correction::with(['history.gcolor.rawMaterial', 'employee'])->latest()->get();
+        $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR04IK')->get();
+        $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.correction', compact('corrections', 'histories', 'employees'));
+        return view('production.correction', compact('corrections', 'histories', 'rms', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -105,6 +108,18 @@ class CorrectionController extends Controller
         ]);
     }
 
+    public function getGrades($rawMaterialId)
+    {
+        $histories = History::with('gcolor')
+            ->where('tujuan', 'PR04IK')
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->get();
+
+        return response()->json($histories);
+    }
+
     public function destroy(int $id): JsonResponse
     {
         try {
@@ -128,24 +143,48 @@ class CorrectionController extends Controller
         }
     }
 
-    public function export($id)
+    public function export(Request $request, $rawMaterialId)
     {
-        $corrections = Correction::with(['employee', 'history'])
-            ->findOrFail($id);
+        $type = $request->get('type', 'pdf');
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'PR04IK')
-        ->firstOrFail();
+        $histories = History::with([
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'edges.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR04IK')
+            ->get();
 
-        $pdf = Pdf::loadView('exports.correction-form', compact('corrections', 'document'))
-                ->setPaper('A4', 'portrait');
+        $historyIds = $histories->pluck('id');
 
-        $filename = 'Inspeksi dan koreksi.pdf';
+        $corrections = Correction::with([
+                'employee',
+                'history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+            ])
+            ->whereIn('histories_id', $historyIds)
+            ->orderBy('tanggal')
+            ->get();
+            
+        if ($type === 'excel') {
 
-        return $pdf->stream($filename);
+            return Excel::download(
+                new CorrectionExport($corrections),
+                'Inspeksi dan Koreksi.xlsx'
+            );
+        }
+
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'PR04IK')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView(
+            'exports.forms.correction-form',
+            compact('corrections', 'document', 'histories')
+        )->setPaper('A4', 'portrait');
+
+        return $pdf->stream('Inspeksi_dan_Koreksi.pdf');
     }
 
     public function deleteMultiple(Request $request): JsonResponse
