@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Soak;
-use App\Models\History;
+use App\Exports\SoakExport;
 use App\Models\Document;
 use App\Models\Employee;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Models\History;
+use App\Models\Soak;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SoakController extends Controller
 {
     public string $obj = 'Perendaman';
     public function index(): View
     {
-        $soaks = Soak::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR06PR')->get();
+        $soaks = Soak::with(['history.gcolor.rawMaterial', 'employee'])->latest()->get();
+        $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR06PR')->get();
+        $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
@@ -119,6 +122,18 @@ class SoakController extends Controller
         ]);
     }
 
+    public function getGrades($rawMaterialId)
+    {
+        $histories = History::with('gcolor')
+            ->where('tujuan', 'PR06PR')
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->get();
+
+        return response()->json($histories);
+    }
+
     public function destroy(int $id): JsonResponse
     {
         try {
@@ -142,19 +157,42 @@ class SoakController extends Controller
         }
     }
 
-    public function export($id)
+    public function export(Request $request, $rawMaterialId)
     {
-        $soaks = Soak::with(['employee', 'history'])
-            ->findOrFail($id);
+        $type = $request->get('type', 'pdf');
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'PR06PR')
-        ->firstOrFail();
+        $histories = History::with([
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'edges.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR06PR')
+            ->get();
 
-        $pdf = Pdf::loadView('exports.soak-form', compact('soaks', 'document'))
+        $historyIds = $histories->pluck('id');
+
+        $soaks = Soak::with([
+                'employee',
+                'history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+            ])
+            ->whereIn('histories_id', $historyIds)
+            ->orderBy('tanggal')
+            ->get();
+
+        if ($type === 'excel') {
+            return Excel::download(
+                new SoakExport($soaks),
+                'Perendaman.xlsx'
+            );
+        }
+
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'PR06PR')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.forms.soak-form', compact('soaks', 'document', 'histories'))
                 ->setPaper('A4', 'portrait');
 
         $filename = 'Perendaman.pdf';

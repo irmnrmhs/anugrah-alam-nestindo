@@ -10,11 +10,12 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode Produk</th>
-    <th>Petugas</th>
     <th>Tanggal</th>
-    <th>Biji</th>
-    <th>Durasi</th>
+    <th>Nama RBW / No. Reg</th>
+    <th>Kode Bahan Baku</th>
+    <th>Kode Grade</th>
+    <th>Jumlah Biji</th>
+    <th>Waktu Rendam</th>
     <th>Shift</th>
     <th>Keterangan</th>
 @stop
@@ -24,9 +25,10 @@
         <tr data-id="{{ $soak->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $soak->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $soak->history->gcolor->kode }}</td>
-            <td>{{ $soak->employee->nama }}</td>
             <td>{{ $soak->tanggal }}</td>
+            <td>{{ $soak->history->rbw }}</td>
+            <td>{{ $soak->history->rm }}</td>
+            <td>{{ $soak->history->gcolor->grade }}</td>
             <td>{{ $soak->biji }}</td>
             <td>{{ $soak->durasi }}</td>
             <td>{{ $soak->shift }}</td>
@@ -41,12 +43,20 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Kode</label>
-        <select id="histories_id" class="form-control" required>
-            <option value="">-- Pilih Produk --</option>
-            @foreach($histories as $history)
-                <option value="{{ $history->id }}">{{ $history->grade_rm }}</option>
+        <label>Kode Bahan Baku</label>
+        <select id="raw_material_id" class="form-control" required>
+            <option value="">-- Pilih Kode --</option>
+            @foreach($rms as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
             @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Grade</label>
+        <select id="histories_id" class="form-control" required>
+            <option value="">-- Pilih Grade --</option>
         </select>
     </div>
     <div class="row mt-3 justify-content-center">
@@ -94,6 +104,29 @@
         <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select id="export_controller" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($soaks->pluck('history.gcolor.rawMaterial')->unique('id') as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     const id = $('#item_id').val();
@@ -155,20 +188,34 @@
 @stop
 
 @section('custom-js')
-    $('#histories_id').on('change', function () {
-        const id = $(this).val();
-        if (!id) return;
+    $('#raw_material_id').on('change', function () {
+        const rmId = $(this).val();
 
-        fetch(`/soaks-info/${id}`)
-            .then(r => r.json())
-            .then(info => {
-                $('#biji_sisa').val(info.biji_sisa);
-                $('#last').val(info.last ?? '-');
-            })
-            .catch(() => {
-                $('#biji_sisa').val('-');
-                $('#last').val('-');
+        $('#histories_id').html('<option value="">Loading...</option>');
+
+        if (!rmId) {
+            $('#histories_id').html('<option value="">-- Pilih Grade --</option>');
+            return;
+        }
+
+        fetch(`/soaks-grades/${rmId}`)
+        .then(r => r.json())
+        .then(data => {
+            let options = `
+                <option value="">-- Pilih Grade --</option>
+                <option value="Hancuran">Hancuran</option>
+            `;
+
+            data.forEach(history => {
+                options += `
+                    <option value="${history.id}">
+                        ${history.gcolor.grade}
+                    </option>
+                `;
             });
+
+            $('#histories_id').html(options);
+        });
     });
 
     $(document).on('click', '.btnEdit', function() {
@@ -215,5 +262,25 @@
                 .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
+    });
+
+    $('#exportForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const rmId = $('#export_controller').val();
+        const type = $('select[name="type"]').val();
+
+        if (!rmId) {
+            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('soaks.export', ':id') }}"
+            .replace(':id', rmId);
+
+        this.method = 'GET';
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+
+        this.submit();
     });
 @stop

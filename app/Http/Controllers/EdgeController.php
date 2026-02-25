@@ -188,7 +188,6 @@ class EdgeController extends Controller
             ->get();
 
         if ($type === 'excel') {
-
             return Excel::download(
                 new EdgeExport($edges),
                 'Sesek Kaki.xlsx'
