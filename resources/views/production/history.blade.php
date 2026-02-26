@@ -20,9 +20,7 @@
     <th>Asal</th>
     <th>Tujuan</th>
     <th>Biji Awal</th>
-    <th>Berat Awal</th>
     <th>Biji Sisa</th>
-    <th>Berat Sisa</th>
 @stop
 
 @section('table-body')
@@ -90,7 +88,6 @@
                 @endif
             </td>
             <td>{{ $history->biji }}</td>
-            <td>{{ $history->berat }}</td>
             <td>
                 @if ($history->tujuan === 'PR02SK')
                     {{ $history->sisa_biji_sesek }}
@@ -118,7 +115,7 @@
                     <span>Steaming</span>
                 @endif
             </td>
-            <td>
+            {{-- <td>
                 @if ($history->tujuan === 'PR02SK')
                     0
                 @elseif ($history->tujuan === 'PR03PC')
@@ -144,7 +141,7 @@
                 @elseif ($history->tujuan === 'PR13GP')
                     <span>Steaming</span>
                 @endif
-            </td>
+            </td> --}}
         </tr>
     @endforeach
 @stop

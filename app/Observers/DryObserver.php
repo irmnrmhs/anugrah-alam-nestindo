@@ -14,8 +14,7 @@ class DryObserver
     public function created(Dry $dry): void
     {
         if (
-            empty($dry->biji_keluar) &&
-            empty($dry->berat_keluar)
+            empty($dry->biji)
         ) {
             return;
         }
@@ -32,12 +31,10 @@ class DryObserver
                 'tujuan' => 'PR11GP',
                 'biji' => 0,
                 'berat' => 0,
-                'status' => 0
             ]);
         }
 
-        $history->increment('biji', $dry->biji_keluar);
-        $history->increment('berat', $dry->berat_keluar);   
+        $history->increment('biji', $dry->biji);  
     }
 
     /**
@@ -45,7 +42,7 @@ class DryObserver
      */
     public function updated(Dry $dry): void
     {
-        if (!$dry->wasChanged(['biji_keluar', 'berat_keluar'])) {
+        if (!$dry->wasChanged('biji')) {
             return;
         }
 
@@ -56,16 +53,14 @@ class DryObserver
 
         if (!$history) return;
 
-        $history->decrement('biji', $dry->getOriginal('biji_keluar') ?? 0);
-        $history->decrement('berat', $dry->getOriginal('berat_keluar') ?? 0);
+        $history->decrement('biji', $dry->getOriginal('biji') ?? 0);
 
-        $history->increment('biji', $dry->biji_keluar ?? 0);
-        $history->increment('berat', $dry->berat_keluar ?? 0);
+        $history->increment('biji', $dry->biji ?? 0);
     }
 
     public function updating(Dry $dry)
     {
-        if (!$dry->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (!$dry->isDirty('biji')) {
             return;
         }
 
@@ -77,17 +72,10 @@ class DryObserver
         if (!$history) return;
 
         $dipakaiBiji = $history->products()->sum('biji');
-        $dipakaiBerat = $history->products()->sum('berat');
 
         if ($dry->biji_keluar < $dipakaiBiji) {
             throw ValidationException::withMessages([
-                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
-
-        if ($dry->berat_keluar < $dipakaiBerat) {
-            throw ValidationException::withMessages([
-                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+                'biji' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
             ]);
         }
     }
@@ -102,10 +90,7 @@ class DryObserver
 
     public function deleting(Dry $dry): void
     {
-        if (
-            empty($dry->biji_keluar) &&
-            empty($dry->berat_keluar)
-        ) {
+        if (empty($dry->biji)) {
             return;
         }
 
@@ -117,18 +102,16 @@ class DryObserver
         if (!$history) return;
 
         if (
-            ($dry->biji_keluar ?? 0) > $history->sisa_biji_produk ||
-            ($dry->berat_keluar ?? 0) > $history->sisa_berat_produk
+            ($dry->biji ?? 0) > $history->sisa_biji_produk
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
             ]);
         }
 
-        $history->decrement('biji', $dry->biji_keluar ?? 0);
-        $history->decrement('berat', $dry->berat_keluar ?? 0);
+        $history->decrement('biji', $dry->biji ?? 0);
 
-        if ($history->biji <= 0 && $history->berat <= 0) {
+        if ($history->biji <= 0) {
             $history->delete();
         }
     }
