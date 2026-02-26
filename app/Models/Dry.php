@@ -14,9 +14,7 @@ class Dry extends Model
         'biji',
         'waktu_in',
         'waktu_out',
-        'keterangan',
         'shift',
-        'status'
     ];
 
     protected $casts = [

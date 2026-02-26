@@ -14,11 +14,9 @@ class PullObserver
     public function created(Pull $pull): void
     {
         if (
-            empty($pull->biji_keluar) &&
-            empty($pull->berat_keluar)
+            empty($pull->biji)
         ) {
-            $pull->biji_keluar = 0;
-            $pull->berat_keluar = 0;
+            $pull->biji = 0;
         }
 
         $history = History::where('gcolors_id', $pull->history->gcolors_id)
@@ -33,12 +31,10 @@ class PullObserver
                 'tujuan' => 'PR10PK',
                 'biji' => 0,
                 'berat' => 0,
-                'status' => 0
             ]);
         }
 
-        $history->increment('biji', $pull->biji_keluar);
-        $history->increment('berat', $pull->berat_keluar);
+        $history->increment('biji', $pull->biji);
     }
 
     /**
@@ -46,7 +42,7 @@ class PullObserver
      */
     public function updated(Pull $pull): void
     {
-        if (!$pull->wasChanged(['biji_keluar', 'berat_keluar'])) {
+        if (!$pull->wasChanged('biji')) {
             return;
         }
 
@@ -57,16 +53,14 @@ class PullObserver
 
         if (!$history) return;
 
-        $history->decrement('biji', $pull->getOriginal('biji_keluar') ?? 0);
-        $history->decrement('berat', $pull->getOriginal('berat_keluar') ?? 0);
+        $history->decrement('biji', $pull->getOriginal('biji') ?? 0);
 
-        $history->increment('biji', $pull->biji_keluar ?? 0);
-        $history->increment('berat', $pull->berat_keluar ?? 0);
+        $history->increment('biji', $pull->biji ?? 0);
     }
 
     public function updating(Pull $pull)
     {
-        if (!$pull->isDirty(['biji_keluar', 'berat_keluar'])) {
+        if (!$pull->isDirty('biji')) {
             return;
         }
 
@@ -77,18 +71,11 @@ class PullObserver
 
         if (!$history) return;
 
-        $dipakaiBiji = $history->dries()->sum('biji_masuk');
-        $dipakaiBerat = $history->dries()->sum('berat_masuk');
+        $dipakaiBiji = $history->dries()->sum('biji');
 
         if ($pull->biji_keluar < $dipakaiBiji) {
             throw ValidationException::withMessages([
-                'biji_keluar' => 'Biji keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
-
-        if ($pull->berat_keluar < $dipakaiBerat) {
-            throw ValidationException::withMessages([
-                'berat_keluar' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+                'biji' => 'Biji lebih kecil dari stok yang sudah dipakai proses berikutnya'
             ]);
         }
     }
@@ -104,8 +91,7 @@ class PullObserver
     public function deleting(Pull $pull): void
     {
         if (
-            empty($pull->biji_keluar) &&
-            empty($pull->berat_keluar)
+            empty($pull->biji)
         ) {
             return;
         }
@@ -118,18 +104,16 @@ class PullObserver
         if (!$history) return;
 
         if (
-            ($pull->biji_keluar ?? 0) > $history->sisa_biji_kering ||
-            ($pull->berat_keluar ?? 0) > $history->sisa_berat_kering
+            ($pull->biji ?? 0) > $history->sisa_biji_kering
         ) {
             throw ValidationException::withMessages([
                 'delete' => 'Data tidak dapat dihapus karena stok sudah digunakan'
             ]);
         }
 
-        $history->decrement('biji', $pull->biji_keluar ?? 0);
-        $history->decrement('berat', $pull->berat_keluar ?? 0);
+        $history->decrement('biji', $pull->biji ?? 0);
 
-        if ($history->biji <= 0 && $history->berat <= 0) {
+        if ($history->biji <= 0) {
             $history->delete();
         }
     }

@@ -31,7 +31,6 @@ class EntryObserver
                 'tujuan' => 'PR09KC',
                 'biji' => 0,
                 'berat' => 0,
-                'status' => 0
             ]);
         }
 

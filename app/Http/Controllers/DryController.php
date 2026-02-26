@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dry;
-use App\Models\History;
+use App\Exports\DryExport;
 use App\Models\Document;
+use App\Models\Dry;
 use App\Models\Employee;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Models\History;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DryController extends Controller
 {
     public string $obj = 'Pengeringan';
     public function index(): View
     {
-        $dries = Dry::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR10PK')->get();
+        $dries = Dry::with(['history.gcolor.rawMaterial', 'employee'])->latest()->get();
+        $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR10PK')->get();
+        $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.dry', compact('dries', 'histories', 'employees'));
+        return view('production.dry', compact('dries', 'histories', 'rms', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -35,7 +38,6 @@ class DryController extends Controller
             'biji' => 'required|integer|min:0',
             'waktu_in' => 'nullable|date_format:H:i',
             'waktu_out' => 'nullable|date_format:H:i',
-            'keterangan' => 'nullable',
             'shift' => 'required',
         ]);
 
@@ -77,7 +79,7 @@ class DryController extends Controller
 
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_kering,
-            'last' => $last?->tgl_mulai,
+            'last' => $last?->tanggal,
         ]);
     }
 
@@ -90,7 +92,6 @@ class DryController extends Controller
             'biji' => 'required|integer|min:0',
             'waktu_in' => 'nullable|date_format:H:i',
             'waktu_out' => 'nullable|date_format:H:i',
-            'keterangan' => 'nullable',
             'shift' => 'required'
         ]);
 
@@ -119,6 +120,18 @@ class DryController extends Controller
         ]);
     }
 
+    public function getGrades($rawMaterialId)
+    {
+        $histories = History::with('gcolor')
+            ->where('tujuan', 'PR10PK')
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->get();
+
+        return response()->json($histories);
+    }
+
     public function destroy(int $id): JsonResponse
     {
         try {
@@ -142,19 +155,42 @@ class DryController extends Controller
         }
     }
 
-    public function export($id)
+    public function export(Request $request, $rawMaterialId)
     {
-        $dries = Dry::with(['employee', 'history'])
-            ->findOrFail($id);
+        $type = $request->get('type', 'pdf');
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'PR10PK')
-        ->firstOrFail();
+        $histories = History::with([
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'edges.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR10PK')
+            ->get();
 
-        $pdf = Pdf::loadView('exports.dry-form', compact('dries', 'document'))
+        $historyIds = $histories->pluck('id');
+
+        $dries = Dry::with([
+                'employee',
+                'history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+            ])
+            ->whereIn('histories_id', $historyIds)
+            ->orderBy('tanggal')
+            ->get();
+
+        if ($type === 'excel') {
+            return Excel::download(
+                new DryExport($dries),
+                'Pengeringan.xlsx'
+            );
+        }
+        
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'PR10PK')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.forms.dry-form', compact('dries', 'document', 'histories'))
                 ->setPaper('A4', 'portrait');
 
         $filename = 'Pengeringan.pdf';

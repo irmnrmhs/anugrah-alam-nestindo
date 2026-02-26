@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('biji');
             $table->time('waktu_in');
             $table->time('waktu_out')->nullable();
-            $table->string('keterangan')->nullable();
             $table->integer('shift');
             $table->timestamps();
         });

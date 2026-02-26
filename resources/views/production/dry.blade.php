@@ -10,29 +10,29 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode Produk</th>
-    <th>Petugas</th>
     <th>Tanggal</th>
-    <th>Biji</th>
+    <th>Nama RBW / No. Reg</th>
+    <th>Kode Bahan Baku</th>
+    <th>Kode Grade</th>
+    <th>Jumlah Biji</th>
     <th>Waktu Masuk</th>
     <th>Waktu Keluar</th>
     <th>Shift</th>
-    <th>Keterangan</th>
 @stop
 
 @section('table-body')
     @foreach($dries as $index => $dry)
         <tr data-id="{{ $dry->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $dry->id }}"></td>
-            <td>{{ $index + 1 }}</td>
-            <td>{{ $dry->history->gcolor->kode }}</td>
-            <td>{{ $dry->employee->nama }}</td>
+             <td>{{ $index + 1 }}</td>
             <td>{{ $dry->tanggal }}</td>
+            <td>{{ $dry->history->rbw }}</td>
+            <td>{{ $dry->history->rm }}</td>
+            <td>{{ $dry->history->gcolor->grade }}</td>
             <td>{{ $dry->biji }}</td>
             <td>{{ $dry->waktu_in }}</td>
             <td>{{ $dry->waktu_out }}</td>
             <td>{{ $dry->shift }}</td>
-            <td>{{ empty($dry->keterangan) ? '-' : $dry->keterangan }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -43,12 +43,20 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Kode</label>
-        <select id="histories_id" class="form-control" required>
-            <option value="">-- Pilih Produk --</option>
-            @foreach($histories as $history)
-                <option value="{{ $history->id }}">{{ $history->grade_rm }}</option>
+        <label>Kode Bahan Baku</label>
+        <select id="raw_material_id" class="form-control" required>
+            <option value="">-- Pilih Kode --</option>
+            @foreach($rms as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
             @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Grade</label>
+        <select id="histories_id" class="form-control" required>
+            <option value="">-- Pilih Grade --</option>
         </select>
     </div>
     <div class="row mt-3 justify-content-center">
@@ -95,11 +103,29 @@
             <option value="2">2</option>
         </select>
     </div>
-    <div class="mb-3">
-        <label>Keterangan</label>
-        <input type="text" id="keterangan" placeholder="Optional" class="form-control">
-    </div>
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select id="export_controller" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($dries->pluck('history.gcolor.rawMaterial')->unique('id') as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     const id = $('#item_id').val();
@@ -115,7 +141,6 @@
         waktu_in: $('#waktu_in').val(),
         waktu_out: $('#waktu_out').val(),
         shift: $('#shift').val(),
-        keterangan: $('#keterangan').val(),
     };
 
     fetch(url, {
@@ -162,38 +187,52 @@
 @stop
 
 @section('custom-js')
-    $('#histories_id').on('change', function () {
-        const id = $(this).val();
-        if (!id) return;
+    $('#raw_material_id').on('change', function () {
+        const rmId = $(this).val();
 
-        fetch(`/dries-info/${id}`)
+        $('#histories_id').html('<option value="">Loading...</option>');
+
+        if (!rmId) {
+            $('#histories_id').html('<option value="">-- Pilih Grade --</option>');
+            return;
+        }
+
+        fetch(`/dries-grades/${rmId}`)
+        .then(r => r.json())
+        .then(data => {
+            let options = `
+                <option value="">-- Pilih Grade --</option>
+                <option value="Hancuran">Hancuran</option>
+            `;
+
+            data.forEach(history => {
+                options += `
+                    <option value="${history.id}">
+                        ${history.gcolor.grade}
+                    </option>
+                `;
+            });
+
+            $('#histories_id').html(options);
+        });
+    });
+
+    $('#histories_id').on('change', function () {
+        const historyId = $(this).val();
+
+        if (!historyId) return;
+
+        fetch(`/dries-info/${historyId}`)
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
+                $('#hcr_sisa').val(info.hcr_sisa);
                 $('#last').val(info.last ?? '-');
             })
             .catch(() => {
                 $('#biji_sisa').val('-');
+                $('#hcr_sisa').val('-');
                 $('#last').val('-');
-            });
-    });
-
-    $(document).on('click', '.btnEdit', function() {
-        const id = $(this).closest('tr').data('id');
-        fetch(`/dries/${id}`)
-            .then(r => r.json())
-            .then(dry => {
-                $('#item_id').val(dry.id);
-                $('#histories_id').val(dry.histories_id).trigger('change');
-                $('#employees_id').val(dry.employees_id);
-                $('#tanggal').val(dry.tanggal);
-                $('#biji').val(dry.biji);
-                $('#waktu_in').val(dry.waktu_in);
-                $('#waktu_out').val(dry.waktu_out);
-                $('#keterangan').val(dry.keterangan);
-                $('#shift').val(dry.shift);
-                $('#modalTitle').text('Edit Masuk Cetak');
-                new bootstrap.Modal('#crudModal').show();
             });
     });
 
@@ -223,5 +262,25 @@
                 .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
+    });
+
+    $('#exportForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const rmId = $('#export_controller').val();
+        const type = $('select[name="type"]').val();
+
+        if (!rmId) {
+            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('dries.export', ':id') }}"
+            .replace(':id', rmId);
+
+        this.method = 'GET';
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+
+        this.submit();
     });
 @stop

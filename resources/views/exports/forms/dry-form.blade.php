@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Pengeringan')
 
@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($dries->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($histories->first()?->dries->first()?->tanggal)->translatedFormat('F') ?? '-' }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -116,38 +116,23 @@
         </th>
     </tr>
 </thead>
-<tbody>
-    @php
-        $arrival = $dries->history->identifier->rawMaterial->arrivals->first();
-        $rm = $dries->history->identifier->rawMaterial;
-    @endphp
+<tbody>@php $no = 1; @endphp
+
+@foreach($histories as $history)
+    @foreach($history->dries as $dry)
+        @continue($dry->biji == 0)
     <tr>
-        <td class="text-center">1</td>
-        <td class="text-center">
-            {{ $dries->tanggal }}
-        </td>
-        <td>
-            {{ $rm->kode}}
-        </td>
-        <td>
-            {{ $arrival->dcertificate->wbhouse->nama }} /
-            {{ $arrival->dcertificate->wbhouse->kode }}
-        </td>
-        <td>
-            {{ $dries->history->identifier->grade->grade }}
-        </td>
-        <td>
-            {{ $dries->biji }}
-        </td>
-        <td>
-            {{ $dries->waktu_in }}
-        </td>
-        <td>
-            {{ $dries->waktu_out }}
-        </td>
-        <td>
-            {{ $dries->employee->nama }}
-        </td>
+        <td class="text-center">{{ $no++ }}</td>
+        <td class="text-center">{{ $dry->tanggal }}</td>
+        <td>{{ $dry->history->rm }}</td>
+        <td>{{ $dry->history->rbw }}</td>
+        <td>{{ $dry->history->grade }}</td>
+        <td>{{ $dry->biji ?? 0 }}</td>
+        <td>{{ $dry->waktu_in }}</td>
+        <td>{{ $dry->waktu_out }}</td>
+        <td>{{ $dry->employee->nama }}</td>
     </tr>
+    @endforeach
+@endforeach
 </tbody>
 @endsection
