@@ -10,12 +10,13 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode Produk</th>
-    <th>Petugas</th>
     <th>Tanggal</th>
-    <th>Biji</th>
+    <th>Nama RBW / No. Reg</th>
+    <th>Kode Bahan Baku</th>
+    <th>Kode Grade</th>
+    <th>Jumlah Biji</th>
     <th>Shift</th>
-    <th>Keterangan</th>
+    <th>Petugas</th>
 @stop
 
 @section('table-body')
@@ -23,12 +24,13 @@
         <tr data-id="{{ $entry->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $entry->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $entry->history->gcolor->kode }}</td>
-            <td>{{ $entry->employee->nama }}</td>
             <td>{{ $entry->tanggal }}</td>
-            <td>{{ $entry->biji }}</td>d>
+            <td>{{ $entry->history->rbw }}</td>
+            <td>{{ $entry->history->rm }}</td>
+            <td>{{ $entry->history->gcolor->grade }}</td>
+            <td>{{ $entry->biji }}</td>
             <td>{{ $entry->shift }}</td>
-            <td>{{ empty($entry->keterangan) ? '-' : $entry->keterangan }}</td>
+            <td>{{ $entry->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -39,28 +41,30 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Kode</label>
-        <select id="histories_id" class="form-control" required>
-            <option value="">-- Pilih Produk --</option>
-            @foreach($histories as $history)
-                <option value="{{ $history->id }}">{{ $history->grade_rm }}</option>
+        <label>Kode Bahan Baku</label>
+        <select id="raw_material_id" class="form-control" required>
+            <option value="">-- Pilih Kode --</option>
+            @foreach($rms as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
             @endforeach
         </select>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-4">
+    <div class="mb-3">
+        <label>Grade</label>
+        <select id="histories_id" class="form-control" required>
+            <option value="">-- Pilih Grade --</option>
+        </select>
+    </div>
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Tanggal Keluar Terakhir</label>
             <input type="text" id="last" class="form-control" readonly>
         </div>
-
-        <div class="col-md-4">
+        <div class="col-md-5">
             <label style="font-size: 10pt">Biji Sisa</label>
             <input type="number" id="biji_sisa" class="form-control" readonly>
-        </div>
-
-        <div class="col-md-4">
-            <label style="font-size: 10pt">Berat Sisa</label>
-            <input type="number" id="berat_sisa" class="form-control" readonly>
         </div>
     </div>
     <div class="mb-3">
@@ -84,8 +88,8 @@
         <label>Shift</label>
         <select id="shift" class="form-control" required>
             <option value="">-- Pilih Shift --</option>
-            <option value="{{ '1' }}">1</option>
-            <option value="{{ '2' }}">2</option>
+            <option value=1>1</option>
+            <option value=2>2</option>
         </select>
     </div>
     <div class="mb-3">
@@ -93,6 +97,36 @@
         <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
 @stop
+
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select id="export_controller" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($entries->pluck('history.gcolor.rawMaterial')->unique('id') as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Shift</label>
+        <select name="shift" class="form-control" required>
+            <option value="">-- Pilih Shift --</option>
+            <option value=1>1</option>
+            <option value=2>2</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
 
 @section('form-submit-script')
     const id = $('#item_id').val();
@@ -153,11 +187,42 @@
 @stop
 
 @section('custom-js')
-    $('#histories_id').on('change', function () {
-        const id = $(this).val();
-        if (!id) return;
+    $('#raw_material_id').on('change', function () {
+        const rmId = $(this).val();
 
-        fetch(`/entries-info/${id}`)
+        $('#histories_id').html('<option value="">Loading...</option>');
+
+        if (!rmId) {
+            $('#histories_id').html('<option value="">-- Pilih Grade --</option>');
+            return;
+        }
+
+        fetch(`/entries-grades/${rmId}`)
+        .then(r => r.json())
+        .then(data => {
+            let options = `
+                <option value="">-- Pilih Grade --</option>
+                <option value="Hancuran">Hancuran</option>
+            `;
+
+            data.forEach(history => {
+                options += `
+                    <option value="${history.id}">
+                        ${history.gcolor.grade}
+                    </option>
+                `;
+            });
+
+            $('#histories_id').html(options);
+        });
+    });
+
+    $('#histories_id').on('change', function () {
+        const historyId = $(this).val();
+
+        if (!historyId) return;
+
+        fetch(`/entries-info/${historyId}`)
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
@@ -212,5 +277,25 @@
                 .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
+    });
+
+    $('#exportForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const rmId = $('#export_controller').val();
+        const type = $('select[name="type"]').val();
+
+        if (!rmId) {
+            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('entries.export', ':id') }}"
+            .replace(':id', rmId);
+
+        this.method = 'GET';
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+
+        this.submit();
     });
 @stop

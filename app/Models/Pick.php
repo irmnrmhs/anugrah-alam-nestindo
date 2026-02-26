@@ -12,6 +12,7 @@ class Pick extends Model
         'tanggal',
         'biji',
         'keterangan',
+        'shift',
     ];
 
     public function history()

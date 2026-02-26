@@ -16,8 +16,8 @@
     <th>Kode Grade</th>
     <th>Jumlah Biji</th>
     <th>Waktu Rendam</th>
-    <th>Shift</th>
     <th>Keterangan</th>
+    <th>Shift</th>
 @stop
 
 @section('table-body')
@@ -95,8 +95,8 @@
         <label>Shift</label>
         <select id="shift" class="form-control" required>
             <option value="">-- Pilih Shift --</option>
-            <option value="{{ '1' }}">1</option>
-            <option value="{{ '2' }}">2</option>
+            <option value=1>1</option>
+            <option value=2>2</option>
         </select>
     </div>
     <div class="mb-3">

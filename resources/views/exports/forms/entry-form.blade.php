@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Masuk Cetak')
 
@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($entries->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($histories->first()?->edges->first()?->tanggal)->translatedFormat('F') ?? '-' }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -105,31 +105,21 @@
     </tr>
 </thead>
 <tbody>
-    @php
-        $arrival = $entries->history->identifier->rawMaterial->arrivals->first();
-        $rm = $entries->history->identifier->rawMaterial;
-    @endphp
-    <tr>
-        <td class="text-center">1</td>
-        <td class="text-center">
-            {{ $entries->tanggal }}
-        </td>
-        <td>
-            {{ $rm->kode}}
-        </td>
-        <td>
-            {{ $arrival->dcertificate->wbhouse->nama }} /
-            {{ $arrival->dcertificate->wbhouse->kode }}
-        </td>
-        <td>
-            {{ $entries->history->identifier->grade->grade }}
-        </td>
-        <td>
-            {{ $entries->biji }}
-        </td>
-        <td>
-            {{ $entries->employee->nama }}
-        </td>
-    </tr>
+@php $no = 1; @endphp
+
+@foreach($histories as $history)
+    @foreach($history->entries as $entry)
+        @continue($history->biji == 0)
+        <tr>
+            <td class="text-center">{{ $no++ }}</td>
+            <td class="text-center">{{ $history->tanggal }}</td>
+            <td>{{ $entry->history->rm }}</td>
+            <td>{{ $entry->history->rbw }}</td>
+            <td>{{ $entry->history->grade }}</td>
+            <td>{{ $entry->biji ?? 0 }}</td>
+            <td>{{ $entry->employee?->nama ?? '-' }}</td>
+        </tr>
+    @endforeach
+@endforeach
 </tbody>
 @endsection

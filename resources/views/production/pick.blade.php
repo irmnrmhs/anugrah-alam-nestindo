@@ -16,6 +16,7 @@
     <th>Kode Grade</th>
     <th>Jumlah Biji</th>
     <th>Keterangan</th>
+    <th>Shift</th>
     <th>Petugas</th>
 @stop
 

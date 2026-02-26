@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Entry;
-use App\Models\History;
+use App\Exports\EntryExport;
 use App\Models\Document;
 use App\Models\Employee;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Models\Entry;
+use App\Models\History;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EntryController extends Controller
 {
     public string $obj = 'Cetak Masuk';
     public function index(): View
     {
-        $entries = Entry::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR08MC')->get();
+        $entries = Entry::with(['history.gcolor.rawMaterial', 'employee'])->latest()->get();
+        $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR08MC')->get();
+        $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.entry', compact('entries', 'histories', 'employees'));
+        return view('production.entry', compact('entries', 'histories', 'rms', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -109,6 +112,18 @@ class EntryController extends Controller
         ]);
     }
 
+    public function getGrades($rawMaterialId)
+    {
+        $histories = History::with('gcolor')
+            ->where('tujuan', 'PR08MC')
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->get();
+
+        return response()->json($histories);
+    }
+
     public function destroy(int $id): JsonResponse
     {
         try {
@@ -132,19 +147,42 @@ class EntryController extends Controller
         }
     }
 
-    public function export($id)
+    public function export(Request $request, $rawMaterialId)
     {
-        $entries = Entry::with(['employee', 'history'])
-            ->findOrFail($id);
+        $type = $request->get('type', 'pdf');
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'PR08MC')
-        ->firstOrFail();
+        $histories = History::with([
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'edges.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR08MC')
+            ->get();
 
-        $pdf = Pdf::loadView('exports.entry-form', compact('entries', 'document'))
+        $historyIds = $histories->pluck('id');
+
+        $entries = Entry::with([
+                'employee',
+                'history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+            ])
+            ->whereIn('histories_id', $historyIds)
+            ->orderBy('tanggal')
+            ->get();
+
+        if ($type === 'excel') {
+            return Excel::download(
+                new EntryExport($entries),
+                'Masuk Cetak.xlsx'
+            );
+        }
+
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'PR08MC')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.forms.entry-form', compact('entries', 'document', 'histories'))
                 ->setPaper('A4', 'landscape');
 
         $filename = 'Masuk Cetak.pdf';

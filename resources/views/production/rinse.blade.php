@@ -14,10 +14,10 @@
     <th>Nama RBW / No. Reg</th>
     <th>Kode Bahan Baku</th>
     <th>Kode Grade</th>
-    <th>Shift</th>
     <th>Jumlah Biji</th>
     <th>Hasil Cek</th>
     <th>Keterangan</th>
+    <th>Shift</th>
     <th>Petugas</th>
 @stop
 

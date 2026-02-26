@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->integer('biji');
             $table->string('keterangan')->nullable();
+            $table->integer('shift');
             $table->timestamps();
         });
     }
