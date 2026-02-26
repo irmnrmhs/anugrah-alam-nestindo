@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Cabut Bilas')
 
@@ -64,7 +64,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($rinses->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($histories->first()?->rinses->first()?->tanggal)->translatedFormat('F') ?? '-' }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -107,37 +107,20 @@
     </tr>
 </thead>
 <tbody>
-    @php
-        $arrival = $rinses->history->identifier->rawMaterial->arrivals->first();
-        $rm = $rinses->history->identifier->rawMaterial;
-    @endphp
-    <tr>
-        <td class="text-center">
-            {{ $rinses->tanggal }}
-        </td>
-        <td>
-            {{ $arrival->dcertificate->wbhouse->nama }} /
-            {{ $arrival->dcertificate->wbhouse->kode }}
-        </td>
-        <td>
-            {{ $rm->kode}}
-        </td>
-        <td>
-            {{ $rinses->history->identifier->grade->grade }}
-        </td>
-        <td>
-            {{ $rinses->biji }}
-        </td>
-        <td>
-            {{ (($rinses->cek) === 1 ? 'Lulus Cek' : 'Tidak Lulus Cek') }}
-        </td>
-        </td>
-        <td>
-            {{ empty($rinses->keterangan) ? '-' : $rinses->keterangan }}
-        </td>
-        <td>
-            {{ $rinses->employee->nama }}
-        </td>
-    </tr>
+@foreach($histories as $history)
+    @foreach($history->rinses as $rinse)
+        @continue($rinse->biji == 0)
+        <tr>
+            <td class="text-center">{{ $rinse->tanggal }}</td>
+            <td>{{ $rinse->history->rbw }}</td>
+            <td>{{ $rinse->history->rm }}</td>
+            <td>{{ $rinse->history->grade }}</td>
+            <td>{{ $rinse->biji ?? 0 }}</td>
+            <td>{{ (($rinse->cek) === 1 ? 'Lulus Cek' : 'Tidak Lulus Cek') }}</td>
+            <td>{{ empty($rinse->keterangan) ? '-' : $rinse->keterangan }}</td>
+            <td>{{ $rinse->employee->nama }}</td>
+        </tr>
+    @endforeach
+@endforeach
 </tbody>
 @endsection

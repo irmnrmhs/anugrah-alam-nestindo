@@ -137,13 +137,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
 
     // Rumah Burung
-    Route::get('/wbhouses', [WbhouseController::class, 'index'])->name('wbhouses.index');
-    Route::post('/wbhouses', [WbhouseController::class, 'store'])->name('wbhouses.store');
-    Route::put('/wbhouses/{id}', [WbhouseController::class, 'update'])->name('wbhouses.update');
-    Route::delete('/wbhouses/{id}', [WbhouseController::class, 'destroy'])->name('wbhouses.destroy');
-    Route::post('/wbhouses/delete-multiple', [WbhouseController::class, 'deleteMultiple']);
-    Route::get('/wbhouses/template', [WbhouseController::class, 'downloadTemplate'])->name('wbhouses.template');
-    Route::get('/wbhouses/{id}', [WbhouseController::class, 'show'])->name('wbhouses.show');
+    Route::get('/wbhouses', [WBHouseController::class, 'index'])->name('wbhouses.index');
+    Route::post('/wbhouses', [WBHouseController::class, 'store'])->name('wbhouses.store');
+    Route::put('/wbhouses/{id}', [WBHouseController::class, 'update'])->name('wbhouses.update');
+    Route::delete('/wbhouses/{id}', [WBHouseController::class, 'destroy'])->name('wbhouses.destroy');
+    Route::post('/wbhouses/delete-multiple', [WBHouseController::class, 'deleteMultiple']);
+    Route::get('/wbhouses/template', [WBHouseController::class, 'downloadTemplate'])->name('wbhouses.template');
+    Route::get('/wbhouses/{id}', [WBHouseController::class, 'show'])->name('wbhouses.show');
     Route::get('/wbhouses/{id}', function($id){
         return App\Models\WBHouse::with('area')->findOrFail($id);
     });

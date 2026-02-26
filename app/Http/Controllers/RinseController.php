@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rinse;
-use App\Models\History;
+use App\Exports\RinseExport;
 use App\Models\Document;
 use App\Models\Employee;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Models\History;
+use App\Models\Rinse;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RinseController extends Controller
 {
     public string $obj = 'Cabut Bilas';
     public function index(): View
     {
-        $rinses = Rinse::with('history', 'employee')->latest()->get();
-        $histories = History::where('tujuan', 'PR07CB')->get();
+        $rinses = Rinse::with(['history.gcolor.rawMaterial', 'employee'])->latest()->get();
+        $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR07CB')->get();
+        $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.rinse', compact('rinses', 'histories', 'employees'));
+        return view('production.rinse', compact('rinses', 'histories', 'rms', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -109,6 +112,18 @@ class RinseController extends Controller
         ]);
     }
 
+    public function getGrades($rawMaterialId)
+    {
+        $histories = History::with('gcolor')
+            ->where('tujuan', 'PR07CB')
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->get();
+
+        return response()->json($histories);
+    }
+
     public function destroy(int $id): JsonResponse
     {
         try {
@@ -132,19 +147,42 @@ class RinseController extends Controller
         }
     }
 
-    public function export($id)
+    public function export(Request $request, $rawMaterialId)
     {
-        $rinses = Rinse::with(['employee', 'history'])
-            ->findOrFail($id);
+        $type = $request->get('type', 'pdf');
 
-        $document = Document::with([
-            'employee',
-            'department'
-        ])
-        ->where('kode', 'PR07CB')
-        ->firstOrFail();
+         $histories = History::with([
+                'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
+                'edges.employee'
+            ])
+            ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
+                $q->where('id', $rawMaterialId);
+            })
+            ->where('tujuan', 'PR07CB')
+            ->get();
 
-        $pdf = Pdf::loadView('exports.rinse-form', compact('rinses', 'document'))
+        $historyIds = $histories->pluck('id');
+
+        $rinses = Rinse::with([
+                'employee',
+                'history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse'
+            ])
+            ->whereIn('histories_id', $historyIds)
+            ->orderBy('tanggal')
+            ->get();
+
+        if ($type === 'excel') {
+            return Excel::download(
+                new RinseExport($rinses),
+                'Cabut Bilas.xlsx'
+            );
+        }
+        
+        $document = Document::with(['employee', 'department'])
+            ->where('kode', 'PR07CB')
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView('exports.forms.rinse-form', compact('rinses', 'document', 'histories'))
                 ->setPaper('A4', 'portrait');
 
         $filename = 'Cabut Bilas.pdf';

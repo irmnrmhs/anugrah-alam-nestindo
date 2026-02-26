@@ -10,13 +10,15 @@
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Kode Produk</th>
-    <th>Petugas</th>
     <th>Tanggal</th>
-    <th>Biji</th>
+    <th>Nama RBW / No. Reg</th>
+    <th>Kode Bahan Baku</th>
+    <th>Kode Grade</th>
     <th>Shift</th>
-    <th>Keterangan</th>
+    <th>Jumlah Biji</th>
     <th>Hasil Cek</th>
+    <th>Keterangan</th>
+    <th>Petugas</th>
 @stop
 
 @section('table-body')
@@ -24,12 +26,12 @@
         <tr data-id="{{ $rinse->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $rinse->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $rinse->history->gcolor->kode }}</td>
-            <td>{{ $rinse->employee->nama }}</td>
             <td>{{ $rinse->tanggal }}</td>
-            <td>{{ $rinse->biji }}</td>
+            <td>{{ $rinse->history->rbw }}</td>
+            <td>{{ $rinse->history->rm }}</td>
+            <td>{{ $rinse->history->gcolor->grade }}</td>
             <td>{{ $rinse->shift }}</td>
-            <td>{{ empty($rinse->keterangan) ? '-' : $rinse->keterangan }}</td>
+            <td>{{ $rinse->biji }}</td>
             <td>
                 @if($rinse->cek == 1)
                     <span class="badge bg-success">Lulus Cek</span>
@@ -37,6 +39,8 @@
                     <span class="badge bg-danger">Tidak Lulus Cek</span>
                 @endif
             </td>
+            <td>{{ empty($rinse->keterangan) ? '-' : $rinse->keterangan }}</td>
+            <td>{{ $rinse->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -45,14 +49,54 @@
     @endforeach
 @stop
 
+@section('export')
+    <div class="mb-3">
+        <label>Kode Bahan Baku</label>
+        <select id="export_controller" class="form-control" required>
+            <option value="">-- Pilih Kode Bahan Baku --</option>
+            @foreach ($rinses->pluck('history.gcolor.rawMaterial')->unique('id') as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    
+    <div class="mb-3">
+        <label>Shift</label>
+        <select name="shift" class="form-control" required>
+            <option value="">-- Pilih Shift --</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Format</label>
+        <select name="type" class="form-control" required>
+            <option value="">-- Pilih Format --</option>
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+    </div>
+@endsection
+
 @section('form-fields')
     <div class="mb-3">
-        <label>Kode</label>
-        <select id="histories_id" class="form-control" required>
-            <option value="">-- Pilih Produk --</option>
-            @foreach($histories as $history)
-                <option value="{{ $history->id }}">{{ $history->grade_rm }}</option>
+        <label>Kode Bahan Baku</label>
+        <select id="raw_material_id" class="form-control" required>
+            <option value="">-- Pilih Kode --</option>
+            @foreach($rms as $rm)
+                <option value="{{ $rm->id }}">
+                    {{ $rm->kode }}
+                </option>
             @endforeach
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Grade</label>
+        <select id="histories_id" class="form-control" required>
+            <option value="">-- Pilih Grade --</option>
         </select>
     </div>
     <div class="row mt-3 justify-content-center">
@@ -165,11 +209,42 @@
 @stop
 
 @section('custom-js')
-    $('#histories_id').on('change', function () {
-        const id = $(this).val();
-        if (!id) return;
+    $('#raw_material_id').on('change', function () {
+        const rmId = $(this).val();
 
-        fetch(`/rinses-info/${id}`)
+        $('#histories_id').html('<option value="">Loading...</option>');
+
+        if (!rmId) {
+            $('#histories_id').html('<option value="">-- Pilih Grade --</option>');
+            return;
+        }
+
+        fetch(`/rinses-grades/${rmId}`)
+        .then(r => r.json())
+        .then(data => {
+            let options = `
+                <option value="">-- Pilih Grade --</option>
+                <option value="Hancuran">Hancuran</option>
+            `;
+
+            data.forEach(history => {
+                options += `
+                    <option value="${history.id}">
+                        ${history.gcolor.grade}
+                    </option>
+                `;
+            });
+
+            $('#histories_id').html(options);
+        });
+    });
+
+    $('#histories_id').on('change', function () {
+        const historyId = $(this).val();
+
+        if (!historyId) return;
+
+        fetch(`/rinses-info/${historyId}`)
             .then(r => r.json())
             .then(info => {
                 $('#biji_sisa').val(info.biji_sisa);
@@ -225,5 +300,25 @@
                 .catch(() => Swal.fire('Error', 'Gagal menghapus data. Pastikan data tidak terintegrasi dengan data lainnya.', 'error'));
             }
         });
+    });
+
+    $('#exportForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const rmId = $('#export_controller').val();
+        const type = $('select[name="type"]').val();
+
+        if (!rmId) {
+            Swal.fire('Oops', 'Pilih kode bahan baku terlebih dahulu', 'warning');
+            return;
+        }
+
+        this.action = "{{ route('rinses.export', ':id') }}"
+            .replace(':id', rmId);
+
+        this.method = 'GET';
+        this.target = (type === 'pdf') ? '_blank' : '_self';
+
+        this.submit();
     });
 @stop
