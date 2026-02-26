@@ -92,10 +92,6 @@
             <option value=2>2</option>
         </select>
     </div>
-    <div class="mb-3">
-        <label>Keterangan</label>
-        <input type="text" id="keterangan" placeholder="Optional" class="form-control">
-    </div>
 @stop
 
 @section('export')
@@ -140,7 +136,6 @@
         tanggal: $('#tanggal').val(),
         biji: $('#biji').val(),
         shift: $('#shift').val(),
-        keterangan: $('#keterangan').val()
     };
 
     fetch(url, {
@@ -245,7 +240,6 @@
                 $('#tanggal').val(entry.tanggal);
                 $('#biji').val(entry.biji);
                 $('#shift').val(entry.shift);
-                $('#keterangan').val(entry.keterangan);
                 $('#modalTitle').text('Edit Masuk Cetak');
                 new bootstrap.Modal('#crudModal').show();
             });

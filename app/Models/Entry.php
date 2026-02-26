@@ -11,7 +11,6 @@ class Entry extends Model
         'employees_id',
         'tanggal',
         'biji',
-        'keterangan',
         'shift',
     ];
 

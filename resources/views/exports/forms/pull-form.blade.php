@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Keluar Cetak')
 
@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($pulls->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($histories->first()?->edges->first()?->tanggal)->translatedFormat('F') ?? '-' }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -109,34 +109,22 @@
     </tr>
 </thead>
 <tbody>
-    @php
-        $arrival = $pulls->history->identifier->rawMaterial->arrivals->first();
-        $rm = $pulls->history->identifier->rawMaterial;
-    @endphp
-    <tr>
-        <td class="text-center">1</td>
-        <td class="text-center">
-            {{ $pulls->tanggal }}
-        </td>
-        <td>
-            {{ $rm->kode}}
-        </td>
-        <td>
-            {{ $arrival->dcertificate->wbhouse->nama }} /
-            {{ $arrival->dcertificate->wbhouse->kode }}
-        </td>
-        <td>
-            {{ $pulls->history->identifier->grade->grade }}
-        </td>
-        <td>
-            {{ $pulls->biji }}
-        </td>
-        <td>
-            {{ empty($pulls->keterangan) ? '-' : $pulls->keterangan }}
-        </td>
-        <td>
-            {{ $pulls->employee->nama }}
-        </td>
-    </tr>
+@php $no = 1; @endphp
+
+@foreach($histories as $history)
+    @foreach($history->pulls as $pull)
+        @continue($pull->biji == 0)
+        <tr>
+            <td class="text-center">{{ $no++ }}</td>
+            <td class="text-center">{{ $pull->tanggal }}</td>
+            <td>{{ $pull->history->rm }}</td>
+            <td>{{ $pull->history->rbw }}</td>
+            <td>{{ $pull->history->grade }}</td>
+            <td>{{ $pull->biji ?? 0 }}</td>
+            <td>{{ empty($pull->keterangan) ? '-' : $pull->keterangan }}</td>
+            <td>{{ $pull->employee?->nama ?? '-' }}</td>
+        </tr>
+    @endforeach
+@endforeach
 </tbody>
 @endsection

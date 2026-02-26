@@ -37,7 +37,6 @@ class EntryController extends Controller
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
             'shift' => 'required',
-            'keterangan' => 'nullable'
         ]);
 
         $tracker = History::find($validated['histories_id']);
@@ -86,7 +85,6 @@ class EntryController extends Controller
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
             'shift' => 'required',
-            'keterangan' => 'nullable'
         ]);
 
         $entry = Entry::findOrFail($id);
