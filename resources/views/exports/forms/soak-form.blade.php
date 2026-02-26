@@ -1,4 +1,4 @@
-@extends('exports.form')
+@extends('exports.forms.form')
 
 @section('title', 'Perendaman')
 
@@ -57,7 +57,7 @@
         Bulan <i>(Month)</i>
     </td>
     <td width="35%">
-        : {{ \Carbon\Carbon::parse($soaks->tanggal)->translatedFormat('F') }}
+        : {{ \Carbon\Carbon::parse($histories->first()?->soaks->first()?->tanggal)->translatedFormat('F') ?? '-' }}
     </td>
     <td width="25%">
         Bagian <i>(Department)</i>
@@ -111,37 +111,25 @@
     </tr>
 </thead>
 <tbody>
-    @php
-        $arrival = $soaks->history->identifier->rawMaterial->arrivals->first();
-        $rm = $soaks->history->identifier->rawMaterial;
-    @endphp
+@php $no = 1; @endphp
+
+@foreach($histories as $history)
+    @foreach($history->soaks as $soak)
+        @continue($soak->biji == 0)
     <tr>
-        <td class="text-center">1</td>
-        <td class="text-center">
-            {{ $soaks->tanggal }}
-        </td>
+        <td class="text-center">{{ $no++ }}</td>
+        <td class="text-center">{{ $soak->tanggal }}</td>
+        <td>{{ $soak->history->rm }}</td>
+        <td>{{ $soak->history->rbw }}</td>
+        <td>{{ $soak->history->grade }}</td>
+        <td>{{ $soak->biji ?? 0 }}</td>
+        <td>{{ $soak->durasi }}</td>
         <td>
-            {{ $arrival->dcertificate->wbhouse->nama }} /
-            {{ $arrival->dcertificate->wbhouse->kode }}
+            {{ empty($soak->keterangan) ? '-' : $soak->keterangan }}
         </td>
-        <td>
-            {{ $rm->kode}}
-        </td>
-        <td>
-            {{ $soaks->history->identifier->grade->grade }}
-        </td>
-        <td>
-            {{ $soaks->biji }}
-        </td>
-        <td>
-            {{ $soaks->durasi }}
-        </td>
-        <td>
-            {{ empty($soaks->keterangan) ? '-' : $soaks->keterangan }}
-        </td>
-        <td>
-            {{ $soaks->employee->nama }}
-        </td>
+        <td>{{ $soak->employee->nama }}</td>
     </tr>
+    @endforeach
+@endforeach
 </tbody>
 @endsection

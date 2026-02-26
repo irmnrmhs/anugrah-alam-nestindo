@@ -26,7 +26,7 @@ class SoakController extends Controller
                 $query->where('posisi', 'karyawan');
             })->get();
 
-        return view('production.soak', compact('soaks', 'histories', 'employees'));
+        return view('production.soak', compact('soaks', 'histories', 'rms', 'employees'));
     }
 
     public function store(Request $request): JsonResponse
@@ -74,7 +74,7 @@ class SoakController extends Controller
 
         return response()->json([
             'biji_sisa' => $tracker->sisa_biji_rendam,
-            'last' => $last?->tgl_mulai,
+            'last' => $last?->tanggal,
         ]);
     }
 
@@ -163,7 +163,7 @@ class SoakController extends Controller
 
         $histories = History::with([
                 'gcolor.rawMaterial.arrivals.dcertificate.wbhouse',
-                'edges.employee'
+                'soaks.employee'
             ])
             ->whereHas('gcolor.rawMaterial', function ($q) use ($rawMaterialId) {
                 $q->where('id', $rawMaterialId);

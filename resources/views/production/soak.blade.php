@@ -119,6 +119,15 @@
     </div>
 
     <div class="mb-3">
+        <label>Shift</label>
+        <select name="shift" class="form-control" required>
+            <option value="">-- Pilih Shift --</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
         <label>Format</label>
         <select name="type" class="form-control" required>
             <option value="">-- Pilih Format --</option>
@@ -216,6 +225,23 @@
 
             $('#histories_id').html(options);
         });
+    });
+
+    $('#histories_id').on('change', function () {
+        const historyId = $(this).val();
+
+        if (!historyId) return;
+
+        fetch(`/soaks-info/${historyId}`)
+            .then(r => r.json())
+            .then(info => {
+                $('#biji_sisa').val(info.biji_sisa);
+                $('#last').val(info.last ?? '-');
+            })
+            .catch(() => {
+                $('#biji_sisa').val('-');
+                $('#last').val('-');
+            });
     });
 
     $(document).on('click', '.btnEdit', function() {

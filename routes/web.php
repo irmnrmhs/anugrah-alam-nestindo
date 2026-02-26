@@ -446,6 +446,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/soaks/delete-multiple', [SoakController::class, 'deleteMultiple']);
     Route::get('/soaks-info/{id}', [SoakController::class, 'info']);
     Route::get('/soaks/{id}/export', [SoakController::class, 'export'])->name('soaks.export');
+    Route::get('/soaks-grades/{rawMaterialId}', [SoakController::class, 'getGrades']);
     
     // Cabut Bilas
     Route::get('/rinses', [RinseController::class, 'index'])->name('rinses.index');
@@ -456,6 +457,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/rinses/delete-multiple', [RinseController::class, 'deleteMultiple']);
     Route::get('/rinses-info/{id}', [RinseController::class, 'info']);
     Route::get('/rinses/{id}/export', [RinseController::class, 'export'])->name('rinses.export');
+    Route::get('/rinses-grades/{rawMaterialId}', [RinseController::class, 'getGrades']);
 
     // Masuk Cetak
     Route::get('/entries', [EntryController::class, 'index'])->name('entries.index');
@@ -466,6 +468,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/entries/delete-multiple', [EntryController::class, 'deleteMultiple']);
     Route::get('/entries-info/{id}', [EntryController::class, 'info']);
     Route::get('/entries/{id}/export', [EntryController::class, 'export'])->name('entries.export');
+    Route::get('/entries-grades/{rawMaterialId}', [EntryController::class, 'getGrades']);
 
     // Keluar Cetak
     Route::get('/pulls', [PullController::class, 'index'])->name('pulls.index');
@@ -476,6 +479,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/pulls/delete-multiple', [PullController::class, 'deleteMultiple']);
     Route::get('/pulls-info/{id}', [PullController::class, 'info']);
     Route::get('/pulls/{id}/export', [PullController::class, 'export'])->name('pulls.export');
+    Route::get('/pulls-grades/{rawMaterialId}', [PullController::class, 'getGrades']);
 
     // Pengeringan
     Route::get('/dries', [DryController::class, 'index'])->name('dries.index');
@@ -486,6 +490,7 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/dries/delete-multiple', [DryController::class, 'deleteMultiple']);
     Route::get('/dries-info/{id}', [DryController::class, 'info']);
     Route::get('/dries/{id}/export', [DryController::class, 'export'])->name('dries.export');
+    Route::get('/dries-grades/{rawMaterialId}', [DryController::class, 'getGrades']);
 
     // Grade Bahan Baku
     Route::get('/fp-grades', [FpGradeController::class, 'index'])->name('fp-grades.index');
