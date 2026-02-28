@@ -51,6 +51,7 @@ use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\FlightController;
 use App\Http\Controllers\GradeColorController;
 use App\Http\Controllers\GradeFeatherController;
 use App\Http\Controllers\GradeShapeController;
@@ -549,6 +550,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/steams/{id}', [SteamController::class, 'destroy'])->name('steams.destroy');
     Route::post('/steams/delete-multiple', [SteamController::class, 'deleteMultiple']);
     Route::get('/steams/{id}/export', [SteamController::class, 'export'])->name('steams.export');
+    
+    // Flight
+    Route::get('/flights', [FlightController::class, 'index'])->name('flights.index');
+    Route::post('/flights', [FlightController::class, 'store'])->name('flights.store');
+    Route::get('/flights/{id}', [FlightController::class, 'show'])->name('flights.show');
+    Route::put('/flights/{id}', [FlightController::class, 'update'])->name('flights.update');
+    Route::delete('/flights/{id}', [FlightController::class, 'destroy'])->name('flights.destroy');
+    Route::post('/flights/delete-multiple', [FlightController::class, 'deleteMultiple']);
     
 });
 

@@ -378,19 +378,19 @@ return [
                     'can'  => ['Super Admin', 'Admin Human Resource'],
                     'icon' => 'fas fa-users',
                 ],
-                [   'header' => 'Ekspor | Administrasi' ],
+                [   'header' => 'Administrasi' ],
                 [
                     'text' => 'Kategori Supplier',
                     'url'  => 'categories',
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
-                [
-                    'text' => 'Supplier',
-                    'url'  => 'suppliers',
-                    'can'  => ['Super Admin', 'Administrasi'],
-                    'icon' => 'fas fa-users',
-                ],
+                // [
+                //     'text' => 'Supplier',
+                //     'url'  => 'suppliers',
+                //     'can'  => ['Super Admin', 'Administrasi'],
+                //     'icon' => 'fas fa-users',
+                // ],
                 [
                     'text' => 'Customer',
                     'url'  => 'customers',
@@ -412,6 +412,13 @@ return [
                 [
                     'text' => 'Rumah Burung',
                     'url'  => 'wbhouses',
+                    'can'  => ['Super Admin', 'Administrasi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [   'header' => 'Ekspor' ],
+                [
+                    'text' => 'Buyer',
+                    'url'  => 'buyers',
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
@@ -698,6 +705,49 @@ return [
                     'text' => 'Summary Produksi',
                     'url'  => 'on-progress',
                     'can'  => ['Super Admin'],
+                    'icon' => 'fas fa-users',
+                ],
+            ],
+        ],
+
+        [
+            'text' => 'Ekspor',
+            'icon' => 'fas fa-folder',
+            'submenu' => [
+                [
+                    'text' => 'Invoice',
+                    'url'  => 'exports',
+                    'can'  => ['Super Admin', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Ceklis Kendaraan',
+                    'url'  => 'vehicles',
+                    'can'  => ['Super Admin', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Pesanan',
+                    'url'  => 'orders',
+                    'can'  => ['Super Admin', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Detail Pesanan',
+                    'url'  => 'order-details',
+                    'can'  => ['Super Admin', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Penerbangan',
+                    'url'  => 'flights',
+                    'can'  => ['Super Admin', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Jadwal Ekspor',
+                    'url'  => 'schedules',
+                    'can'  => ['Super Admin', 'Admin Ekspor'],
                     'icon' => 'fas fa-users',
                 ],
             ],

@@ -104,7 +104,6 @@
             @endforeach
         </select>
     </div>
-
     <div class="mb-3">
         <label>Format</label>
         <select name="type" class="form-control" required>
