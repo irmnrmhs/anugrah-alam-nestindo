@@ -12,4 +12,9 @@ class Flight extends Model
         'shipping_mark',
         'estimated_arrival',
     ];
+
+    public function exports()
+    {
+        return $this->hasMany(Export::class, 'flights_id');
+    }
 }

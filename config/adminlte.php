@@ -415,13 +415,6 @@ return [
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
-                [   'header' => 'Ekspor' ],
-                [
-                    'text' => 'Buyer',
-                    'url'  => 'buyers',
-                    'can'  => ['Super Admin', 'Administrasi'],
-                    'icon' => 'fas fa-users',
-                ],
                 // [
                 //     'text' => 'Rumah Burung',
                 //     'url'  => 'areas-wbhouses',

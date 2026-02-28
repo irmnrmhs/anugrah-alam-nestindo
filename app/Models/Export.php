@@ -6,5 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Export extends Model
 {
-    //
+    protected $fillable = [
+        'inv',
+        'customers_id',
+        'flights_id',
+        'contract_no',
+        'date',
+        'by',
+    ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customers_id');
+    }
+
+    public function flight()
+    {
+        return $this->belongsTo(Flight::class, 'flights_id');
+    }
 }

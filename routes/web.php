@@ -51,6 +51,7 @@ use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\GradeColorController;
 use App\Http\Controllers\GradeFeatherController;
@@ -559,6 +560,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/flights/{id}', [FlightController::class, 'destroy'])->name('flights.destroy');
     Route::post('/flights/delete-multiple', [FlightController::class, 'deleteMultiple']);
     
+    // Ekspor
+    Route::get('/exports', [ExportController::class, 'index'])->name('exports.index');
+    Route::post('/exports', [ExportController::class, 'store'])->name('exports.store');
+    Route::get('/exports/{id}', [ExportController::class, 'show'])->name('exports.show');
+    Route::put('/exports/{id}', [ExportController::class, 'update'])->name('exports.update');
+    Route::delete('/exports/{id}', [ExportController::class, 'destroy'])->name('exports.destroy');
+    Route::post('/exports/delete-multiple', [ExportController::class, 'deleteMultiple']);
 });
 
 Route::get('/scan-camera', function () {

@@ -15,4 +15,9 @@ class Customer extends Model
         'fax',
         'negara',
     ];
+
+    public function exports()
+    {
+        return $this->hasMany(Export::class, 'customers_id');
+    }
 }

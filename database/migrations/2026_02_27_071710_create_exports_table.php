@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('exports', function (Blueprint $table) {
             $table->id();
+            $table->string('inv')->unique();
+            $table->foreignId('customers_id')->constrained('customers');
+            $table->foreignId('flights_id')->constrained('flights')->nullable();
+            $table->string('contract_no')->unique();
+            $table->date('date');
+            $table->string('by');
             $table->timestamps();
         });
     }
