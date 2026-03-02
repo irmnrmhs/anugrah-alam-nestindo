@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('exports_id')->constraine('exports');
-            $table->foreignId('products_id')->constrained('product_batch');
+            // $table->foreignId('products_id')->constrained('product_batch');
             $table->decimal('pieces', 7, 2);
             $table->decimal('unit_price', 7, 2);
             $table->timestamps();
