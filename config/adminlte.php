@@ -398,6 +398,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Petugas Karantina',
+                    'url'  => 'officers',
+                    'can'  => ['Super Admin', 'Administrasi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Mobil',
                     'url'  => 'cars',
                     'can'  => ['Super Admin', 'Administrasi'],

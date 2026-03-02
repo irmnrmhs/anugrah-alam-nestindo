@@ -56,9 +56,11 @@ use App\Http\Controllers\FlightController;
 use App\Http\Controllers\GradeColorController;
 use App\Http\Controllers\GradeFeatherController;
 use App\Http\Controllers\GradeShapeController;
+use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\ProductIdentifierController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\VehicleController;
 
 Route::get('/', function () {
@@ -576,6 +578,22 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/vehicles/{id}', [VehicleController::class, 'update'])->name('vehicles.update');
     Route::delete('/vehicles/{id}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
     Route::post('/vehicles/delete-multiple', [VehicleController::class, 'deleteMultiple']);
+    
+    // Petugas Karantina
+    Route::get('/officers', [OfficerController::class, 'index'])->name('officers.index');
+    Route::post('/officers', [OfficerController::class, 'store'])->name('officers.store');
+    Route::get('/officers/{id}', [OfficerController::class, 'show'])->name('officers.show');
+    Route::put('/officers/{id}', [OfficerController::class, 'update'])->name('officers.update');
+    Route::delete('/officers/{id}', [OfficerController::class, 'destroy'])->name('officers.destroy');
+    Route::post('/officers/delete-multiple', [OfficerController::class, 'deleteMultiple']);
+    
+    // Jadwal
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
+    Route::get('/schedules/{id}', [ScheduleController::class, 'show'])->name('schedules.show');
+    Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->name('schedules.update');
+    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+    Route::post('/schedules/delete-multiple', [ScheduleController::class, 'deleteMultiple']);
 });
 
 Route::get('/scan-camera', function () {
