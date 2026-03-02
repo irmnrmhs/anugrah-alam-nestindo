@@ -59,6 +59,7 @@ use App\Http\Controllers\GradeShapeController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\ProductIdentifierController;
+use App\Http\Controllers\VehicleController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -567,6 +568,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/exports/{id}', [ExportController::class, 'update'])->name('exports.update');
     Route::delete('/exports/{id}', [ExportController::class, 'destroy'])->name('exports.destroy');
     Route::post('/exports/delete-multiple', [ExportController::class, 'deleteMultiple']);
+    
+    // Ceklis Kendaraan
+    Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
+    Route::post('/vehicles', [VehicleController::class, 'store'])->name('vehicles.store');
+    Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('vehicles.show');
+    Route::put('/vehicles/{id}', [VehicleController::class, 'update'])->name('vehicles.update');
+    Route::delete('/vehicles/{id}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
+    Route::post('/vehicles/delete-multiple', [VehicleController::class, 'deleteMultiple']);
 });
 
 Route::get('/scan-camera', function () {

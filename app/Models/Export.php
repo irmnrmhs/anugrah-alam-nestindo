@@ -24,4 +24,9 @@ class Export extends Model
     {
         return $this->belongsTo(Flight::class, 'flights_id');
     }
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class, 'exports_id');
+    }
 }

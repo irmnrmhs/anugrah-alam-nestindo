@@ -121,13 +121,13 @@ class Employee extends Model
         return $this->hasOne(SteamOfficer::class, 'employees_id');
     }
 
-    public function position()
-    {
-        return $this->belongsTo(Position::class, 'positions_id');
-    }
+    // public function position()
+    // {
+    //     return $this->belongsTo(Position::class, 'positions_id');
+    // }
 
-    public function steps()
+    public function vehicles()
     {
-        return $this->hasMany(Step::class, 'steps_id');
+        return $this->hasMany(Vehicle::class, 'emp_id');
     }
 }

@@ -10,4 +10,9 @@ class Car extends Model
         'plat',
         'merk',
     ];
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class, 'cars_id');
+    }
 }
