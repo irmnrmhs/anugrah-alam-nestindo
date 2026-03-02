@@ -17,4 +17,9 @@ class Flight extends Model
     {
         return $this->hasMany(Export::class, 'flights_id');
     }
+
+    public function schedule()
+    {
+        return $this->hasOne(Schedule::class, 'flights_id');
+    }
 }

@@ -17,4 +17,9 @@ class Schedule extends Model
     {
         return $this->belongsTo(Officer::class, 'officers_id');
     }
+
+    public function flight()
+    {
+        return $this->belongsTo(Flight::class, 'flights_id');
+    }
 }
