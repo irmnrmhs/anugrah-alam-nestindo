@@ -14,7 +14,6 @@ use App\Models\Arrival;
 use App\Models\Supplier;
 use App\Models\Dcertificate;
 use App\Models\Grade;
-use App\Models\ProductIdentifier;
 use App\Models\GradeColor;
 use App\Models\Edge;
 use App\Models\Wash;
@@ -29,6 +28,7 @@ use App\Models\Product;
 use App\Models\Area;
 use App\Models\Container;
 use App\Models\RmStock;
+use App\Models\Steam;
 
 use App\Observers\DCertificateObserver;
 use App\Observers\ShapeObserver;
@@ -39,7 +39,6 @@ use App\Observers\ArrivalObserver;
 use App\Observers\SupplierObserver;
 use App\Observers\GradeObserver;
 use App\Observers\RmGradeObserver;
-use App\Observers\IdentifierObserver;
 use App\Observers\EdgeObserver;
 use App\Observers\WashObserver;
 use App\Observers\CorrectionObserver;
@@ -53,6 +52,7 @@ use App\Observers\ProductObserver;
 use App\Observers\AreaObserver;
 use App\Observers\ContainerObserver;
 use App\Observers\RmStockObserver;
+use App\Observers\SteamObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -117,9 +117,10 @@ class AppServiceProvider extends ServiceProvider
         Entry::observe(EntryObserver::class);
         Pull::observe(PullObserver::class);
         Dry::observe(DryObserver::class);
-        Product::observe(ProductObserver::class);
+        // Product::observe(ProductObserver::class);
         Container::observe(ContainerObserver::class);
         RmStock::observe(RmStockObserver::class);
+        Steam::observe(SteamObserver::class);
     }
 
     // 1. Grading BB (PR01GB)
