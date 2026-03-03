@@ -681,12 +681,12 @@ return [
                     'can'  => ['Super Admin'],
                     'icon' => 'fas fa-users',
                 ],
-                [
-                    'text' => 'Stok Produk Jadi',
-                    'url'  => 'fp-stocks',
-                    'can'  => ['Super Admin', 'Admin Produksi'],
-                    'icon' => 'fas fa-users',
-                ],
+                // [
+                //     'text' => 'Stok Produk Jadi',
+                //     'url'  => 'fp-stocks',
+                //     'can'  => ['Super Admin', 'Admin Produksi'],
+                //     'icon' => 'fas fa-users',
+                // ],
                 [
                     'text' => 'Steaming',
                     'url'  => 'steams',

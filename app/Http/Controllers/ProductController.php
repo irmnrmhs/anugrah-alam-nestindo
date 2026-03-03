@@ -37,13 +37,13 @@ class ProductController extends Controller
             'ket' => 'nullable',
         ]);
 
-        $tracker = History::with('identifier')->find($validated['histories_id']);
+        $tracker = History::with('gcolor')->find($validated['histories_id']);
         $grade = FpGrade::find($validated['grades_id']);
 
         // Kode Proses
-        $kd_reg = History::with('identifier.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
+        $kd_reg = History::with('gcolor.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
         $noreg = optional(
-            $kd_reg->identifier->rawMaterial->arrivals->first()?->dcertificate?->wbhouse
+            $kd_reg->gcolor->rawMaterial->arrivals->first()?->dcertificate?->wbhouse
         )->kode;
 
         $tgl = $validated['tanggal'];
@@ -101,14 +101,14 @@ class ProductController extends Controller
         ]);
 
         $product = Product::findOrFail($id);
-        $tracker = History::with('identifier')->find($validated['histories_id']);
+        $tracker = History::with('gcolor')->find($validated['histories_id']);
         $grade = FpGrade::find($validated['grades_id']);
 
         $biji_sisa = $tracker->sisa_biji_produk + $product->biji;
         $berat_sisa = $tracker->sisa_berat_produk + $product->berat;
 
         // Kode Proses
-        $kd_reg = History::with('identifier.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
+        $kd_reg = History::with('gcolor.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
         $tgl = $validated['tgl_mulai'];
         $format_tgl = date('dmy', strtotime($tgl));
 

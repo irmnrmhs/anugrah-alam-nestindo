@@ -31,6 +31,7 @@
             <td>{{ $pick->history->gcolor->grade }}</td>
             <td>{{ $pick->biji }}</td>
             <td>{{ empty($pick->keterangan) ? '-' : $pick->keterangan }}</td>
+            <td>{{ $pick->shift }}</td>
             <td>{{ $pick->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -90,6 +91,14 @@
         <label>Keterangan</label>
         <input type="text" id="keterangan" placeholder="Optional" class="form-control">
     </div>
+    <div class="mb-3">
+        <label>Shift</label>
+        <select id="shift" class="form-control" required>
+            <option value="">-- Pilih Shift --</option>
+            <option value=1>1</option>
+            <option value=2>2</option>
+        </select>
+    </div>
 @stop
 
 @section('export')
@@ -125,7 +134,8 @@
         employees_id: $('#employees_id').val(),
         tanggal: $('#tanggal').val(),
         biji: $('#biji').val(),
-        keterangan: $('#keterangan').val()
+        keterangan: $('#keterangan').val(),
+        shift: $('#shift').val(),
     };
 
     fetch(url, {
@@ -230,6 +240,7 @@
                 $('#tanggal').val(pick.tanggal);
                 $('#biji').val(pick.biji);
                 $('#keterangan').val(pick.keterangan);
+                $('#shift').val(pick.shift);
                 $('#modalTitle').text('Edit Pencabutan Bulu');
                 new bootstrap.Modal('#crudModal').show();
             });

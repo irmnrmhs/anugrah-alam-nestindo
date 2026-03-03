@@ -36,7 +36,8 @@ class PickController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
-            'keterangan' => 'nullable'
+            'keterangan' => 'nullable',
+            'shift' => 'required',
         ]);
 
         $tracker = History::find($validated['histories_id']);
@@ -83,7 +84,8 @@ class PickController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
-            'keterangan' => 'nullable'
+            'keterangan' => 'nullable',
+            'shift' => 'required',
         ]);
 
         $pick = Pick::findOrFail($id);
