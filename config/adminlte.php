@@ -566,12 +566,12 @@ return [
             'text' => 'Kontrol Kualitas',
             'icon' => 'fas fa-folder',
             'submenu' => [
-                // [
-                //     'text' => 'Sampel Bahan Baku',
-                //     'url'  => 'rm-samples',
-                //     'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
-                //     'icon' => 'fas fa-users',
-                // ],
+                [
+                    'text' => 'Air Produksi',
+                    'url'  => 'waters',
+                    'can'  => ['Super Admin', 'Admin Kontrol Kualitas'],
+                    'icon' => 'fas fa-users',
+                ],
                 [
                     'text' => 'HU Air & Nitrit BB',
                     'url'  => 'rm-results',

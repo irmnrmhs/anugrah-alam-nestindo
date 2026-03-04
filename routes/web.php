@@ -63,6 +63,7 @@ use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\ProductIdentifierController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\WaterController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -330,6 +331,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/testTypes/{id}', [TestTypeController::class, 'show'])->name('testTypes.show');
     Route::put('/testTypes/{id}', [TestTypeController::class, 'update'])->name('testTypes.update');
     Route::delete('/testTypes/{id}', [TestTypeController::class, 'destroy'])->name('testTypes.destroy');
+
+    // Air Produksi
+    Route::get('/waters', [WaterController::class, 'index'])->name('waters.index');
+    Route::post('/waters', [WaterController::class, 'store'])->name('waters.store');
+    Route::get('/waters/{id}', [WaterController::class, 'show'])->name('waters.show');
+    Route::put('/waters/{id}', [WaterController::class, 'update'])->name('waters.update');
+    Route::delete('/waters/{id}', [WaterController::class, 'destroy'])->name('waters.destroy');
 
     // Hasil Uji BB
     Route::get('/rm-results', [RmResultController::class, 'index'])->name('rm-results.index');
