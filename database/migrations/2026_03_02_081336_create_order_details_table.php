@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('orders_id')->constrained('orders');
-            $table->integer('item');
-            $table->string('spesification');
+            $table->foreignId('items_id')->constrained('items');
             $table->integer('packaging');
+            $table->integer('label');
             $table->decimal('net_wt', 7, 2);
             $table->date('production_date');
-            $table->integer('qty_pack');
             $table->decimal('gross_wt', 7, 2);
             $table->integer('cartons');
             $table->decimal('amount_fob', 7, 2);

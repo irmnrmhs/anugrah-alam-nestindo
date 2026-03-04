@@ -56,6 +56,7 @@ use App\Http\Controllers\FlightController;
 use App\Http\Controllers\GradeColorController;
 use App\Http\Controllers\GradeFeatherController;
 use App\Http\Controllers\GradeShapeController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductReportController;
@@ -587,6 +588,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/officers/{id}', [OfficerController::class, 'destroy'])->name('officers.destroy');
     Route::post('/officers/delete-multiple', [OfficerController::class, 'deleteMultiple']);
     
+    // Item
+    Route::get('/items', [ItemController::class, 'index'])->name('items.index');
+    Route::post('/items', [ItemController::class, 'store'])->name('items.store');
+    Route::get('/items/{id}', [ItemController::class, 'show'])->name('items.show');
+    Route::put('/items/{id}', [ItemController::class, 'update'])->name('items.update');
+    Route::delete('/items/{id}', [ItemController::class, 'destroy'])->name('items.destroy');
+    Route::post('/items/delete-multiple', [ItemController::class, 'deleteMultiple']);
+
     // Jadwal
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
     Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');

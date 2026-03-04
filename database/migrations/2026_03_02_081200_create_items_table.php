@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('finished_products', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('products_id')->constrained('products');
             $table->string('kode')->unique();
-            $table->foreignId('products_id')->constrained('products')->unique();
-            $table->integer('biji')->default(0);
-            $table->decimal('berat', 7, 2)->default(0);
-            $table->date('tanggal');
+            $table->string('item');
+            $table->string('specification');
+            $table->integer('price');
+            $table->string('ket')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('finished_products');
+        Schema::dropIfExists('items');
     }
 };

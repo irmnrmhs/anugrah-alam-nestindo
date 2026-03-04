@@ -9,13 +9,13 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Produk Jadi';
-    $singular = 'Produk Jadi';
+    $title = 'Product Batch';
+    $singular = 'Product Batch';
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Kode</th>
+    <th>Product Batch</th>
     <th>Biji</th>
     <th>Berat</th>
     <th>Biji Sisa</th>

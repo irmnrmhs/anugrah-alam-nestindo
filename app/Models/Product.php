@@ -47,6 +47,11 @@ class Product extends Model
         return $this->hasMany(FpAlum::class, 'products_id');
     }
 
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'products_id');
+    }
+
     public static function generateCode($grade, $pi)
     {
         return $grade

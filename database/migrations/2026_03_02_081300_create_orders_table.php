@@ -14,9 +14,14 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('exports_id')->constraine('exports');
-            // $table->foreignId('products_id')->constrained('product_batch');
-            $table->decimal('pieces', 7, 2);
-            $table->decimal('unit_price', 7, 2);
+            $table->foreignId('batch_id')->constrained('finished_products');
+            $table->foreignId('items_id')->constrained('items');
+            $table->integer('packaging');
+            $table->integer('label');
+            $table->decimal('net', 7, 2);
+            $table->decimal('gross', 7, 2);
+            $table->decimal('amount_fob', 7, 2);
+            $table->decimal('amount_cif', 7, 2);
             $table->timestamps();
         });
     }

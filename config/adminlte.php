@@ -404,6 +404,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Item',
+                    'url'  => 'items',
+                    'can'  => ['Super Admin', 'Administrasi', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Mobil',
                     'url'  => 'cars',
                     'can'  => ['Super Admin', 'Administrasi'],
@@ -697,19 +703,6 @@ return [
         ],
 
         [
-            'text' => 'Laporan',
-            'icon' => 'fas fa-folder',
-            'submenu' => [
-                [
-                    'text' => 'Summary Produksi',
-                    'url'  => 'on-progress',
-                    'can'  => ['Super Admin'],
-                    'icon' => 'fas fa-users',
-                ],
-            ],
-        ],
-
-        [
             'text' => 'Ekspor',
             'icon' => 'fas fa-folder',
             'submenu' => [
@@ -747,6 +740,32 @@ return [
                     'text' => 'Jadwal Ekspor',
                     'url'  => 'schedules',
                     'can'  => ['Super Admin', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+            ],
+        ],
+        
+        [
+            'text' => 'Kalkulator Analisis',
+            'icon' => 'fas fa-folder',
+            'submenu' => [
+                [
+                    // 'text' => 'Summary Produksi',
+                    // 'url'  => 'steam-calc',
+                    // 'can'  => ['Super Admin', 'Admin Ekspor'],
+                    // 'icon' => 'fas fa-users',
+                ],
+            ],
+        ],
+        
+        [
+            'text' => 'Laporan',
+            'icon' => 'fas fa-folder',
+            'submenu' => [
+                [
+                    'text' => 'Summary Produksi',
+                    'url'  => 'on-progress',
+                    'can'  => ['Super Admin'],
                     'icon' => 'fas fa-users',
                 ],
             ],
