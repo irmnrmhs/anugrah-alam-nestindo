@@ -29,6 +29,11 @@ class FinishedProduct extends Model
         return $this->hasMany(Steam::class, 'fproducts_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'batch_id');
+    }
+
     // Finished Product
     public function getTotalBijiKeluarAttribute()
     {

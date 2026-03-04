@@ -29,4 +29,9 @@ class Export extends Model
     {
         return $this->hasMany(Vehicle::class, 'exports_id');
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'exports_id');
+    }
 }

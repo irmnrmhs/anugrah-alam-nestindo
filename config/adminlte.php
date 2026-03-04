@@ -698,6 +698,12 @@ return [
                     'url'  => 'steams',
                     'can'  => ['Super Admin', 'Admin Produksi'],
                     'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Packing',
+                    'url'  => 'packs',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
                 ]
             ],
         ],

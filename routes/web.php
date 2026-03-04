@@ -58,6 +58,7 @@ use App\Http\Controllers\GradeFeatherController;
 use App\Http\Controllers\GradeShapeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OfficerController;
+use App\Http\Controllers\PackingController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\ProductIdentifierController;
@@ -563,6 +564,15 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/steams/{id}', [SteamController::class, 'destroy'])->name('steams.destroy');
     Route::post('/steams/delete-multiple', [SteamController::class, 'deleteMultiple']);
     Route::get('/steams/{id}/export', [SteamController::class, 'export'])->name('steams.export');
+
+    // Packing
+    Route::get('/packs', [PackingController::class, 'index'])->name('packs.index');
+    Route::post('/packs', [PackingController::class, 'store'])->name('packs.store');
+    Route::get('/packs/{id}', [PackingController::class, 'show'])->name('packs.show');
+    Route::put('/packs/{id}', [PackingController::class, 'update'])->name('packs.update');
+    Route::delete('/packs/{id}', [PackingController::class, 'destroy'])->name('packs.destroy');
+    Route::post('/packs/delete-multiple', [PackingController::class, 'deleteMultiple']);
+    Route::get('/packs/{id}/export', [PackingController::class, 'export'])->name('packs.export');
     
     // Flight
     Route::get('/flights', [FlightController::class, 'index'])->name('flights.index');
