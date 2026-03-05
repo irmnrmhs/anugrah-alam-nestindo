@@ -205,7 +205,6 @@
         .then(data => {
             let options = `
                 <option value="">-- Pilih Grade --</option>
-                <option value="Hancuran">Hancuran</option>
             `;
 
             data.forEach(history => {

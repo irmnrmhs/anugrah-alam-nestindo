@@ -16,6 +16,7 @@
     <th>pH</th>
     <th>Ozon</th>
     <th>Organoleptis</th>
+    <th>Hasil Uji</th>
 @stop
 
 @section('table-body')
@@ -24,14 +25,21 @@
             <td><input type="checkbox" class="row-check" value="{{ $water->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $water->tanggal }}</td>
-            <td>{{ $water->nitrit }}</td>
+            <td>{{ $water->nitrit }} ppm</td>
             <td>{{ $water->ph }}</td>
-            <td>{{ $water->ozone }}</td>
+            <td>{{ $water->ozone }} ppm</td>
             <td>
                 @if($water->organoleptis == 1)
-                    <span class="badge bg-success">Lulus</span>
+                    Lulus
                 @else
-                    <span class="badge bg-danger">Tidak Lulus</span>
+                    Tidak Lulus
+                @endif
+            </td>
+            <td>
+                @if($water->result == 1)
+                    <span class="badge bg-success">Lulus Uji</span>
+                @else
+                    <span class="badge bg-danger">Tidak Lulus Uji</span>
                 @endif
             </td>
             <td>

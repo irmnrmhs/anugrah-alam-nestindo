@@ -203,8 +203,7 @@
         .then(r => r.json())
         .then(data => {
             let options = `
-                <option value="">-- Pilih Grade --</option>
-                <option value="Hancuran">Hancuran</option>
+                <option value="">-- Pilih Grade --</option>\
             `;
 
             data.forEach(history => {
