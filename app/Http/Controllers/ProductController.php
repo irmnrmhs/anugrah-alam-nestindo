@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
-    public string $obj = 'Pengidentifikasi Produk';
+    public string $obj = 'Produk Jadi';
     public function index(): View
     {
         $products = Product::with('history', 'employee', 'grade')->latest()->get();

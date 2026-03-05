@@ -63,15 +63,15 @@
     <div class="mb-3">
         <label>Tipe Penambahan Air</label>
         <select id="penambahan" class="form-control" required>
-            <option value="0">Manual</option>
             <option value="1">Otomatis</option>
+            <option value="0">Manual</option>
         </select>
     </div>
     <div class="mb-3">
         <label>Tipe Sumber Panas</label>
         <select id="sumber_panas" class="form-control" required>
-            <option value="0">Gas</option>
             <option value="1">Listrik</option>
+            <option value="0">Gas</option>
         </select>
     </div>
     <div class="mb-3">
@@ -154,7 +154,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan NIP tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap', 'error'));
 @stop
 
 @section('custom-js')
@@ -190,6 +190,20 @@
                 $('#tgl_pemanasan').val(steam.tgl_pemanasan);
                 $('#lv_air').val(steam.lv_air);
                 $('#suhu_awal').val(steam.suhu_awal);
+
+                $('.officer-item').prop('checked', false);
+                $('#officer_all').prop('checked', false);
+
+                if (steam.petugas) {
+                    const officerList = steam.petugas.toLowerCase().split(', ');
+
+                    officerList.forEach(function(k) {
+                        $('.officer-item[value="'+k.trim()+'"]').prop('checked', true);
+                    });
+                }
+
+                syncOfficerAll();
+
                 $('#modalTitle').text('Edit Karyawan');
                 new bootstrap.Modal('#crudModal').show();
             });

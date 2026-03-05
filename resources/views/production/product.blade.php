@@ -30,7 +30,7 @@
             <td>{{ $product->tanggal }}</td>
             <td>{{ empty($product->biji) ? 0 : $product->biji }}</td>
             <td>{{ empty($product->berat) ? 0 : $product->berat }}</td>
-            <td>{{ $product->ket }}</td>
+            <td>{{ empty($product->ket) ? '-' : $product->ket }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
