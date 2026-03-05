@@ -33,7 +33,7 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/officers/${id}` : '/officers';
+    const url = id ? `/qofficers/${id}` : '/qofficers';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
@@ -60,7 +60,7 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/officers/${id}`)
+        fetch(`/qofficers/${id}`)
             .then(r => r.json())
             .then(officer => {
                 $('#item_id').val(officer.id);
@@ -81,7 +81,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/officers/${id}`, {
+                fetch(`/qofficers/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

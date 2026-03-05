@@ -39,6 +39,11 @@ class Order extends Model
         return $this->hasOne(Packing::class, 'orders_id');
     }
 
+    public function steams()
+    {
+        return $this->hasMany(Steam::class, 'orders_id');
+    }
+
     public function getQtyAttribute()
     {
         $qty = $this->net / $this->label;

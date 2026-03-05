@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             ContainerSeeder::class,
             FpGradeSeeder::class,
             NestTypeSeeder::class,
+            SteamOfficerSeeder::class,
         ]);
         
         // User::factory(10)->create();

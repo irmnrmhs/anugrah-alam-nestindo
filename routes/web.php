@@ -51,6 +51,7 @@ use App\Http\Controllers\CorrectionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\DcertificateController;
+use App\Http\Controllers\DetailSteamController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\GradeColorController;
@@ -565,6 +566,15 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/steams/delete-multiple', [SteamController::class, 'deleteMultiple']);
     Route::get('/steams/{id}/export', [SteamController::class, 'export'])->name('steams.export');
 
+    // Detail Steam
+    Route::get('/dsteams', [DetailSteamController::class, 'index'])->name('dsteams.index');
+    Route::post('/dsteams', [DetailSteamController::class, 'store'])->name('dsteams.store');
+    Route::get('/dsteams/{id}', [DetailSteamController::class, 'show'])->name('dsteams.show');
+    Route::put('/dsteams/{id}', [DetailSteamController::class, 'update'])->name('dsteams.update');
+    Route::delete('/dsteams/{id}', [DetailSteamController::class, 'destroy'])->name('dsteams.destroy');
+    Route::post('/dsteams/delete-multiple', [DetailSteamController::class, 'deleteMultiple']);
+    Route::get('/dsteams/{id}/export', [DetailSteamController::class, 'export'])->name('dsteams.export');
+
     // Packing
     Route::get('/packs', [PackingController::class, 'index'])->name('packs.index');
     Route::post('/packs', [PackingController::class, 'store'])->name('packs.store');
@@ -599,12 +609,12 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::post('/vehicles/delete-multiple', [VehicleController::class, 'deleteMultiple']);
     
     // Petugas Karantina
-    Route::get('/officers', [OfficerController::class, 'index'])->name('officers.index');
-    Route::post('/officers', [OfficerController::class, 'store'])->name('officers.store');
-    Route::get('/officers/{id}', [OfficerController::class, 'show'])->name('officers.show');
-    Route::put('/officers/{id}', [OfficerController::class, 'update'])->name('officers.update');
-    Route::delete('/officers/{id}', [OfficerController::class, 'destroy'])->name('officers.destroy');
-    Route::post('/officers/delete-multiple', [OfficerController::class, 'deleteMultiple']);
+    Route::get('/qofficers', [OfficerController::class, 'index'])->name('qofficers.index');
+    Route::post('/qofficers', [OfficerController::class, 'store'])->name('qofficers.store');
+    Route::get('/qofficers/{id}', [OfficerController::class, 'show'])->name('qofficers.show');
+    Route::put('/qofficers/{id}', [OfficerController::class, 'update'])->name('qofficers.update');
+    Route::delete('/qofficers/{id}', [OfficerController::class, 'destroy'])->name('qofficers.destroy');
+    Route::post('/qofficers/delete-multiple', [OfficerController::class, 'deleteMultiple']);
     
     // Item
     Route::get('/items', [ItemController::class, 'index'])->name('items.index');

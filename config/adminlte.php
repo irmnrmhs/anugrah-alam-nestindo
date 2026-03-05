@@ -399,7 +399,7 @@ return [
                 ],
                 [
                     'text' => 'Petugas Karantina',
-                    'url'  => 'officers',
+                    'url'  => 'qofficers',
                     'can'  => ['Super Admin', 'Administrasi'],
                     'icon' => 'fas fa-users',
                 ],
@@ -682,7 +682,19 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Produk Jadi',
+                    'text' => 'Steaming',
+                    'url'  => 'steams',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Detail Steaming',
+                    'url'  => 'dsteams',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'text' => 'Batch Produk',
                     'url'  => 'fp-products',
                     'can'  => ['Super Admin'],
                     'icon' => 'fas fa-users',
@@ -693,12 +705,6 @@ return [
                 //     'can'  => ['Super Admin', 'Admin Produksi'],
                 //     'icon' => 'fas fa-users',
                 // ],
-                [
-                    'text' => 'Steaming',
-                    'url'  => 'steams',
-                    'can'  => ['Super Admin', 'Admin Produksi'],
-                    'icon' => 'fas fa-users',
-                ],
                 [
                     'text' => 'Packing',
                     'url'  => 'packs',

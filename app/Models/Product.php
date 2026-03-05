@@ -52,6 +52,11 @@ class Product extends Model
         return $this->hasMany(Item::class, 'products_id');
     }
 
+    public function steams()
+    {
+        return $this->hasMany(Steam::class, 'products_id');
+    }
+
     public static function generateCode($grade, $pi)
     {
         return $grade

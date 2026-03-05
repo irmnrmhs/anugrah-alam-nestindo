@@ -16,8 +16,8 @@ class SteamOfficer extends Model
         return $this->belongsTo(Employee::class, 'employees_id');
     }
 
-    public function steams()
-    {
-        return $this->hasMany(Steam::class, 'officers_id');
-    }
+    // public function steams()
+    // {
+    //     return $this->hasMany(Steam::class, 'officers_id');
+    // }
 }

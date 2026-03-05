@@ -20,14 +20,14 @@ class Export extends Model
         return $this->belongsTo(Customer::class, 'customers_id');
     }
 
-    public function flight()
-    {
-        return $this->belongsTo(Flight::class, 'flights_id');
-    }
-
     public function vehicles()
     {
         return $this->hasMany(Vehicle::class, 'exports_id');
+    }
+
+    public function flight()
+    {
+        return $this->belongsTo(Flight::class, 'flights_id');
     }
 
     public function orders()

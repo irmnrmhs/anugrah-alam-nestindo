@@ -13,23 +13,16 @@ return new class extends Migration
     {
         Schema::create('steams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fproducts_id')->constrained('finished_products');
-            $table->foreignId('officers_id')->constrained('steam_officers');
+            $table->foreignId('products_id')->constrained('products');
+            // $table->foreignId('officers_id')->constrained('steam_officers');
             $table->foreignId('nests_id')->constrained('nest_types');
+            $table->string('batch')->unique();
+            $table->string('petugas');
             $table->boolean('penambahan');
             $table->boolean('sumber_panas');
-            $table->string('kode');
             $table->date('tgl_pemanasan');
-            $table->boolean('standar');
+            $table->boolean('lv_air');
             $table->decimal('suhu_awal', 5, 2);
-            $table->integer('biji');
-            $table->decimal('berat', 7, 2);
-            $table->decimal('suhu', 5, 2);
-            $table->time('waktu');
-            $table->decimal('suhu_total', 5, 2);
-            $table->time('waktu_total');
-            $table->integer('jml_tray');
-            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }
