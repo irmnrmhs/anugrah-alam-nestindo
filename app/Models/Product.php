@@ -31,11 +31,6 @@ class Product extends Model
     {
         return $this->belongsTo(FpGrade::class, 'grades_id');
     }
-    
-    public function fproduct()
-    {
-        return $this->hasOne(FinishedProduct::class, 'products_id');
-    }
 
     public function fresults()
     {
@@ -56,6 +51,11 @@ class Product extends Model
     {
         return $this->hasMany(Steam::class, 'products_id');
     }
+
+    // public function getBeratAttribute()
+    // {
+    //     return $this->history()->gcolor()->sum('berat');
+    // }
 
     public static function generateCode($grade, $pi)
     {

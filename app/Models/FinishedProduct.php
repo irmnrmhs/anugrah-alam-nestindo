@@ -8,15 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class FinishedProduct extends Model
 {
     protected $fillable = [
-        'kode',
-        'products_id',
+        'batch',
+        'steams_id',
         'biji',
-        'berat'
+        'berat',
+        'tanggal',
     ];
 
-    public function product()
+    public function steam()
     {
-        return $this->belongsTo(Product::class, 'products_id');
+        return $this->belongsTo(Steam::class, 'steams_id');
     }
 
     public function fpstocks()

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FinishedProduct;
-use App\Models\Product;
+use App\Models\Steam;
 use Illuminate\View\View;
 
 class FinishedController extends Controller
@@ -12,9 +12,9 @@ class FinishedController extends Controller
     public function index(): View
     {
         $fproducts = FinishedProduct::latest()->get();
-        $products = Product::all();
+        $steams = Steam::all();
 
-        return view('production.finished', compact('fproducts', 'products'));
+        return view('production.finished', compact('fproducts', 'steams'));
     }
 
     public function info($id)

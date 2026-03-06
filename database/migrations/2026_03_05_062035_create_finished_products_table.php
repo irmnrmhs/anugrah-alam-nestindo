@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('finished_products', function (Blueprint $table) {
             $table->id();
-            $table->string('kode')->unique();
-            $table->foreignId('products_id')->constrained('products')->unique();
+            $table->string('batch')->unique();
+            $table->foreignId('steams_id')->constrained('steams')->unique();
             $table->integer('biji')->default(0);
             $table->decimal('berat', 7, 2)->default(0);
-            $table->date('tanggal');
+            // $table->date('tanggal');
             $table->timestamps();
         });
     }

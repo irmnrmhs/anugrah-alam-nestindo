@@ -26,7 +26,7 @@
     @foreach($fproducts as $index => $fproduct)
         <tr data-id="{{ $fproduct->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $fproduct->kode }}</td>
+            <td>{{ $fproduct->batch }}</td>
             <td>{{ $fproduct->biji }}</td>
             <td>{{ $fproduct->berat }}</td>
             <td>{{ $fproduct->biji_sisa }}</td>

@@ -34,6 +34,11 @@ class Steam extends Model
         return $this->belongsTo(Product::class, 'products_id');
     }
 
+    public function fproduct()
+    {
+        return $this->hasOne(FinishedProduct::class, 'steams_id');
+    }
+
     // public function dsteams()
     // {
     //     return $this->hasMany(DetailSteam::class, 'steams_id');

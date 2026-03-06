@@ -11,6 +11,7 @@
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Grade Produk Jadi</th>
+    <th>Kode Batch</th>
     <th>Tipe Sarang</th>
     <th>Tipe Penambahan Air</th>
     <th>Tipe Sumber Panas</th>
@@ -26,12 +27,13 @@
             <td><input type="checkbox" class="row-check" value="{{ $steam->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $steam->product->kode }}</td>
+            <td>{{ $steam->batch }}</td>
             <td>{{ $steam->nest->type }}</td>
-            <td>{{ $steam->penambahan }}</td>
-            <td>{{ $steam->sumber_panas }}</td>
+            <td>{{ $steam->penambahan ? 'Otomatis' : 'Manual' }}</td>
+            <td>{{ $steam->sumber_panas ? 'Listrik' : 'Gas' }}</td>
             <td>{{ $steam->tgl_pemanasan }}</td>
-            <td>{{ $steam->officer->employee->nama }}</td>
-            <td>{{ $steam->lv_air }}</td>
+            <td>{{ $steam->petugas }}</td>
+            <td>{{ $steam->lv_air ? 'Sesuai Standar' : 'Tidak Sesuai' }}</td>
             <td>{{ $steam->suhu_awal }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -195,7 +197,7 @@
                 $('#officer_all').prop('checked', false);
 
                 if (steam.petugas) {
-                    const officerList = steam.petugas.toLowerCase().split(', ');
+                    const officerList = steam.petugas.split(', ');
 
                     officerList.forEach(function(k) {
                         $('.officer-item[value="'+k.trim()+'"]').prop('checked', true);

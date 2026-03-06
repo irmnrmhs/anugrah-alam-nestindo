@@ -42,8 +42,9 @@ class SteamController extends Controller
 
         $product = Product::with('history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse')->findOrFail($validated['products_id']);
         $tgl = date('dmy', strtotime($validated['tgl_pemanasan']));
+        $grade = $product->grade->kode;
 
-        $validated['batch'] = $product->history->gcolor->rawMaterial->arrivals->first()->dcertificate->wbhouse->kode . '-' . $tgl;
+        $validated['batch'] = $grade . $product->history->gcolor->rawMaterial->arrivals->first()->dcertificate->wbhouse->kode . '-' . $tgl;
         
         Steam::create($validated);
 
@@ -55,7 +56,7 @@ class SteamController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $steam = Steam::with('officer', 'nest', 'product')->findOrFail($id);
+        $steam = Steam::with('nest', 'product')->findOrFail($id);
         return response()->json($steam);
     }
 
@@ -76,8 +77,9 @@ class SteamController extends Controller
 
         $product = Product::with('history.gcolor.rawMaterial.arrivals.dcertificate.wbhouse')->findOrFail($validated['products_id']);
         $tgl = date('dmy', strtotime($validated['tgl_pemanasan']));
+        $grade = $product->grade->kode;
 
-        $validated['batch'] = $product->history->gcolor->rawMaterial->arrivals->first()->dcertificate->wbhouse->kode . '-' . $tgl;
+        $validated['batch'] = $grade . $product->history->gcolor->rawMaterial->arrivals->first()->dcertificate->wbhouse->kode . '-' . $tgl;
 
         $steam = Steam::findOrFail($id);
 
