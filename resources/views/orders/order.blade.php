@@ -72,7 +72,7 @@
     </div>
     <div class="mb-3">
         <label>Label Nutrisi</label>
-        <input type="number" id="label" step="1" min="0" class="form-control" required>
+        <input type="number" id="label" min="0" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Net</label>
@@ -129,7 +129,7 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/ordes/${id}`)
+        fetch(`/orders/${id}`)
             .then(r => r.json())
             .then(data => {
                 $('#item_id').val(data.id);
