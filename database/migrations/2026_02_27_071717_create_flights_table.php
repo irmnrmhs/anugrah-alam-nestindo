@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('flights', function (Blueprint $table) {
             $table->id();
-            $table->string('destination');
             $table->string('flight_no')->unique();
+            $table->string('destination');
             $table->boolean('shipping_mark');
             $table->date('estimated_arrival');
             $table->timestamps();

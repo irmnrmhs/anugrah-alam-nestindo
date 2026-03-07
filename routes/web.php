@@ -54,6 +54,7 @@ use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\DetailSteamController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FlightController;
+use App\Http\Controllers\FlightDetailController;
 use App\Http\Controllers\GradeColorController;
 use App\Http\Controllers\GradeFeatherController;
 use App\Http\Controllers\GradeShapeController;
@@ -591,6 +592,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/flights/{id}', [FlightController::class, 'update'])->name('flights.update');
     Route::delete('/flights/{id}', [FlightController::class, 'destroy'])->name('flights.destroy');
     Route::post('/flights/delete-multiple', [FlightController::class, 'deleteMultiple']);
+    
+    // Flight
+    Route::get('/dflights', [FlightDetailController::class, 'index'])->name('dflights.index');
+    Route::post('/dflights', [FlightDetailController::class, 'store'])->name('dflights.store');
+    Route::get('/dflights/{id}', [FlightDetailController::class, 'show'])->name('dflights.show');
+    Route::put('/dflights/{id}', [FlightDetailController::class, 'update'])->name('dflights.update');
+    Route::delete('/dflights/{id}', [FlightDetailController::class, 'destroy'])->name('dflights.destroy');
+    Route::post('/dflights/delete-multiple', [FlightDetailController::class, 'deleteMultiple']);
     
     // Ekspor
     Route::get('/exports', [ExportController::class, 'index'])->name('exports.index');

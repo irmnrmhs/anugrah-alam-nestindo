@@ -749,6 +749,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Detail Penerbangan',
+                    'url'  => 'dflights',
+                    'can'  => ['Super Admin', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Jadwal Ekspor',
                     'url'  => 'schedules',
                     'can'  => ['Super Admin', 'Admin Ekspor'],

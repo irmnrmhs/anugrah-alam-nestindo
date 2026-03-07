@@ -12,7 +12,6 @@ class FinishedProduct extends Model
         'steams_id',
         'biji',
         'berat',
-        'tanggal',
     ];
 
     public function steam()

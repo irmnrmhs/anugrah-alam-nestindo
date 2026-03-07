@@ -19,13 +19,13 @@ class FlightController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'destination'   => 'required',
             'flight_no'     => 'required|unique:flights,flight_no',
+            'destination'   => 'required',
             'shipping_mark' => 'required|boolean',
             'estimated_arrival' => 'required|date',
         ]);
 
-        $flight = Flight::create($validated);
+        Flight::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -41,8 +41,8 @@ class FlightController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'destination'   => 'required',
             'flight_no'     => 'required|unique:flights,flight_no,' .$id,
+            'destination'   => 'required',
             'shipping_mark' => 'required|boolean',
             'estimated_arrival' => 'required|date',
         ]);

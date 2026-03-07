@@ -1,31 +1,25 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Data Ekspor';
-    $singular = 'Ekspor';
-    $deleteMultipleUrl = '/exports/delete-multiple';
+    $title = 'Kelola Data Detail Penerbangan';
+    $singular = 'Detail Penerbangan';
+    $deleteMultipleUrl = '/dflights/delete-multiple';
 @endphp
 
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Invoice</th>
-    <th>Customer</th>
-    <th>No. Kontrak</th>
-    <th>Tanggal</th>
-    <th>Sarana Transportasi</th>
+    <th>No Penerbangan</th>
 @stop
 
 @section('table-body')
-    @foreach($exports as $index => $export)
-        <tr data-id="{{ $export->id }}">
-            <td><input type="checkbox" class="row-check" value="{{ $export->id }}"></td>
+    @foreach($dflights as $index => $dflight)
+        <tr data-id="{{ $dflight->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $dflight->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $export->inv }}</td>
-            <td>{{ $export->customer->nama }}</td>
-            <td>{{ $export->contract_no }}</td>
-            <td>{{ $export->date }}</td>
-            <td>{{ $export->by }}</td>
+            <td>{{ $dflight->export->inv }}</td>
+            <td>{{ $dflight->flight->flight_no }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -37,43 +31,33 @@
 @section('form-fields')
     <div class="mb-3">
         <label>Invoice</label>
-        <input type="text" id="inv" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Customer</label>
-        <select id="customers_id" class="form-control" required>
-            <option value="">-- Pilih Customer --</option>
-            @foreach($customers as $customer)
-                <option value="{{ $customer->id }}">{{ $customer->nama }}</option>
+        <select id="exports_id" class="form-control" required>
+            <option value="">-- Pilih Invoice --</option>
+            @foreach($exports as $export)
+                <option value="{{ $export->id }}">{{ $export->inv }}</option>
             @endforeach
         </select>
     </div>
     <div class="mb-3">
-        <label>No. Kontrak</label>
-        <input type="text" id="contract_no" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Tanggal</label>
-        <input type="date" id="date" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Sarana Transportasi</label>
-        <input type="string" id="by" class="form-control" required>
+        <label>Penerbangan</label>
+        <select id="flights_id" class="form-control" required>
+            <option value="">-- Pilih No Penerbangan --</option>
+            @foreach($flights as $flight)
+                <option value="{{ $flight->id }}">{{ $flight->flight_no }}</option>
+            @endforeach
+        </select>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/exports/${id}` : '/exports';
+    const url = id ? `/dflights/${id}` : '/dflights';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        inv: $('#inv').val(),
-        customers_id: $('#customers_id').val(),
-        contract_no: $('#contract_no').val(),
-        date: $('#date').val(),
-        by: $('#by').val(),
+        exports_id: $('#exports_id').val(),
+        flights_id: $('#flights_id').val(),
     };
 
     fetch(url, {
@@ -95,16 +79,13 @@
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/exports/${id}`)
+        fetch(`/dflights/${id}`)
             .then(r => r.json())
             .then(data => {
                 $('#item_id').val(data.id);
-                $('#inv').val(data.inv);
-                $('#customers_id').val(data.customers_id);
-                $('#contract_no').val(data.contract_no);
-                $('#date').val(data.date);
-                $('#by').val(data.by);
-                $('#modalTitle').text('Edit Ekspor');
+                $('#exports_id').val(data.exports_id);
+                $('#flights_id').val(data.flights_id);
+                $('#modalTitle').text('Edit Detail Penerbangan');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -120,7 +101,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/exports/${id}`, {
+                fetch(`/dflights/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

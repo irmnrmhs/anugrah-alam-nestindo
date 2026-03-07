@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Flight extends Model
 {
     protected $fillable = [
-        'destination',
         'flight_no',
+        'destination',
         'shipping_mark',
         'estimated_arrival',
     ];
 
-    public function exports()
+    public function dflights()
     {
-        return $this->hasMany(Export::class, 'flights_id');
+        return $this->hasMany(DetailFlight::class, 'flights_id');
     }
 
     public function schedule()

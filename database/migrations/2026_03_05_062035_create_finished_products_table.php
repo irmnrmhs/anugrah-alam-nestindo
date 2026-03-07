@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('steams_id')->constrained('steams')->unique();
             $table->integer('biji')->default(0);
             $table->decimal('berat', 7, 2)->default(0);
-            // $table->date('tanggal');
             $table->timestamps();
         });
     }

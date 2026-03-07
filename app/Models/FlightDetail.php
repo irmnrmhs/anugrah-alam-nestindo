@@ -4,18 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Schedule extends Model
+class FlightDetail extends Model
 {
     protected $fillable = [
+        'exports_id',
         'flights_id',
-        'officers_id',
-        'preshipment',
-        'shipment',
     ];
 
-    public function officer()
+    public function export()
     {
-        return $this->belongsTo(Officer::class, 'officers_id');
+        return $this->belongsTo(Export::class, 'exports_id');
     }
 
     public function flight()
