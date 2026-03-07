@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('label');
             $table->decimal('net', 7, 2);
             $table->decimal('gross', 7, 2);
+            $table->decimal('cartons');
             $table->decimal('amount_fob', 7, 2);
             $table->decimal('amount_cif', 7, 2);
             $table->timestamps();

@@ -31,6 +31,6 @@ class Export extends Model
 
     public function dflights()
     {
-        return $this->hasMany(DetailFlight::class, 'flights_id');
+        return $this->hasMany(FlightDetail::class, 'flights_id');
     }
 }

@@ -60,6 +60,8 @@ use App\Http\Controllers\GradeFeatherController;
 use App\Http\Controllers\GradeShapeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OfficerController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\PackingController;
 use App\Http\Controllers\SteamOfficerController;
 use App\Http\Controllers\ProductReportController;
@@ -608,6 +610,24 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/exports/{id}', [ExportController::class, 'update'])->name('exports.update');
     Route::delete('/exports/{id}', [ExportController::class, 'destroy'])->name('exports.destroy');
     Route::post('/exports/delete-multiple', [ExportController::class, 'deleteMultiple']);
+    
+    
+    // Order
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::post('/orders/delete-multiple', [OrderController::class, 'deleteMultiple']);
+    
+    
+    // Ekspor
+    Route::get('/order-details', [OrderDetailController::class, 'index'])->name('order-details.index');
+    Route::post('/order-details', [OrderDetailController::class, 'store'])->name('order-details.store');
+    Route::get('/order-details/{id}', [OrderDetailController::class, 'show'])->name('order-details.show');
+    Route::put('/order-details/{id}', [OrderDetailController::class, 'update'])->name('order-details.update');
+    Route::delete('/order-details/{id}', [OrderDetailController::class, 'destroy'])->name('order-details.destroy');
+    Route::post('/order-details/delete-multiple', [OrderDetailController::class, 'deleteMultiple']);
     
     // Ceklis Kendaraan
     Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
