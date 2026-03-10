@@ -10,8 +10,10 @@ class Package extends Model
         'types_id',
         'bahan',
         'satuan',
-        'min',
-        'max',
+        'panjang',
+        'lebar',
+        'tinggi',
+        'lainnya',
         'toleransi',
     ];
 

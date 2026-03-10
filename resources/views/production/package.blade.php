@@ -12,8 +12,10 @@
     <th>Jenis Kemasan</th>
     <th>Kemasan</th>
     <th>Satuan</th>
-    <th>Syarat Minimal</th>
-    <th>Syarat Maksimal</th>
+    <th>Panjang</th>
+    <th>Lebar</th>
+    <th>Tinggi</th>
+    <th>Lainnya</th>
     <th>Toleransi</th>
 @stop
 
@@ -23,6 +25,13 @@
             <td><input type="checkbox" class="row-check" value="{{ $package->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $package->type->type }}</td>
+            <td>{{ $package->bahan }}</td>
+            <td>{{ $package->satuan }}</td>
+            <td>{{ $package->panjang }}</td>
+            <td>{{ $package->lebar }}</td>
+            <td>{{ $package->tinggi }}</td>
+            <td>{{ $package->lainnya }}</td>
+            <td>{{ $package->toleransi }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -47,19 +56,28 @@
     </div>
     <div class="mb-3">
         <label>Satuan</label>
-        <input type="text" id="satuan" class="form-control" required>
+        <input type="text" id="satuan" class="form-control">
     </div>
     <div class="mb-3">
-        <label>Standar Minimal</label>
-        <input type="number" id="min" min="0" class="form-control" required>
+        <label>Panjang</label>
+        <input type="number" id="panjang" min="0" class="form-control">
     </div>
     <div class="mb-3">
-        <label>Standar Maksimal</label>
-        <input type="number" id="min" min="0" class="form-control" required>
+        <label>Lebar</label>
+        <input type="number" id="lebar" min="0" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Tinggi</label>
+        <input type="number" id="tinggi" min="0" class="form-control">
+    </div>
+    </div>
+    <div class="mb-3">
+        <label>Lainnya</label>
+        <input type="text" id="lainnya" class="form-control">
     </div>
     <div class="mb-3">
         <label>Toleransi</label>
-        <input type="number" id="toleransi" min="0" class="form-control" required>
+        <input type="number" id="toleransi" min="0" class="form-control">
     </div>
 @stop
 
@@ -73,8 +91,10 @@
         types_id: $('#types_id').val(),
         bahan: $('#bahan').val(),
         satuan: $('#satuan').val(),
-        min: $('#min').val(),
-        max: $('#max').val(),
+        panjang: $('#panjang').val(),
+        lebar: $('#lebar').val(),
+        tinggi: $('#tinggi').val(),
+        lainnya: $('#lainnya').val(),
         toleransi: $('toleransi').val(),
     };
 
@@ -104,8 +124,10 @@
                 $('#types_id').val(data.types_id);
                 $('#bahan').val(data.bahan);
                 $('#satuan').val(data.satuan);
-                $('#min').val(data.min);
-                $('#max').val(data.max);
+                $('#panjang').val(data.panjang);
+                $('#lebar').val(data.lebar);
+                $('#tinggi').val(data.tinggi);
+                $('#lainnya').val(data.lainnya);
                 $('#toleransi').val(data.toleransi);
                 $('#modalTitle').text('Edit Kemasan');
                 new bootstrap.Modal('#crudModal').show();

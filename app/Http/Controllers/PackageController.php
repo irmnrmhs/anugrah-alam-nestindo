@@ -24,10 +24,12 @@ class PackageController extends Controller
         $validated = $request->validate([
             'types_id' => 'required|exists:packages_types,id',
             'bahan' => 'required|string',
-            'satuan' => 'required|string',
-            'min' => 'required|numeric',
-            'max' => 'required|numeric',
-            'toleransi' => 'required|numeric',
+            'satuan' => 'nullable|string',
+            'panjang' => 'nullable|numeric',
+            'lebar' => 'nullable|numeric',
+            'tinggi' => 'nullable|numeric',
+            'lainnya' => 'nullable|string',
+            'toleransi' => 'nullable|numeric',
         ]);
 
         Package::create($validated);
@@ -49,10 +51,12 @@ class PackageController extends Controller
         $validated = $request->validate([
             'types_id' => 'required|exists:packages_types,id',
             'bahan' => 'required|string',
-            'satuan' => 'required|string',
-            'min' => 'required|numeric',
-            'max' => 'required|numeric',
-            'toleransi' => 'required|numeric',
+            'satuan' => 'nullable|string',
+            'panjang' => 'nullable|numeric',
+            'lebar' => 'nullable|numeric',
+            'tinggi' => 'nullable|numeric',
+            'lainnya' => 'nullable|string',
+            'toleransi' => 'nullable|numeric',
         ]);
 
         $package = Package::findOrFail($id);

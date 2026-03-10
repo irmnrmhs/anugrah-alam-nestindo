@@ -13,7 +13,7 @@ class PackageTypeController extends Controller
     public function index(): View
     {
         $types = PackageType::latest()->get();
-        return view('productions.package-type', compact('types'));
+        return view('production.package-type', compact('types'));
     }
 
     public function store(Request $request): JsonResponse

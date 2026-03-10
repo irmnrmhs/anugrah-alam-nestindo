@@ -15,7 +15,7 @@
 @stop
 
 @section('table-body')
-    @foreach($iinspections as $index => $inspection)
+    @foreach($inspections as $index => $inspection)
         <tr data-id="{{ $inspection->id }}">
             <td><input inspection="checkbox" class="row-check" value="{{ $inspection->id }}"></td>
             <td>{{ $index + 1 }}</td>

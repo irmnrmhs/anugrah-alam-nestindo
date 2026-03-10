@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('types_id')->constrained('package_types');
             $table->string('bahan');
-            $table->string('satuan');
-            $table->integer('min');
-            $table->integer('max');
-            $table->integer('toleransi');
+            $table->string('satuan')->nullable();
+            $table->integer('panjang')->nullable();
+            $table->integer('lebar')->nullable();
+            $table->integer('tinggi')->nullable();
+            $table->string('lainnya')->nullable();
+            $table->integer('toleransi')->nullable();
             $table->timestamps();
         });
     }

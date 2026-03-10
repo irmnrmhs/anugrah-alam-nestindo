@@ -16,7 +16,7 @@ class PackageInspectionController extends Controller
         $inspections = PackageInspection::with('type')->latest()->get();
         $packages = Package::all();
 
-        return view('production.package-inspections', compact('inspections', 'packages'));
+        return view('production.package-inspection', compact('inspections', 'packages'));
     }
 
     public function store(Request $request): JsonResponse
