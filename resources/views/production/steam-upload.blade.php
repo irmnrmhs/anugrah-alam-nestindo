@@ -46,7 +46,7 @@
     </div>
 @stop
 
-@section('form-submit-script')
+@section('form-submit-script')  
     const id = $('#item_id').val();
     const url = id ? `/usteams/${id}` : '/usteams';
     const method = id ? 'PUT' : 'POST';
