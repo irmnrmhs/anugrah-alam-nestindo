@@ -19,7 +19,7 @@ class Package extends Model
 
     public function type()
     {
-        return $this->belongsTo(Package::class, 'types_id');
+        return $this->belongsTo(PackageType::class, 'types_id');
     }
 
     public function inspections()

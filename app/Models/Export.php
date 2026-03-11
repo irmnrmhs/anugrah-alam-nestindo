@@ -33,4 +33,9 @@ class Export extends Model
     {
         return $this->hasMany(FlightDetail::class, 'flights_id');
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(AnalysisCertficate::class, 'exports_id');
+    }
 }

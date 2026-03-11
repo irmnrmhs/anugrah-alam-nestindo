@@ -26,12 +26,12 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $package->type->type }}</td>
             <td>{{ $package->bahan }}</td>
-            <td>{{ $package->satuan }}</td>
-            <td>{{ $package->panjang }}</td>
-            <td>{{ $package->lebar }}</td>
-            <td>{{ $package->tinggi }}</td>
-            <td>{{ $package->lainnya }}</td>
-            <td>{{ $package->toleransi }}</td>
+            <td>{{ empty($package->satuan) ? '-' : $package->satuan }}</td>
+            <td>{{ empty($package->panjang) ? '-' : $package->panjang }}</td>
+            <td>{{ empty($package->lebar) ? '-' : $package->lebar }}</td>
+            <td>{{ empty($package->tinggi) ? '-' : $package->tinggi }}</td>
+            <td>{{ empty($package->lainnya) ? '-' : $package->lainnya }}</td>
+            <td>{{ empty($package->toleransi) ? '-' : $package->toleransi }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>

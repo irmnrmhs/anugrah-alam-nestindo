@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AnalysisCertficateController;
+use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\BlendController;
@@ -609,11 +611,11 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     
     // Bahan Kemas
     Route::get('/inspections', [PackageInspectionController::class, 'index'])->name('inspections.index');
-    Route::post('/inspections', [PackageController::class, 'store'])->name('inspections.store');
-    Route::get('/inspections/{id}', [PackageController::class, 'show'])->name('inspections.show');
-    Route::put('/inspections/{id}', [PackageController::class, 'update'])->name('inspections.update');
-    Route::delete('/inspections/{id}', [PackageController::class, 'destroy'])->name('inspections.destroy');
-    Route::post('/inspections/delete-multiple', [PackageController::class, 'deleteMultiple']);
+    Route::post('/inspections', [PackageInspectionController::class, 'store'])->name('inspections.store');
+    Route::get('/inspections/{id}', [PackageInspectionController::class, 'show'])->name('inspections.show');
+    Route::put('/inspections/{id}', [PackageInspectionController::class, 'update'])->name('inspections.update');
+    Route::delete('/inspections/{id}', [PackageInspectionController::class, 'destroy'])->name('inspections.destroy');
+    Route::post('/inspections/delete-multiple', [PackageInspectionController::class, 'deleteMultiple']);
 
     // Flight
     Route::get('/flights', [FlightController::class, 'index'])->name('flights.index');
@@ -688,6 +690,22 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->name('schedules.update');
     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
     Route::post('/schedules/delete-multiple', [ScheduleController::class, 'deleteMultiple']);
+
+    // Analisis
+    Route::get('/analysis', [AnalysisController::class, 'index'])->name('analysis.index');
+    Route::post('/analysis', [AnalysisController::class, 'store'])->name('analysis.store');
+    Route::get('/analysis/{id}', [AnalysisController::class, 'show'])->name('analysis.show');
+    Route::put('/analysis/{id}', [AnalysisController::class, 'update'])->name('analysis.update');
+    Route::delete('/analysis/{id}', [AnalysisController::class, 'destroy'])->name('analysis.destroy');
+    Route::post('/analysis/delete-multiple', [AnalysisController::class, 'deleteMultiple']);
+
+    // Sertifikat Analisis
+    Route::get('/certificates', [AnalysisCertficateController::class, 'index'])->name('certificates.index');
+    Route::post('/certificates', [AnalysisCertficateController::class, 'store'])->name('certificates.store');
+    Route::get('/certificates/{id}', [AnalysisCertficateController::class, 'show'])->name('certificates.show');
+    Route::put('/certificates/{id}', [AnalysisCertficateController::class, 'update'])->name('certificates.update');
+    Route::delete('/certificates/{id}', [AnalysisCertficateController::class, 'destroy'])->name('certificates.destroy');
+    Route::post('/certificates/delete-multiple', [AnalysisCertficateController::class, 'deleteMultiple']);
 });
 
 Route::get('/scan-camera', function () {

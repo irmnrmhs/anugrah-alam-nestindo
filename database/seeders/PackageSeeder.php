@@ -110,8 +110,7 @@ class PackageSeeder extends Seeder
         Package::create([
             'types_id' => 4,
             'bahan' => 'Cemaran Mikroba (Microbial contamination)',
-            'satuan' => 'mm',
-            'lainnya' => 'Bersih (Clean)'
+            'lainnya' => 'Bersih (Clean)',
         ]);
 
         Package::create([

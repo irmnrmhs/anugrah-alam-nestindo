@@ -29,6 +29,11 @@ class FinishedProduct extends Model
         return $this->hasMany(Order::class, 'batch_id');
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(AnalysisCertficate::class, 'fproducts_id');
+    }
+
     // Finished Product
     public function getTotalBijiKeluarAttribute()
     {

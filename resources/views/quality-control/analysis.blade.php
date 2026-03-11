@@ -1,27 +1,25 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Pemeriksaan Bahan Kemas';
-    $singular = 'Pemeriksaan Bahan Kemas';
+    $title = 'Kelola Analisis';
+    $singular = 'Analisis';
     $hideImportButton = true;
 @endphp
 
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
-    <th>Bahan Kemas</th>
-    <th>Tanggal Uji</th>
-    <th>Hasil Uji</th>
+    <th>Item</th>
+    <th>Standar</th>
 @stop
 
 @section('table-body')
-    @foreach($inspections as $index => $inspection)
-        <tr data-id="{{ $inspection->id }}">
-            <td><input inspection="checkbox" class="row-check" value="{{ $inspection->id }}"></td>
+    @foreach($analys as $index => $i)
+        <tr data-id="{{ $i->id }}">
+            <td><input type="checkbox" class="row-check" value="{{ $i->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $inspection->package->bahan }}</td>
-            <td>{{ $inspection->tanggal }}</td>
-            <td>{{ $inspection->hasil }}</td>
+            <td>{{ $i->item }}</td>
+            <td>{{ $i->standard }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -32,38 +30,24 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Jenis Bahan Kemas</label>
-        <select id="packages_id" class="form-control" required>
-            <option value="">-- Pilih Jenis --</option>
-            @foreach($packages as $package)
-                <option value="{{ $package->id }}">{{ $package->bahan }}</option>
-            @endforeach
-        </select>
+        <label>Item</label>
+        <input type="text" id="item" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Tanggal Uji</label>
-        <input type="date" id="tanggal" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Hasil Uji</label>
-        <select id="hasil" class="form-control">
-            <option value="">-- Pilih --</option>
-                <option value=1>Lulus</option>
-                <option value=0>Tidak Lulus</option>
-        </select>
+        <label>Standar</label>
+        <input type="text" id="standard" class="form-control" required>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/inspections/${id}` : '/inspections';
+    const url = id ? `/analysis/${id}` : '/analysis';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        packages_id: $('#packages_id').val(),
-        tanggal: $('#tanggal').val(),
-        hasil: $('#hasil').val(),
+        item: $('#item').val(),
+        standard: $('#standard').val(),
     };
 
     fetch(url, {
@@ -79,20 +63,19 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/inspections/${id}`)
+        fetch(`/analysis/${id}`)
             .then(r => r.json())
-            .then(inspection => {
-                $('#item_id').val(inspection.id);
-                $('#packages_id').val(inspection.packages_id);
-                $('#tanggal').val(inspection.tanggal);
-                $('#hasil').val(inspection.hasil);
-                $('#modalTitle').text('Edit Pemeriksaan Bahan Kemas');
+            .then(data => {
+                $('#item_id').val(data.id);
+                $('#item').val(data.item);
+                $('#standard').val(data.standard);
+                $('#modalTitle').text('Edit Analisis');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -108,7 +91,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/inspections/${id}`, {
+                fetch(`/analysis/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })
