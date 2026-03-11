@@ -65,6 +65,7 @@ use App\Http\Controllers\ShapeController;
 use App\Http\Controllers\SoakController;
 use App\Http\Controllers\SteamController;
 use App\Http\Controllers\SteamOfficerController;
+use App\Http\Controllers\SteamUploadController;
 use App\Http\Controllers\StepController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TestTypeController;
@@ -583,6 +584,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/dsteams/{id}', [DetailSteamController::class, 'destroy'])->name('dsteams.destroy');
     Route::post('/dsteams/delete-multiple', [DetailSteamController::class, 'deleteMultiple']);
     Route::get('/dsteams/{id}/export', [DetailSteamController::class, 'export'])->name('dsteams.export');
+
+    // Scan Steaming
+    Route::get('/usteams', [SteamUploadController::class, 'index'])->name('usteams.index');
+    Route::post('/usteams', [SteamUploadController::class, 'store'])->name('usteams.store');
+    Route::get('/usteams/{id}', [SteamUploadController::class, 'show'])->name('usteams.show');
+    Route::put('/usteams/{id}', [SteamUploadController::class, 'update'])->name('usteams.update');
+    Route::delete('/usteams/{id}', [SteamUploadController::class, 'destroy'])->name('usteams.destroy');
+    Route::post('/usteams/delete-multiple', [SteamUploadController::class, 'deleteMultiple']);
 
     // Packing
     Route::get('/packs', [PackingController::class, 'index'])->name('packs.index');

@@ -694,6 +694,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Scan Steaming',
+                    'url'  => 'usteams',
+                    'can'  => ['Super Admin', 'Admin Produksi'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Batch Produk',
                     'url'  => 'fp-products',
                     'can'  => ['Super Admin'],
