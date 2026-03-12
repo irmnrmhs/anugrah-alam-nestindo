@@ -17,7 +17,7 @@ class DocumentController extends Controller
     {
         $docs = Document::with('department')->latest()->get();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'karyawan');
+                $query->where('posisi', 'Produksi');
             })->get();
         
         $depts = Department::all();

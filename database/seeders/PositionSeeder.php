@@ -22,7 +22,11 @@ class PositionSeeder extends Seeder
         ]);
 
         Position::create([
-            'posisi' => 'Karyawan'
+            'posisi' => 'Produksi'
+        ]);
+
+        Position::create([
+            'posisi' => 'Office'
         ]);
     }
 }

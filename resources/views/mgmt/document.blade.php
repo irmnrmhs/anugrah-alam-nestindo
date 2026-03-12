@@ -38,7 +38,7 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Proses</label>
+        <label>Departemen</label>
         <select id="depts_id" class="form-control" required>
             <option value="">-- Pilih Departemen --</option>
             @foreach($depts as $dept)
@@ -56,11 +56,11 @@
     </div>
     <div class="mb-3">
         <label>Nama Dokumen</label>
-        <input type="text" id="name" class="form-control">
+        <input type="text" id="name" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Nomor Revisi</label>
-        <input type="number" id="rev" step="0" min="0" class="form-control">
+        <input type="number" id="rev" step="0" min="0" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Tanggal</label>

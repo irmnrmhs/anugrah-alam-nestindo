@@ -20,7 +20,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $department->kd_dept }}</td>
             <td>{{ $department->nama_dept }}</td>
-            <td>{{ $department->nama_eng }}</td>
+            <td>{{ empty($department->nama_eng) ? '-' : $department->nama_eng }}</td>
             <td>{{ empty($department->deskripsi) ? '-' : $department->deskripsi }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -43,7 +43,7 @@
 
     <div class="mb-3">
         <label>Departemen (dalam bahasa inggris)</label>
-        <input type="text" id="nama_eng" class="form-control" required>
+        <input type="text" id="nama_eng" class="form-control">
     </div>
 
     <div class="mb-3">

@@ -18,7 +18,7 @@ class DocumentSeeder extends Seeder
             'no'        => 'AAN/FRM/RW/01/04',
             'name'      => 'Surat Keterangan Pengiriman',
             'rev'       => 1,
-            'employees_id'  => 17,
+            'employees_id'  => 1,
         ]);
 
         Document::create([
@@ -58,7 +58,7 @@ class DocumentSeeder extends Seeder
             'name'      => 'Grading Bahan Baku',
             'rev'       => 3,
             'tgl'       => '2023-08-10',
-            'employees_id'  => 17,
+            'employees_id'  => 19,
         ]);
 
         Document::create([
@@ -68,7 +68,7 @@ class DocumentSeeder extends Seeder
             'name'      => 'Sesek Kaki',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 18,
+            'employees_id'  => 20,
         ]);
 
         Document::create([
@@ -78,7 +78,7 @@ class DocumentSeeder extends Seeder
             'name'      => 'Pencucian',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 17,
+            'employees_id'  => 21,
         ]);
 
         Document::create([
@@ -88,7 +88,7 @@ class DocumentSeeder extends Seeder
             'name'      => 'Inspeksi dan Koreksi',
             'rev'       => 0,
             'tgl'       => '2023-01-11',
-            'employees_id'  => 19,
+            'employees_id'  => 1,
         ]);
 
         Document::create([
@@ -98,7 +98,17 @@ class DocumentSeeder extends Seeder
             'name'      => 'Pencabutan Bulu',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 17,
+            'employees_id'  => 22,
+        ]);
+
+        Document::create([
+            'depts_id'  => 11,
+            'kode'      => 'PR05PB',
+            'no'        => 'AAN/FRM/PR/01/02',
+            'name'      => 'Pencabutan Bulu',
+            'rev'       => 0,
+            'tgl'       => '2021-10-08',
+            'employees_id'  => 23,
         ]);
 
         Document::create([

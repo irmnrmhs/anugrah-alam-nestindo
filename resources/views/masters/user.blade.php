@@ -48,7 +48,7 @@
         <select id="employees_id" class="form-control" required>
             <option value="">-- Pilih Karyawan --</option>
             @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->nama }}({{ $employee->nip }})</option>
+                <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
             @endforeach
         </select>
     </div>
