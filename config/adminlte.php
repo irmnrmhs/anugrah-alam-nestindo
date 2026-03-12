@@ -367,6 +367,12 @@ return [
                     'icon' => 'fas fa-building',
                 ],
                 [
+                    'text' => 'Detail Dokumen',
+                    'url'  => 'det-documents',
+                    'can'  => ['Super Admin', 'Admin Human Resource'],
+                    'icon' => 'fas fa-building',
+                ],
+                [
                     'text' => 'Jabatan',
                     'url'  => 'positions',
                     'can'  => ['Super Admin', 'Admin Human Resource'],

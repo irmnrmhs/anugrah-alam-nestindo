@@ -16,18 +16,13 @@ class DocumentController extends Controller
     public function index(): View
     {
         $docs = Document::with('department')->latest()->get();
-        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'Produksi');
-            })->get();
-        
         $depts = Department::all();
-        return view('mgmt.document', compact('docs', 'employees', 'depts'));
+        return view('mgmt.document', compact('docs', 'depts'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'employees_id' => 'required|exists:employees,id',
             'depts_id' => 'required|exists:departments,id',
             'kode' => 'required|unique:documents,kode',
             'no'      => 'required',
@@ -54,7 +49,6 @@ class DocumentController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'employees_id' => 'required|exists:employees,id',
             'depts_id' => 'required|exists:departments,id',
             'kode' => 'required|unique:documents,kode,' . $id,
             'no'      => 'required',

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             EmployeeSeeder::class,
             // StepSeeder::class,
             DocumentSeeder::class,
+            DetailDocumentSeeder::class,
             UserSeeder::class,
 
             AreaSeeder::class,

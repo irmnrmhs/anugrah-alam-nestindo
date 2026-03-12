@@ -12,15 +12,16 @@ class DocumentSeeder extends Seeder
      */
     public function run(): void
     {
+        // 1
         Document::create([
             'depts_id'  => 7,
             'kode'      => 'SKP058',
             'no'        => 'AAN/FRM/RW/01/04',
             'name'      => 'Surat Keterangan Pengiriman',
             'rev'       => 1,
-            'employees_id'  => 1,
         ]);
 
+        // 2
         Document::create([
             'depts_id'  => 8,
             'kode'      => 'KBB058',
@@ -28,9 +29,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kendaraan Bahan Baku',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 18,
         ]);
 
+        // 3
         Document::create([
             'depts_id'  => 8,
             'kode'      => 'DBB058',
@@ -38,9 +39,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kedatangan Bahan Baku',
             'rev'       => 1,
             'tgl'       => '2022-04-05',
-            'employees_id'  => 18,
         ]);
 
+        // 4
         Document::create([
             'depts_id'  => 8,
             'kode'      => 'SBB058',
@@ -48,9 +49,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Stok Bahan Baku',
             'rev'       => 1,
             'tgl'       => '2022-11-01',
-            'employees_id'  => 19,
         ]);
 
+        // 5
         Document::create([
             'depts_id'  => 8,
             'kode'      => 'PR01GB',
@@ -58,9 +59,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Grading Bahan Baku',
             'rev'       => 3,
             'tgl'       => '2023-08-10',
-            'employees_id'  => 19,
         ]);
 
+        // 6
         Document::create([
             'depts_id'  => 8,
             'kode'      => 'PR02SK',
@@ -68,9 +69,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Sesek Kaki',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 20,
         ]);
 
+        // 7
         Document::create([
             'depts_id'  => 9,
             'kode'      => 'PR03PC',
@@ -78,9 +79,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Pencucian',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 21,
         ]);
 
+        // 8
         Document::create([
             'depts_id'  => 10,
             'kode'      => 'PR04IK',
@@ -88,9 +89,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Inspeksi dan Koreksi',
             'rev'       => 0,
             'tgl'       => '2023-01-11',
-            'employees_id'  => 1,
         ]);
 
+        // 9
         Document::create([
             'depts_id'  => 11,
             'kode'      => 'PR05PB',
@@ -98,19 +99,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Pencabutan Bulu',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 22,
         ]);
 
-        Document::create([
-            'depts_id'  => 11,
-            'kode'      => 'PR05PB',
-            'no'        => 'AAN/FRM/PR/01/02',
-            'name'      => 'Pencabutan Bulu',
-            'rev'       => 0,
-            'tgl'       => '2021-10-08',
-            'employees_id'  => 23,
-        ]);
-
+        // 10
         Document::create([
             'depts_id'  => 12,
             'kode'      => 'PR06PR',
@@ -118,9 +109,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Perendaman',
             'rev'       => 1,
             'tgl'       => '2023-01-16',
-            'employees_id'  => 19,
         ]);
 
+        // 11
         Document::create([
             'depts_id'  => 13,
             'kode'      => 'PR07CB',
@@ -128,9 +119,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Cabut Bilas',
             'rev'       => 0,
             'tgl'       => '2023-01-11',
-            'employees_id'  => 17,
         ]);
 
+        // 12
         Document::create([
             'depts_id'  => 14,
             'kode'      => 'PR08MC',
@@ -138,9 +129,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Masuk Cetak',
             'rev'       => 1,
             'tgl'       => '2023-01-16',
-            'employees_id'  => 19,
         ]);
 
+        // 13
         Document::create([
             'depts_id'  => 14,
             'kode'      => 'PR09KC',
@@ -148,9 +139,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Keluar Cetak',
             'rev'       => 1,
             'tgl'       => '2023-01-16',
-            'employees_id'  => 17,
         ]);
 
+        // 14
         Document::create([
             'depts_id'  => 15,
             'kode'      => 'PR10PK',
@@ -158,9 +149,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Pengeringan',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 17,
         ]);
 
+        // 15
         Document::create([
             'depts_id'  => 16,
             'kode'      => 'PR11GP',
@@ -168,28 +159,19 @@ class DocumentSeeder extends Seeder
             'name'      => 'Grading Produk Jadi',
             'rev'       => 1,
             'tgl'       => '2023-02-01',
-            'employees_id'  => 18,
         ]);
 
-        // Document::create([
-            //     'depts_id'  => 4,
-            //     'kode'      => 'PR12SP',
-            //     'no'        => 'AAN/FRM/RW/01/01',
-            //     'name'      => 'Stok Produk Jadi',
-            //     'rev'       => 1,
-            // ]);
-            //     'employees_id'  => 1,
-
+        // 16
         Document::create([
-            'depts_id'  => 15,
+            'depts_id'  => 17,
             'kode'      => 'PR13ST',
             'no'        => 'AAN/FRM/PR/04/01',
             'name'      => 'Steaming',
             'rev'       => 5,
             'tgl'       => '2025-05-05',
-            'employees_id'  => 19,
         ]);
 
+        // 17
         Document::create([
             'depts_id'  => 18,
             'kode'      => 'QCBBA',
@@ -197,9 +179,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kadar Air Bahan Baku',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 19,
         ]);
 
+        // 18
         Document::create([
             'depts_id'  => 18,
             'kode'      => 'QCBBN',
@@ -207,9 +189,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kadar Nitrit Bahan Baku',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 19,
         ]);
 
+        // 19
         Document::create([
             'depts_id'  => 18,
             'kode'      => 'QCBBL',
@@ -217,9 +199,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kadar Aluminium Bahan Baku',
             'rev'       => 0,
             'tgl'       => '2025-01-02',
-            'employees_id'  => 19,
         ]);
 
+        // 20
         Document::create([
             'depts_id'  => 18,
             'kode'      => 'QCCCPN',
@@ -227,9 +209,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kadar Nitrit Selama Proses',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 19,
         ]);
 
+        // 21
         Document::create([
             'depts_id'  => 18,
             'kode'      => 'QCCCPL',
@@ -237,9 +219,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kadar Aluminium Selama Proses',
             'rev'       => 01,
             'tgl'       => '2025-08-12',
-            'employees_id'  => 19,
         ]);
 
+        // 22
         Document::create([
             'depts_id'  => 18,
             'kode'      => 'QCPJA',
@@ -247,9 +229,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kadar Air Produk Jadi',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 19,
         ]);
 
+        // 23
         Document::create([
             'depts_id'  => 18,
             'kode'      => 'QCPJN',
@@ -257,9 +239,9 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kadar Nitrit Produk Jadi',
             'rev'       => 0,
             'tgl'       => '2021-10-08',
-            'employees_id'  => 19,
         ]);
 
+        // 24
         Document::create([
             'depts_id'  => 18,
             'kode'      => 'QCPJL',
@@ -267,7 +249,6 @@ class DocumentSeeder extends Seeder
             'name'      => 'Kadar Aluminium Produk Jadi',
             'rev'       => 0,
             'tgl'       => '2025-01-02',
-            'employees_id'  => 19,
         ]);
     }
 }

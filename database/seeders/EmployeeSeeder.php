@@ -162,56 +162,56 @@ class EmployeeSeeder extends Seeder
 
         Employee::create([
             'nip' => '22',
-            'nama' => 'Nadi',
-            'positions_id' => 3,
-            'dept_id' => 11
-        ]);
-
-        Employee::create([
-            'nip' => '23',
             'nama' => 'Ayi',
             'positions_id' => 3,
             'dept_id' => 11
         ]);
 
         Employee::create([
-            'nip' => '24',
-            'nama' => 'Rini',
+            'nip' => '23',
+            'nama' => 'Nadi',
             'positions_id' => 3,
-            'dept_id' => 12
+            'dept_id' => 11
         ]);
 
         Employee::create([
-            'nip' => '25',
+            'nip' => '24',
             'nama' => 'Eva',
             'positions_id' => 3,
             'dept_id' => 12
         ]);
 
         Employee::create([
-            'nip' => '26',
-            'nama' => 'Anis',
+            'nip' => '25',
+            'nama' => 'Rini',
             'positions_id' => 3,
-            'dept_id' => 14
+            'dept_id' => 12
         ]);
 
         Employee::create([
-            'nip' => '27',
+            'nip' => '26',
             'nama' => 'Fitri',
             'positions_id' => 3,
             'dept_id' => 14
         ]);
 
         Employee::create([
+            'nip' => '27',
+            'nama' => 'Anis',
+            'positions_id' => 3,
+            'dept_id' => 14
+        ]);
+
+        Employee::create([
             'nip' => '28',
-            'nama' => 'Anisa',
+            'nama' => 'Resi',
             'positions_id' => 3,
             'dept_id' => 14
         ]);
 
         Employee::create([
             'nip' => '29',
-            'nama' => 'Resi',
+            'nama' => 'Anisa',
             'positions_id' => 3,
             'dept_id' => 14
         ]);

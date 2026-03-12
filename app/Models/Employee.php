@@ -130,4 +130,9 @@ class Employee extends Model
     {
         return $this->hasMany(Vehicle::class, 'emp_id');
     }
+
+    public function details()
+    {
+        return $this->hasMany(DetailDocument::class, 'employees_id');
+    }
 }

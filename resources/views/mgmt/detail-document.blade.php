@@ -1,31 +1,25 @@
 @extends('layouts.form')
 
 @php
-    $title = 'Kelola Dokumen';
-    $singular = 'Dokumen';
+    $title = 'Kelola Detail Dokumen';
+    $singular = 'Detail Dokumen';
     $hideImportButton = true;
 @endphp
 
 @section('table-headers')
     <th>No</th>
-    <th>Departemen</th>
-    <th>Kode</th>
-    <th>Nomor Dokumen</th>
-    <th>Nama Dokumen</th>
-    <th>Nomor Revisi</th>
-    <th>Tanggal</th>
+    <th>Dokumen</th>
+    <th>Shift</th>
+    <th>PIC</th>
 @stop
 
 @section('table-body')
-    @foreach($docs as $index => $doc)
-        <tr data-id="{{ $doc->id }}">
+    @foreach($details as $index => $detail)
+        <tr data-id="{{ $detail->id }}">
             <td>{{ $index + 1 }}</td>
-            <td>{{ $doc->department->nama_dept }}</td>
-            <td>{{ $doc->kode }}</td>
-            <td>{{ $doc->no }}</td>
-            <td>{{ $doc->name }}</td>
-            <td>{{ $doc->rev }}</td>
-            <td>{{ $doc->tgl }}</td>
+            <td>{{ $detail->document->name }}</td>
+            <td>{{ empty($detail->shift) ? '-' : $detail->shift }}</td>
+            <td>{{ $detail->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -36,49 +30,43 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Departemen</label>
-        <select id="depts_id" class="form-control" required>
-            <option value="">-- Pilih Departemen --</option>
-            @foreach($depts as $dept)
-                <option value="{{ $dept->id }}">{{ $dept->nama_dept }}</option>
+        <label>Dokumen</label>
+        <select id="documents_id" class="form-control" required>
+            <option value="">-- Pilih Dokumen --</option>
+            @foreach($documents as $document)
+                <option value="{{ $document->id }}">{{ $document->name }}</option>
             @endforeach
         </select>
     </div>
     <div class="mb-3">
-        <label>Kode Dokumen</label>
-        <input type="text" id="kode" class="form-control" required>
+        <label>PIC</label>
+        <select id="employees_id" class="form-control" required>
+            <option value="">-- Pilih Karyawan --</option>
+            @foreach($employees as $employee)
+                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="mb-3">
-        <label>Nomor Dokumen</label>
-        <input type="text" id="no" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Nama Dokumen</label>
-        <input type="text" id="name" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Nomor Revisi</label>
-        <input type="number" id="rev" step="0" min="0" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Tanggal</label>
-        <input type="date" id="tgl" class="form-control">
+        <label>Shift</label>
+        <select id="shift" class="form-control">
+            <option value="">-- Pilih Shift --</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
     </div>
 @stop
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/documents/${id}` : '/documents';
+    const url = id ? `/det-documents/${id}` : '/det-documents';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
         _token: '{{ csrf_token() }}',
-        depts_id: $('#depts_id').val(),
-        kode: $('#kode').val(),
-        no: $('#no').val(),
-        name: $('#name').val(),
-        rev: $('#rev').val(),
-        tgl: $('#tgl').val(),
+        documents_id: $('#documents_id').val(),
+        employees_id: $('#employees_id').val(),
+        shift: $('#shift').val(),
     };
 
     fetch(url, {
@@ -94,23 +82,20 @@
         Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode dan nama tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')
     $(document).on('click', '.btnEdit', function() {
         const id = $(this).closest('tr').data('id');
-        fetch(`/documents/${id}`)
+        fetch(`/det-documents/${id}`)
             .then(r => r.json())
-            .then(document => {
-                $('#item_id').val(document.id);
-                $('#depts_id').val(document.depts_id);
-                $('#kode').val(document.kode);
-                $('#no').val(document.no);
-                $('#name').val(document.name);
-                $('#rev').val(document.rev);
-                $('#tgl').val(document.tgl);
-                $('#modalTitle').text('Edit Dokumen');
+            .then(detail => {
+                $('#item_id').val(detail.id);
+                $('#documents_id').val(detail.documents_id);
+                $('#employees_id').val(detail.employees_id);
+                $('#shift').val(detail.shift);
+                $('#modalTitle').text('Edit Detail Dokumen');
                 new bootstrap.Modal('#crudModal').show();
             });
     });
@@ -126,7 +111,7 @@
             cancelButtonText: 'Batal'
         }).then(result => {
             if (result.isConfirmed) {
-                fetch(`/documents/${id}`, {
+                fetch(`/det-documents/${id}`, {
                     method: 'DELETE',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })

@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('detail_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('depts_id')->constrained('departments');
-            $table->string('kode')->unique();
-            $table->string('no');
-            $table->string('name')->unique();
-            $table->integer('rev');
-            $table->date('tgl')->nullable();
+            $table->foreignId('documents_id')->constrained('documents');
+            $table->foreignId('employees_id')->constrained('employees');
+            $table->integer('shift')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('detail_documents');
     }
 };

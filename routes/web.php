@@ -17,6 +17,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DcertificateController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DetailDocumentController;
 use App\Http\Controllers\DetailSkpController;
 use App\Http\Controllers\DetailSteamController;
 use App\Http\Controllers\DocumentController;
@@ -130,6 +131,13 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
     Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
     Route::delete('/documents/{id}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+    
+    // Detail Dokumen
+    Route::get('det-documents', [DetailDocumentController::class, 'index'])->name('det-documents.index');
+    Route::post('/det-documents', [DetailDocumentController::class, 'store'])->name('det-documents.store');
+    Route::get('/det-documents/{id}', [DetailDocumentController::class, 'show'])->name('det-documents.show');
+    Route::put('/det-documents/{id}', [DetailDocumentController::class, 'update'])->name('det-documents.update');
+    Route::delete('/det-documents/{id}', [DetailDocumentController::class, 'destroy'])->name('det-documents.destroy');
     
     // Jabatan
     Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');

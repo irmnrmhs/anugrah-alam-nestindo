@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     protected $fillable = [
-        'employees_id',
         'depts_id',
         'kode',
         'no',
@@ -16,14 +15,14 @@ class Document extends Model
         'tgl',
     ];
 
-    public function employee()
-    {
-        return $this->belongsTo(Employee::class, 'employees_id');
-    }
-
     public function department()
     {
         return $this->belongsTo(Department::class, 'depts_id');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(DetailDocument::class, 'documents_id');
     }
 
     public function getRevFormattedAttribute()
