@@ -38,7 +38,7 @@ class OfficerController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'officer' => 'required',
+            'nama' => 'required',
         ]);
 
         $officer = Officer::findOrFail($id);

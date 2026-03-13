@@ -26,7 +26,7 @@ class PositionSeeder extends Seeder
         ]);
 
         Position::create([
-            'posisi' => 'Office'
+            'posisi' => 'Staff'
         ]);
     }
 }

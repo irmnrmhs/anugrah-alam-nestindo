@@ -234,49 +234,84 @@ class EmployeeSeeder extends Seeder
             'nip' => '32',
             'nama' => 'Ahmad',
             'positions_id' => 2,
-            'dept_id' => 10
+            'dept_id' => 5
         ]);
 
         Employee::create([
             'nip' => '33',
             'nama' => 'Iqbal',
             'positions_id' => 2,
-            'dept_id' => 10
+            'dept_id' => 5
         ]);
 
         Employee::create([
             'nip' => '34',
             'nama' => 'Idun',
             'positions_id' => 2,
-            'dept_id' => 10
+            'dept_id' => 5
         ]);
 
         Employee::create([
             'nip' => '35',
             'nama' => 'Udin',
             'positions_id' => 2,
-            'dept_id' => 10
+            'dept_id' => 5
         ]);
 
         Employee::create([
             'nip' => '36',
             'nama' => 'Bilal',
             'positions_id' => 2,
-            'dept_id' => 10
+            'dept_id' => 5
         ]);
 
         Employee::create([
             'nip' => '37',
             'nama' => 'Muji',
             'positions_id' => 2,
-            'dept_id' => 10
+            'dept_id' => 5
         ]);
 
         Employee::create([
             'nip' => '38',
             'nama' => 'Ifan',
             'positions_id' => 2,
-            'dept_id' => 10
+            'dept_id' => 5
+        ]);
+
+        Employee::create([
+            'nip' => '39',
+            'nama' => 'Nando',
+            'positions_id' => 3,
+            'dept_id' => 17
+        ]);
+
+        Employee::create([
+            'nip' => '40',
+            'nama' => 'Wisnu',
+            'positions_id' => 3,
+            'dept_id' => 17
+        ]);
+
+        Employee::create([
+            'nip' => '41',
+            'nama' => 'Husen',
+            'positions_id' => 3,
+            'dept_id' => 17
+        ]);
+
+        Employee::create([
+            'nip' => '42',
+            'nama' => 'Mia',
+            'positions_id' => 3,
+            'dept_id' => 17
+        ]);
+
+        Employee::create([
+            'nip' => '43',
+            'nama' => 'Anggi',
+            'positions_id' => 3,
+            'dept_id' => 17
         ]);
     }
 }

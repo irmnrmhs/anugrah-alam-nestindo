@@ -13,9 +13,9 @@
     <th>No</th>
     <th>Nomor SKP</th>
     <th>Tanggal Panen</th>
-    <th>Berat Panen</th>
+    <th>Berat Panen (kg)</th>
     <th>Tanggal Kirim</th>
-    <th>Berat Kirim</th>
+    <th>Berat Kirim (kg)</th>
 @stop
 
 @section('table-body')
@@ -51,7 +51,7 @@
         <input type="date" id="tgl_panen" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Berat Panen</label>
+        <label>Berat Panen (kg)</label>
         <input type="number" id="berat_panen" min="0" step="0.01" class="form-control" required>
     </div>
     <div class="mb-3">
@@ -59,7 +59,7 @@
         <input type="date" id="tgl_kirim" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Berat Kirim</label>
+        <label>Berat Kirim (kg)</label>
         <input type="number" id="berat_kirim" min="0" step="0.01" class="form-control" required>
     </div>
 @stop

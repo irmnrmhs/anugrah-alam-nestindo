@@ -61,7 +61,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode dan kategori tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode dan jenis tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')

@@ -3,6 +3,7 @@
     $singular = 'Bahan Baku';
     $hideAddButton = true;
     $hideActions = true;
+    $hideExportButton = true;
     $hideImportButton = true;
 @endphp
 

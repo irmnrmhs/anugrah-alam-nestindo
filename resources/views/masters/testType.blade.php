@@ -81,8 +81,8 @@
         kode: $('#kode').val(),
         nama_uji: $('#nama_uji').val(),
         satuan: $('#satuan').val(),
-        standar_maksimal: $('#standar_maksimal').val(),
         standar_minimal: $('#standar_minimal').val(),
+        standar_maksimal: $('#standar_maksimal').val(),
     };
 
     fetch(url, {
@@ -98,7 +98,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kategori dan nama uji belum dibuat.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kategori, kode dan nama uji tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')

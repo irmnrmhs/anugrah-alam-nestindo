@@ -42,6 +42,16 @@ class Arrival extends Model
         return $this->belongsTo(RawMaterial::class, 'kode', 'kode');
     }
 
+    // public function getTotalBeratAttribute()
+    // {
+    //     return number_format(
+    //         $this->dcertificate()->details()->sum('berat_kirim') * 1000,
+    //         0,
+    //         ',',
+    //         '.'
+    //     );
+    // }
+
     // public function generateCode(): string
     // {
     //     $kodeWb = $this->dcertificate->wbhouse->kode;

@@ -25,7 +25,9 @@ class GradeFeatherController extends Controller
         $feathers = GradeFeather::with('rawMaterial', 'employee', 'feather')->latest()->get();
 
         $rms = RawMaterial::all();
-        $employees = Employee::where('status', 1)->get();
+        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
+                $query->where('posisi', 'Produksi');
+            })->get();
         $featherList = Feather::all();
 
         return view(

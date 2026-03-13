@@ -18,7 +18,9 @@ class GradeShapeController extends Controller
     {
         $shapes = GradeShape::with('rawMaterial', 'employee', 'shape')->latest()->get();
         $rms = RawMaterial::all();
-        $employees = Employee::where('status', 1)->get();
+        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
+                $query->where('posisi', 'Produksi');
+            })->get();
         $shapeList = Shape::all();
 
         return view('raw-material.grade-shape', compact('shapes', 'rms', 'employees', 'shapeList'));

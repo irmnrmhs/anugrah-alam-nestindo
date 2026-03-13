@@ -17,4 +17,9 @@ class FpGrade extends Model
     {
         return $this->hasMany(Product::class, 'grades_id');
     }
+    
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'grades_id');
+    }
 }

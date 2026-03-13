@@ -385,12 +385,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [   'header' => 'Administrasi' ],
-                [
-                    'text' => 'Kategori Supplier',
-                    'url'  => 'categories',
-                    'can'  => ['Super Admin', 'Admin Keamanan Pangan'],
-                    'icon' => 'fas fa-users',
-                ],
+                // [
+                //     'text' => 'Kategori Supplier',
+                //     'url'  => 'categories',
+                //     'can'  => ['Super Admin', 'Admin Keamanan Pangan'],
+                //     'icon' => 'fas fa-users',
+                // ],
                 // [
                 //     'text' => 'Supplier',
                 //     'url'  => 'suppliers',

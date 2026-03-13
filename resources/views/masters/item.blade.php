@@ -4,18 +4,16 @@
     $title = 'Kelola Data Item';
     $singular = 'Item';
     $deleteMultipleUrl = '/items/delete-multiple';
-    $importUrl = route('items.import');
-    $templateUrl = route('items.template');
 @endphp
 
 @section('table-headers')
     <th><input type="checkbox" id="checkAll"></th>
     <th>No</th>
     <th>Grade</th>
-    <th>Kode</th>
     <th>Item</th>
+    <th>Item (dalam tulisan Cina)</th>
     <th>Spesifikasi</th>
-    <th>Harga</th>
+    <th>Harga (CNY)</th>
     <th>Keterangan</th>
 @stop
 
@@ -24,12 +22,12 @@
         <tr data-id="{{ $item->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $item->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $item->product->grade->grade }}</td>
-            <td>{{ $item->kode }}</td>
+            <td>{{ $item->grade->grade }}</td>
             <td>{{ $item->item }}</td>
-            <td>{{ $item->spesifikasi }}</td>
-            <td>{{ $item->harga }}</td>
-            <td>{{ $item->keterangan }}</td>
+            <td>{{ empty($item->item_cn) ? '-' : $item->item_cn }}</td>
+            <td>{{ $item->specification }}</td>
+            <td>{{ $item->price }}</td>
+            <td>{{ empty($item->ket) ? '-' : $item->ket  }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
                 <button class="btn btn-sm btn-danger btnDelete">Hapus</button>
@@ -40,18 +38,13 @@
 
 @section('form-fields')
     <div class="mb-3">
-        <label>Produk</label>
-        <select id="products_id" class="form-control">
-            <option value="">Pilih Produk</option>
-            @foreach($products as $product)
-                <option value="{{ $product->id }}">{{ $product->grade->grade }}</option>
+        <label>Grade Produk jadi</label>
+        <select id="grades_id" class="form-control" required>
+            <option value="">Pilih Grade PJ</option>
+            @foreach($grades as $grade)
+                <option value="{{ $grade->id }}">{{ $grade->grade }}</option>
             @endforeach
         </select>
-    </div>
-
-    <div class="mb-3">
-        <label>Kode</label>
-        <input type="text" id="kode" class="form-control" required>
     </div>
 
     <div class="mb-3">
@@ -60,12 +53,17 @@
     </div>
 
     <div class="mb-3">
-        <label>Spesifikasi</label>
-        <input type="text" id="spesification" class="form-control" required>
+        <label>Item (dalam tulisan Cina)</label>
+        <input type="text" id="item_cn" class="form-control">
     </div>
 
     <div class="mb-3">
-        <label>Harga</label>
+        <label>Spesifikasi</label>
+        <input type="text" id="specification" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Harga (CNY)</label>
         <input type="number" id="price" class="form-control" required>
     </div>
 
@@ -82,10 +80,10 @@
 
     const data = {
         _token: '{{ csrf_token() }}',
-        products_id: $('#products_id').val(),
-        kode: $('#kode').val(),
+        grades_id: $('#grades_id').val(),
         item: $('#item').val(),
-        spesification: $('#spesification').val(),
+        item_cn: $('#item_cn').val(),
+        specification: $('#specification').val(),
         price: $('#price').val(),
         ket: $('#ket').val(),
     };
@@ -113,10 +111,10 @@
             .then(r => r.json())
             .then(item => {
                 $('#item_id').val(item.id);
-                $('#products_id').val(item.products_id);
-                $('#kode').val(item.kode);
+                $('#grades_id').val(item.grades_id);
                 $('#item').val(item.item);
-                $('#spesification').val(item.spesification);
+                $('#item_cn').val(item.item_cn);
+                $('#specification').val(item.specification);
                 $('#price').val(item.price);
                 $('#ket').val(item.ket);
                 $('#modalTitle').text('Edit Item');

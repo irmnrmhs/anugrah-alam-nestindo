@@ -54,7 +54,7 @@ class RmAlumController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:raw_materials,id',
+            'rms_id' => 'required|exists:raw_materials,id',
             'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);

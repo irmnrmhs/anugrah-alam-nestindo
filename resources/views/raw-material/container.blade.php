@@ -13,9 +13,9 @@
     <th>No</th>
     <th>Tanggal Kedatangan</th>
     <th>Nama RBW/ No. Reg</th>
-    <th>Kode</th>
+    <th>Kode Bahan Baku</th>
     <th>Biji</th>
-    <th>Berat</th>
+    <th>Berat (gram)</th>
     <th>Keterangan</th>
     <th>Petugas</th>
 @stop

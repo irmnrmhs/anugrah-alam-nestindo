@@ -33,7 +33,7 @@
             <td>{{ $arrival->car->merk . ' - ' . $arrival->car->plat }}</td>
             <td>{{ $arrival->kondisi }}</td>
             <td>{{ $arrival->kode }}</td>
-            <td>{{ $arrival->dcertificate->total_berat }}</td>
+            <td>{{ $arrival->total_berat }}</td>
             <td>{{ $arrival->dcertificate->wbhouse->nama . ' / ' . $arrival->dcertificate->wbhouse->kode}}</td>
             <td>{{ empty($arrival->rawMaterial->rmResults->avg('kadar_air')) ? '-' : $arrival->rawMaterial->rmResults->avg('kadar_air') }}</td> 
             <td>{{ $arrival->dcertificate->no_skp }}</td>
@@ -159,7 +159,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kondisi diisi dan kode tidak duplikat.', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kondisi diisi dan data tidak duplikat.', 'error'));
 @stop
 
 @section('custom-js')

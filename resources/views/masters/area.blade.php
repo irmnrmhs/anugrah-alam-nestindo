@@ -22,9 +22,9 @@
             <td>{{ $area->area }}</td>
             <td>
                 @if($area->kh)
-                    <span class="badge bg-success">Ya</span>
+                    Ya
                 @else
-                    <span class="badge bg-danger">Tidak</span>
+                    Tidak
                 @endif
             </td>
             <td>{{ empty($area->keterangan) ? '-' : $area->keterangan }}</td>

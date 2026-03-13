@@ -34,7 +34,7 @@ class RmGradeObserver
         }
 
         $history->increment('biji', $gradeColor->biji);
-        $history->increment('berat', $gradeColor->berat);
+        // $history->increment('berat', $gradeColor->berat);
     }
 
     public function updating(gradeColor $gradeColor)
@@ -51,7 +51,7 @@ class RmGradeObserver
         if(!$history) return;
 
         $bijiOut = $history->edges()->sum('biji');
-        $beratOut = $history->edges()->sum('berat');
+        // $beratOut = $history->edges()->sum('berat');
 
         if($gradeColor->biji < $bijiOut){
             throw ValidationException::withMessages([
@@ -59,11 +59,11 @@ class RmGradeObserver
             ]);
         }
 
-        if($gradeColor->berat < $beratOut){
-            throw ValidationException::withMessages([
-                'berat' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
-            ]);
-        }
+        // if($gradeColor->berat < $beratOut){
+        //     throw ValidationException::withMessages([
+        //         'berat' => 'Berat keluar lebih kecil dari stok yang sudah dipakai proses berikutnya'
+        //     ]);
+        // }
     }
     /**
      * Handle the GradeColor "updated" event.
@@ -80,10 +80,10 @@ class RmGradeObserver
 
             if ($history) {
                 $history->decrement('biji', $gradeColor->getOriginal('biji') ?? 0);
-                $history->decrement('berat', $gradeColor->getOriginal('berat') ?? 0);
+                // $history->decrement('berat', $gradeColor->getOriginal('berat') ?? 0);
 
                 $history->increment('biji', $gradeColor->biji ?? 0);
-                $history->increment('berat', $gradeColor->berat ?? 0);
+                // $history->increment('berat', $gradeColor->berat ?? 0);
             }
         }
 

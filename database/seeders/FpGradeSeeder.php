@@ -14,15 +14,15 @@ class FpGradeSeeder extends Seeder
     public function run(): void
     {
         FpGrade::create([
-            'kode' => 'GR1',
-            'grade' => 'Grade 1',
+            'kode' => 'X',
+            'grade' => 'Xiandun',
             'keterangan' => '-',
             'status' => 1
         ]);
 
         FpGrade::create([
-            'kode' => 'GR2',
-            'grade' => 'Grade 2',
+            'kode' => 'S',
+            'grade' => 'Suzhan',
             'keterangan' => '-',
             'status' => 1
         ]);

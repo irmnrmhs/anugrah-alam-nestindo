@@ -16,7 +16,7 @@ class SteamOfficerController extends Controller
         $officers = SteamOfficer::with('employee')->latest()->get();
         // $employees = Employee::where('status', 1)->get();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'karyawan');
+                $query->where('posisi', 'Produksi');
             })->get();
         return view('masters.steam-officer', compact('officers', 'employees'));
     }

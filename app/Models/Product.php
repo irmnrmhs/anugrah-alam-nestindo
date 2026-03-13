@@ -42,11 +42,6 @@ class Product extends Model
         return $this->hasMany(FpAlum::class, 'products_id');
     }
 
-    public function items()
-    {
-        return $this->hasMany(Item::class, 'products_id');
-    }
-
     public function steams()
     {
         return $this->hasMany(Steam::class, 'products_id');

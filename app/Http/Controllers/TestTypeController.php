@@ -25,7 +25,7 @@ class TestTypeController extends Controller
         $validated = $request->validate([
             'categories_id' => 'required|exists:categories,id',
             // 'nama_uji' => 'required|string|max:100',
-            'kode' => 'required|unique:test_types, kode',
+            'kode' => 'required|unique:test_types,kode',
             'nama_uji' => [
                 'required',
                 Rule::unique('test_types')->where(function ($query) use ($request) {
@@ -33,8 +33,8 @@ class TestTypeController extends Controller
                 }),
             ],
             'satuan' => 'required|string|max:100',
-            'standar_maksimal' => 'required|numeric|min:0|max:999.999',
             'standar_minimal' => 'required|numeric|min:0|max:999.999',
+            'standar_maksimal' => 'required|numeric|min:0|max:999.999',
         ]);
 
         $testType = TestType::create($validated);
@@ -57,7 +57,7 @@ class TestTypeController extends Controller
     {
         $validated = $request->validate([
             'categories_id' => 'required|exists:categories,id',
-            'kode' => 'required|unique:test_types, kode,' .$id,
+            'kode' => 'required|unique:test_types,kode,' .$id,
             'nama_uji' => [
                 'required',
                 Rule::unique('test_types')
@@ -65,8 +65,8 @@ class TestTypeController extends Controller
                     ->ignore($id),
             ],
             'satuan' => 'required|string|max:100',
-            'standar_maksimal' => 'required|numeric|min:0|max:999.999',
             'standar_minimal' => 'required|numeric|min:0|max:999.999',
+            'standar_maksimal' => 'required|numeric|min:0|max:999.999',
         ]);
 
         $testType = TestType::findOrFail($id);

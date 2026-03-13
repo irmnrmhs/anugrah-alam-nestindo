@@ -62,7 +62,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan kode tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan plat nomor tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')

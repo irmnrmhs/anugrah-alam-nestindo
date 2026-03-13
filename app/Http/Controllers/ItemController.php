@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FpGrade;
 use App\Models\Item;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -13,18 +13,18 @@ class ItemController extends Controller
     public string $obj = 'Karyawan';
     public function index(): View
     {
-        $items = Item::with('product')->latest()->get();
-        $products = Product::all();
+        $items = Item::with('grade')->latest()->get();
+        $grades = FpGrade::all();
 
-        return view('masters.item', compact('items', 'products'));
+        return view('masters.item', compact('items', 'grades'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'nullable|exists:products,id',
-            'kode' => 'required|unique:items,kode',
+            'grades_id' => 'required|exists:fp_grades,id',
             'item' => 'required',
+            'item_cn' => 'nullable',
             'specification' => 'required',
             'price' => 'integer',
             'ket' => 'nullable',
@@ -40,7 +40,7 @@ class ItemController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $item = Item::findOrFail($id);
+        $item = Item::with('grade')->findOrFail($id);
         return response()->json($item);
     }
 
@@ -48,9 +48,9 @@ class ItemController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'nullable|exists:products,id',
-            'kode' => 'required|unique:items,kode,' .$id,
+            'grades_id' => 'required|exists:fp_grades,id',
             'item' => 'required',
+            'item_cn' => 'nullable',
             'specification' => 'required',
             'price' => 'integer',
             'ket' => 'nullable',

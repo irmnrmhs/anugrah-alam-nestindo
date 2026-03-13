@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nip')->unique();
             $table->string('nama');
-            $table->foreignId('positions_id')->nullable()->constrained('positions')->nullOnDelete();
+            $table->foreignId('positions_id')->nullable()->constrained('positions');
             $table->foreignId('dept_id')->constrained('departments');
             $table->boolean('status')->default(1);
             $table->timestamps();

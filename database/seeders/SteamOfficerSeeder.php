@@ -14,18 +14,33 @@ class SteamOfficerSeeder extends Seeder
     public function run(): void
     {
         SteamOfficer::create([
-            'employees_id' => 17,
+            'employees_id' => 39,
             'status' => 1,
         ]);
         
         SteamOfficer::create([
-            'employees_id' => 19,
+            'employees_id' => 40,
             'status' => 1,
         ]);
 
         SteamOfficer::create([
-            'employees_id' => 18,
-            'status' => 0,
+            'employees_id' => 41,
+            'status' => 1,
+        ]);
+
+        SteamOfficer::create([
+            'employees_id' => 42,
+            'status' => 1,
+        ]);
+
+        SteamOfficer::create([
+            'employees_id' => 43,
+            'status' => 1,
+        ]);
+
+        SteamOfficer::create([
+            'employees_id' => 14,
+            'status' => 1,
         ]);
     }
 }
