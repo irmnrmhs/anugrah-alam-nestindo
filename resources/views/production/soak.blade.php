@@ -15,9 +15,9 @@
     <th>Kode Bahan Baku</th>
     <th>Kode Grade</th>
     <th>Jumlah Biji</th>
-    <th>Waktu Rendam</th>
-    <th>Keterangan</th>
+    <th>Waktu Rendam (Menit)</th>
     <th>Shift</th>
+    <th>Keterangan</th>
 @stop
 
 @section('table-body')
@@ -75,7 +75,7 @@
         <select id="employees_id" class="form-control" required>
             <option value="">-- Pilih Petugas --</option>
             @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+                <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
             @endforeach
         </select>
     </div>

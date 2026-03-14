@@ -23,7 +23,7 @@ class RinseController extends Controller
         $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR07CB')->get();
         $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'karyawan');
+                $query->where('posisi', 'Produksi');
             })->get();
 
         return view('production.rinse', compact('rinses', 'histories', 'rms', 'employees'));

@@ -23,7 +23,7 @@ class EntryController extends Controller
         $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR08MC')->get();
         $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'karyawan');
+                $query->where('posisi', 'Produksi');
             })->get();
 
         return view('production.entry', compact('entries', 'histories', 'rms', 'employees'));
@@ -90,8 +90,7 @@ class EntryController extends Controller
         $entry = Entry::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_entry + $entry->biji_masuk;
-        $berat_sisa = $tracker->sisa_berat_entry + $entry->berat_masuk;
+        $biji_sisa = $tracker->sisa_biji_entry + $entry->biji;
 
         if(
             $validated['biji'] > $biji_sisa

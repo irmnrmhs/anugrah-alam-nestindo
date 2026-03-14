@@ -2,6 +2,7 @@
     $title = 'Tracker';
     $singular = 'Tracker';
     $hideAddButton = true;
+    $hideExportButton = true;
     $hideActions = true;
     $hideImportButton = true;
 @endphp

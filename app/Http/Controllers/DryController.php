@@ -23,7 +23,7 @@ class DryController extends Controller
         $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR10PK')->get();
         $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'karyawan');
+                $query->where('posisi', 'Produksi');
             })->get();
 
         return view('production.dry', compact('dries', 'histories', 'rms', 'employees'));
@@ -98,7 +98,7 @@ class DryController extends Controller
         $dry = Dry::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_kering + $dry->biji_masuk;
+        $biji_sisa = $tracker->sisa_biji_kering + $dry->biji;
 
         if(
             $validated['biji'] > $biji_sisa

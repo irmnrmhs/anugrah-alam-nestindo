@@ -19,7 +19,9 @@ class ProductController extends Controller
     {
         $products = Product::with('history', 'employee', 'grade')->latest()->get();
         $histories = History::where('tujuan', 'PR11GP')->get();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
+                $query->where('posisi', 'Produksi');
+            })->get();
         $grades = FpGrade::all();
 
         return view('production.product', compact('products', 'histories', 'employees', 'grades'));

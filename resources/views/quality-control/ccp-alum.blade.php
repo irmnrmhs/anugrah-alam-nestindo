@@ -73,7 +73,7 @@
             <div class="border rounded p-3 mb-3">
                 <h6>Sampel ${i}</h6>
                 <label>Kadar Aluminium Selama Proses (CCP1)</label>
-                <input type="number" class="form-control mb-2 ccp1" data-index="${i}" step="0.1" min="0" max="999.9">
+                <input type="number" class="form-control mb-2 ccp_al" data-index="${i}" step="0.1" min="0" max="999.9">
             </div>
         `;
     }
@@ -88,7 +88,7 @@
             list.push({
                 rms_id,
                 tgl,
-                ccp_alum: $(`.ccp_alum[data-index="${i}"]`).val(),
+                ccp_al: $(`.ccp_al[data-index="${i}"]`).val(),
             });
         }
 
@@ -123,8 +123,8 @@
 
                 let html = `
                     <label>Kadar Aluminium Selama Proses</label>
-                    <input type="number" class="form-control mb-2" id="edit_ccp_alum"
-                        value="${result.ccp_alum}" step="0.1" min="0" max="999.9">
+                    <input type="number" class="form-control mb-2" id="edit_ccp_al"
+                        value="${result.ccp_al}" step="0.1" min="0" max="999.9">
                 `;
 
                 $('#secondModalBody').html(html);
@@ -135,7 +135,7 @@
                     let payload = {
                         rms_id: result.rms_id,
                         tgl: result.tgl,
-                        ccp_alum: parseFloat($('#edit_ccp_alum').val()),
+                        ccp_al: parseFloat($('#edit_ccp_al').val()),
                     };
 
                     fetch(`/ccp-al/${result.id}`, {

@@ -23,7 +23,7 @@ class SoakController extends Controller
         $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR06PR')->get();
         $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'karyawan');
+                $query->where('posisi', 'Produksi');
             })->get();
 
         return view('production.soak', compact('soaks', 'histories', 'rms', 'employees'));
@@ -85,7 +85,7 @@ class SoakController extends Controller
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
             'biji' => 'required|integer|min:0',
-            'durasi' => 'require',
+            'durasi' => 'required',
             'shift' => 'required',
             'keterangan' => 'nullable'
         ]);
@@ -93,24 +93,14 @@ class SoakController extends Controller
         $soak = Soak::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_rendam + $soak->biji_masuk;
+        $biji_sisa = $tracker->sisa_biji_rendam + $soak->biji;
 
         if(
-            $validated['biji_masuk'] > $biji_sisa
+            $validated['biji'] > $biji_sisa
         ){
             return response()->json([
                 'status' => 'error',
                 'message' => 'Melebihi stok sisa pada tahapan sebelumnya',
-            ], 422);
-        }
-
-        if(
-            $validated['biji_keluar'] > $validated['biji_masuk'] ||
-            $validated['berat_keluar'] > $validated['berat_masuk']
-        ){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Biji atau berat setelah proses melebihi biji atau berat sebelum proses',
             ], 422);
         }
 

@@ -75,7 +75,7 @@
         <select id="employees_id" class="form-control" required>
             <option value="">-- Pilih Petugas --</option>
             @foreach($employees as $employee)
-                <option value="{{ $employee->id }}">{{ $employee->nama }}</option>
+                <option value="{{ $employee->id }}">{{ $employee->nama }} ({{ $employee->nip }})</option>
             @endforeach
         </select>
     </div>
@@ -233,6 +233,26 @@
                 $('#hcr_sisa').val('-');
                 $('#last').val('-');
             });
+    });
+
+    $(document).on('click', '.btnEdit', function() {
+        const id = $(this).closest('tr').data('id');
+
+        fetch(`/dries/${id}`)
+        .then(r => r.json())
+        .then(dry => {
+            $('#item_id').val(dry.id);
+            $('#histories_id').val(dry.histories_id).trigger('change');
+            $('#employees_id').val(dry.employees_id);
+            $('#tanggal').val(dry.tanggal);
+            $('#biji').val(dry.biji);
+            $('#waktu_in').val(dry.waktu_in);
+            $('#waktu_out').val(dry.waktu_out);
+            $('#shift').val(dry.shift);
+
+            $('#modalTitle').text('Edit Pengeringan');
+            new bootstrap.Modal('#crudModal').show();
+        });
     });
 
     $(document).on('click', '.btnDelete', function() {

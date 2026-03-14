@@ -23,7 +23,7 @@ class PickController extends Controller
         $histories = History::with('gcolor.rawMaterial')->where('tujuan', 'PR05PB')->get();
         $rms = $histories->pluck('gcolor.rawMaterial')->unique('id')->values();
         $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
-                $query->where('posisi', 'karyawan');
+                $query->where('posisi', 'Produksi');
             })->get();
 
         return view('production.pick', compact('picks', 'histories', 'rms', 'employees'));
@@ -91,7 +91,7 @@ class PickController extends Controller
         $pick = Pick::findOrFail($id);
         $tracker = History::find($validated['histories_id']);
 
-        $biji_sisa = $tracker->sisa_biji_cabut + $pick->biji_masuk;
+        $biji_sisa = $tracker->sisa_biji_cabut + $pick->biji;
 
         if(
             $validated['biji'] > $biji_sisa
