@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class fpResult extends Model
+class FpResult extends Model
 {
     protected $fillable = [
         'products_id',
@@ -16,6 +16,6 @@ class fpResult extends Model
 
     public function product()
     {
-        return $this->belongsTo(FinishedProduct::class, 'products_id');
+        return $this->belongsTo(Product::class, 'products_id');
     }
 }

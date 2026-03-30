@@ -15,8 +15,9 @@ class Order extends Model
         'label',
         'net',
         'gross',
+        'cartons',
         'amount_fob',
-        'amout_cif',
+        'amount_cif',
     ];
 
     public function export()

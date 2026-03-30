@@ -18,12 +18,12 @@ class SteamController extends Controller
     public string $obj = 'Steam';
     public function index(): View
     {
-        $steams = Steam::with('nest', 'product')->latest()->get();
+        $steams = Steam::with('product')->latest()->get();
         $officers = SteamOfficer::where('status', 1)->get();
-        $nests = NestType::all();
+        // $nests = NestType::all();
         $products = Product::all();
 
-        return view('production.steam', compact('steams', 'officers', 'nests', 'products'));
+        return view('production.steam', compact('steams', 'officers', 'products'));
     }
 
     public function store(Request $request): JsonResponse
@@ -31,7 +31,7 @@ class SteamController extends Controller
         $validated = $request->validate([
             'products_id' => 'required|exists:products,id',
             // 'officers_id' => 'required|exists:steam_officers,id',
-            'nests_id' => 'required|exists:nest_types,id',
+            // 'nests_id' => 'required|exists:nest_types,id',
             'petugas' => 'required',
             'penambahan' => 'required|boolean',
             'sumber_panas' => 'required|boolean',
@@ -66,7 +66,7 @@ class SteamController extends Controller
         $validated = $request->validate([
             'products_id' => 'required|exists:products,id',
             // 'officers_id' => 'required|exists:steam_officers,id',
-            'nests_id' => 'required|exists:nest_types,id',
+            // 'nests_id' => 'required|exists:nest_types,id',
             'petugas' => 'required',
             'penambahan' => 'required|boolean',
             'sumber_panas' => 'required|boolean',

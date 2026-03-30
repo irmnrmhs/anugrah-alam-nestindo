@@ -28,7 +28,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $steam->product->kode }}</td>
             <td>{{ $steam->batch }}</td>
-            <td>{{ $steam->nest->type }}</td>
+            <td>{{ $steam->product->grade->grade }}</td>
             <td>{{ $steam->penambahan ? 'Otomatis' : 'Manual' }}</td>
             <td>{{ $steam->sumber_panas ? 'Listrik' : 'Gas' }}</td>
             <td>{{ $steam->tgl_pemanasan }}</td>
@@ -53,7 +53,7 @@
             @endforeach
         </select>
     </div>
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <label>Tipe Sarang Walet</label>
         <select id="nests_id" class="form-control" required>
             <option value="">-- Pilih Tipe Sarang Walet --</option>
@@ -61,7 +61,7 @@
                 <option value="{{ $nest->id }}">{{ $nest->type }}</option>
             @endforeach
         </select>
-    </div>
+    </div> --}}
     <div class="mb-3">
         <label>Tipe Penambahan Air</label>
         <select id="penambahan" class="form-control" required>
@@ -134,7 +134,7 @@
     const data = {
         _token: '{{ csrf_token() }}',
         products_id: $('#products_id').val(),
-        nests_id: $('#nests_id').val(),
+        {{-- nests_id: $('#nests_id').val(), --}}
         petugas: getOfficerValue(),
         penambahan: $('#penambahan').val(),
         sumber_panas: $('#sumber_panas').val(),
@@ -156,7 +156,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan data diisi lengkap.', 'error'));
 @stop
 
 @section('custom-js')
@@ -185,7 +185,7 @@
             .then(steam => {
                 $('#item_id').val(steam.id);
                 $('#products_id').val(steam.products_id);
-                $('#nests_id').val(steam.nests_id);
+                {{-- $('#nests_id').val(steam.nests_id); --}}
                 $('#petugas').val(steam.petugas);
                 $('#penambahan').val(steam.penambahan);
                 $('#sumber_panas').val(steam.sumber_panas);

@@ -32,6 +32,7 @@
             <td>{{ $order->label }}</td>
             <td>{{ $order->net }}</td>
             <td>{{ $order->gross }}</td>
+            <td>{{ $order->cartons }}</td>
             <td>{{ $order->amount_fob }}</td>
             <td>{{ $order->amount_cif }}</td>
             <td>
@@ -63,12 +64,16 @@
     </div>
     <div class="mb-3">
         <label>Item</label>
-        <select id="batch_id" class="form-control" required>
+        <select id="items_id" class="form-control" required>
             <option value="">-- Pilih Item --</option>
             @foreach($items as $item)
-                <option value="{{ $item->id }}">{{ $item->kode }}</option>
+                <option value="{{ $item->id }}">{{ $item->item }}</option>
             @endforeach
         </select>
+    </div>
+    <div class="mb-3">
+        <label>Packaging</label>
+        <input type="number" id="packaging" class="form-control" required>
     </div>
     <div class="mb-3">
         <label>Label Nutrisi</label>
@@ -83,11 +88,15 @@
         <input type="number" id="gross" step="0.01" min="0" max="99999.99" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Amount</label>
+        <label>Carton</label>
+        <input type="number" id="cartons" step="0.01" min="0" max="99999.99" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Amount FOB</label>
         <input type="number" id="amount_fob" step="0.01" min="0" max="99999.99" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Gross</label>
+        <label>Gross CIF</label>
         <input type="number" id="amount_cif" step="0.01" min="0" max="99999.99" class="form-control" required>
     </div>
 @stop
@@ -106,6 +115,7 @@
         label: $('#label').val(),
         net: $('#net').val(),
         gross: $('#gross').val(),
+        cartons: $('#cartons').val(),
         amount_fob: $('#amount_fob').val(),
         amount_cif: $('#amount_cif').val(),
     };
@@ -140,6 +150,7 @@
                 $('#label').val(data.label);
                 $('#net').val(data.net);
                 $('#gross').val(data.gross);
+                $('#cartons').val(data.cartons);
                 $('#amount_fob').val(data.amount_fob);
                 $('#amount_cif').val(data.amount_cif);
                 $('#modalTitle').text('Edit Pesanan');

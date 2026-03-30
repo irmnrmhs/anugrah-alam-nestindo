@@ -109,9 +109,18 @@ class ProductController extends Controller
         $biji_sisa = $tracker->sisa_biji_produk + $product->biji;
         $berat_sisa = $tracker->sisa_berat_produk + $product->berat;
 
+        if(
+            $validated['biji'] > $biji_sisa || $validated['berat'] > $berat_sisa
+        ){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Melebihi stok sisa',
+            ], 422);
+        }
+
         // Kode Proses
         $kd_reg = History::with('gcolor.rawMaterial.arrivals.dcertificate.wbhouse')->find($validated['histories_id']);
-        $tgl = $validated['tgl_mulai'];
+        $tgl = $validated['tanggal'];
         $format_tgl = date('dmy', strtotime($tgl));
 
         $validated['kd_proses'] = $grade . $kd_reg . '-' . $format_tgl;

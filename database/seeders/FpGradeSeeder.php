@@ -26,5 +26,40 @@ class FpGradeSeeder extends Seeder
             'keterangan' => '-',
             'status' => 1
         ]);
+
+        FpGrade::create([
+            'kode' => '-',
+            'grade' => 'Mangkok',
+            'keterangan' => '-',
+            'status' => 1
+        ]);
+
+        FpGrade::create([
+            'kode' => '-',
+            'grade' => 'Patahan',
+            'keterangan' => '-',
+            'status' => 1
+        ]);
+
+        FpGrade::create([
+            'kode' => '-',
+            'grade' => 'Kaki',
+            'keterangan' => '-',
+            'status' => 1
+        ]);
+
+        FpGrade::create([
+            'kode' => '-',
+            'grade' => 'Hancuran',
+            'keterangan' => '-',
+            'status' => 1
+        ]);
+
+        FpGrade::create([
+            'kode' => '-',
+            'grade' => 'Hancuran Cetak',
+            'keterangan' => '-',
+            'status' => 1
+        ]);
     }
 }

@@ -6,7 +6,7 @@ use App\Models\Document;
 use App\Models\FpResult;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-use App\Models\FinishedProduct;
+use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 
@@ -15,8 +15,8 @@ class FpResultController extends Controller
     public string $obj = 'Hasil Uji Air dan Nitrit Produk Jadi';
     public function index(): View
     {
-        $results = FpResult::latest()->get();
-        $products = FinishedProduct::all();
+        $results = FpResult::with('product')->latest()->get();
+        $products = Product::all();
 
         return view('quality-control.fpResult', compact('results', 'products'));
     }
@@ -24,7 +24,7 @@ class FpResultController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:finished_products,id',
+            'products_id' => 'required|exists:products,id',
             'tgl' => 'required|date',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
@@ -64,7 +64,7 @@ class FpResultController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:finished_products,id',
+            'products_id' => 'required|exists:products,id',
             'tgl' => 'required|date',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
@@ -110,7 +110,7 @@ class FpResultController extends Controller
     {
         $validated = $request->validate([
             'items' => 'required|array|min:1',
-            'items.*.products_id'   => 'required|exists:finished_products,id',
+            'items.*.products_id'   => 'required|exists:products,id',
             'items.*.tgl' => 'required|date',
             'items.*.kadar_air' => 'nullable|numeric|min:0|max:999.99',
             'items.*.kadar_nitrit' => 'nullable|numeric|min:0|max:999.9',

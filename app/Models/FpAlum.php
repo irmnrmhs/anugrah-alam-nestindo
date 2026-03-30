@@ -14,6 +14,6 @@ class FpAlum extends Model
 
     public function product()
     {
-        return $this->belongsTo(FinishedProduct::class, 'products_id');
+        return $this->belongsTo(Product::class, 'products_id');
     }
 }

@@ -27,7 +27,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'exports_id' => 'required|exists:exports,id',
-            'batch_id' => 'required|exists:finished_product,id',
+            'batch_id' => 'required|exists:finished_products,id',
             'items_id' => 'required|exists:items,id',
             'packaging' => 'required|numeric',
             'label' => 'required|numeric',
@@ -55,7 +55,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'exports_id' => 'required|exists:exports,id',
-            'batch_id' => 'required|exists:finished_product,id',
+            'batch_id' => 'required|exists:finished_products,id',
             'items_id' => 'required|exists:items,id',
             'packaging' => 'required|numeric',
             'label' => 'required|numeric',

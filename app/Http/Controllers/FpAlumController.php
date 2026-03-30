@@ -15,7 +15,7 @@ class FpAlumController extends Controller
     public string $obj = 'Hasil Uji Aluminium Produk Jadi';
     public function index(): View
     {
-        $results = FpAlum::latest()->get();
+        $results = FpAlum::with('product')->latest()->get();
         $products = FinishedProduct::all();
 
         return view('quality-control.fp-alum', compact('results', 'products'));
@@ -24,7 +24,7 @@ class FpAlumController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:finished_products,id',
+            'products_id' => 'required|exists:products,id',
             'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
@@ -55,7 +55,7 @@ class FpAlumController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:finished_products,id',
+            'products_id' => 'required|exists:products,id',
             'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
@@ -94,7 +94,7 @@ class FpAlumController extends Controller
     {
         $validated = $request->validate([
             'items' => 'required|array|min:1',
-            'items.*.products_id'   => 'required|exists:finished_products,id',
+            'items.*.products_id'   => 'required|exists:products,id',
             'items.*.tgl' => 'required|date',
             'items.*.kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
         ]);

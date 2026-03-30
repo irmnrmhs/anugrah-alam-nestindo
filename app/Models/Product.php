@@ -47,6 +47,16 @@ class Product extends Model
         return $this->hasMany(Steam::class, 'products_id');
     }
 
+    public function fpResults()
+    {
+        return $this->hasMany(FpResult::class, 'products_id');
+    }
+
+    public function fpAlumns()
+    {
+        return $this->hasMany(FpAlum::class, 'products_id');
+    }
+
     // public function getBeratAttribute()
     // {
     //     return $this->history()->gcolor()->sum('berat');

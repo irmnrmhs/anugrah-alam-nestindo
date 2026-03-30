@@ -9,7 +9,7 @@ class Steam extends Model
     protected $fillable = [
         'products_id',
         // 'officers_id',
-        'nests_id',
+        // 'nests_id',
         'batch',
         'petugas',
         'penambahan',
@@ -19,10 +19,10 @@ class Steam extends Model
         'suhu_awal',
     ];
 
-    public function nest()
-    {
-        return $this->belongsTo(NestType::class, 'nests_id');
-    }
+    // public function nest()
+    // {
+    //     return $this->belongsTo(NestType::class, 'nests_id');
+    // }
 
     // public function officer()
     // {

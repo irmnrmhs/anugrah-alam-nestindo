@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('fp_alums', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('products_id')->constrained('finished_products');
+            $table->foreignId('products_id')->constrained('products');
             $table->date('tgl');
             $table->decimal('kadar_aluminium', 4, 1)->default(0);
             $table->timestamps();

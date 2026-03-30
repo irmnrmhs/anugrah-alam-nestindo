@@ -59,9 +59,4 @@ class FinishedProduct extends Model
     {
         return $this->berat - $this->total_berat_keluar;
     }
-
-    public function fpResults()
-    {
-        return $this->hasMany(FpResult::class, 'products_id');
-    }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('products_id')->constrained('products');
             // $table->foreignId('officers_id')->constrained('steam_officers');
-            $table->foreignId('nests_id')->constrained('nest_types');
+            // $table->foreignId('nests_id')->constrained('nest_types');
             $table->string('batch')->unique();
             $table->string('petugas');
             $table->boolean('penambahan');
