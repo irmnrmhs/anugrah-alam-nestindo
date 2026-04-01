@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('exports_id')->constrained('exports');
             $table->foreignId('batch_id')->constrained('finished_products');
-            $table->foreignId('items_id')->constrained('items');
+            $table->foreignId('items_id')->constrained('item_details');
             $table->integer('packaging');
             $table->integer('label');
             $table->decimal('net', 7, 2);

@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             ContainerSeeder::class,
             FpGradeSeeder::class,
             ItemSeeder::class,
+            ItemDetailSeeder::class,
             NestTypeSeeder::class,
             SteamOfficerSeeder::class,
             PackageTypeSeeder::class,

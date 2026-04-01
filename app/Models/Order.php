@@ -32,7 +32,7 @@ class Order extends Model
 
     public function item()
     {
-        return $this->belongsTo(Item::class, 'items_id');
+        return $this->belongsTo(ItemDetail::class, 'items_id');
     }
 
     public function pack()

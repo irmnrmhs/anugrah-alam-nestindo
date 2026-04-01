@@ -416,6 +416,12 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Detail Item',
+                    'url'  => 'ditems',
+                    'can'  => ['Super Admin', 'Admin Ekspor'],
+                    'icon' => 'fas fa-users',
+                ],
+                [
                     'text' => 'Mobil',
                     'url'  => 'cars',
                     'can'  => ['Super Admin', 'Admin Keamanan Pangan'],
@@ -754,12 +760,12 @@ return [
                     'can'  => ['Super Admin', 'Admin Ekspor'],
                     'icon' => 'fas fa-users',
                 ],
-                [
-                    'text' => 'Detail Pesanan',
-                    'url'  => 'order-details',
-                    'can'  => ['Super Admin', 'Admin Ekspor'],
-                    'icon' => 'fas fa-users',
-                ],
+                // [
+                //     'text' => 'Detail Pesanan',
+                //     'url'  => 'order-details',
+                //     'can'  => ['Super Admin', 'Admin Ekspor'],
+                //     'icon' => 'fas fa-users',
+                // ],
                 [
                     'text' => 'Ceklis Kendaraan',
                     'url'  => 'vehicles',

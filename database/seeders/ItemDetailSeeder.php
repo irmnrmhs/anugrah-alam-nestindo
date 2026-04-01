@@ -2,20 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\Item;
+use App\Models\ItemDetail;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ItemSeeder extends Seeder
+class ItemDetailSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Item::create([
-            'item' => "BIRD'S NEST (WHITЕ)",
-            'item_cn' => '白燕窝(燕盏)',
+        ItemDetail::create([
+            'grades_id' => 2,
+            'items_id' => 1,
+            'specification' => 'Z3',
+            'price' => 5700,
         ]);
     }
 }

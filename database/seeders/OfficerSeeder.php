@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\SteamOfficer;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Officer;
 use Illuminate\Database\Seeder;
 
 class OfficerSeeder extends Seeder
@@ -13,19 +12,16 @@ class OfficerSeeder extends Seeder
      */
     public function run(): void
     {
-        SteamOfficer::create([
-            'employees_id' => 10,
-            'status' => 1
+        Officer::create([
+            'nama' => 'Petugas 1',
         ]);
 
-        SteamOfficer::create([
-            'employees_id' => 11,
-            'status' => 1
+        Officer::create([
+            'nama' => 'Petugas 2',
         ]);
 
-        SteamOfficer::create([
-            'employees_id' => 12,
-            'status' => 0
+        Officer::create([
+            'nama' => 'Petugas 3',
         ]);
     }
 }

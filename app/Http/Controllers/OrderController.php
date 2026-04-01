@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FinishedProduct;
-use App\Models\Order;
 use App\Models\Export;
+use App\Models\FinishedProduct;
 use App\Models\Item;
-use Illuminate\Http\Request;
+use App\Models\ItemDetail;
+use App\Models\Order;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class OrderController extends Controller
 {
-    public string $obj = 'Detail Penerbangan';
+    public string $obj = 'Pesanan';
     public function index(): View
     {
         $orders = Order::with('export', 'batch', 'item')->latest()->get();
         $exports = Export::all();
         $batchs = FinishedProduct::all();
-        $items = Item::all();
+        $items = ItemDetail::all();
 
         return view('orders.order', compact('orders', 'exports', 'batchs', 'items'));
     }
@@ -33,6 +34,7 @@ class OrderController extends Controller
             'label' => 'required|numeric',
             'net' => 'required|numeric',
             'gross' => 'required|numeric',
+            'cartons' => 'required|numeric',
             'amount_fob' => 'required|numeric',
             'amount_cif' => 'required|numeric',
         ]);
@@ -61,6 +63,7 @@ class OrderController extends Controller
             'label' => 'required|numeric',
             'net' => 'required|numeric',
             'gross' => 'required|numeric',
+            'cartons' => 'required|numeric',
             'amount_fob' => 'required|numeric',
             'amount_cif' => 'required|numeric',
         ]);

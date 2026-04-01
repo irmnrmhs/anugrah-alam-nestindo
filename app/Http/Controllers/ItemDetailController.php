@@ -4,28 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\FpGrade;
 use App\Models\Item;
+use App\Models\ItemDetail;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-class ItemController extends Controller
+class ItemDetailController extends Controller
 {
-    public string $obj = 'Item';
+    public string $obj = 'Karyawan';
     public function index(): View
     {
-        $items = Item::latest()->get();
+        $ditems = ItemDetail::with('grade', 'item')->latest()->get();
+        $grades = FpGrade::all();
+        $items = Item::all();
 
-        return view('masters.item', compact('items'));
+        return view('masters.item-detail', compact('ditems', 'grades', 'items'));
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'item' => 'required',
-            'item_cn' => 'nullable',
+            'grades_id' => 'required|exists:fp_grades,id',
+            'items_id' => 'required|exists:items,id',
+            'specification' => 'required',
+            'price' => 'integer',
+            'ket' => 'nullable',
         ]);
 
-        Item::create($validated);
+        ItemDetail::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -35,37 +41,35 @@ class ItemController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $item = Item::findOrFail($id);
-        return response()->json($item);
+        $ditem = ItemDetail::with('grade', 'item')->findOrFail($id);
+        return response()->json($ditem);
     }
-
 
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
             'grades_id' => 'required|exists:fp_grades,id',
-            'item' => 'required',
-            'item_cn' => 'nullable',
+            'items_id' => 'required|exists:items,id',
             'specification' => 'required',
             'price' => 'integer',
             'ket' => 'nullable',
         ]);
 
-        $item = Item::findOrFail($id);
+        $ditem = ItemDetail::findOrFail($id);
 
-        $item->update($validated);
+        $ditem->update($validated);
 
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil diperbarui',
-            'data' => $item,
+            'data' => $ditem,
         ]);
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $item = Item::findOrFail($id);
-        $item->delete();
+        $ditem = ItemDetail::findOrFail($id);
+        $ditem->delete();
 
         return response()->json([
             'status' => 'success',
@@ -77,7 +81,7 @@ class ItemController extends Controller
     {
         $ids = $request->ids;
 
-        Item::whereIn('id', $ids)->delete();
+        ItemDetail::whereIn('id', $ids)->delete();
 
         return response()->json([
             'status' => 'success',

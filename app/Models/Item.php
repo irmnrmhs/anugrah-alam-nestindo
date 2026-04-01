@@ -7,21 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     protected $fillable = [
-        'grades_id',
         'item',
         'item_cn',
-        'specification',
-        'price',
-        'ket',
     ];
 
-    public function grade()
+    public function ditems()
     {
-        return $this->belongsTo(FpGrade::class, 'grades_id');
-    }
-
-    public function orders()
-    {
-        return $this->hasMany(Order::class, 'orders_id');
+        return $this->hasMany(ItemDetail::class, 'items_id');
     }
 }

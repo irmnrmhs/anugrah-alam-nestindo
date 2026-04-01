@@ -12,10 +12,12 @@
     <th>Invoice</th>
     <th>Produk Batch</th>
     <th>Item</th>
+    <th>Spesification</th>
     <th>Packaging</th>
     <th>Label Nutrisi</th>
     <th>Net</th>
     <th>Gross</th>
+    <th>Cartons</th>
     <th>Amount FOB</th>
     <th>Amount CIF</th>
 @stop
@@ -27,7 +29,8 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $order->export->inv }}</td>
             <td>{{ $order->batch->batch }}</td>
-            <td>{{ $order->item->kode }}</td>
+            <td>{{ $order->item->item->item}}</td>
+            <td>{{ $order->item->specification}}</td>
             <td>{{ $order->packaging }}</td>
             <td>{{ $order->label }}</td>
             <td>{{ $order->net }}</td>
@@ -67,7 +70,7 @@
         <select id="items_id" class="form-control" required>
             <option value="">-- Pilih Item --</option>
             @foreach($items as $item)
-                <option value="{{ $item->id }}">{{ $item->item }}</option>
+                <option value="{{ $item->id }}">{{ $item->specification }} - {{ $item->item->item }}</option>
             @endforeach
         </select>
     </div>

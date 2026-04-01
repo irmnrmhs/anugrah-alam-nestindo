@@ -18,7 +18,9 @@ class VehicleController extends Controller
         $vehicles = Vehicle::with('export', 'car', 'employee')->latest()->get();
         $exports = Export::all();
         $cars = Car::all();
-        $employees = Employee::all();
+        $employees = Employee::with('position')->where('status', 1)->whereHas('position', function ($query) {
+                $query->where('posisi', 'Produksi');
+            })->get();
 
         return view('orders.vehicle', compact('vehicles', 'exports', 'cars', 'employees'));
     }

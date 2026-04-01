@@ -89,7 +89,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan no invoice tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan no invoice dan no kontrak tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')

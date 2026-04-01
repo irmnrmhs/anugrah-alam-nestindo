@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailSteam;
 use App\Models\Order;
-use App\Models\Steam;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
@@ -57,7 +56,7 @@ class DetailSteamController extends Controller
             'jml_tray' => 'required|integer|min:0|max:6',
         ]);
 
-        $dsteam = DetailSteam::findOrFail($id);
+        $dsteam = DetailSteam::with('order')->findOrFail($id);
 
         $dsteam->update($validated);
 

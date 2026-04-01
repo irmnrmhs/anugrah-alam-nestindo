@@ -40,6 +40,7 @@ use App\Http\Controllers\GradeFeatherController;
 use App\Http\Controllers\GradeShapeController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemDetailController;
 use App\Http\Controllers\NestTypeController;
 use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\OrderController;
@@ -75,7 +76,6 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WashController;
 use App\Http\Controllers\WaterController;
 use App\Http\Controllers\WBHouseController;
-use App\Models\PackageType;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -658,7 +658,6 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::delete('/exports/{id}', [ExportController::class, 'destroy'])->name('exports.destroy');
     Route::post('/exports/delete-multiple', [ExportController::class, 'deleteMultiple']);
     
-    
     // Order
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
@@ -666,7 +665,6 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
     Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::post('/orders/delete-multiple', [OrderController::class, 'deleteMultiple']);
-    
     
     // Ekspor
     Route::get('/order-details', [OrderDetailController::class, 'index'])->name('order-details.index');
@@ -699,6 +697,14 @@ Route::middleware(['auth', 'can:Super Admin'])->group(function () {
     Route::put('/items/{id}', [ItemController::class, 'update'])->name('items.update');
     Route::delete('/items/{id}', [ItemController::class, 'destroy'])->name('items.destroy');
     Route::post('/items/delete-multiple', [ItemController::class, 'deleteMultiple']);
+    
+    // Item
+    Route::get('/ditems', [ItemDetailController::class, 'index'])->name('ditems.index');
+    Route::post('/ditems', [ItemDetailController::class, 'store'])->name('ditems.store');
+    Route::get('/ditems/{id}', [ItemDetailController::class, 'show'])->name('ditems.show');
+    Route::put('/ditems/{id}', [ItemDetailController::class, 'update'])->name('ditems.update');
+    Route::delete('/ditems/{id}', [ItemDetailController::class, 'destroy'])->name('ditems.destroy');
+    Route::post('/ditems/delete-multiple', [ItemDetailController::class, 'deleteMultiple']);
 
     // Jadwal
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');

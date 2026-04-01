@@ -18,8 +18,8 @@ class FpGrade extends Model
         return $this->hasMany(Product::class, 'grades_id');
     }
     
-    public function items()
+    public function ditems()
     {
-        return $this->hasMany(Item::class, 'grades_id');
+        return $this->hasMany(ItemDetail::class, 'grades_id');
     }
 }

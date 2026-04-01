@@ -23,7 +23,7 @@
         <tr data-id="{{ $dsteam->id }}">
             <td><input type="checkbox" class="row-check" value="{{ $dsteam->id }}"></td>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $dsteam->order->steams->first()->batch }}</td>
+            <td>{{ $dsteam->order->batch->steam->batch }}</td>
             <td>{{ $dsteam->suhu_preheating }}</td>
             <td>{{ $dsteam->waktu_preheating }}</td>
             <td>{{ $dsteam->suhu_total }}</td>
@@ -41,9 +41,9 @@
     <div class="mb-3">
         <label>Kode Batch</label>
         <select id="orders_id" class="form-control" required>
-            <option value="">-- Pilih Tipe Sarang Walet --</option>
+            <option value="">-- Pilih Batch --</option>
             @foreach($orders as $order)
-                <option value="{{ $order->id }}">{{ $order->steams->first()->batch }}</option>
+                <option value="{{ $order->id }}">{{ $order->batch->steam->batch }}</option>
             @endforeach
         </select>
     </div>
