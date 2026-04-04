@@ -62,7 +62,7 @@ class DetailSteamController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => $this->obj . ' berhasil diperbarui',
+            'message' => $this->obj . ' berhasil diperbaharui',
             'data' => $dsteam,
         ]);
     }
