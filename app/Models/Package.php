@@ -24,6 +24,6 @@ class Package extends Model
 
     public function inspections()
     {
-        return $this->hasMany('packages_id');
+        return $this->hasMany(PackageInspection::class, 'packages_id');
     }
 }

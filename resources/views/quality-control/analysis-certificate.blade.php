@@ -67,10 +67,6 @@
         <input type="date" id="tanggal" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Tanggal</label>
-        <input type="date" id="tanggal" class="form-control" required>
-    </div>
-    <div class="mb-3">
         <label>Hasil Uji</label>
         <select id="hasil" class="form-control">
             <option value="">-- Pilih --</option>

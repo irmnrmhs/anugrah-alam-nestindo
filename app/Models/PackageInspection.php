@@ -14,6 +14,6 @@ class PackageInspection extends Model
 
     public function package()
     {
-        return $this->belongsTo('packages_id');
+        return $this->belongsTo(Package::class, 'packages_id');
     }
 }

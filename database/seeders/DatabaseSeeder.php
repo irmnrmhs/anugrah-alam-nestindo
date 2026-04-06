@@ -46,8 +46,10 @@ class DatabaseSeeder extends Seeder
             ItemDetailSeeder::class,
             NestTypeSeeder::class,
             SteamOfficerSeeder::class,
+            OfficerSeeder::class,
             PackageTypeSeeder::class,
             PackageSeeder::class,
+            AnalysisSeeder::class,
         ]);
         
         // User::factory(10)->create();

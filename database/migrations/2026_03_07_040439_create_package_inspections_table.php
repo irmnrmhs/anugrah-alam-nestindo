@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('packages_id')->constrained('packages');
             $table->date('tanggal');
-            $table->boolean('hasil');
+            $table->string('hasil');
             $table->timestamps();
         });
     }

@@ -217,7 +217,7 @@
                 $('#item_id').val(data.id);
                 $('#exports_id').val(data.exports_id);
                 $('#cars_id').val(data.cars_id);
-                $('#employees_id').val(data.emp_id);
+                $('#emp_id').val(data.emp_id);
                 $('#berat').val(data.berat);
                 
                 $('.kondisi-item').prop('checked', false);
@@ -226,8 +226,8 @@
                 $('.kemasan-item').prop('checked', false);
                 $('#kemasan_all').prop('checked', false);
 
-                if (data.kondisi) {
-                    const kondisiList = data.kondisi
+                if (data.kondisi_box) {
+                    const kondisiList = data.kondisi_box
                         .toLowerCase()
                         .replace('bebas dari ', '')
                         .split(', ');
@@ -240,7 +240,7 @@
                 if (data.kemasan) {
                     const kemasanList = data.kemasan
                         .toLowerCase()
-                        .replace('bebas dari ', '')
+                        .replace('kondisi kemasan ', '')
                         .split(', ');
 
                     kemasanList.forEach(function(k) {

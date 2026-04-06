@@ -17,7 +17,7 @@
 @section('table-body')
     @foreach($inspections as $index => $inspection)
         <tr data-id="{{ $inspection->id }}">
-            <td><input inspection="checkbox" class="row-check" value="{{ $inspection->id }}"></td>
+            <td><input type="checkbox" class="row-check" value="{{ $inspection->id }}"></td>
             <td>{{ $index + 1 }}</td>
             <td>{{ $inspection->package->bahan }}</td>
             <td>{{ $inspection->tanggal }}</td>
@@ -46,11 +46,7 @@
     </div>
     <div class="mb-3">
         <label>Hasil Uji</label>
-        <select id="hasil" class="form-control">
-            <option value="">-- Pilih --</option>
-                <option value=1>Lulus</option>
-                <option value=0>Tidak Lulus</option>
-        </select>
+        <input type="text" id="hasil" class="form-control" required>
     </div>
 @stop
 

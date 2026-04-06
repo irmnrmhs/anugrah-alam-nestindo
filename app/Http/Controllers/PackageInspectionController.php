@@ -13,7 +13,7 @@ class PackageInspectionController extends Controller
     public string $obj = 'Pemeriksaan Bahan Baku';
     public function index(): View
     {
-        $inspections = PackageInspection::with('type')->latest()->get();
+        $inspections = PackageInspection::with('package')->latest()->get();
         $packages = Package::all();
 
         return view('production.package-inspection', compact('inspections', 'packages'));
@@ -24,7 +24,7 @@ class PackageInspectionController extends Controller
         $validated = $request->validate([
             'packages_id' => 'required|exists:packages,id',
             'tanggal' => 'required|date',
-            'hasil' => 'required|boolean',
+            'hasil' => 'required',
         ]);
 
         PackageInspection::create($validated);
@@ -46,7 +46,7 @@ class PackageInspectionController extends Controller
         $validated = $request->validate([
             'packages_id' => 'required|exists:packages,id',
             'tanggal' => 'required|date',
-            'hasil' => 'required|boolean',
+            'hasil' => 'required',
         ]);
 
         $inspection = PackageInspection::findOrFail($id);

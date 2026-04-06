@@ -28,9 +28,9 @@ class AnalysisCertficateController extends Controller
         $validated = $request->validate([
             'fproducts_id' => 'required|exists:finished_products,id',
             'exports_id' => 'required|exists:exports,id',
-            'analysis_id' => 'required|exists:analysis,id',
+            'analysis_id' => 'required|exists:analyses,id',
             'tanggal' => 'required|date',
-            'hasil' => 'required|boolean',
+            'hasil' => 'required',
         ]);
 
         AnalysisCertficate::create($validated);
@@ -52,9 +52,9 @@ class AnalysisCertficateController extends Controller
         $validated = $request->validate([
             'fproducts_id' => 'required|exists:finished_products,id',
             'exports_id' => 'required|exists:exports,id',
-            'analysis_id' => 'required|exists:analysis,id',
+            'analysis_id' => 'required|exists:analyses,id',
             'tanggal' => 'required|date',
-            'hasil' => 'required|boolean',
+            'hasil' => 'required',
         ]);
 
         $certificate = AnalysisCertficate::findOrFail($id);
