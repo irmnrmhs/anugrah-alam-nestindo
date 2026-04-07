@@ -41,7 +41,7 @@ class DcertificateController extends Controller
             ]
         ]);
  
-        $dcertificate = Dcertificate::create($validated);
+        Dcertificate::create($validated);
 
         return response()->json([
             'status' => 'success',

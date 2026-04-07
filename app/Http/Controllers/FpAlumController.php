@@ -7,6 +7,7 @@ use App\Models\Document;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\FinishedProduct;
+use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 
@@ -16,7 +17,7 @@ class FpAlumController extends Controller
     public function index(): View
     {
         $results = FpAlum::with('product')->latest()->get();
-        $products = FinishedProduct::all();
+        $products = Product::all();
 
         return view('quality-control.fp-alum', compact('results', 'products'));
     }

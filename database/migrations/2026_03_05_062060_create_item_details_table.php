@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('price');
             $table->string('ket')->nullable();
             $table->timestamps();
+
+            $table->unique(['grades_id', 'items_id', 'specification']);
         });
     }
 

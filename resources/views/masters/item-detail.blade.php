@@ -50,7 +50,7 @@
         <select id="items_id" class="form-control" required>
             <option value="">Pilih Item</option>
             @foreach($items as $item)
-                <option value="{{ $item->id }}">{{ $item->grade }}</option>
+                <option value="{{ $item->id }}">{{ $item->item }}</option>
             @endforeach
         </select>
     </div>
@@ -73,7 +73,7 @@
 
 @section('form-submit-script')
     const id = $('#item_id').val();
-    const url = id ? `/ditems/${id}` : '/items';
+    const url = id ? `/ditems/${id}` : '/ditems';
     const method = id ? 'PUT' : 'POST';
 
     const data = {
@@ -98,7 +98,7 @@
             Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
         }
     })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan NIP tidak duplikat', 'error'));
+    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan item tidak duplikat', 'error'));
 @stop
 
 @section('custom-js')

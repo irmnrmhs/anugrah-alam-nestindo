@@ -8,6 +8,7 @@ use App\Models\ItemDetail;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Illuminate\Validation\Rule;
 
 class ItemDetailController extends Controller
 {
@@ -26,7 +27,14 @@ class ItemDetailController extends Controller
         $validated = $request->validate([
             'grades_id' => 'required|exists:fp_grades,id',
             'items_id' => 'required|exists:items,id',
-            'specification' => 'required',
+            'specification' => [
+                'required',
+                Rule::unique('item_details')->where(function ($query) use ($request) {
+                    return $query
+                        // ->where('grades_id', $request->grades_id)
+                        ->where('items_id', $request->items_id);
+                }),
+            ],
             'price' => 'integer',
             'ket' => 'nullable',
         ]);
@@ -50,7 +58,16 @@ class ItemDetailController extends Controller
         $validated = $request->validate([
             'grades_id' => 'required|exists:fp_grades,id',
             'items_id' => 'required|exists:items,id',
-            'specification' => 'required',
+            'specification' => [
+                'required',
+                Rule::unique('item_details')
+                    ->where(function ($query) use ($request) {
+                        return $query
+                            // ->where('grades_id', $request->grades_id)
+                            ->where('items_id', $request->items_id);
+                    })
+                    ->ignore($id),
+            ],
             'price' => 'integer',
             'ket' => 'nullable',
         ]);

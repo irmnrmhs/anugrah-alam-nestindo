@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
@@ -40,7 +41,11 @@ class UserController extends Controller
             'email' => 'nullable|email',
             'password' => 'required',
             'roles_id' => 'required|exists:roles,id',
-            'employees_id' => 'required|exists:employees,id',
+            'employees_id' => ['required', 'exists:employees,id',
+                Rule::unique('users')->where(fn ($q) =>
+                    $q->where('roles_id', $request->roles_id)
+                ),
+            ],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -73,7 +78,13 @@ class UserController extends Controller
             'email' => 'nullable|email',
             'password' => 'nullable',
             'roles_id' => 'required|exists:roles,id',
-            'employees_id' => 'required|exists:employees,id',
+            'employees_id' => ['required', 'exists:employees,id',
+                Rule::unique('users')
+                    ->where(fn ($q) =>
+                        $q->where('roles_id', $request->roles_id)
+                    )
+                    ->ignore($id),
+                ],
         ]);
 
         $user = User::findOrFail($id);
