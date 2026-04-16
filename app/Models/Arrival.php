@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\RawMaterialController;
 use Illuminate\Database\Eloquent\Model;
 
 class Arrival extends Model
@@ -42,15 +41,21 @@ class Arrival extends Model
         return $this->belongsTo(RawMaterial::class, 'kode', 'kode');
     }
 
-    // public function getTotalBeratAttribute()
-    // {
-    //     return number_format(
-    //         $this->dcertificate()->details()->sum('berat_kirim') * 1000,
-    //         0,
-    //         ',',
-    //         '.'
-    //     );
-    // }
+    public function getTotalBeratAttribute()
+    {
+        return number_format(
+            $this->dcertificate->details->sum('berat_kirim') * 1000,
+            0,
+            ',',
+            '.'
+        );
+    }
+
+    public function getMaxBeratAttribute()
+    {
+        // return optional($this->dcertificate)->details?->sum('berat_kirim') * 1000 ?? 0;
+        return optional($this->dcertificate)->details?->sum('berat_kirim') ?? 0;
+    }
 
     // public function generateCode(): string
     // {

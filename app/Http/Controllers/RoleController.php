@@ -32,7 +32,6 @@ class RoleController extends Controller
             'data' => $role,
         ]);
     }
-
     
     public function show(int $id): JsonResponse
     {

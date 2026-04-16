@@ -16,7 +16,7 @@ class Dcertificate extends Model
     public function getTotalBeratAttribute()
     {
         return number_format(
-            $this->arrivals()->details()->sum('berat_kirim') * 1000,
+            $this->arrivals->details->sum('berat_kirim') * 1000,
             0,
             ',',
             '.'

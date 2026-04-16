@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FpGrade;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +20,7 @@ class ItemController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'item' => 'required',
+            'item' => 'required|unique:items,item',
             'item_cn' => 'nullable',
         ]);
 
@@ -43,12 +42,8 @@ class ItemController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'grades_id' => 'required|exists:fp_grades,id',
-            'item' => 'required',
+            'item' => 'required|unique:items,item,' . $id,
             'item_cn' => 'nullable',
-            'specification' => 'required',
-            'price' => 'integer',
-            'ket' => 'nullable',
         ]);
 
         $item = Item::findOrFail($id);

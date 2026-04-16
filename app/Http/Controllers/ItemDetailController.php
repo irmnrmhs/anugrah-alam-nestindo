@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 
 class ItemDetailController extends Controller
 {
-    public string $obj = 'Karyawan';
+    public string $obj = 'Detail Item';
     public function index(): View
     {
         $ditems = ItemDetail::with('grade', 'item')->latest()->get();

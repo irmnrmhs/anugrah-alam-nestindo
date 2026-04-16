@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Department;
 
@@ -98,7 +97,7 @@ class DepartmentSeeder extends Seeder
         Department::create([
             'kd_dept' => 'MC',
             'nama_dept' => 'Cetak',
-            'nama_eng' => 'Molding'
+            'nama_eng' => 'Molding',
         ]);
 
         // 15
@@ -129,6 +128,12 @@ class DepartmentSeeder extends Seeder
         Department::create([
             'kd_dept' => 'FS',
             'nama_dept' => 'Keamanan Pangan',
+        ]);
+        
+        // 20
+        Department::create([
+            'kd_dept' => 'MR',
+            'nama_dept' => 'Manajemen Representatif',
         ]);
         
     }

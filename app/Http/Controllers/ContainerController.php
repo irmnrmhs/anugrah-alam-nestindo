@@ -39,7 +39,26 @@ class ContainerController extends Controller
             'keterangan'   => 'nullable|string',
         ]);
 
-        $container = Container::create($validated);
+        $arrival = Arrival::with('dcertificate.details', 'containers')
+        ->findOrFail($validated['arrivals_id']);
+
+        // total berat SKP
+        $totalSkp = $arrival->max_berat;
+
+        // total container existing
+        $totalContainer = $arrival->containers->sum('berat');
+
+        // total setelah ditambah data baru
+        $newTotal = $totalContainer + $validated['berat'];
+
+        if ($newTotal > $totalSkp) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Total berat melebihi berat kirim SKP!',
+            ], 422);
+        }
+
+        Container::create($validated);
 
         return response()->json([
             'status'  => 'success',
@@ -66,6 +85,25 @@ class ContainerController extends Controller
         ]);
 
         $container = Container::findOrFail($id);
+
+        $arrival = Arrival::with('dcertificate.details', 'containers')
+            ->findOrFail($validated['arrivals_id']);
+
+        $totalSkp = $arrival->max_berat;
+
+        // total semua kecuali container ini
+        $totalContainer = $arrival->containers
+            ->where('id', '!=', $container->id)
+            ->sum('berat');
+
+        $newTotal = $totalContainer + $validated['berat'];
+
+        if ($newTotal > $totalSkp) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Total berat melebihi berat kirim SKP!',
+            ], 422);
+        }
 
         $container->update($validated);
 
@@ -99,6 +137,24 @@ class ContainerController extends Controller
             'items.*.keterangan'      => 'nullable|string',
         ]);
 
+        $arrivalId = $validated['items'][0]['arrivals_id'];
+
+        $arrival = Arrival::with('dcertificate.details', 'containers')
+            ->findOrFail($arrivalId);
+
+        $totalSkp = $arrival->max_berat;
+
+        $existing = $arrival->containers->sum('berat');
+
+        $newBulk = collect($validated['items'])->sum('berat');
+
+        if (($existing + $newBulk) > $totalSkp) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Total berat melebihi berat kirim SKP!',
+            ], 422);
+        }
+        
         DB::transaction(function () use ($validated) {
             foreach ($validated['items'] as $item) {
                 Container::create($item);
@@ -161,7 +217,7 @@ class ContainerController extends Controller
 
         return response()->json([
             'status'  => 'success',
-            'message' => 'Data terpilih berhasil dihapus'
+            'message' => 'Data terpilih berhasil dihapus',
         ]);
     }
 }

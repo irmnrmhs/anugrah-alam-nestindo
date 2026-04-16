@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        
         Schema::create('grade_feathers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');

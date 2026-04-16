@@ -24,7 +24,6 @@ use App\Models\Rinse;
 use App\Models\Entry;
 use App\Models\Pull;
 use App\Models\Dry;
-use App\Models\Product;
 use App\Models\Area;
 use App\Models\Container;
 use App\Models\RmStock;
@@ -48,7 +47,6 @@ use App\Observers\RinseObserver;
 use App\Observers\EntryObserver;
 use App\Observers\PullObserver;
 use App\Observers\DryObserver;
-use App\Observers\ProductObserver;
 use App\Observers\AreaObserver;
 use App\Observers\ContainerObserver;
 use App\Observers\RmStockObserver;
@@ -71,12 +69,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $roles = [
             'Super Admin',
+            'Admin Rumah Walet',
             'Admin Bahan Baku',
             'Admin Produksi',
             'Admin Kontrol Kualitas',
-            'Admin Keamanan Pangan',
             'Admin Ekspor',
-            'User'
+            'MR',
         ];
 
         foreach ($roles as $role) {

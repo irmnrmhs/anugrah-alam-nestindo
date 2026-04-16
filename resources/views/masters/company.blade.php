@@ -43,9 +43,12 @@
             <div class="mb-3">
                 <label>Negara</label>
                 <select id="negara" class="form-control">
-                    <option value="{{ $company->negara ?? '-' }}">{{$company->negara ?? '-- Pilih Negara --'}}</option>
+                    <option value="">-- Pilih Negara --</option>
                         @foreach($countries as $country)
-                            <option value="{{ $country ?? '-' }}">{{ $country ?? '-' }}</option>
+                            <option value="{{ $country }}" 
+                                {{ ($company->negara ?? '') == $country ? 'selected' : '' }}>
+                                {{ $country }}
+                            </option>
                         @endforeach
                 </select>
             </div>
