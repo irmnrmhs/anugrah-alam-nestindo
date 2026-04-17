@@ -15,7 +15,7 @@ class GradeFeather extends Model
         'feathers_id',
         'biji',
         'berat',
-        'tanggal'
+        'tanggal',
     ];
 
     public function rawMaterial()
@@ -32,6 +32,11 @@ class GradeFeather extends Model
     {
         return $this->belongsTo(Feather::class, 'feathers_id');
     }
+
+    // public function gshape()
+    // {
+    //     return $this->belongsTo(GradeShape::class, 'gshapes_id');
+    // }
 
     // public function brp()
     // {

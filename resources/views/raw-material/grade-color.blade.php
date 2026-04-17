@@ -118,10 +118,10 @@
                     </div>
                 </div>
             @endforeach
-        {{-- <div class="mb-3">
+        <div class="mb-3">
             <label>Hancuran</label>
-            <input type="number" id="berat" class="form-control" required>
-        </div> --}}
+            <input type="number" id="beratt" class="form-control" required>
+        </div>
     </div>
     </div>
 @stop

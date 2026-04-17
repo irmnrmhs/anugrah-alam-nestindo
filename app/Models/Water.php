@@ -12,12 +12,6 @@ class Water extends Model
         'ph',
         'ozone',
         'organoleptis',
+        'hasil',
     ];
-
-    public function getResultAttribute()
-    {
-        if(($this->nitrit < 3 && $this->nitrit >= 0) && ($this->ph < 8.5 && $this->ph >= 6.5) && ($this->ozone < 0.3 && $this->ozone >= 0)){
-            return true;
-        }
-    }
 }

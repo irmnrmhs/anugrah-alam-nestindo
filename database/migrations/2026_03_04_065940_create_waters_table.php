@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal');
             $table->decimal('nitrit', 4, 1);
-            $table->integer('ph');
+            $table->decimal('ph', 3, 1);
             $table->decimal('ozone', 5, 2);
             $table->boolean('organoleptis');
+            $table->boolean('hasil');
             $table->timestamps();
         });
     }

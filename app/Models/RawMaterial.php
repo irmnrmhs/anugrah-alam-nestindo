@@ -11,13 +11,7 @@ class RawMaterial extends Model
         'arrivals_id',
         'biji',
         'berat',
-        // 'kadar_air'
     ];
-    
-    // public function containers()
-    // {
-    //     return $this->hasMany(Container::class, 'raw_materials_id');
-    // }
 
     public function arrivals()
     {
@@ -109,16 +103,6 @@ class RawMaterial extends Model
         $this->increment('berat_sisa', $berat);
     }
 
-    // public function getTotalBijiRmAttribute()
-    // {
-    //     return $this->stocks()->sum('biji');
-    // }
-
-    // public function getTotalBeratRmAttribute()
-    // {
-    //     return $this->stocks()->sum('berat');
-    // }
-
     // Product Identifier Sisa
     public function getBijiSisaIdentifierAttribute(){
         return $this->total_biji_keluar - $this->identifiers()->sum('biji');
@@ -128,27 +112,51 @@ class RawMaterial extends Model
         return $this->total_berat_keluar - $this->identifiers()->sum('berat');
     }
 
+    // Total Berat Grade Bentuk
+    public function getTotalBeratShapeAttribute(){
+        return $this->shapes()->sum('berat');
+    }
+
+    // Total Berat Grade Bulu
+    public function getTotalBeratFeatherAttribute(){
+        return $this->feathers()->sum('berat');
+    }
+
+    // Total Biji Grade Bulu
+    public function getTotalBijiFeatherAttribute(){
+        return $this->feathers()->sum('biji');
+    }
+
+    // Total Berat Grade Color
+    public function getTotalBeratColorAttribute(){
+        return $this->colors()->sum('berat');
+    }
+
+    // Total Biji Grade Color
+    public function getTotalBijiColorAttribute(){
+        return $this->colors()->sum('biji');
+    }
+
     // Grade Shape Sisa
     public function getBeratSisaShapeAttribute(){
-        return $this->total_berat_keluar - $this->shapes()->sum('berat');
+        return $this->total_berat_keluar - $this->total_berat_shape;
     }
 
     // Grade Feather Sisa
     public function getBeratSisaFeatherAttribute(){
-        return $this->total_berat_keluar - $this->feathers()->sum('berat');
+        return $this->total_berat_shape - $this->total_berat_feather;
     }
 
     public function getBijiSisaFeatherAttribute(){
-        return $this->total_biji_keluar - $this->feathers()->sum('biji');
+        return $this->total_biji_keluar - $this->total_biji_feather;
     }
 
-    // Grade Color Sisa
     public function getBeratSisaColorAttribute(){
-        return $this->total_berat_keluar - $this->colors()->sum('berat');
+        return $this->total_berat_feather - $this->total_berat_color;
     }
 
     public function getBijiSisaColorAttribute(){
-        return $this->total_biji_keluar - $this->colors()->sum('biji');
+        return $this->total_biji_feather - $this->total_biji_color;
     }
 
     public function getRbwAttribute()
@@ -156,5 +164,4 @@ class RawMaterial extends Model
         $arrival = $this->arrivals->first();
         return optional(optional($arrival?->dcertificate)?->wbhouse)?->nama . ' / ' . optional(optional($arrival?->dcertificate)?->wbhouse)?->kode;
     }
-
 }

@@ -59,7 +59,7 @@ class GradeFeatherController extends Controller
             if ($totalBerat > $rm->berat_sisa_feather) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Total berat melebihi stok sisa',
+                    'message' => 'Total berat melebihi grade bentuk',
                 ], 422);
             }
 
@@ -123,7 +123,7 @@ class GradeFeatherController extends Controller
         $last = GradeFeather::where('rms_id', $id)->latest()->first();
 
         return response()->json([
-            'berat_sisa' => $rm->berat_sisa_feather,
+            'berat_sisa' => $rm->berat_sisa_feather ?? 0,
             'biji_sisa' => $rm->biji_sisa_feather,
             'last_date' => $last?->tanggal,
         ]);

@@ -21,14 +21,21 @@ class WaterController extends Controller
     {
         $validated = $request->validate([
             'tanggal' => 'required|date',
-            'nitrit' => 'required|numeric|min:0|max:999.9',
+            'nitrit' => 'required|numeric',
             'ph' => 'required|numeric',
-            'ozone' => 'required|numeric|min:0|max:9999.9',
+            'ozone' => 'required|numeric',
             'organoleptis' => 'required|boolean',
         ]);
 
-        Water::create($validated);
+        $isValid =
+            $validated['nitrit'] >= 0 && $validated['nitrit'] < 3 &&
+            $validated['ph'] >= 6.5 && $validated['ph'] < 8.5 &&
+            $validated['ozone'] >= 0 && $validated['ozone'] < 0.3 &&
+            $validated['organoleptis'] == 1;
 
+        $validated['hasil'] = $isValid ? 1 : 0;
+
+        Water::create($validated);
         return response()->json([
             'status' => 'success',
             'message' => $this->obj . ' berhasil ditambahkan',
@@ -46,14 +53,22 @@ class WaterController extends Controller
     {
         $validated = $request->validate([
             'tanggal' => 'required|date',
-            'nitrit' => 'required|numeric|min:0|max:999.9',
+            'nitrit' => 'required|numeric',
             'ph' => 'required|numeric',
-            'ozone' => 'required|numeric|min:0|max:9999.9',
+            'ozone' => 'required|numeric',
             'organoleptis' => 'required|boolean',
         ]);
 
-        $water = Water::findOrFail($id);
+        $isValid =
+            $validated['nitrit'] >= 0 && $validated['nitrit'] < 3 &&
+            $validated['ph'] >= 6.5 && $validated['ph'] < 8.5 &&
+            $validated['ozone'] >= 0 && $validated['ozone'] < 0.3 &&
+            $validated['organoleptis'] == 1;
 
+        $validated['hasil'] = $isValid ? 1 : 0;
+
+        $water = Water::findOrFail($id);
+        
         $water->update($validated);
 
         return response()->json([

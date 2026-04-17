@@ -36,7 +36,7 @@
                 @endif
             </td>
             <td>
-                @if($water->result == 1)
+                @if($water->hasil == 1)
                     <span class="badge bg-success">Lulus Uji</span>
                 @else
                     <span class="badge bg-danger">Tidak Lulus Uji</span>
@@ -91,7 +91,7 @@
         nitrit: $('#nitrit').val(),
         ph: $('#ph').val(),
         ozone: $('#ozone').val(),
-        organoleptis: $('#organoleptis').val(),
+        organoleptis: parseInt($('#organoleptis').val()),
     };
 
     fetch(url, {

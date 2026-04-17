@@ -29,6 +29,11 @@ class GradeShape extends Model
         return $this->belongsTo(Shape::class, 'shapes_id');
     }
 
+    // public function gfeathers()
+    // {
+    //     return $this->hasMany(GradeFeather::class, 'gshapes_id');
+    // }
+
     // public function mk()
     // {
     //     $mk = $this->shape()->where('kode', 'mk')->get();
