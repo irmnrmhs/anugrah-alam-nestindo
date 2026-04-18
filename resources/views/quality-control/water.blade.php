@@ -85,29 +85,60 @@
     const url = id ? `/waters/${id}` : '/waters';
     const method = id ? 'PUT' : 'POST';
 
+    const nitrit = parseFloat($('#nitrit').val());
+    const ph = parseFloat($('#ph').val());
+    const ozone = parseFloat($('#ozone').val());
+    const organoleptis = parseInt($('#organoleptis').val());
+
     const data = {
         _token: '{{ csrf_token() }}',
-        tanggal: $('#tanggal').val(),
-        nitrit: $('#nitrit').val(),
-        ph: $('#ph').val(),
-        ozone: $('#ozone').val(),
-        organoleptis: parseInt($('#organoleptis').val()),
-    };
+            tanggal: $('#tanggal').val(),
+            nitrit: nitrit,
+            ph: ph,
+            ozone: ozone,
+            organoleptis: organoleptis,
+        };
 
-    fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(res => {
-        if (res.status === 'success') {
-            Swal.fire('Sukses', res.message, 'success').then(() => location.reload());
-        } else {
-            Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
-        }
-    })
-    .catch(() => Swal.fire('Error', 'Gagal menambahkan data. Pastikan NIP tidak duplikat', 'error'));
+    const isValid =
+        nitrit >= 0 && nitrit < 3 &&
+        ph >= 6.5 && ph < 8.5 &&
+        ozone >= 0 && ozone < 0.3 &&
+        organoleptis === 1;
+
+    function submitData() {
+        fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (res.status === 'success') {
+                Swal.fire('Sukses', res.message, 'success')
+                    .then(() => location.reload());
+            } else {
+                Swal.fire('Gagal', res.message || 'Terjadi kesalahan!', 'error');
+            }
+        })
+        .catch(() => Swal.fire('Error', 'Gagal menyimpan data.', 'error'));
+    }
+
+    if (!isValid) {
+        Swal.fire({
+            title: 'Data Tidak Lulus Uji!',
+            text: 'Data tidak memenuhi standar. Tetap ingin menyimpan?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Simpan',
+            cancelButtonText: 'Batal'
+        }).then(result => {
+            if (result.isConfirmed) {
+                submitData();
+            }
+        });
+    } else {
+        submitData();
+    }
 @stop
 
 @section('custom-js')

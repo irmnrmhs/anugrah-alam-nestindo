@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('products_id')->constrained('products');
             $table->date('tgl');
             $table->decimal('kadar_aluminium', 4, 1)->default(0);
+            $table->boolean('hasil');
             $table->timestamps();
         });
     }

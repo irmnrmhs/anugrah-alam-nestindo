@@ -9,7 +9,8 @@ class Ccp1 extends Model
     protected $fillable = [
         'rms_id',
         'tgl',
-        'ccp1'
+        'ccp1',
+        'hasil',
     ];
 
     public function rawMaterial()

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('tgl');
             $table->decimal('kadar_air', 5, 2)->default(0);
             $table->decimal('kadar_nitrit', 4, 1)->default(0);
-            // $table->decimal('kadar_aluminium', 4, 1)->default(0);
+            $table->boolean('hasil');
             $table->timestamps();
         });
     }

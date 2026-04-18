@@ -10,6 +10,7 @@ class CcpAlum extends Model
         'rms_id',
         'tgl',
         'ccp_al',
+        'hasil',
     ];
 
     public function rawMaterial()

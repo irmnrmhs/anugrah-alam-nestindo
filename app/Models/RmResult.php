@@ -12,6 +12,7 @@ class RmResult extends Model
         'tgl',
         'kadar_air',
         'kadar_nitrit',
+        'hasil',
     ];
 
     // public function type()

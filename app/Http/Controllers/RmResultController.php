@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\RmResult;
-use App\Models\TestType;
 use Illuminate\View\View;
 use App\Models\RawMaterial;
+use App\Models\TestType;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
@@ -28,45 +28,18 @@ class RmResultController extends Controller
             'rms_id' => 'required|exists:raw_materials,id',
             'tgl' => 'required|date',
             'kadar_air' => 'required|numeric|min:0|max:999.99',
-            'kadar_nitrit' => 'required|numeric|min:0|max:999.9'
+            'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        // $ujiMap = [
-        //     'kadar_air'        => 'Kadar Air',
-        //     'kadar_nitrit'     => 'Kadar Nitrit',
-        //     'kadar_aluminium'  => 'Kadar Aluminium',
-        //     'ccp1'             => 'CCP 1',
-        // ];
-
-        // $standars = TestType::where('categories_id', 1)
-        //     ->whereIn('nama_uji', array_values($ujiMap))
-        //     ->get()
-        //     ->keyBy('nama_uji');
-
-        // foreach ($ujiMap as $field => $namaUji) {
-
-        //     if (!isset($validated[$field])) continue;
-
-        //     if (!isset($standars[$namaUji])) {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => "Standar uji {$namaUji} belum tersedia"
-        //         ], 422);
-        //     }
-
-        //     $nilai = $validated[$field];
-        //     $min   = $standars[$namaUji]->standar_minimal;
-        //     $max   = $standars[$namaUji]->standar_maksimal;
-
-        //     if ($nilai < $min || $nilai > $max) {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => "Nilai {$namaUji} harus antara {$min} dan {$max}"
-        //         ], 422);
-        //     }
-        // }
-
         $result = RmResult::create($validated);
+        $mois = TestType::where('kode', 'QCBBA')->first();
+        $nitrite = TestType::where('kode', 'QCBBN')->first();
+
+        $isValid =
+            $validated['kadar_air'] > $mois->standar_minimal && $validated['kadar_air'] < $mois->standar_maksimal &&
+            $validated['kadar_nitrit'] > $nitrite->standar_minimal && $validated['kadar_nitrit'] < $nitrite->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
 
         return response()->json([
             'status' => 'success',

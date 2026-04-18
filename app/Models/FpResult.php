@@ -11,7 +11,7 @@ class FpResult extends Model
         'tgl',
         'kadar_air',
         'kadar_nitrit',
-        // 'kadar_aluminium'
+        'hasil',
     ];
 
     public function product()

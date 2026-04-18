@@ -10,6 +10,7 @@ class RmAlum extends Model
         'rms_id',
         'tgl',
         'kadar_aluminium',
+        'hasil',
     ];
 
     public function rawMaterial()

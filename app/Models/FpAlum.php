@@ -10,6 +10,7 @@ class FpAlum extends Model
         'products_id',
         'tgl',
         'kadar_aluminium',
+        'hasil',
     ];
 
     public function product()
