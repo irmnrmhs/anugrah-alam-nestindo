@@ -15,7 +15,6 @@
     <th>Kode Bahan Baku</th>
     <th>Kode Grade</th>
     <th>Jumlah Biji</th>
-    <th>Hancuran</th>
     <th>Petugas</th>
 @stop
 
@@ -29,7 +28,6 @@
             <td>{{ $edge->history->rm }}</td>
             <td>{{ $edge->history->gcolor->grade }}</td>
             <td>{{ $edge->biji }}</td>
-            <td>{{ empty($edge->hancuran) ? '0' : $edge->hancuran }}</td>
             <td>{{ $edge->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
@@ -64,7 +62,7 @@
         </div>
 
         <div class="col-md-5">
-            <label id="sisa_label" style="font-size: 10pt">Biji Sisa</label>
+            <label id="sisa_label" style="font-size: 10pt">Biji Sisa/Berat Hancuran</label>
             <input type="number" id="biji_sisa" class="form-control" readonly>
         </div>
     </div>
@@ -82,7 +80,7 @@
         <input type="date" id="tanggal" class="form-control" required>
     </div>
     <div class="mb-3">
-        <label>Biji</label>
+        <label>Biji/Berat Hancuran</label>
         <input type="number" id="biji" step="1" min="0" class="form-control" required>
     </div>
 @stop
@@ -182,7 +180,6 @@
         .then(data => {
             let options = `
                 <option value="">-- Pilih Grade --</option>
-                <option value="Hancuran">Hancuran</option>
             `;
 
             data.forEach(history => {

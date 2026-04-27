@@ -189,6 +189,7 @@
             `;
 
             data.forEach(history => {
+                if (history.gcolor?.grade === 'HANCURAN') return;
                 options += `
                     <option value="${history.id}">
                         ${history.gcolor.grade}
