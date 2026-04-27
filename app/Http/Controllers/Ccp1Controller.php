@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Ccp1;
 use App\Models\Document;
-use Illuminate\View\View;
 use App\Models\RawMaterial;
-use Illuminate\Http\Request;
+use App\Models\TestType;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class Ccp1Controller extends Controller
 {
@@ -29,14 +30,13 @@ class Ccp1Controller extends Controller
             'ccp1' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        if($validated['ccp1'] > 100){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Aluminium'
-            ]);
-        }
-
         $result = Ccp1::create($validated);
+        $ccp = TestType::where('kode', 'QCCCPN')->first();
+
+        $isValid = 
+            $validated['ccp1'] > $ccp->standar_minimal && $validated['ccp1'] < $ccp->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
 
         return response()->json([
             'status' => 'success',
@@ -58,16 +58,14 @@ class Ccp1Controller extends Controller
             'tgl' => 'required|date',
             'ccp1' => 'required|numeric|min:0|max:999.9'
         ]);
-
-        if($validated['ccp1'] > 100)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Aluminium'
-            ]);
-        }
         
         $result = Ccp1::findOrFail($id);
+        $ccp = TestType::where('kode', 'QCCCPN')->first();
+
+        $isValid = 
+            $validated['ccp1'] > $ccp->standar_minimal && $validated['ccp1'] < $ccp->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
         
         $result->update($validated);
 

@@ -83,31 +83,62 @@
 
     $('#btnSubmitAll').off().on('click', function () {
         let list = [];
+        let isAnyInvalid = false;
+
+        const CCP_MIN = 0;
+        const CCP_MAX = 30;
 
         for (let i = 1; i <= jumlah; i++) {
+            const ccp1 = parseFloat($(`.ccp1[data-index="${i}"]`).val()) || 0;
+
+            const isValid = ccp1 > CCP_MIN && ccp1 < CCP_MAX;
+
+            if(!isValid){
+                isAnyInvalid = true
+            }
+
             list.push({
                 rms_id,
                 tgl,
-                ccp1: $(`.ccp1[data-index="${i}"]`).val(),
+                ccp1,
             });
         }
 
-        fetch('/ccp1/bulk', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ items: list })
-        })
-        .then(r => r.json())
-        .then(res => {
-            if (res.status === 'success') {
-                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
-            } else {
-                Swal.fire('Error', res.message, 'error');
-            }
-        });
+        function submitData(){
+            fetch('/ccp1/bulk', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ items: list })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            });
+        }
+
+        if (isAnyInvalid) {
+            Swal.fire({
+                title: 'Ada Sampel Tidak Lulus!',
+                text: 'Beberapa data tidak memenuhi standar. Tetap simpan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    submitData();
+                }
+            });
+        } else {
+            submitData();
+        }
     });
 @stop
 

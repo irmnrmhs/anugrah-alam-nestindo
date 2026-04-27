@@ -15,11 +15,6 @@ class RmResult extends Model
         'hasil',
     ];
 
-    // public function type()
-    // {
-    //     return $this->belongsTo(TestType::class, 'types_id');
-    // }
-
     public function rawMaterial()
     {
         return $this->belongsTo(RawMaterial::class, 'rms_id');

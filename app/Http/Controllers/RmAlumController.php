@@ -6,6 +6,7 @@ use App\Models\RmAlum;
 use App\Models\Document;
 use Illuminate\View\View;
 use App\Models\RawMaterial;
+use App\Models\TestType;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
@@ -29,14 +30,13 @@ class RmAlumController extends Controller
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        if($validated['kadar_aluminium'] > 100){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Aluminium'
-            ]);
-        }
-
         $result = RmAlum::create($validated);
+        $alum = TestType::where('kode', 'QCBBL')->first();
+
+        $isValid = 
+            $validated['kadar_aluminium'] > $alum->standar_minimal && $validated['kadar_aluminium'] < $alum->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
 
         return response()->json([
             'status' => 'success',
@@ -58,16 +58,14 @@ class RmAlumController extends Controller
             'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
-
-        if($validated['kadar_aluminium'] > 100)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Aluminium'
-            ]);
-        }
         
         $result = RmAlum::findOrFail($id);
+        $alum = TestType::where('kode', 'QCBBL')->first();
+
+        $isValid = 
+            $validated['kadar_aluminium'] > $alum->standar_minimal && $validated['kadar_aluminium'] < $alum->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
         
         $result->update($validated);
 

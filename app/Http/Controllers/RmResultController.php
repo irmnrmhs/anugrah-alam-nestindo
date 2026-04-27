@@ -65,6 +65,14 @@ class RmResultController extends Controller
         ]);
 
         $result = RmResult::findOrFail($id);
+        $mois = TestType::where('kode', 'QCBBA')->first();
+        $nitrite = TestType::where('kode', 'QCBBN')->first();
+
+        $isValid =
+            $validated['kadar_air'] > $mois->standar_minimal && $validated['kadar_air'] < $mois->standar_maksimal &&
+            $validated['kadar_nitrit'] > $nitrite->standar_minimal && $validated['kadar_nitrit'] < $nitrite->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
 
         $result->update($validated);
 

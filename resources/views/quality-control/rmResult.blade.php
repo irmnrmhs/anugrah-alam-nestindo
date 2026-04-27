@@ -95,9 +95,9 @@
         let isAnyInvalid = false;
 
         const AIR_MIN = 0;
-        const AIR_MAX = 10;
+        const AIR_MAX = 15;
         const NITRIT_MIN = 0;
-        const NITRIT_MAX = 3;
+        const NITRIT_MAX = 100;
 
         for (let i = 1; i <= jumlah; i++) {
             const kadar_air = parseFloat($(`.kadar-air[data-index="${i}"]`).val()) || 0;

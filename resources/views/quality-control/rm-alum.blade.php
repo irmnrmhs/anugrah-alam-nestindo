@@ -84,31 +84,62 @@
 
     $('#btnSubmitAll').off().on('click', function () {
         let list = [];
+        let isAnyInvalid = false;
+
+        const ALUM_MIN = 0;
+        const ALUM_MAX = 100;
 
         for (let i = 1; i <= jumlah; i++) {
+            const kadar_aluminium = parseFloat($(`.kadar-aluminium[data-index="${i}"]`).val()) || 0;
+
+            const isValid = kadar_aluminium > ALUM_MIN && kadar_aluminium < ALUM_MAX;
+
+            if(!isValid){
+                isAnyInvalid = true
+            }
+
             list.push({
                 rms_id,
                 tgl,
-                kadar_aluminium: $(`.kadar-aluminium[data-index="${i}"]`).val(),
+                kadar_aluminium,
             });
         }
 
-        fetch('/rm-alums/bulk', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ items: list })
-        })
-        .then(r => r.json())
-        .then(res => {
-            if (res.status === 'success') {
-                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
-            } else {
-                Swal.fire('Error', res.message, 'error');
-            }
-        });
+        function submitData() {
+            fetch('/rm-alums/bulk', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ items: list })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            });
+        }
+
+        if (isAnyInvalid) {
+            Swal.fire({
+                title: 'Ada Sampel Tidak Lulus!',
+                text: 'Beberapa data tidak memenuhi standar. Tetap simpan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    submitData();
+                }
+            });
+        } else {
+            submitData();
+        }
     });
 @stop
 
