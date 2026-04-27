@@ -31,7 +31,6 @@ class RmResultController extends Controller
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        $result = RmResult::create($validated);
         $mois = TestType::where('kode', 'QCBBA')->first();
         $nitrite = TestType::where('kode', 'QCBBN')->first();
 
@@ -40,6 +39,8 @@ class RmResultController extends Controller
             $validated['kadar_nitrit'] > $nitrite->standar_minimal && $validated['kadar_nitrit'] < $nitrite->standar_maksimal;
 
         $validated['hasil'] = $isValid ? 1 : 0;
+
+        $result = RmResult::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -53,7 +54,6 @@ class RmResultController extends Controller
         $result = RmResult::with('rawMaterial')->findOrFail($id);
         return response()->json($result);
     }
-
 
     public function update(Request $request, int $id): JsonResponse
     {
@@ -106,7 +106,17 @@ class RmResultController extends Controller
 
         $items = $validated['items'];
 
+        $mois = TestType::where('kode', 'QCBBA')->first();
+        $nitrite = TestType::where('kode', 'QCBBN')->first();
+
         foreach ($items as $item) {
+
+            $isValid =
+                $item['kadar_air'] > $mois->standar_minimal && $item['kadar_air'] < $mois->standar_maksimal &&
+                $item['kadar_nitrit'] > $nitrite->standar_minimal && $item['kadar_nitrit'] < $nitrite->standar_maksimal;
+
+            $item['hasil'] = $isValid ? 1 : 0;
+
             RmResult::create($item);
         }
 

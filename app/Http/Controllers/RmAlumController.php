@@ -30,13 +30,14 @@ class RmAlumController extends Controller
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        $result = RmAlum::create($validated);
         $alum = TestType::where('kode', 'QCBBL')->first();
 
         $isValid = 
             $validated['kadar_aluminium'] > $alum->standar_minimal && $validated['kadar_aluminium'] < $alum->standar_maksimal;
 
         $validated['hasil'] = $isValid ? 1 : 0;
+        
+        $result = RmAlum::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -98,7 +99,14 @@ class RmAlumController extends Controller
 
         $items = $validated['items'];
 
+        $alum = TestType::where('kode', 'QCBBL')->first();
+
         foreach ($items as $item) {
+            $isValid = 
+                $item['kadar_aluminium'] > $alum->standar_minimal && $item['kadar_aluminium'] < $alum->standar_maksimal;
+
+            $item['hasil'] = $isValid ? 1 : 0;
+
             RmAlum::create($item);
         }
 

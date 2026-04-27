@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('rms_id')->constrained('raw_materials');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->foreignId('feathers_id')->constrained('feathers');
-            $table->foreignId('colors_id')->constrained('colors');
+            $table->foreignId('feathers_id')->nullable()->constrained('feathers')->nullOnDelete();
+            $table->foreignId('colors_id')->nullable()->constrained('colors')->nullOnDelete();
             $table->string('grade');
             // $table->unique(['rms_id', 'grade']);
             $table->integer('biji');

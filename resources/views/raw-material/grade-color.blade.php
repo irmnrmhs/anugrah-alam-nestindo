@@ -33,8 +33,8 @@
             <td>
                 {{ (optional(optional($color->rawMaterial->arrivals->first())->dcertificate)->wbhouse->nama) . " / " . optional(optional($color->rawMaterial->arrivals->first())->dcertificate)->wbhouse->kode }}
             </td>
-            <td>{{ $color->feather->jenis_bulu }}</td>
-            <td>{{ $color->color->jenis_warna }}</td>
+            <td>{{ optional($color->feather)->jenis_bulu ?? '-' }}</td>
+            <td>{{ optional($color->color)->jenis_warna ?? '-' }}</td>
             <td>{{ $color->berat }}</td>
             <td>{{ $color->biji }}</td>
             <td>{{ $color->employee->nama }}</td>
@@ -120,7 +120,7 @@
             @endforeach
         <div class="mb-3">
             <label>Hancuran</label>
-            <input type="number" id="beratt" class="form-control" required>
+            <input type="number" id="hancuran" name="hancuran" class="form-control">
         </div>
     </div>
     </div>
@@ -182,6 +182,7 @@
         employees_id: $('#employees_id').val(),
         tanggal: $('#tanggal').val(),
         grade: $('#grade').val(),
+        hancuran: $('#hancuran').val(),
         other: $('#other').val(),
         data: formData,
     };

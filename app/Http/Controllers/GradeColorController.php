@@ -40,7 +40,8 @@ class GradeColorController extends Controller
             'rms_id' => 'required|exists:raw_materials,id',
             'employees_id' => 'required|exists:employees,id',
             'tanggal' => 'required|date',
-            'data' => 'required|array',
+            'data' => 'nullable|array',
+            'hancuran' => 'nullable|numeric|min:0',
         ]);
 
         $rm = RawMaterial::findOrFail($request->rms_id);
@@ -52,19 +53,32 @@ class GradeColorController extends Controller
             $totalBerat = 0;
             $totalBiji  = 0;
 
-            foreach ($request->data as $featherId => $colors) {
-                foreach ($colors as $colorId => $values) {
+            // Hitung total dr data normal
+            if (!empty($request->data)) {
+                foreach ($request->data as $featherId => $colors) {
+                    foreach ($colors as $colorId => $values) {
 
-                    $berat = $values['berat'] ?? 0;
-                    $biji  = $values['biji'] ?? 0;
+                        $berat = (float) ($values['berat'] ?? 0);
+                        $biji  = (int) ($values['biji'] ?? 0);
 
-                    if ($berat <= 0 && $biji <= 0) continue;
+                        if ($berat <= 0 && $biji <= 0) {
+                            continue;
+                        }
 
-                    $totalBerat += $berat;
-                    $totalBiji  += $biji;
+                        $totalBerat += $berat;
+                        $totalBiji  += $biji;
+                    }
                 }
             }
 
+            // tambahkan hancuran ke total
+            $hancuran = (float) ($request->hancuran ?? 0);
+
+            if ($hancuran > 0) {
+                $totalBerat += $hancuran;
+            }
+
+            // validasi stok
             if ($totalBerat > $rm->berat_sisa_color) {
                 return response()->json([
                     'status' => 'error',
@@ -79,38 +93,73 @@ class GradeColorController extends Controller
                 ], 422);
             }
 
-            foreach ($request->data as $featherId => $colors) {
-                foreach ($colors as $colorId => $values) {
+            // simpan data normal
+            if (!empty($request->data)) {
+                foreach ($request->data as $featherId => $colors) {
+                    foreach ($colors as $colorId => $values) {
 
-                    $berat = $values['berat'] ?? 0;
-                    $biji  = $values['biji'] ?? 0;
+                        $berat = (float) ($values['berat'] ?? 0);
+                        $biji  = (int) ($values['biji'] ?? 0);
 
-                    if ($berat <= 0 && $biji <= 0) continue;
+                        if ($berat <= 0 && $biji <= 0) {
+                            continue;
+                        }
 
-                    $feather = Feather::find($featherId);
-                    $color   = Color::find($colorId);
+                        $feather = Feather::find($featherId);
+                        $color   = Color::find($colorId);
 
-                    $grade = strtoupper($feather->kode . '-' . $color->kode);
-                    $exists = GradeColor::where('rms_id', $request->rms_id)
-                        ->where('grade', $grade)
-                        ->exists();
+                        if (!$feather || !$color) {
+                            throw new \Exception('Data feather atau warna tidak ditemukan');
+                        }
 
-                    if ($exists) {
-                        throw new \Exception('Grade bahan baku duplikat');
+                        $grade = strtoupper($feather->kode . '-' . $color->kode);
+
+                        $exists = GradeColor::where('rms_id', $request->rms_id)
+                            ->where('grade', $grade)
+                            ->exists();
+
+                        if ($exists) {
+                            throw new \Exception("Grade {$grade} sudah ada");
+                        }
+
+                        GradeColor::create([
+                            'rms_id' => $request->rms_id,
+                            'employees_id' => $request->employees_id,
+                            'feathers_id' => $featherId,
+                            'colors_id' => $colorId,
+                            'tanggal' => $request->tanggal,
+                            'grade' => $grade,
+                            'berat' => $berat,
+                            'biji' => $biji,
+                            'other' => null,
+                        ]);
                     }
-
-                    GradeColor::create([
-                        'rms_id' => $request->rms_id,
-                        'employees_id' => $request->employees_id,
-                        'feathers_id' => $featherId,
-                        'colors_id' => $colorId,
-                        'tanggal' => $request->tanggal,
-                        'grade' => $grade,
-                        'other' => $request->other,
-                        'berat' => $berat,
-                        'biji' => $biji,
-                    ]);
                 }
+            }
+
+            // simpan hancuran
+            if ($hancuran > 0) {
+
+                $existsHancuran = GradeColor::where('rms_id', $request->rms_id)
+                    ->where('grade', 'HANCURAN')
+                    ->whereDate('tanggal', $request->tanggal)
+                    ->exists();
+
+                if ($existsHancuran) {
+                    throw new \Exception('Data HANCURAN pada tanggal ini sudah ada');
+                }
+
+                GradeColor::create([
+                    'rms_id' => $request->rms_id,
+                    'employees_id' => $request->employees_id,
+                    'feathers_id' => null,
+                    'colors_id' => null,
+                    'tanggal' => $request->tanggal,
+                    'grade' => 'HANCURAN',
+                    'berat' => $hancuran,
+                    'biji' => 0,
+                    'other' => null,
+                ]);
             }
 
             DB::commit();
