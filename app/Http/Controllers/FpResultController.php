@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\FpResult;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\TestType;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class FpResultController extends Controller
 {
@@ -29,20 +30,15 @@ class FpResultController extends Controller
             'kadar_air' => 'required|numeric|min:0|max:999.99',
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
         ]);
+        
+        $air = TestType::where('kode', 'QCPJA')->first();
+        $alum = TestType::where('kode', 'QCPJN')->first();
 
-        if($validated['kadar_air']>15)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Air'
-            ], 422);
-        }elseif($validated['kadar_nitrit'] > 30)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Nitrit'
-            ]);
-        }
+        $isValid = 
+            $validated['kadar_air'] > $air->standar_minimal && $validated['kadar_air'] < $air->standar_maksimal &&
+            $validated['kadar_nitrit'] > $alum->standar_minimal && $validated['kadar_nitrit'] < $alum->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
 
         $result = FpResult::create($validated);
 
@@ -60,7 +56,6 @@ class FpResultController extends Controller
         return response()->json($result);
     }
 
-
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
@@ -70,21 +65,15 @@ class FpResultController extends Controller
             'kadar_nitrit' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        if($validated['kadar_air']>15)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Air'
-            ], 422);
-        }elseif($validated['kadar_nitrit'] > 30)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Nitrit'
-            ]);
-        }
-
         $result = FpResult::findOrFail($id);
+        $air = TestType::where('kode', 'QCPJA')->first();
+        $alum = TestType::where('kode', 'QCPJN')->first();
+
+        $isValid = 
+            $validated['kadar_air'] > $air->standar_minimal && $validated['kadar_air'] < $air->standar_maksimal &&
+            $validated['kadar_nitrit'] > $alum->standar_minimal && $validated['kadar_nitrit'] < $alum->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
         
         $result->update($validated);
 
@@ -118,7 +107,16 @@ class FpResultController extends Controller
 
         $items = $validated['items'];
 
+        $air = TestType::where('kode', 'QCPJA')->first();
+        $alum = TestType::where('kode', 'QCPJN')->first();
+
         foreach ($items as $item) {
+            $isValid = 
+                $item['kadar_air'] > $air->standar_minimal && $item['kadar_air'] < $air->standar_maksimal &&
+                $item['kadar_nitrit'] > $alum->standar_minimal && $item['kadar_nitrit'] < $alum->standar_maksimal;
+
+            $item['hasil'] = $isValid ? 1 : 0;
+
             FpResult::create($item);
         }
 

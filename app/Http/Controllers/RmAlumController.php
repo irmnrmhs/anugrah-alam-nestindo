@@ -94,7 +94,7 @@ class RmAlumController extends Controller
             'items' => 'required|array|min:1',
             'items.*.rms_id'   => 'required|exists:raw_materials,id',
             'items.*.tgl' => 'required|date',
-            'items.*.kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
+            'items.*.kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
         $items = $validated['items'];

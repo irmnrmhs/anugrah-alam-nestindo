@@ -30,13 +30,14 @@ class Ccp1Controller extends Controller
             'ccp1' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        $result = Ccp1::create($validated);
         $ccp = TestType::where('kode', 'QCCCPN')->first();
 
         $isValid = 
             $validated['ccp1'] > $ccp->standar_minimal && $validated['ccp1'] < $ccp->standar_maksimal;
 
         $validated['hasil'] = $isValid ? 1 : 0;
+        
+        $result = Ccp1::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -93,12 +94,18 @@ class Ccp1Controller extends Controller
             'items' => 'required|array|min:1',
             'items.*.rms_id'   => 'required|exists:raw_materials,id',
             'items.*.tgl' => 'required|date',
-            'items.*.ccp1' => 'nullable|numeric|min:0|max:999.9'
+            'items.*.ccp1' => 'required|numeric|min:0|max:999.9'
         ]);
 
         $items = $validated['items'];
-
+        $ccp = TestType::where('kode', 'QCCCPN')->first();
+    
         foreach ($items as $item) {
+            $isValid = 
+                $item['ccp1'] > $ccp->standar_minimal && $item['ccp1'] < $ccp->standar_maksimal;
+
+            $item['hasil'] = $isValid ? 1 : 0;
+
             Ccp1::create($item);
         }
 

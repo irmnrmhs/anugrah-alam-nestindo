@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FpAlum;
 use App\Models\Document;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use App\Models\FinishedProduct;
+use App\Models\FpAlum;
 use App\Models\Product;
+use App\Models\TestType;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class FpAlumController extends Controller
 {
@@ -30,13 +30,12 @@ class FpAlumController extends Controller
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
-        if($validated['kadar_aluminium'] > 100)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Aluminium'
-            ]);
-        }
+        $alum = TestType::where('kode', 'QCPJL')->first();
+
+        $isValid = 
+            $validated['kadar_aluminium'] > $alum->standar_minimal && $validated['kadar_aluminium'] < $alum->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
 
         $result = FpAlum::create($validated);
 
@@ -60,16 +59,14 @@ class FpAlumController extends Controller
             'tgl' => 'required|date',
             'kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
-
-        if($validated['kadar_aluminium'] > 100)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Aluminium'
-            ]);
-        }
         
         $result = FpAlum::findOrFail($id);
+        $alum = TestType::where('kode', 'QCPJL')->first();
+
+        $isValid = 
+            $validated['kadar_aluminium'] > $alum->standar_minimal && $validated['kadar_aluminium'] < $alum->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
         
         $result->update($validated);
 
@@ -97,12 +94,18 @@ class FpAlumController extends Controller
             'items' => 'required|array|min:1',
             'items.*.products_id'   => 'required|exists:products,id',
             'items.*.tgl' => 'required|date',
-            'items.*.kadar_aluminium' => 'nullable|numeric|min:0|max:999.9'
+            'items.*.kadar_aluminium' => 'required|numeric|min:0|max:999.9'
         ]);
 
         $items = $validated['items'];
+        $alum = TestType::where('kode', 'QCPJL')->first();
 
         foreach ($items as $item) {
+            $isValid = 
+                $item['kadar_aluminium'] > $alum->standar_minimal && $item['kadar_aluminium'] < $alum->standar_maksimal;
+
+            $item['hasil'] = $isValid ? 1 : 0;
+
             FpAlum::create($item);
         }
 

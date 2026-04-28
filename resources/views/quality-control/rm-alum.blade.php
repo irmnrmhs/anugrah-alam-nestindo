@@ -72,7 +72,6 @@
         html += `
             <div class="border rounded p-3 mb-3">
                 <h6>Sampel ${i}</h6>
-                
                 <label>Kadar Aluminium</label>
                 <input type="number" class="form-control mb-2 kadar-aluminium" data-index="${i}" step="0.1" min="0" max="999.9">
             </div>
@@ -91,7 +90,6 @@
 
         for (let i = 1; i <= jumlah; i++) {
             const kadar_aluminium = parseFloat($(`.kadar-aluminium[data-index="${i}"]`).val()) || 0;
-
             const isValid = kadar_aluminium > ALUM_MIN && kadar_aluminium < ALUM_MAX;
 
             if(!isValid){

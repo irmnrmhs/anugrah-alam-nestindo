@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\CcpAlum;
 use App\Models\Document;
-use Illuminate\View\View;
 use App\Models\RawMaterial;
-use Illuminate\Http\Request;
+use App\Models\TestType;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CcpAlumController extends Controller
 {
@@ -29,12 +30,12 @@ class CcpAlumController extends Controller
             'ccp_al' => 'required|numeric|min:0|max:999.9',
         ]);
 
-        if($validated['ccp_al'] > 100){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Aluminium'
-            ]);
-        }
+        $ccpl = TestType::where('kode', 'QCCCPL')->first();
+
+        $isValid = 
+            $validated['ccp_al'] > $ccpl->standar_minimal && $validated['ccp_al'] < $ccpl->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
 
         $result = CcpAlum::create($validated);
 
@@ -54,20 +55,18 @@ class CcpAlumController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $validated = $request->validate([
-            'products_id' => 'required|exists:raw_materials,id',
+            'rms_id' => 'required|exists:raw_materials,id',
             'tgl' => 'required|date',
             'ccp_al' => 'required|numeric|min:0|max:999.9'
         ]);
-
-        if($validated['ccp_al'] > 100)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak memenuhi standar Kadar Aluminium'
-            ]);
-        }
         
         $result = CcpAlum::findOrFail($id);
+        $ccpl = TestType::where('kode', 'QCCCPL')->first();
+
+        $isValid = 
+            $validated['ccp_al'] > $ccpl->standar_minimal && $validated['ccp_al'] < $ccpl->standar_maksimal;
+
+        $validated['hasil'] = $isValid ? 1 : 0;
         
         $result->update($validated);
 
@@ -95,12 +94,19 @@ class CcpAlumController extends Controller
             'items' => 'required|array|min:1',
             'items.*.rms_id'   => 'required|exists:raw_materials,id',
             'items.*.tgl' => 'required|date',
-            'items.*.ccp_al' => 'nullable|numeric|min:0|max:999.9'
+            'items.*.ccp_al' => 'required|numeric|min:0|max:999.9'
         ]);
 
         $items = $validated['items'];
 
+        $ccpl = TestType::where('kode', 'QCCCPL')->first();
+
         foreach ($items as $item) {
+            $isValid = 
+                $item['ccp_al'] > $ccpl->standar_minimal && $item['ccp_al'] < $ccpl->standar_maksimal;
+
+            $item['hasil'] = $isValid ? 1 : 0;
+
             CcpAlum::create($item);
         }
 

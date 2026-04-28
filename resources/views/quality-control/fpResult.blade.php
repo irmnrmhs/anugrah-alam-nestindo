@@ -89,32 +89,67 @@
 
     $('#btnSubmitAll').off().on('click', function () {
         let list = [];
+        let isAnyInvalid = false;
+
+        const AIR_MIN = 0;
+        const AIR_MAX = 15;
+        const NITRIT_MIN = 0;
+        const NITRIT_MAX = 30;
 
         for (let i = 1; i <= jumlah; i++) {
+            const kadar_air = parseFloat($(`.kadar-air[data-index="${i}"]`).val()) || 0;
+            const kadar_nitrit = parseFloat($(`.kadar-nitrit[data-index="${i}"]`).val()) || 0;
+            const isValid = 
+                kadar_air > AIR_MIN && kadar_air < AIR_MAX && 
+                kadar_nitrit > NITRIT_MIN && kadar_nitrit < NITRIT_MAX;
+
+            if(!isValid){
+                isAnyInvalid = true
+            }
+
             list.push({
                 products_id,
                 tgl,
-                kadar_air: $(`.kadar-air[data-index="${i}"]`).val(),
-                kadar_nitrit: $(`.kadar-nitrit[data-index="${i}"]`).val(),
+                kadar_air,
+                kadar_nitrit,
             });
         }
 
-        fetch('/fp-results/bulk', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ items: list })
-        })
-        .then(r => r.json())
-        .then(res => {
-            if (res.status === 'success') {
-                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
-            } else {
-                Swal.fire('Error', res.message, 'error');
-            }
-        });
+        function submitData() {
+            fetch('/fp-results/bulk', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ items: list })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            });
+        }
+
+        if (isAnyInvalid) {
+            Swal.fire({
+                title: 'Ada Sampel Tidak Lulus!',
+                text: 'Beberapa data tidak memenuhi standar. Tetap simpan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    submitData();
+                }
+            });
+        } else {
+            submitData();
+        }
     });
 @stop
 

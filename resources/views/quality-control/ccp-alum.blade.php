@@ -73,7 +73,7 @@
             <div class="border rounded p-3 mb-3">
                 <h6>Sampel ${i}</h6>
                 <label>Kadar Aluminium Selama Proses (CCP1)</label>
-                <input type="number" class="form-control mb-2 ccp_al" data-index="${i}" step="0.1" min="0" max="999.9">
+                <input type="number" class="form-control mb-2 ccp-al" data-index="${i}" step="0.1" min="0" max="999.9">
             </div>
         `;
     }
@@ -83,31 +83,61 @@
 
     $('#btnSubmitAll').off().on('click', function () {
         let list = [];
+        let isAnyInvalid = false;
+
+        const CCP_MIN = 0;
+        const CCP_MAX = 100;
 
         for (let i = 1; i <= jumlah; i++) {
+            const ccp_al = parseFloat($(`.ccp-al[data-index="${i}"]`).val()) || 0;
+            const isValid = ccp_al > CCP_MIN && ccp_al < CCP_MAX;
+
+            if(!isValid){
+                isAnyInvalid = true
+            }
+
             list.push({
                 rms_id,
                 tgl,
-                ccp_al: $(`.ccp_al[data-index="${i}"]`).val(),
+                ccp_al,
             });
         }
 
-        fetch('/ccp-al/bulk', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ items: list })
-        })
-        .then(r => r.json())
-        .then(res => {
-            if (res.status === 'success') {
-                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
-            } else {
-                Swal.fire('Error', res.message, 'error');
-            }
-        });
+        function submitData() {
+            fetch('/ccp-al/bulk', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ items: list })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
+            });
+        }
+
+        if (isAnyInvalid) {
+            Swal.fire({
+                title: 'Ada Sampel Tidak Lulus!',
+                text: 'Beberapa data tidak memenuhi standar. Tetap simpan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    submitData();
+                }
+            });
+        } else {
+            submitData();
+        }
     });
 @stop
 
