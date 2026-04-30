@@ -17,8 +17,8 @@
     <th>Kode Bahan Baku</th>
     <th>Jenis Bulu</th>
     <th>Jenis Warna</th>
-    <th>Berat</th>
     <th>Biji</th>
+    <th>Berat</th>
     <th>Petugas</th>
 @stop
 
@@ -35,8 +35,8 @@
             </td>
             <td>{{ optional($color->feather)->jenis_bulu ?? '-' }}</td>
             <td>{{ optional($color->color)->jenis_warna ?? '-' }}</td>
-            <td>{{ $color->berat }}</td>
             <td>{{ $color->biji }}</td>
+            <td>{{ $color->berat }}</td>
             <td>{{ $color->employee->nama }}</td>
             <td>
                 <button class="btn btn-sm btn-warning btnEdit">Edit</button>
